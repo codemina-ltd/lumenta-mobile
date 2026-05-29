@@ -1,0 +1,53 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Lumenta",
+
+  "loginTitle": "Connexion",
+  "loginSubtitle": "Content de vous revoir sur Lumenta",
+  "emailLabel": "E-mail",
+  "passwordLabel": "Mot de passe",
+  "loginButton": "Se connecter",
+  "loginError": "Connexion impossible. Vérifiez vos informations et réessayez.",
+
+  "tenantPickerTitle": "Choisir un espace de travail",
+  "switchTenant": "Changer d'espace",
+  "logout": "Se déconnecter",
+
+  "navClients": "Clients",
+  "navChats": "Discussions",
+  "navNotifications": "Notifications",
+
+  "clientsTitle": "Clients",
+  "searchClients": "Rechercher des clients",
+  "clientsEmpty": "Aucun client pour le moment",
+
+  "chatsTitle": "Discussions",
+  "chatsEmpty": "Aucune conversation pour le moment",
+
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "Vous êtes à jour",
+  "markAllRead": "Tout marquer comme lu",
+
+  "previewPhoto": "Photo",
+  "previewVoice": "Note vocale",
+  "previewAudio": "Audio",
+  "previewVideo": "Vidéo",
+  "previewDocument": "Document",
+  "previewLocation": "Position",
+  "previewSticker": "Sticker",
+  "previewContact": "Contact",
+
+  "statusSent": "Envoyé",
+  "statusDelivered": "Distribué",
+  "statusRead": "Lu",
+  "statusFailed": "Échec",
+
+  "retry": "Réessayer",
+  "loadingError": "Une erreur est survenue",
+  "today": "Aujourd'hui",
+  "yesterday": "Hier",
+
+  "transcription": "Transcription",
+  "openDocument": "Ouvrir le document",
+  "loginNoRecaptcha": "La connexion n'est pas configurée (clé reCAPTCHA manquante)."
+}

@@ -1,0 +1,53 @@
+{
+  "@@locale": "en",
+  "appTitle": "Lumenta",
+
+  "loginTitle": "Sign in",
+  "loginSubtitle": "Welcome back to Lumenta",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "loginButton": "Sign in",
+  "loginError": "Couldn't sign in. Check your details and try again.",
+
+  "tenantPickerTitle": "Choose a workspace",
+  "switchTenant": "Switch workspace",
+  "logout": "Log out",
+
+  "navClients": "Clients",
+  "navChats": "Chats",
+  "navNotifications": "Notifications",
+
+  "clientsTitle": "Clients",
+  "searchClients": "Search clients",
+  "clientsEmpty": "No clients yet",
+
+  "chatsTitle": "Chats",
+  "chatsEmpty": "No conversations yet",
+
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "You're all caught up",
+  "markAllRead": "Mark all as read",
+
+  "previewPhoto": "Photo",
+  "previewVoice": "Voice note",
+  "previewAudio": "Audio",
+  "previewVideo": "Video",
+  "previewDocument": "Document",
+  "previewLocation": "Location",
+  "previewSticker": "Sticker",
+  "previewContact": "Contact",
+
+  "statusSent": "Sent",
+  "statusDelivered": "Delivered",
+  "statusRead": "Read",
+  "statusFailed": "Failed",
+
+  "retry": "Retry",
+  "loadingError": "Something went wrong",
+  "today": "Today",
+  "yesterday": "Yesterday",
+
+  "transcription": "Transcription",
+  "openDocument": "Open document",
+  "loginNoRecaptcha": "Login is not configured (missing reCAPTCHA key)."
+}

@@ -1,0 +1,71 @@
+name: mobile
+description: "Lumenta mobile companion app."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State management
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Routing (deep links for notification taps)
+  go_router: ^14.6.2
+
+  # HTTP
+  dio: ^5.7.0
+
+  # Models / serialization
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # Secure token storage (Keychain / Keystore). 10.x adds Swift Package
+  # Manager support via flutter_secure_storage_darwin.
+  flutter_secure_storage: ^10.0.0
+
+  # Firebase / FCM
+  firebase_core: ^3.8.0
+  firebase_messaging: ^15.1.5
+  # 19+ ships a Package.swift (Swift Package Manager support).
+  flutter_local_notifications: ^19.0.0
+
+  # reCAPTCHA Enterprise (mobile login token)
+  recaptcha_enterprise_flutter: ^18.7.0
+
+  # Fonts (Inter Tight + JetBrains Mono, fetched & cached at runtime)
+  google_fonts: ^6.2.1
+
+  # i18n
+  intl: any
+
+  # Media
+  cached_network_image: ^3.4.1
+  audioplayers: ^6.1.0
+
+  # Permissions (Android 13+ POST_NOTIFICATIONS, iOS prompt)
+  permission_handler: ^11.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+  build_runner: ^2.4.13
+  freezed: ^2.5.7
+  json_serializable: ^6.9.0
+  riverpod_generator: ^2.6.3
+
+flutter:
+  uses-material-design: true
+  generate: true

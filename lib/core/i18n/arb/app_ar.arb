@@ -1,0 +1,53 @@
+{
+  "@@locale": "ar",
+  "appTitle": "لومينتا",
+
+  "loginTitle": "تسجيل الدخول",
+  "loginSubtitle": "مرحبًا بعودتك إلى لومينتا",
+  "emailLabel": "البريد الإلكتروني",
+  "passwordLabel": "كلمة المرور",
+  "loginButton": "تسجيل الدخول",
+  "loginError": "تعذّر تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى.",
+
+  "tenantPickerTitle": "اختر مساحة عمل",
+  "switchTenant": "تبديل مساحة العمل",
+  "logout": "تسجيل الخروج",
+
+  "navClients": "العملاء",
+  "navChats": "المحادثات",
+  "navNotifications": "الإشعارات",
+
+  "clientsTitle": "العملاء",
+  "searchClients": "ابحث عن العملاء",
+  "clientsEmpty": "لا يوجد عملاء بعد",
+
+  "chatsTitle": "المحادثات",
+  "chatsEmpty": "لا توجد محادثات بعد",
+
+  "notificationsTitle": "الإشعارات",
+  "notificationsEmpty": "لقد اطّلعت على كل شيء",
+  "markAllRead": "تعليم الكل كمقروء",
+
+  "previewPhoto": "صورة",
+  "previewVoice": "رسالة صوتية",
+  "previewAudio": "صوت",
+  "previewVideo": "فيديو",
+  "previewDocument": "مستند",
+  "previewLocation": "موقع",
+  "previewSticker": "ملصق",
+  "previewContact": "جهة اتصال",
+
+  "statusSent": "تم الإرسال",
+  "statusDelivered": "تم التسليم",
+  "statusRead": "تمت القراءة",
+  "statusFailed": "فشل",
+
+  "retry": "إعادة المحاولة",
+  "loadingError": "حدث خطأ ما",
+  "today": "اليوم",
+  "yesterday": "أمس",
+
+  "transcription": "النص المكتوب",
+  "openDocument": "فتح المستند",
+  "loginNoRecaptcha": "تسجيل الدخول غير مهيأ (مفتاح reCAPTCHA مفقود)."
+}
