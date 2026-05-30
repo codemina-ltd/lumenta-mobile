@@ -4,6 +4,42 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
 
+/// The Lumenta logo tile — a rounded square with the signal-green accent
+/// gradient and a four-point "lumen" spark. Used on the splash, login, and
+/// app bar so the brand mark reads consistently everywhere.
+class LumentaMark extends StatelessWidget {
+  const LumentaMark({super.key, this.size = 56, this.radius = Radii.lg});
+
+  final double size;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        gradient: context.brand.accent,
+        borderRadius: BorderRadius.circular(radius),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.signal.withValues(alpha: 0.35),
+            blurRadius: size * 0.4,
+            offset: Offset(0, size * 0.14),
+          ),
+        ],
+      ),
+      child: Center(
+        child: SizedBox(
+          width: size * 0.52,
+          height: size * 0.52,
+          child: CustomPaint(painter: _SparkPainter()),
+        ),
+      ),
+    );
+  }
+}
+
 /// The shipped app launcher icon (`assets/images/app_icon.png`), rounded to the
 /// launcher squircle and lifted with the signal glow. Use this where the real
 /// brand icon is wanted rather than the abstract [LumentaMark] glyph.
