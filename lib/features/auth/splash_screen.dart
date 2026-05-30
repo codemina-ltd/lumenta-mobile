@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const LumentaMark(size: 84, radius: Radii.xl),
+                  const AppIconMark(size: 84, radius: Radii.xl),
                   const SizedBox(height: Insets.xxl),
                   const LumentaWordmark(
                     fontSize: 30,
