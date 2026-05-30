@@ -21,10 +21,7 @@ Future<void> main() async {
   unawaited(container.read(authControllerProvider.notifier).bootstrap());
 
   runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const LumentaApp(),
-    ),
+    UncontrolledProviderScope(container: container, child: const LumentaApp()),
   );
 
   // FCM lifecycle — no-ops gracefully when Firebase has no native config.
