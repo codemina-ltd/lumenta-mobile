@@ -56,9 +56,7 @@ class AppIconMark extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(
-          color: AppColors.onDarkHigh.withValues(alpha: 0.08),
-        ),
+        border: Border.all(color: AppColors.onDarkHigh.withValues(alpha: 0.08)),
         boxShadow: [
           BoxShadow(
             color: AppColors.signal.withValues(alpha: 0.30),
@@ -92,14 +90,30 @@ class _SparkPainter extends CustomPainter {
     final waist = rx * 0.36;
     final path = Path()
       ..moveTo(c.dx, c.dy - ry) // top
-      ..quadraticBezierTo(c.dx + waist * 0.4, c.dy - waist * 0.4,
-          c.dx + rx, c.dy) // right
-      ..quadraticBezierTo(c.dx + waist * 0.4, c.dy + waist * 0.4,
-          c.dx, c.dy + ry) // bottom
-      ..quadraticBezierTo(c.dx - waist * 0.4, c.dy + waist * 0.4,
-          c.dx - rx, c.dy) // left
-      ..quadraticBezierTo(c.dx - waist * 0.4, c.dy - waist * 0.4,
-          c.dx, c.dy - ry)
+      ..quadraticBezierTo(
+        c.dx + waist * 0.4,
+        c.dy - waist * 0.4,
+        c.dx + rx,
+        c.dy,
+      ) // right
+      ..quadraticBezierTo(
+        c.dx + waist * 0.4,
+        c.dy + waist * 0.4,
+        c.dx,
+        c.dy + ry,
+      ) // bottom
+      ..quadraticBezierTo(
+        c.dx - waist * 0.4,
+        c.dy + waist * 0.4,
+        c.dx - rx,
+        c.dy,
+      ) // left
+      ..quadraticBezierTo(
+        c.dx - waist * 0.4,
+        c.dy - waist * 0.4,
+        c.dx,
+        c.dy - ry,
+      )
       ..close();
     canvas.drawPath(path, paint);
   }
@@ -110,11 +124,7 @@ class _SparkPainter extends CustomPainter {
 
 /// The "Lumenta" wordmark with a tracking tuned for headers.
 class LumentaWordmark extends StatelessWidget {
-  const LumentaWordmark({
-    super.key,
-    this.fontSize = 28,
-    this.color,
-  });
+  const LumentaWordmark({super.key, this.fontSize = 28, this.color});
 
   final double fontSize;
   final Color? color;

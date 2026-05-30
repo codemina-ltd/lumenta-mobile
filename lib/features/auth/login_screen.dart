@@ -106,8 +106,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         obscureText: _obscure,
                         autofillHints: const [AutofillHints.password],
                         onSubmitted: (_) => _submit(),
-                        validator: (v) =>
-                            (v == null || v.isEmpty) ? '—' : null,
+                        validator: (v) => (v == null || v.isEmpty) ? '—' : null,
                         suffix: IconButton(
                           icon: Icon(
                             _obscure
@@ -244,8 +243,11 @@ class _ErrorBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.error_outline_rounded,
-              color: AppColors.ember, size: 20),
+          const Icon(
+            Icons.error_outline_rounded,
+            color: AppColors.ember,
+            size: 20,
+          ),
           const SizedBox(width: Insets.md),
           Expanded(
             child: Text(
