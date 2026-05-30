@@ -1,0 +1,286 @@
+{
+  "bell": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "viewAll": "Voir toutes les notifications",
+    "empty": "Vous êtes à jour"
+  },
+  "page": {
+    "title": "Notifications",
+    "subtitle": "Tout ce qui se passe sur votre compte.",
+    "loadMore": "Charger plus",
+    "empty": "Aucune notification",
+    "emptyUnread": "Aucune notification non lue",
+    "emptyFiltered": "Aucune notification ne correspond à ces filtres",
+    "markedAllRead": "Toutes les notifications ont été marquées comme lues",
+    "markAllError": "Impossible de tout marquer comme lu",
+    "archiveError": "Impossible d'archiver la notification",
+    "filters": {
+      "all": "Toutes",
+      "unread": "Non lues",
+      "allCategories": "Toutes les catégories",
+      "allSeverities": "Toutes les gravités",
+      "dateRange": "Période"
+    },
+    "severity": {
+      "info": "Info",
+      "success": "Succès",
+      "warning": "Avertissement",
+      "critical": "Critique"
+    },
+    "actions": {
+      "archive": "Archiver"
+    }
+  },
+  "settings": {
+    "title": "Paramètres de notification",
+    "inboxCard": {
+      "open": "Ouvrir la boîte de réception"
+    },
+    "tabs": {
+      "preferences": "Préférences",
+      "channels": "Canaux",
+      "quietHours": "Heures calmes"
+    },
+    "preferences": {
+      "eventCol": "Événement",
+      "saved": "Préférences enregistrées",
+      "saveError": "Impossible d'enregistrer les préférences",
+      "fcmTooltip": "Disponible dans l'application mobile Lumenta",
+      "noChannelHint": "Les notifications in-app sont toujours actives. Ajoutez un canal WhatsApp, SMS ou Slack ci-dessous pour les recevoir ailleurs.",
+      "channel": {
+        "in_app": "In-app",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "slack": "Slack",
+        "fcm": "Push"
+      }
+    },
+    "channels": {
+      "subtitle": "Où vos notifications WhatsApp, SMS et Slack sont livrées.",
+      "add": "Ajouter un canal",
+      "empty": "Aucun canal pour l'instant. Ajoutez-en un pour recevoir des notifications hors de l'application.",
+      "verify": "Vérifier",
+      "verified": "Vérifié",
+      "unverified": "Non vérifié",
+      "test": "Tester",
+      "removeConfirm": "Supprimer ce canal ?",
+      "created": "Canal ajouté",
+      "createError": "Impossible d'ajouter le canal",
+      "verifySent": "Code de vérification envoyé",
+      "verifyStartError": "Impossible d'envoyer le code de vérification",
+      "verifiedToast": "Canal vérifié",
+      "verifyError": "Impossible de vérifier le canal",
+      "testSent": "Notification de test envoyée",
+      "testError": "Impossible d'envoyer la notification de test",
+      "testReEnable": "Tester et réactiver",
+      "reEnabled": "Canal réactivé",
+      "suspendedOn": "Suspendu automatiquement le {{date}}",
+      "lastSeen": "dernière livraison {{date}}",
+      "kind": {
+        "sms": "SMS",
+        "slack": "Slack",
+        "whatsapp": "WhatsApp",
+        "fcm": "Push"
+      },
+      "addModal": {
+        "title": "Ajouter un canal",
+        "kind": "Type de canal",
+        "destination": "Destination",
+        "destinationSms": "Numéro de téléphone, p. ex. +15551234567",
+        "destinationSlack": "URL du webhook entrant Slack",
+        "label": "Libellé (facultatif)",
+        "labelPlaceholder": "p. ex. Mon téléphone, canal #ops",
+        "submit": "Ajouter"
+      },
+      "verifyModal": {
+        "title": "Vérifier le canal",
+        "description": "Saisissez le code à 6 chiffres envoyé à votre canal.",
+        "confirm": "Confirmer",
+        "resend": "Renvoyer le code",
+        "resendIn": "Renvoyer dans {{seconds}} s"
+      }
+    },
+    "quietHours": {
+      "subtitle": "Mettez en attente les notifications WhatsApp, SMS et Slack non critiques pendant une plage nocturne. Les alertes in-app et critiques passent toujours.",
+      "enable": "Activer les heures calmes",
+      "window": "Plage calme",
+      "timezone": "Fuseau horaire",
+      "save": "Enregistrer",
+      "saved": "Heures calmes enregistrées",
+      "saveError": "Impossible d'enregistrer les heures calmes",
+      "incomplete": "Définissez une heure de début, de fin et un fuseau horaire"
+    }
+  },
+  "category": {
+    "template": "Modèle",
+    "sender": "Expéditeur",
+    "campaign": "Campagne",
+    "billing": "Facturation",
+    "integration": "Intégration",
+    "flow": "Flux",
+    "team": "Équipe",
+    "security": "Sécurité",
+    "export": "Rapport",
+    "webhook": "Webhook",
+    "system": "Système"
+  },
+  "template": {
+    "approved": {
+      "title": "Modèle approuvé",
+      "body": "Votre modèle « {{templateName}} » a été approuvé par WhatsApp et est prêt à l'emploi."
+    },
+    "rejected": {
+      "title": "Modèle rejeté",
+      "body": "Votre modèle « {{templateName}} » a été rejeté par WhatsApp. Vérifiez-le et soumettez-le à nouveau."
+    },
+    "flagged": {
+      "title": "Qualité du modèle en baisse",
+      "body": "Votre modèle « {{templateName}} » a atteint un score de qualité ROUGE — une rétrogradation de palier peut suivre."
+    },
+    "paused": {
+      "title": "Modèle suspendu",
+      "body": "Votre modèle « {{templateName}} » a été suspendu par WhatsApp et ne peut pas être envoyé pour le moment."
+    }
+  },
+  "sender": {
+    "connected": {
+      "title": "Expéditeur connecté",
+      "body": "{{senderName}} est connecté et prêt à envoyer."
+    }
+  },
+  "campaign": {
+    "completed": {
+      "title": "Campagne terminée",
+      "body": "Votre campagne est terminée — {{sent}} envoyés, {{failed}} échecs sur {{total}}."
+    },
+    "failed": {
+      "title": "Échec de la campagne",
+      "body": "L'exécution de votre campagne a été interrompue : {{reason}}"
+    },
+    "scheduled_reminder": {
+      "title": "La campagne démarre bientôt",
+      "body": "Une campagne planifiée s'exécute dans environ une heure — annulez-la maintenant si nécessaire."
+    }
+  },
+  "export": {
+    "completed": {
+      "title": "Rapport prêt",
+      "body": "Votre rapport {{reportType}} est prêt à être téléchargé."
+    },
+    "failed": {
+      "title": "Échec du rapport",
+      "body": "Votre rapport {{reportType}} n'a pas pu être généré. Vous pouvez réessayer."
+    }
+  },
+  "flow": {
+    "published": {
+      "title": "Flux publié",
+      "body": "Votre flux « {{flowName}} » est désormais publié et actif."
+    }
+  },
+  "team": {
+    "invitation_sent": {
+      "title": "Invitation envoyée",
+      "body": "Une invitation a été envoyée à {{email}} en tant que {{role}}."
+    },
+    "member_joined": {
+      "title": "Nouveau membre de l'équipe",
+      "body": "{{memberName}} a rejoint l'espace de travail en tant que {{role}}."
+    },
+    "role_changed": {
+      "title": "Votre rôle a changé",
+      "body": "Votre rôle dans cet espace de travail est désormais {{role}}."
+    }
+  },
+  "api_key": {
+    "created": {
+      "title": "Clé API créée",
+      "body": "Une nouvelle clé API « {{keyName}} » a été créée pour cet espace de travail."
+    },
+    "expiring_soon": {
+      "title": "Clé API bientôt expirée",
+      "body": "La clé API « {{keyName}} » expire dans {{daysRemaining}} jours. Renouvelez-la pour éviter une interruption."
+    }
+  },
+  "billing": {
+    "payment_failed": {
+      "title": "Échec du paiement",
+      "body": "Une tentative de paiement a échoué (tentative {{attempt}}). Mettez à jour votre moyen de paiement pour éviter une interruption de service."
+    },
+    "trial_ending": {
+      "title": "Période d'essai bientôt terminée",
+      "body": "Votre période d'essai se termine dans {{daysRemaining}} jour(s). Choisissez un forfait pour garder votre compte actif."
+    },
+    "invoice_issued": {
+      "title": "Nouvelle facture",
+      "body": "Une nouvelle facture a été émise pour votre compte."
+    },
+    "subscription_suspended": {
+      "title": "Abonnement suspendu",
+      "body": "Votre abonnement a été suspendu. Régularisez la facturation pour rétablir le service."
+    }
+  },
+  "message": {
+    "received": {
+      "title": "Nouveau message de {{clientName}}",
+      "body": "{{clientName}} : {{preview}}"
+    }
+  },
+  "lume": {
+    "draft_ready": {
+      "title": "Lume a rédigé une réponse",
+      "body": "Lume a rédigé une réponse à un message client — examinez-la et approuvez-la."
+    },
+    "cost_cap_hit": {
+      "title": "Plafond de coût Lume atteint",
+      "body": "Lume a atteint son plafond de dépenses ({{scope}}) et a suspendu les réponses automatiques. Augmentez le plafond dans Facturation pour reprendre."
+    },
+    "support_notified": {
+      "title": "Lume a transmis au support",
+      "body": "Lume n'a pas pu répondre à une question client et a prévenu l'équipe de support Lumenta."
+    },
+    "trial_exhausted": {
+      "title": "Essai gratuit Lume épuisé",
+      "body": "Vos requêtes Lume gratuites sont épuisées. Activez un forfait dans Facturation pour continuer à utiliser Lume."
+    },
+    "kb_ingest_failed": {
+      "title": "Échec du traitement d'une source de connaissances",
+      "body": "La source de connaissances Lume « {{name}} » n'a pas pu être traitée. Ouvrez la base de connaissances pour la vérifier."
+    }
+  },
+  "credit": {
+    "topup_succeeded": {
+      "title": "Recharge du crédit réussie",
+      "body": "{{amount}} ont été ajoutés à votre crédit Codemina. Nouveau solde : {{balance}}."
+    },
+    "topup_failed": {
+      "title": "Échec de la recharge automatique",
+      "body": "Nous n'avons pas pu débiter {{amount}} sur votre carte enregistrée (tentative {{attempt}}/{{maxAttempts}}). Mettez à jour votre moyen de paiement."
+    },
+    "balance_low": {
+      "title": "Solde de crédit faible",
+      "body": "Votre solde de crédit Codemina ({{balance}}) est sous votre seuil d'alerte ({{threshold}}). Rechargez pour garder le service actif."
+    },
+    "balance_zero": {
+      "title": "Solde de crédit à zéro",
+      "body": "Votre solde de crédit Codemina est épuisé. Tout nouvel usage sera ajouté à la prochaine facture (ou les envois seront bloqués si vous l'avez activé)."
+    },
+    "admin_grant": {
+      "title": "Crédit ajouté à votre compte",
+      "body": "Lumenta vous a accordé {{amount}} de crédit. Nouveau solde : {{balance}}."
+    },
+    "admin_clawback": {
+      "title": "Crédit retiré de votre compte",
+      "body": "Lumenta a retiré {{amount}} de crédit. Nouveau solde : {{balance}}."
+    },
+    "debit_summary": {
+      "title": "Crédit appliqué à votre facture",
+      "body": "{{amount}} de crédit a été appliqué à votre usage {{period}}. Solde restant : {{balance}}."
+    },
+    "refund_issued": {
+      "title": "Recharge remboursée",
+      "body": "Un remboursement de {{amount}} a été émis sur une recharge précédente. Nouveau solde : {{balance}}."
+    }
+  }
+}

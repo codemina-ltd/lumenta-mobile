@@ -1,0 +1,286 @@
+{
+  "bell": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "viewAll": "View all notifications",
+    "empty": "You're all caught up"
+  },
+  "page": {
+    "title": "Notifications",
+    "subtitle": "Everything happening across your account.",
+    "loadMore": "Load more",
+    "empty": "No notifications yet",
+    "emptyUnread": "No unread notifications",
+    "emptyFiltered": "No notifications match these filters",
+    "markedAllRead": "All notifications marked as read",
+    "markAllError": "Couldn't mark all as read",
+    "archiveError": "Couldn't archive notification",
+    "filters": {
+      "all": "All",
+      "unread": "Unread",
+      "allCategories": "All categories",
+      "allSeverities": "All severities",
+      "dateRange": "Date range"
+    },
+    "severity": {
+      "info": "Info",
+      "success": "Success",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "actions": {
+      "archive": "Archive"
+    }
+  },
+  "settings": {
+    "title": "Notification settings",
+    "inboxCard": {
+      "open": "Open inbox"
+    },
+    "tabs": {
+      "preferences": "Preferences",
+      "channels": "Channels",
+      "quietHours": "Quiet hours"
+    },
+    "preferences": {
+      "eventCol": "Event",
+      "saved": "Preferences saved",
+      "saveError": "Couldn't save preferences",
+      "fcmTooltip": "Available in the Lumenta mobile app",
+      "noChannelHint": "In-app notifications are always on. Add a WhatsApp, SMS, or Slack channel below to receive on those.",
+      "channel": {
+        "in_app": "In-app",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "slack": "Slack",
+        "fcm": "Push"
+      }
+    },
+    "channels": {
+      "subtitle": "Where your WhatsApp, SMS, and Slack notifications are delivered.",
+      "add": "Add channel",
+      "empty": "No channels yet. Add one to receive notifications outside the app.",
+      "verify": "Verify",
+      "verified": "Verified",
+      "unverified": "Unverified",
+      "test": "Test",
+      "removeConfirm": "Remove this channel?",
+      "created": "Channel added",
+      "createError": "Couldn't add channel",
+      "verifySent": "Verification code sent",
+      "verifyStartError": "Couldn't send verification code",
+      "verifiedToast": "Channel verified",
+      "verifyError": "Couldn't verify channel",
+      "testSent": "Test notification sent",
+      "testError": "Couldn't send test notification",
+      "testReEnable": "Test & re-enable",
+      "reEnabled": "Channel re-enabled",
+      "suspendedOn": "Auto-suspended {{date}}",
+      "lastSeen": "last delivered {{date}}",
+      "kind": {
+        "sms": "SMS",
+        "slack": "Slack",
+        "whatsapp": "WhatsApp",
+        "fcm": "Push"
+      },
+      "addModal": {
+        "title": "Add a channel",
+        "kind": "Channel type",
+        "destination": "Destination",
+        "destinationSms": "Phone number, e.g. +15551234567",
+        "destinationSlack": "Slack incoming webhook URL",
+        "label": "Label (optional)",
+        "labelPlaceholder": "e.g. My phone, #ops channel",
+        "submit": "Add"
+      },
+      "verifyModal": {
+        "title": "Verify channel",
+        "description": "Enter the 6-digit code we sent to your channel.",
+        "confirm": "Confirm",
+        "resend": "Resend code",
+        "resendIn": "Resend in {{seconds}}s"
+      }
+    },
+    "quietHours": {
+      "subtitle": "Hold non-critical WhatsApp, SMS and Slack notifications during a nightly window. In-app and critical alerts always come through.",
+      "enable": "Enable quiet hours",
+      "window": "Quiet window",
+      "timezone": "Timezone",
+      "save": "Save",
+      "saved": "Quiet hours saved",
+      "saveError": "Couldn't save quiet hours",
+      "incomplete": "Set a start time, end time and timezone"
+    }
+  },
+  "category": {
+    "template": "Template",
+    "sender": "Sender",
+    "campaign": "Campaign",
+    "billing": "Billing",
+    "integration": "Integration",
+    "flow": "Flow",
+    "team": "Team",
+    "security": "Security",
+    "export": "Report",
+    "webhook": "Webhook",
+    "system": "System"
+  },
+  "template": {
+    "approved": {
+      "title": "Template approved",
+      "body": "Your template \"{{templateName}}\" was approved by WhatsApp and is ready to use."
+    },
+    "rejected": {
+      "title": "Template rejected",
+      "body": "Your template \"{{templateName}}\" was rejected by WhatsApp. Review and resubmit it."
+    },
+    "flagged": {
+      "title": "Template quality dropped",
+      "body": "Your template \"{{templateName}}\" hit a RED quality score — a tier drop may follow."
+    },
+    "paused": {
+      "title": "Template paused",
+      "body": "Your template \"{{templateName}}\" was paused by WhatsApp and cannot be sent right now."
+    }
+  },
+  "sender": {
+    "connected": {
+      "title": "Sender connected",
+      "body": "{{senderName}} is connected and ready to send."
+    }
+  },
+  "campaign": {
+    "completed": {
+      "title": "Campaign completed",
+      "body": "Your campaign finished — {{sent}} delivered, {{failed}} failed of {{total}}."
+    },
+    "failed": {
+      "title": "Campaign failed",
+      "body": "Your campaign run was aborted: {{reason}}"
+    },
+    "scheduled_reminder": {
+      "title": "Campaign starts soon",
+      "body": "A scheduled campaign runs in about an hour — cancel it now if you need to."
+    }
+  },
+  "export": {
+    "completed": {
+      "title": "Report ready",
+      "body": "Your {{reportType}} report is ready to download."
+    },
+    "failed": {
+      "title": "Report failed",
+      "body": "Your {{reportType}} report could not be generated. You can retry it."
+    }
+  },
+  "flow": {
+    "published": {
+      "title": "Flow published",
+      "body": "Your flow \"{{flowName}}\" is now published and live."
+    }
+  },
+  "team": {
+    "invitation_sent": {
+      "title": "Invitation sent",
+      "body": "An invitation was sent to {{email}} as {{role}}."
+    },
+    "member_joined": {
+      "title": "New team member",
+      "body": "{{memberName}} joined the workspace as {{role}}."
+    },
+    "role_changed": {
+      "title": "Your role changed",
+      "body": "Your role in this workspace is now {{role}}."
+    }
+  },
+  "api_key": {
+    "created": {
+      "title": "API key created",
+      "body": "A new API key \"{{keyName}}\" was created for this workspace."
+    },
+    "expiring_soon": {
+      "title": "API key expiring",
+      "body": "API key \"{{keyName}}\" expires in {{daysRemaining}} days. Rotate it to avoid downtime."
+    }
+  },
+  "billing": {
+    "payment_failed": {
+      "title": "Payment failed",
+      "body": "A payment attempt failed (attempt {{attempt}}). Update your payment method to avoid service interruption."
+    },
+    "trial_ending": {
+      "title": "Trial ending soon",
+      "body": "Your trial ends in {{daysRemaining}} day(s). Choose a plan to keep your account active."
+    },
+    "invoice_issued": {
+      "title": "New invoice",
+      "body": "A new invoice has been issued for your account."
+    },
+    "subscription_suspended": {
+      "title": "Subscription suspended",
+      "body": "Your subscription has been suspended. Resolve billing to restore service."
+    }
+  },
+  "message": {
+    "received": {
+      "title": "New message from {{clientName}}",
+      "body": "{{clientName}}: {{preview}}"
+    }
+  },
+  "lume": {
+    "draft_ready": {
+      "title": "Lume drafted a reply",
+      "body": "Lume drafted a reply to a customer message — review and approve it."
+    },
+    "cost_cap_hit": {
+      "title": "Lume cost cap reached",
+      "body": "Lume hit its {{scope}} spend cap and paused automatic replies. Raise the cap in Billing to resume."
+    },
+    "support_notified": {
+      "title": "Lume escalated to support",
+      "body": "Lume could not answer a customer question and notified the Lumenta support team."
+    },
+    "trial_exhausted": {
+      "title": "Lume free trial used up",
+      "body": "Your free Lume inquiries are used up. Activate a plan in Billing to keep Lume running."
+    },
+    "kb_ingest_failed": {
+      "title": "Knowledge source failed to process",
+      "body": "The Lume knowledge source \"{{name}}\" could not be processed. Open the knowledge base to review it."
+    }
+  },
+  "credit": {
+    "topup_succeeded": {
+      "title": "Credit top-up succeeded",
+      "body": "{{amount}} was added to your Codemina credit. New balance: {{balance}}."
+    },
+    "topup_failed": {
+      "title": "Auto top-up failed",
+      "body": "We could not charge your saved card for {{amount}} (attempt {{attempt}}/{{maxAttempts}}). Update your payment method to keep credit flowing."
+    },
+    "balance_low": {
+      "title": "Credit balance is low",
+      "body": "Your Codemina credit balance ({{balance}}) is below your alert threshold ({{threshold}}). Top up to keep things running."
+    },
+    "balance_zero": {
+      "title": "Credit balance is zero",
+      "body": "Your Codemina credit balance is empty. Overages will roll onto your next invoice (or block sending if you opted in)."
+    },
+    "admin_grant": {
+      "title": "Credit added to your account",
+      "body": "Lumenta granted you {{amount}} of credit. New balance: {{balance}}."
+    },
+    "admin_clawback": {
+      "title": "Credit removed from your account",
+      "body": "Lumenta removed {{amount}} of credit. New balance: {{balance}}."
+    },
+    "debit_summary": {
+      "title": "Credit applied to your invoice",
+      "body": "{{amount}} of credit was applied to your {{period}} usage. Remaining balance: {{balance}}."
+    },
+    "refund_issued": {
+      "title": "Credit top-up refunded",
+      "body": "A refund of {{amount}} was issued against a previous top-up. New balance: {{balance}}."
+    }
+  }
+}

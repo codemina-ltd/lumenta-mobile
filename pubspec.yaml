@@ -73,3 +73,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+  assets:
+    # Notification event strings (en/ar/fr), mirrored from the portal's
+    # `notifications` i18n namespace. Title/body keys are server-provided.
+    - assets/i18n/notifications/
