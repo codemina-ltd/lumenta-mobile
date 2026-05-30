@@ -29,6 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _submit() async {
+    if (ref.read(authControllerProvider).busy) return;
     if (!_formKey.currentState!.validate()) return;
     FocusScope.of(context).unfocus();
     await ref
@@ -131,7 +132,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: Insets.xxl),
                       FilledButton(
-                        onPressed: state.busy ? null : _submit,
+                        onPressed: _submit,
                         child: state.busy
                             ? const SizedBox(
                                 height: 22,
