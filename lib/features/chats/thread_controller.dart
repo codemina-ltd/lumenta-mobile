@@ -88,6 +88,94 @@ class ThreadController extends StateNotifier<ThreadState> {
   /// Newest message timestamp, for the local last-read cursor.
   DateTime? get newestTimestamp =>
       state.messages.isEmpty ? null : state.messages.last.createdAtDate;
+
+  /// Send a free-form text reply with an optimistic bubble.
+  Future<void> sendText(String to, String body) async {
+    final temp = _optimistic(body: body, type: MessageType.text);
+    _insert(temp);
+    try {
+      final sent =
+          await _ref.read(messagesRepoProvider).sendText(to: to, body: body);
+      _replace(temp.id, sent);
+    } catch (_) {
+      _markFailed(temp.id);
+    }
+  }
+
+  /// Send a media reply with an optimistic bubble.
+  Future<void> sendMedia({
+    required String to,
+    required String mediaType,
+    required String filePath,
+    String? caption,
+    String? filename,
+  }) async {
+    final type = _typeFromMedia(mediaType);
+    final temp = _optimistic(body: caption ?? '', type: type);
+    _insert(temp);
+    try {
+      final sent = await _ref.read(messagesRepoProvider).sendMedia(
+            to: to,
+            mediaType: mediaType,
+            filePath: filePath,
+            caption: caption,
+            filename: filename,
+          );
+      _replace(temp.id, sent);
+    } catch (_) {
+      _markFailed(temp.id);
+    }
+  }
+
+  Message _optimistic({required String body, required MessageType type}) {
+    final id = 'temp_${DateTime.now().microsecondsSinceEpoch}';
+    return Message(
+      id: id,
+      direction: MessageDirection.outbound,
+      body: body,
+      status: MessageStatus.sent,
+      messageType: type,
+      createdAt: DateTime.now().toUtc().toIso8601String(),
+    );
+  }
+
+  MessageType _typeFromMedia(String mediaType) {
+    switch (mediaType) {
+      case 'image':
+        return MessageType.image;
+      case 'audio':
+        return MessageType.audio;
+      case 'video':
+        return MessageType.video;
+      default:
+        return MessageType.document;
+    }
+  }
+
+  void _insert(Message m) {
+    _byId[m.id] = m;
+    _resort();
+  }
+
+  void _replace(String tempId, Message real) {
+    _byId.remove(tempId);
+    _byId[real.id] = real;
+    _resort();
+  }
+
+  void _markFailed(String tempId) {
+    final m = _byId[tempId];
+    if (m != null) {
+      _byId[tempId] = m.copyWith(status: MessageStatus.failed);
+      _resort();
+    }
+  }
+
+  void _resort() {
+    final sorted = _byId.values.toList()
+      ..sort((a, b) => a.createdAtDate.compareTo(b.createdAtDate));
+    state = state.copyWith(messages: sorted);
+  }
 }
 
 final threadControllerProvider = StateNotifierProvider.autoDispose

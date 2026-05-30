@@ -52,6 +52,10 @@ dependencies:
   cached_network_image: ^3.4.1
   audioplayers: ^6.1.0
 
+  # Reply composer attachments (Phase 7)
+  image_picker: ^1.1.2
+  file_picker: ^8.1.6
+
   # Permissions (Android 13+ POST_NOTIFICATIONS, iOS prompt)
   permission_handler: ^11.3.1
 

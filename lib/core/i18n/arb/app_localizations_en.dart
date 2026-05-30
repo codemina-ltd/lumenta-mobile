@@ -129,4 +129,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loginNoRecaptcha =>
       'Login is not configured (missing reCAPTCHA key).';
+
+  @override
+  String get composerHint => 'Message';
+
+  @override
+  String get windowClosed =>
+      'Outside the 24-hour window. Use an approved template to start a new conversation.';
+
+  @override
+  String get attachPhoto => 'Photo';
+
+  @override
+  String get attachCamera => 'Camera';
+
+  @override
+  String get attachDocument => 'Document';
+
+  @override
+  String get sendFailed => 'Couldn\'t send. Tap to retry.';
 }

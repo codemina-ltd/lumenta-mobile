@@ -129,4 +129,23 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get loginNoRecaptcha =>
       'La connexion n\'est pas configurée (clé reCAPTCHA manquante).';
+
+  @override
+  String get composerHint => 'Message';
+
+  @override
+  String get windowClosed =>
+      'Hors de la fenêtre de 24 heures. Utilisez un modèle approuvé pour démarrer une nouvelle conversation.';
+
+  @override
+  String get attachPhoto => 'Photo';
+
+  @override
+  String get attachCamera => 'Appareil photo';
+
+  @override
+  String get attachDocument => 'Document';
+
+  @override
+  String get sendFailed => 'Échec de l\'envoi. Appuyez pour réessayer.';
 }

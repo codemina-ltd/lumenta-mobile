@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../auth/auth_controller.dart';
 import '../notifications/notifications_controller.dart';
+import '../push/push_service.dart';
 
 /// App chrome for the three primary tabs: app bar (workspace switch + logout)
 /// and a bottom navigation bar. Body is the branch's [navigationShell].
@@ -38,11 +39,14 @@ class HomeShell extends ConsumerWidget {
               ),
             ),
           PopupMenuButton<String>(
-            onSelected: (value) {
+            onSelected: (value) async {
               if (value == 'switch') {
                 context.go('/select-tenant');
               } else if (value == 'logout') {
-                ref.read(authControllerProvider.notifier).logout();
+                // Unregister the device while the token is still valid, then
+                // clear the session.
+                await ref.read(pushServiceProvider).deregister();
+                await ref.read(authControllerProvider.notifier).logout();
               }
             },
             itemBuilder: (context) => [

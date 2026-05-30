@@ -49,5 +49,12 @@
 
   "transcription": "النص المكتوب",
   "openDocument": "فتح المستند",
-  "loginNoRecaptcha": "تسجيل الدخول غير مهيأ (مفتاح reCAPTCHA مفقود)."
+  "loginNoRecaptcha": "تسجيل الدخول غير مهيأ (مفتاح reCAPTCHA مفقود).",
+
+  "composerHint": "رسالة",
+  "windowClosed": "خارج نافذة الـ 24 ساعة. استخدم قالبًا معتمدًا لبدء محادثة جديدة.",
+  "attachPhoto": "صورة",
+  "attachCamera": "الكاميرا",
+  "attachDocument": "مستند",
+  "sendFailed": "تعذّر الإرسال. اضغط لإعادة المحاولة."
 }

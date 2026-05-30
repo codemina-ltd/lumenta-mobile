@@ -5,6 +5,12 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Apply the Firebase Google Services plugin only when its config is present,
+// so the project still builds before Firebase is provisioned (Phase 6 setup).
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+}
+
 android {
     namespace = "co.lumenta.app"
     compileSdk = flutter.compileSdkVersion

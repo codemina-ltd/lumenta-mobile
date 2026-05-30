@@ -13,6 +13,7 @@ import '../shared/widgets.dart';
 import 'chat_providers.dart';
 import 'thread_controller.dart';
 import 'widgets/audio_bubble.dart';
+import 'widgets/chat_composer.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({super.key, required this.clientId});
@@ -52,12 +53,26 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     }
     if (!_didInitialScroll) {
       _didInitialScroll = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_scroll.hasClients) {
-          _scroll.jumpTo(_scroll.position.maxScrollExtent);
-        }
-      });
+      _scrollToBottom();
     }
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scroll.hasClients) {
+        _scroll.jumpTo(_scroll.position.maxScrollExtent);
+      }
+    });
+  }
+
+  /// WhatsApp free-form replies are only allowed within 24h of the last inbound.
+  bool _windowOpen(ThreadState state) {
+    for (final m in state.messages.reversed) {
+      if (m.direction == MessageDirection.inbound) {
+        return DateTime.now().difference(m.createdAtDate).inHours < 24;
+      }
+    }
+    return false;
   }
 
   @override
@@ -84,7 +99,18 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         ),
         title: Text(title.isEmpty ? '…' : title),
       ),
-      body: _body(context, state),
+      body: Column(
+        children: [
+          Expanded(child: _body(context, state)),
+          if (clientAsync.hasValue && !state.loading)
+            ChatComposer(
+              clientId: widget.clientId,
+              to: clientAsync.value!.phoneNumber,
+              windowOpen: _windowOpen(state),
+              onSent: _scrollToBottom,
+            ),
+        ],
+      ),
     );
   }
 

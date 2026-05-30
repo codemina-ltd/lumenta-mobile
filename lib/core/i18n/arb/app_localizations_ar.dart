@@ -129,4 +129,23 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get loginNoRecaptcha =>
       'تسجيل الدخول غير مهيأ (مفتاح reCAPTCHA مفقود).';
+
+  @override
+  String get composerHint => 'رسالة';
+
+  @override
+  String get windowClosed =>
+      'خارج نافذة الـ 24 ساعة. استخدم قالبًا معتمدًا لبدء محادثة جديدة.';
+
+  @override
+  String get attachPhoto => 'صورة';
+
+  @override
+  String get attachCamera => 'الكاميرا';
+
+  @override
+  String get attachDocument => 'مستند';
+
+  @override
+  String get sendFailed => 'تعذّر الإرسال. اضغط لإعادة المحاولة.';
 }

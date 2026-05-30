@@ -17,9 +17,9 @@ Implemented: project setup, brand theme, i18n (en/ar/fr + RTL), data layer
 | 3 | Auth, token refresh, tenant switcher | ✅ |
 | 4 | Models / Dio / repos | ✅ |
 | 5 | Clients, Chats, Chat detail (media), Notifications | ✅ |
-| 6 | Firebase / FCM push | ⏳ deferred |
-| 7 | Reply composer (24h window) | ⏳ optional |
-| 8 | Hardening / release | ⏳ |
+| 6 | Firebase / FCM push | ✅ (needs Firebase config files) |
+| 7 | Reply composer (24h window) | ✅ text + image + document |
+| 8 | Hardening / release | ✅ code-level (signing/store need accounts) |
 
 ## Run
 
@@ -63,6 +63,52 @@ the web portal. Without a key, login surfaces a "not configured" message.
 
 Server needs `FIREBASE_PROJECT_ID` + `FIREBASE_SERVICE_ACCOUNT_JSON_BASE64` for
 push to actually send.
+
+## Firebase / FCM (Phase 6)
+
+The push lifecycle is fully wired (`lib/features/push/push_service.dart`):
+permission prompt, token registration via `DeviceRepo` on login, re-register on
+token refresh, deregister + `deleteToken()` on logout, foreground local
+notifications, background/terminated handling, and tap → deep-link to
+`/chats/:clientId` (switching tenant when the push targets another workspace).
+
+It **degrades gracefully**: without native Firebase config the app runs and the
+in-app notifications feed still works — only push is disabled.
+
+To enable push you must provision Firebase (needs a Firebase project):
+
+1. **Android**: add the Firebase Android app for `co.lumenta.app`, download
+   `google-services.json` into `android/app/`. The Google Services Gradle
+   plugin auto-applies once that file exists (already declared in
+   `settings.gradle.kts` + `app/build.gradle.kts`). The `messages`
+   notification channel and `POST_NOTIFICATIONS` permission are already set up.
+2. **iOS**: add the Firebase iOS app for `co.lumenta.app`, download
+   `GoogleService-Info.plist` into `ios/Runner/` (add it to the Runner target
+   in Xcode). In Xcode → Signing & Capabilities add **Push Notifications** and
+   **Background Modes → Remote notifications** (the Info.plist background mode
+   is already declared). Upload an **APNs auth key** to the Firebase project.
+3. Backend: set `FIREBASE_PROJECT_ID` + `FIREBASE_SERVICE_ACCOUNT_JSON_BASE64`.
+
+`Firebase.initializeApp()` is called with no options and reads those native
+config files — no `firebase_options.dart` is required.
+
+## Hardening & release (Phase 8)
+
+Code-level security in place: JWTs only in Keychain/Keystore (never logged),
+single-flight refresh that clears the session on failure, `X-Tenant-Id` sent on
+every request (server enforces cross-tenant 404), logout deregisters the FCM
+device server-side and calls `deleteToken()`. Android desugaring + `minSdk 23`.
+
+Still required for store release (need accounts/keys):
+
+- **Android**: release signing keystore + `signingConfigs`; Play Console
+  listing; staged rollout. (R8/ProGuard defaults work for the current plugins.)
+- **iOS**: Apple Developer account, distribution signing, App Store privacy
+  labels.
+- **Optional**: `sentry_flutter` (needs a DSN) for crash reporting — strip PII /
+  tokens from breadcrumbs; certificate pinning on the Dio client.
+- **QA matrix**: foreground/background/terminated push × Android 13+/iOS ×
+  en/ar(RTL)/fr × single/multi-tenant.
 
 ## Notes
 

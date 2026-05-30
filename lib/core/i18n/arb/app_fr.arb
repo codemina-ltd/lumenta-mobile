@@ -49,5 +49,12 @@
 
   "transcription": "Transcription",
   "openDocument": "Ouvrir le document",
-  "loginNoRecaptcha": "La connexion n'est pas configurée (clé reCAPTCHA manquante)."
+  "loginNoRecaptcha": "La connexion n'est pas configurée (clé reCAPTCHA manquante).",
+
+  "composerHint": "Message",
+  "windowClosed": "Hors de la fenêtre de 24 heures. Utilisez un modèle approuvé pour démarrer une nouvelle conversation.",
+  "attachPhoto": "Photo",
+  "attachCamera": "Appareil photo",
+  "attachDocument": "Document",
+  "sendFailed": "Échec de l'envoi. Appuyez pour réessayer."
 }

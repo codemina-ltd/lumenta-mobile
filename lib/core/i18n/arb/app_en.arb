@@ -49,5 +49,12 @@
 
   "transcription": "Transcription",
   "openDocument": "Open document",
-  "loginNoRecaptcha": "Login is not configured (missing reCAPTCHA key)."
+  "loginNoRecaptcha": "Login is not configured (missing reCAPTCHA key).",
+
+  "composerHint": "Message",
+  "windowClosed": "Outside the 24-hour window. Use an approved template to start a new conversation.",
+  "attachPhoto": "Photo",
+  "attachCamera": "Camera",
+  "attachDocument": "Document",
+  "sendFailed": "Couldn't send. Tap to retry."
 }

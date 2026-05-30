@@ -339,6 +339,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login is not configured (missing reCAPTCHA key).'**
   String get loginNoRecaptcha;
+
+  /// No description provided for @composerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get composerHint;
+
+  /// No description provided for @windowClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside the 24-hour window. Use an approved template to start a new conversation.'**
+  String get windowClosed;
+
+  /// No description provided for @attachPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get attachPhoto;
+
+  /// No description provided for @attachCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get attachCamera;
+
+  /// No description provided for @attachDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Document'**
+  String get attachDocument;
+
+  /// No description provided for @sendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send. Tap to retry.'**
+  String get sendFailed;
 }
 
 class _AppLocalizationsDelegate

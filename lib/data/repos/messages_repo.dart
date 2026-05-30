@@ -41,4 +41,35 @@ class MessagesRepo {
   /// Pair with [mediaHeaders] for `cached_network_image`/`Image.network`.
   String mediaUrl(String messageId) =>
       '${Env.apiBaseUrl}/messages/$messageId/media';
+
+  /// `POST /messages/send` — free-form text reply (24h service window).
+  Future<Message> sendText({required String to, required String body}) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/messages/send',
+      data: {'to': to, 'body': body},
+    );
+    return Message.fromJson(res.data!);
+  }
+
+  /// `POST /messages/send-media` — multipart media reply.
+  Future<Message> sendMedia({
+    required String to,
+    required String mediaType, // image | audio | video | document
+    required String filePath,
+    String? caption,
+    String? filename,
+  }) async {
+    final form = FormData.fromMap({
+      'to': to,
+      'mediaType': mediaType,
+      'caption': ?caption,
+      'filename': ?filename,
+      'file': await MultipartFile.fromFile(filePath, filename: filename),
+    });
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/messages/send-media',
+      data: form,
+    );
+    return Message.fromJson(res.data!);
+  }
 }
