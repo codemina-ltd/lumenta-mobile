@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo to send in a chat.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app does not use your location. This entry is required because a bundled framework references location APIs.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Record audio to send in a chat.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
