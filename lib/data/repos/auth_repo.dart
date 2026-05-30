@@ -18,10 +18,14 @@ class AuthRepo {
   final Dio _dio;
 
   /// `POST /auth/login` — requires a reCAPTCHA Enterprise token (D6).
+  ///
+  /// [recaptchaPlatform] tells the API which site key to verify the token
+  /// against ('android' / 'ios'); each platform registers its own key.
   Future<LoginResult> login({
     required String email,
     required String password,
     required String recaptchaToken,
+    required String recaptchaPlatform,
   }) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/auth/login',
@@ -29,6 +33,7 @@ class AuthRepo {
         'email': email,
         'password': password,
         'recaptchaToken': recaptchaToken,
+        'recaptchaPlatform': recaptchaPlatform,
       },
     );
     final data = res.data!;

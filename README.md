@@ -34,9 +34,16 @@ flutter run \
 ```
 
 `RECAPTCHA_SITE_KEY` must be a **mobile** reCAPTCHA Enterprise key (Android/iOS
-apps registered in the Google Cloud reCAPTCHA console). The API verifies the
-login token with action **`LOGIN`** (uppercase), which the client sends to match
-the web portal. Without a key, login surfaces a "not configured" message.
+apps registered in the Google Cloud reCAPTCHA console) — pass the
+platform-matching key per build (the iOS build's key for iOS, etc.). The API
+verifies the login token with action **`LOGIN`** (uppercase), which the client
+sends to match the web portal. Without a key, login surfaces a "not configured"
+message.
+
+The client sends `recaptchaPlatform` (`android`/`ios`) with login so the API
+selects the matching site key. Configure the server with per-platform keys:
+`RECAPTCHA_SITE_KEY` (web, also `RECAPTCHA_SITE_KEY_WEB`),
+`RECAPTCHA_SITE_KEY_ANDROID`, `RECAPTCHA_SITE_KEY_IOS`.
 
 ## API contract (verified against `api/` + `portal/`)
 

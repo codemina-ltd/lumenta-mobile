@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -92,9 +93,13 @@ class AuthController extends StateNotifier<AuthState> {
     try {
       final recaptcha = _ref.read(recaptchaServiceProvider);
       final token = await recaptcha.tokenForLogin();
-      final result = await _ref
-          .read(authRepoProvider)
-          .login(email: email, password: password, recaptchaToken: token);
+      final result = await _ref.read(authRepoProvider).login(
+            email: email,
+            password: password,
+            recaptchaToken: token,
+            recaptchaPlatform:
+                defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android',
+          );
       await _session.setTokens(result.accessToken, result.refreshToken);
       await _loadProfileAndTenants(preferredTenantId: _session.activeTenantId);
     } on RecaptchaUnavailable catch (e) {
