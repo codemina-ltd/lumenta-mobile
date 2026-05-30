@@ -12,7 +12,7 @@ if (file("google-services.json").exists()) {
 }
 
 android {
-    namespace = "co.lumenta.app"
+    namespace = "com.codemina.apps.lumenta"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "co.lumenta.app"
+        applicationId = "com.codemina.apps.lumenta"
         // firebase_messaging / flutter_local_notifications need at least SDK 23.
         minSdk = maxOf(flutter.minSdkVersion, 23)
         targetSdk = flutter.targetSdkVersion

@@ -12,7 +12,7 @@ Implemented: project setup, brand theme, i18n (en/ar/fr + RTL), data layer
 
 | Phase | Area | State |
 |-------|------|-------|
-| 0 | Deps, env config, app id (`co.lumenta.app`) | ✅ |
+| 0 | Deps, env config, app id (`com.codemina.apps.lumenta`) | ✅ |
 | 2 | Theme + i18n (en/ar/fr, Arabic RTL) | ✅ |
 | 3 | Auth, token refresh, tenant switcher | ✅ |
 | 4 | Models / Dio / repos | ✅ |
@@ -77,12 +77,12 @@ in-app notifications feed still works — only push is disabled.
 
 To enable push you must provision Firebase (needs a Firebase project):
 
-1. **Android**: add the Firebase Android app for `co.lumenta.app`, download
+1. **Android**: add the Firebase Android app for `com.codemina.apps.lumenta`, download
    `google-services.json` into `android/app/`. The Google Services Gradle
    plugin auto-applies once that file exists (already declared in
    `settings.gradle.kts` + `app/build.gradle.kts`). The `messages`
    notification channel and `POST_NOTIFICATIONS` permission are already set up.
-2. **iOS**: add the Firebase iOS app for `co.lumenta.app`, download
+2. **iOS**: add the Firebase iOS app for `com.codemina.apps.lumenta`, download
    `GoogleService-Info.plist` into `ios/Runner/` (add it to the Runner target
    in Xcode). In Xcode → Signing & Capabilities add **Push Notifications** and
    **Background Modes → Remote notifications** (the Info.plist background mode

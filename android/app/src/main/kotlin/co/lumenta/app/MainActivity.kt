@@ -1,4 +1,4 @@
-package co.lumenta.app
+package com.codemina.apps.lumenta
 
 import io.flutter.embedding.android.FlutterActivity
 

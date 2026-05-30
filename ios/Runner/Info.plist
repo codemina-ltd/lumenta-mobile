@@ -26,6 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Take a photo to send in a chat.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Record audio to send in a chat.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Attach a photo from your library to send in a chat.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -49,6 +55,11 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -65,19 +76,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<!-- Reply composer attachments (Phase 7). -->
-	<key>NSCameraUsageDescription</key>
-	<string>Take a photo to send in a chat.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Attach a photo from your library to send in a chat.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Record audio to send in a chat.</string>
-	<!-- FCM: wake the app to handle data/notification pushes (plan §6, §8). -->
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
 	</array>
 </dict>
 </plist>
