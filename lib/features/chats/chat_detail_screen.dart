@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/format.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/providers.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/message.dart';
 import '../../data/storage/last_read_store.dart';
@@ -83,6 +85,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       data: (c) => c.displayName,
       orElse: () => '',
     );
+    final initials = clientAsync.maybeWhen(
+      data: (c) => c.initials,
+      orElse: () => '',
+    );
+    final phone = clientAsync.maybeWhen(
+      data: (c) => '+${c.phoneNumber}',
+      orElse: () => null,
+    );
 
     ref.listen(threadControllerProvider(widget.clientId), (_, next) {
       if (!next.loading && next.error == null) {
@@ -92,12 +102,43 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
+        leadingWidth: 40,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () =>
               context.canPop() ? context.pop() : context.go('/chats'),
         ),
-        title: Text(title.isEmpty ? '…' : title),
+        title: Row(
+          children: [
+            if (initials.isNotEmpty)
+              InitialsAvatar(initials: initials, radius: 18),
+            const SizedBox(width: Insets.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title.isEmpty ? '…' : title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.text.titleMedium?.copyWith(fontSize: 17),
+                  ),
+                  if (phone != null)
+                    Text(
+                      phone,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.text.labelSmall?.copyWith(
+                        color: context.scheme.onSurfaceVariant,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -131,12 +172,15 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     final rows = _buildRows(context, state.messages);
     return ListView.builder(
       controller: _scroll,
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        vertical: Insets.md,
+        horizontal: Insets.xs,
+      ),
       itemCount: rows.length + (state.loadingOlder ? 1 : 0),
       itemBuilder: (context, i) {
         if (state.loadingOlder && i == 0) {
           return const Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(Insets.sm),
             child: Center(
               child: SizedBox(
                 width: 18,
@@ -191,13 +235,22 @@ class _DayHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
+        margin: const EdgeInsets.symmetric(vertical: Insets.md),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Insets.md,
+          vertical: 5,
         ),
-        child: Text(label, style: Theme.of(context).textTheme.labelSmall),
+        decoration: BoxDecoration(
+          color: context.scheme.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(Radii.pill),
+        ),
+        child: Text(
+          label,
+          style: context.text.labelSmall?.copyWith(
+            color: context.scheme.onSurfaceVariant,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }
@@ -209,10 +262,11 @@ class _MessageBubble extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final chat = Theme.of(context).extension<ChatColors>()!;
+    final chat = context.chat;
     final outbound = message.isOutbound;
     final bubbleColor = outbound ? chat.outboundBubble : chat.inboundBubble;
     final textColor = outbound ? chat.outboundText : chat.inboundText;
+    final isLight = context.scheme.brightness == Brightness.light;
 
     return Align(
       alignment: outbound ? Alignment.centerRight : Alignment.centerLeft,
@@ -220,16 +274,31 @@ class _MessageBubble extends ConsumerWidget {
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.78,
         ),
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: const EdgeInsets.symmetric(
+          horizontal: Insets.md,
+          vertical: 3,
+        ),
+        padding: const EdgeInsets.fromLTRB(Insets.md, Insets.sm, Insets.md, 6),
         decoration: BoxDecoration(
           color: bubbleColor,
           borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(14),
-            topRight: const Radius.circular(14),
-            bottomLeft: Radius.circular(outbound ? 14 : 4),
-            bottomRight: Radius.circular(outbound ? 4 : 14),
+            topLeft: const Radius.circular(Radii.md),
+            topRight: const Radius.circular(Radii.md),
+            bottomLeft: Radius.circular(outbound ? Radii.md : 4),
+            bottomRight: Radius.circular(outbound ? 4 : Radii.md),
           ),
+          border: (!outbound && isLight)
+              ? Border.all(color: AppColors.hairline)
+              : null,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.deepForest.withValues(
+                alpha: isLight ? 0.05 : 0.18,
+              ),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,13 +353,13 @@ class _MessageBubble extends ConsumerWidget {
         );
       case MessageType.video:
         return _IconTile(
-          icon: Icons.videocam,
+          icon: Icons.videocam_rounded,
           label: AppLocalizations.of(context).previewVideo,
           textColor: textColor,
         );
       case MessageType.document:
         return _IconTile(
-          icon: Icons.insert_drive_file,
+          icon: Icons.insert_drive_file_rounded,
           label: message.body.isNotEmpty
               ? message.body
               : AppLocalizations.of(context).previewDocument,
@@ -301,7 +370,7 @@ class _MessageBubble extends ConsumerWidget {
       default:
         return Text(
           message.body.isEmpty ? '…' : message.body,
-          style: TextStyle(color: textColor, fontSize: 15),
+          style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
         );
     }
   }
@@ -319,7 +388,7 @@ class _MessageBubble extends ConsumerWidget {
         ),
         if (outbound) ...[
           const SizedBox(width: 4),
-          Icon(_statusIcon(), size: 13, color: _statusColor(textColor)),
+          Icon(_statusIcon(), size: 14, color: _statusColor(textColor)),
         ],
       ],
     );
@@ -329,17 +398,17 @@ class _MessageBubble extends ConsumerWidget {
     switch (message.status) {
       case MessageStatus.read:
       case MessageStatus.delivered:
-        return Icons.done_all;
+        return Icons.done_all_rounded;
       case MessageStatus.failed:
-        return Icons.error_outline;
+        return Icons.error_outline_rounded;
       default:
-        return Icons.done;
+        return Icons.done_rounded;
     }
   }
 
   Color _statusColor(Color textColor) {
-    if (message.status == MessageStatus.read) return Colors.lightBlueAccent;
-    if (message.status == MessageStatus.failed) return Colors.redAccent;
+    if (message.status == MessageStatus.read) return AppColors.lilac;
+    if (message.status == MessageStatus.failed) return AppColors.ember;
     return textColor.withValues(alpha: 0.6);
   }
 }
@@ -365,19 +434,20 @@ class _ImageContent extends StatelessWidget {
         GestureDetector(
           onTap: () => _openZoom(context),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(Radii.sm),
             child: CachedNetworkImage(
               imageUrl: url,
               httpHeaders: headers,
               fit: BoxFit.cover,
-              width: 220,
-              placeholder: (_, _) => const SizedBox(
-                width: 220,
+              width: 230,
+              placeholder: (_, _) => Container(
+                width: 230,
                 height: 160,
-                child: Center(child: CircularProgressIndicator()),
+                color: Colors.black.withValues(alpha: 0.05),
+                child: const Center(child: CircularProgressIndicator()),
               ),
               errorWidget: (_, _, _) => const SizedBox(
-                width: 220,
+                width: 230,
                 height: 120,
                 child: Icon(Icons.broken_image_outlined),
               ),
@@ -386,8 +456,11 @@ class _ImageContent extends StatelessWidget {
         ),
         if (caption.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(caption, style: TextStyle(color: textColor)),
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              caption,
+              style: TextStyle(color: textColor, height: 1.35),
+            ),
           ),
       ],
     );
@@ -413,7 +486,7 @@ class _ImageContent extends StatelessWidget {
               top: 40,
               right: 12,
               child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
+                icon: const Icon(Icons.close_rounded, color: Colors.white),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
@@ -439,8 +512,15 @@ class _IconTile extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: textColor, size: 28),
-        const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.all(Insets.sm),
+          decoration: BoxDecoration(
+            color: textColor.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(Radii.sm),
+          ),
+          child: Icon(icon, color: textColor, size: 24),
+        ),
+        const SizedBox(width: Insets.md),
         Flexible(
           child: Text(label, style: TextStyle(color: textColor)),
         ),
@@ -465,8 +545,15 @@ class _LocationContent extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(Icons.location_on, color: textColor, size: 28),
-        const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.all(Insets.sm),
+          decoration: BoxDecoration(
+            color: textColor.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(Radii.sm),
+          ),
+          child: Icon(Icons.location_on_rounded, color: textColor, size: 24),
+        ),
+        const SizedBox(width: Insets.md),
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -474,7 +561,7 @@ class _LocationContent extends StatelessWidget {
             children: [
               Text(
                 name ?? AppLocalizations.of(context).previewLocation,
-                style: TextStyle(color: textColor, fontWeight: FontWeight.w500),
+                style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
               ),
               if (coords != null)
                 Text(

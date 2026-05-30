@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/i18n/arb/app_localizations.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_dimens.dart';
+import '../../core/theme/app_theme.dart';
 import '../auth/auth_controller.dart';
 import '../notifications/notifications_controller.dart';
 import '../push/push_service.dart';
@@ -23,90 +26,153 @@ class HomeShell extends ConsumerWidget {
     );
 
     final titles = [l10n.navClients, l10n.navChats, l10n.navNotifications];
+    final index = navigationShell.currentIndex;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(titles[navigationShell.currentIndex]),
+        titleSpacing: Insets.lg,
+        title: Text(titles[index]),
         actions: [
           if (auth.activeTenant != null)
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Text(
-                  auth.activeTenant!.name,
-                  style: const TextStyle(fontSize: 13),
-                ),
-              ),
-            ),
-          PopupMenuButton<String>(
-            onSelected: (value) async {
-              if (value == 'switch') {
-                context.go('/select-tenant');
-              } else if (value == 'logout') {
+            _WorkspaceMenu(
+              name: auth.activeTenant!.name,
+              canSwitch: auth.tenants.length > 1,
+              onSwitch: () => context.go('/select-tenant'),
+              onLogout: () async {
                 // Unregister the device while the token is still valid, then
                 // clear the session.
                 await ref.read(pushServiceProvider).deregister();
                 await ref.read(authControllerProvider.notifier).logout();
-              }
-            },
-            itemBuilder: (context) => [
-              if (auth.tenants.length > 1)
-                PopupMenuItem(
-                  value: 'switch',
-                  child: Row(
-                    children: [
-                      const Icon(Icons.swap_horiz, size: 20),
-                      const SizedBox(width: 8),
-                      Text(l10n.switchTenant),
-                    ],
-                  ),
-                ),
-              PopupMenuItem(
-                value: 'logout',
-                child: Row(
-                  children: [
-                    const Icon(Icons.logout, size: 20),
-                    const SizedBox(width: 8),
-                    Text(l10n.logout),
-                  ],
-                ),
-              ),
-            ],
-          ),
+              },
+            ),
+          const SizedBox(width: Insets.sm),
         ],
       ),
       body: navigationShell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: (i) => navigationShell.goBranch(
-          i,
-          initialLocation: i == navigationShell.currentIndex,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: context.scheme.outlineVariant),
+          ),
         ),
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.people_outline),
-            selectedIcon: const Icon(Icons.people),
-            label: l10n.navClients,
+        child: NavigationBar(
+          selectedIndex: index,
+          onDestinationSelected: (i) => navigationShell.goBranch(
+            i,
+            initialLocation: i == index,
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.forum_outlined),
-            selectedIcon: const Icon(Icons.forum),
-            label: l10n.navChats,
-          ),
-          NavigationDestination(
-            icon: Badge.count(
-              count: unread,
-              isLabelVisible: unread > 0,
-              child: const Icon(Icons.notifications_none),
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.people_alt_outlined),
+              selectedIcon: const Icon(Icons.people_alt_rounded),
+              label: l10n.navClients,
             ),
-            selectedIcon: Badge.count(
-              count: unread,
-              isLabelVisible: unread > 0,
-              child: const Icon(Icons.notifications),
+            NavigationDestination(
+              icon: const Icon(Icons.forum_outlined),
+              selectedIcon: const Icon(Icons.forum_rounded),
+              label: l10n.navChats,
             ),
-            label: l10n.navNotifications,
+            NavigationDestination(
+              icon: Badge.count(
+                count: unread,
+                isLabelVisible: unread > 0,
+                backgroundColor: AppColors.ember,
+                child: const Icon(Icons.notifications_none_rounded),
+              ),
+              selectedIcon: Badge.count(
+                count: unread,
+                isLabelVisible: unread > 0,
+                backgroundColor: AppColors.ember,
+                child: const Icon(Icons.notifications_rounded),
+              ),
+              label: l10n.navNotifications,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The active-workspace chip in the app bar; tapping opens switch / logout.
+class _WorkspaceMenu extends StatelessWidget {
+  const _WorkspaceMenu({
+    required this.name,
+    required this.canSwitch,
+    required this.onSwitch,
+    required this.onLogout,
+  });
+
+  final String name;
+  final bool canSwitch;
+  final VoidCallback onSwitch;
+  final Future<void> Function() onLogout;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return PopupMenuButton<String>(
+      tooltip: name,
+      position: PopupMenuPosition.under,
+      offset: const Offset(0, Insets.sm),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(Radii.md)),
+      ),
+      onSelected: (value) {
+        if (value == 'switch') {
+          onSwitch();
+        } else if (value == 'logout') {
+          onLogout();
+        }
+      },
+      itemBuilder: (context) => [
+        if (canSwitch)
+          PopupMenuItem(
+            value: 'switch',
+            child: Row(
+              children: [
+                const Icon(Icons.swap_horiz_rounded, size: 20),
+                const SizedBox(width: Insets.md),
+                Text(l10n.switchTenant),
+              ],
+            ),
           ),
-        ],
+        PopupMenuItem(
+          value: 'logout',
+          child: Row(
+            children: [
+              const Icon(Icons.logout_rounded, size: 20, color: AppColors.ember),
+              const SizedBox(width: Insets.md),
+              Text(l10n.logout),
+            ],
+          ),
+        ),
+      ],
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(Insets.md, Insets.sm, Insets.sm, Insets.sm),
+        decoration: BoxDecoration(
+          color: context.scheme.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(Radii.pill),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.workspaces_rounded,
+                size: 16, color: AppColors.signalDeep),
+            const SizedBox(width: Insets.sm),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 120),
+              child: Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.text.labelLarge?.copyWith(fontSize: 13),
+              ),
+            ),
+            Icon(Icons.expand_more_rounded,
+                size: 18, color: context.scheme.onSurfaceVariant),
+          ],
+        ),
       ),
     );
   }

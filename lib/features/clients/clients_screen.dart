@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/i18n/arb/app_localizations.dart';
+import '../../core/theme/app_dimens.dart';
+import '../../core/theme/app_theme.dart';
+import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'clients_controller.dart';
 
@@ -57,18 +60,31 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+          padding: const EdgeInsets.fromLTRB(
+            Insets.lg,
+            Insets.sm,
+            Insets.lg,
+            Insets.md,
+          ),
           child: TextField(
             controller: _searchCtrl,
             onChanged: _onSearchChanged,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               hintText: l10n.searchClients,
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search_rounded),
               isDense: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              suffixIcon: _searchCtrl.text.isEmpty
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.close_rounded, size: 20),
+                      onPressed: () {
+                        _searchCtrl.clear();
+                        _onSearchChanged('');
+                        setState(() {});
+                      },
+                    ),
+              border: const OutlineInputBorder(borderRadius: Radii.field),
             ),
           ),
         ),
@@ -76,36 +92,39 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
           child: Builder(
             builder: (context) {
               if (state.loading) {
-                return const Center(child: CircularProgressIndicator());
+                return const SkeletonList(count: 9, lines: 1);
               }
               if (state.error != null && state.items.isEmpty) {
                 return ErrorRetry(onRetry: controller.refresh);
               }
               if (state.items.isEmpty) {
                 return EmptyState(
-                  message: l10n.clientsEmpty,
-                  icon: Icons.people_outline,
+                  title: l10n.clientsEmpty,
+                  message: l10n.searchClients,
+                  icon: Icons.people_alt_outlined,
                 );
               }
               return RefreshIndicator(
                 onRefresh: controller.refresh,
                 child: ListView.separated(
                   controller: _scroll,
+                  padding: const EdgeInsets.only(bottom: Insets.lg),
                   itemCount: state.items.length + (state.hasMore ? 1 : 0),
-                  separatorBuilder: (_, _) => const Divider(height: 1),
+                  separatorBuilder: (_, _) => Divider(
+                    height: 1,
+                    indent: 76,
+                    endIndent: Insets.lg,
+                    color: context.scheme.outlineVariant,
+                  ),
                   itemBuilder: (context, i) {
                     if (i >= state.items.length) {
-                      return const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
+                      return const _LoadingMore();
                     }
                     final c = state.items[i];
-                    return ListTile(
-                      leading: InitialsAvatar(initials: c.initials),
-                      title: Text(c.displayName),
-                      subtitle: Text('+${c.phoneNumber}'),
-                      trailing: const Icon(Icons.chat_bubble_outline, size: 20),
+                    return _ClientRow(
+                      initials: c.initials,
+                      name: c.displayName,
+                      phone: '+${c.phoneNumber}',
                       onTap: () => context.go('/chats/${c.id}'),
                     );
                   },
@@ -115,6 +134,85 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ClientRow extends StatelessWidget {
+  const _ClientRow({
+    required this.initials,
+    required this.name,
+    required this.phone,
+    required this.onTap,
+  });
+
+  final String initials;
+  final String name;
+  final String phone;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Insets.lg,
+          vertical: Insets.md,
+        ),
+        child: Row(
+          children: [
+            InitialsAvatar(initials: initials),
+            const SizedBox(width: Insets.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.text.titleMedium,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    phone,
+                    style: context.text.bodySmall?.copyWith(
+                      color: context.scheme.onSurfaceVariant,
+                      fontFeatures: const [],
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: Insets.sm),
+            Icon(
+              Icons.chat_bubble_outline_rounded,
+              size: 20,
+              color: context.scheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoadingMore extends StatelessWidget {
+  const _LoadingMore();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(Insets.lg),
+      child: Center(
+        child: SizedBox(
+          width: 22,
+          height: 22,
+          child: CircularProgressIndicator(strokeWidth: 2.4),
+        ),
+      ),
     );
   }
 }

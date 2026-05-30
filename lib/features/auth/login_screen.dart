@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_dimens.dart';
+import '../shared/brand_mark.dart';
 import 'auth_controller.dart';
 import 'recaptcha_service.dart';
 
@@ -46,91 +48,104 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.deepForest,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Text(
-                      'Lumenta',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: AppColors.signal,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l10n.loginSubtitle,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: AppColors.onDarkMed),
-                    ),
-                    const SizedBox(height: 32),
-                    TextFormField(
-                      controller: _email,
-                      keyboardType: TextInputType.emailAddress,
-                      autofillHints: const [AutofillHints.email],
-                      style: const TextStyle(color: AppColors.onDarkHigh),
-                      decoration: _decoration(l10n.emailLabel),
-                      validator: (v) =>
-                          (v == null || !v.contains('@')) ? '—' : null,
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _password,
-                      obscureText: _obscure,
-                      autofillHints: const [AutofillHints.password],
-                      style: const TextStyle(color: AppColors.onDarkHigh),
-                      decoration: _decoration(l10n.passwordLabel).copyWith(
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscure
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: AppColors.onDarkMed,
-                          ),
-                          onPressed: () =>
-                              setState(() => _obscure = !_obscure),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFF0E2A25), AppColors.deepForest],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Insets.xxl,
+                vertical: Insets.xxxl,
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Center(child: AppIconMark(size: 72)),
+                      const SizedBox(height: Insets.xl),
+                      const Center(
+                        child: LumentaWordmark(
+                          fontSize: 32,
+                          color: AppColors.onDarkHigh,
                         ),
                       ),
-                      validator: (v) =>
-                          (v == null || v.isEmpty) ? '—' : null,
-                      onFieldSubmitted: (_) => _submit(),
-                    ),
-                    if (state.error != null) ...[
-                      const SizedBox(height: 16),
+                      const SizedBox(height: Insets.sm),
                       Text(
-                        _errorText(l10n, state.error),
-                        style: const TextStyle(color: AppColors.ember),
+                        l10n.loginSubtitle,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: AppColors.onDarkMed,
+                          fontSize: 15,
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(height: Insets.huge),
+                      _Field(
+                        controller: _email,
+                        label: l10n.emailLabel,
+                        icon: Icons.alternate_email_rounded,
+                        keyboardType: TextInputType.emailAddress,
+                        autofillHints: const [AutofillHints.email],
+                        validator: (v) =>
+                            (v == null || !v.contains('@')) ? '—' : null,
+                      ),
+                      const SizedBox(height: Insets.lg),
+                      _Field(
+                        controller: _password,
+                        label: l10n.passwordLabel,
+                        icon: Icons.lock_outline_rounded,
+                        obscureText: _obscure,
+                        autofillHints: const [AutofillHints.password],
+                        onSubmitted: (_) => _submit(),
+                        validator: (v) =>
+                            (v == null || v.isEmpty) ? '—' : null,
+                        suffix: IconButton(
+                          icon: Icon(
+                            _obscure
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: AppColors.onDarkMed,
+                          ),
+                          onPressed: () => setState(() => _obscure = !_obscure),
+                        ),
+                      ),
+                      AnimatedSize(
+                        duration: Motion.fast,
+                        curve: Motion.standard,
+                        child: state.error != null
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: Insets.lg),
+                                child: _ErrorBanner(
+                                  message: _errorText(l10n, state.error),
+                                ),
+                              )
+                            : const SizedBox(width: double.infinity),
+                      ),
+                      const SizedBox(height: Insets.xxl),
+                      FilledButton(
+                        onPressed: state.busy ? null : _submit,
+                        child: state.busy
+                            ? const SizedBox(
+                                height: 22,
+                                width: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                  color: AppColors.deepForest,
+                                ),
+                              )
+                            : Text(l10n.loginButton),
                       ),
                     ],
-                    const SizedBox(height: 28),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.signal,
-                        foregroundColor: AppColors.deepForest,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      onPressed: state.busy ? null : _submit,
-                      child: state.busy
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppColors.deepForest,
-                              ),
-                            )
-                          : Text(l10n.loginButton),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -139,22 +154,107 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ),
     );
   }
+}
 
-  InputDecoration _decoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(color: AppColors.onDarkMed),
-      filled: true,
-      fillColor: AppColors.forest2,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF24403A)),
+/// Dark-surface text field tuned for the forest login backdrop (the global
+/// input theme targets the light/dark scaffold, not this fixed-dark screen).
+class _Field extends StatelessWidget {
+  const _Field({
+    required this.controller,
+    required this.label,
+    required this.icon,
+    this.keyboardType,
+    this.obscureText = false,
+    this.autofillHints,
+    this.validator,
+    this.onSubmitted,
+    this.suffix,
+  });
+
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+  final Iterable<String>? autofillHints;
+  final String? Function(String?)? validator;
+  final void Function(String)? onSubmitted;
+  final Widget? suffix;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      autofillHints: autofillHints,
+      validator: validator,
+      onFieldSubmitted: onSubmitted,
+      style: const TextStyle(color: AppColors.onDarkHigh, fontSize: 15),
+      cursorColor: AppColors.signal,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: AppColors.onDarkMed),
+        floatingLabelStyle: const TextStyle(color: AppColors.signal),
+        prefixIcon: Icon(icon, color: AppColors.onDarkMed, size: 20),
+        suffixIcon: suffix,
+        filled: true,
+        fillColor: AppColors.forest2,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: Insets.lg,
+          vertical: Insets.lg,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: Radii.field,
+          borderSide: const BorderSide(color: AppColors.forestLine),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: Radii.field,
+          borderSide: const BorderSide(color: AppColors.signal, width: 1.6),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: Radii.field,
+          borderSide: const BorderSide(color: AppColors.ember),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: Radii.field,
+          borderSide: const BorderSide(color: AppColors.ember, width: 1.6),
+        ),
+        errorStyle: const TextStyle(height: 0),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.signal),
+    );
+  }
+}
+
+class _ErrorBanner extends StatelessWidget {
+  const _ErrorBanner({required this.message});
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.lg,
+        vertical: Insets.md,
       ),
-      errorStyle: const TextStyle(height: 0),
+      decoration: BoxDecoration(
+        color: AppColors.ember.withValues(alpha: 0.14),
+        borderRadius: Radii.field,
+        border: Border.all(color: AppColors.ember.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.error_outline_rounded,
+              color: AppColors.ember, size: 20),
+          const SizedBox(width: Insets.md),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(color: AppColors.onDarkHigh, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

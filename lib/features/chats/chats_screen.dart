@@ -5,8 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../core/format.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_dimens.dart';
+import '../../core/theme/app_theme.dart';
 import '../../data/models/message.dart';
 import '../../data/storage/last_read_store.dart';
+import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'chats_controller.dart';
 import 'message_preview.dart';
@@ -46,7 +49,7 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
     final lastRead = ref.watch(lastReadStoreProvider);
 
     if (state.loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const SkeletonList(count: 8);
     }
     if (state.endpointMissing) {
       return ErrorRetry(
@@ -60,7 +63,8 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
     }
     if (state.items.isEmpty) {
       return EmptyState(
-        message: l10n.chatsEmpty,
+        title: l10n.chatsEmpty,
+        message: l10n.searchClients,
         icon: Icons.forum_outlined,
       );
     }
@@ -69,13 +73,25 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
       onRefresh: controller.refresh,
       child: ListView.separated(
         controller: _scroll,
+        padding: const EdgeInsets.only(bottom: Insets.lg),
         itemCount: state.items.length + (state.hasMore ? 1 : 0),
-        separatorBuilder: (_, _) => const Divider(height: 1, indent: 76),
+        separatorBuilder: (_, _) => Divider(
+          height: 1,
+          indent: 80,
+          endIndent: Insets.lg,
+          color: context.scheme.outlineVariant,
+        ),
         itemBuilder: (context, i) {
           if (i >= state.items.length) {
             return const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
+              padding: EdgeInsets.all(Insets.lg),
+              child: Center(
+                child: SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(strokeWidth: 2.4),
+                ),
+              ),
             );
           }
           final conv = state.items[i];
@@ -89,43 +105,129 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
               conv.lastMessageDirection == MessageDirection.inbound;
           final unread = inbound && lastRead.isUnread(conv.clientId, when);
 
-          return ListTile(
-            leading: InitialsAvatar(initials: conv.initials),
-            title: Text(
-              conv.displayName,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: unread ? FontWeight.w700 : FontWeight.w500,
+          return _ChatRow(
+            initials: conv.initials,
+            name: conv.displayName,
+            preview: preview,
+            when: when,
+            unread: unread,
+            outbound: !inbound,
+            onTap: () => context.go('/chats/${conv.clientId}'),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ChatRow extends StatelessWidget {
+  const _ChatRow({
+    required this.initials,
+    required this.name,
+    required this.preview,
+    required this.when,
+    required this.unread,
+    required this.outbound,
+    required this.onTap,
+  });
+
+  final String initials;
+  final String name;
+  final String preview;
+  final DateTime? when;
+  final bool unread;
+  final bool outbound;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final timeColor = unread
+        ? AppColors.signalDeep
+        : context.scheme.onSurfaceVariant;
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Insets.lg,
+          vertical: Insets.md,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InitialsAvatar(initials: initials, radius: 26),
+            const SizedBox(width: Insets.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.text.titleMedium?.copyWith(
+                      fontWeight: unread ? FontWeight.w700 : FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Row(
+                    children: [
+                      if (outbound) ...[
+                        Icon(
+                          Icons.subdirectory_arrow_right_rounded,
+                          size: 14,
+                          color: context.scheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 3),
+                      ],
+                      Expanded(
+                        child: Text(
+                          preview,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.text.bodyMedium?.copyWith(
+                            color: unread
+                                ? context.scheme.onSurface
+                                : context.scheme.onSurfaceVariant,
+                            fontWeight:
+                                unread ? FontWeight.w600 : FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            subtitle: Text(
-              preview,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: unread ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            const SizedBox(width: Insets.md),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (when != null)
                   Text(
-                    Fmt.listTimestamp(context, when),
-                    style: Theme.of(context).textTheme.labelSmall,
+                    Fmt.listTimestamp(context, when!),
+                    style: context.text.labelSmall?.copyWith(
+                      color: timeColor,
+                      fontWeight: unread ? FontWeight.w700 : FontWeight.w500,
+                    ),
                   ),
-                const SizedBox(height: 6),
+                const SizedBox(height: Insets.sm),
                 if (unread)
-                  const CircleAvatar(radius: 5, backgroundColor: AppColors.signal)
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      color: AppColors.signal,
+                      shape: BoxShape.circle,
+                    ),
+                  )
                 else
                   const SizedBox(height: 10),
               ],
             ),
-            onTap: () => context.go('/chats/${conv.clientId}'),
-          );
-        },
+          ],
+        ),
       ),
     );
   }

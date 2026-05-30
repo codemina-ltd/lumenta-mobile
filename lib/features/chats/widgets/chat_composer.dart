@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/i18n/arb/app_localizations.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_dimens.dart';
+import '../../../core/theme/app_theme.dart';
 import '../thread_controller.dart';
 
 /// Reply composer for the chat thread (Phase 7). Free-form sending is only
@@ -90,33 +93,45 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
     showModalBottomSheet<void>(
       context: context,
       builder: (sheetCtx) => SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.photo_library_outlined),
-              title: Text(l10n.attachPhoto),
-              onTap: () {
-                Navigator.pop(sheetCtx);
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_camera_outlined),
-              title: Text(l10n.attachCamera),
-              onTap: () {
-                Navigator.pop(sheetCtx);
-                _pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.insert_drive_file_outlined),
-              title: Text(l10n.attachDocument),
-              onTap: () {
-                Navigator.pop(sheetCtx);
-                _pickDocument();
-              },
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Insets.sm,
+            0,
+            Insets.sm,
+            Insets.md,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _AttachOption(
+                icon: Icons.photo_library_rounded,
+                color: AppColors.signal,
+                label: l10n.attachPhoto,
+                onTap: () {
+                  Navigator.pop(sheetCtx);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+              _AttachOption(
+                icon: Icons.photo_camera_rounded,
+                color: AppColors.lilac,
+                label: l10n.attachCamera,
+                onTap: () {
+                  Navigator.pop(sheetCtx);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              _AttachOption(
+                icon: Icons.insert_drive_file_rounded,
+                color: AppColors.amber,
+                label: l10n.attachDocument,
+                onTap: () {
+                  Navigator.pop(sheetCtx);
+                  _pickDocument();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -125,67 +140,161 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+    final scheme = Theme.of(context).colorScheme;
 
     if (!widget.windowOpen) {
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        color: theme.colorScheme.surfaceContainerHighest,
-        child: Row(
-          children: [
-            Icon(Icons.lock_clock, size: 18, color: theme.colorScheme.outline),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                l10n.windowClosed,
-                style: theme.textTheme.bodySmall,
-              ),
+        decoration: BoxDecoration(
+          color: AppColors.amber.withValues(alpha: 0.12),
+          border: Border(top: BorderSide(color: scheme.outlineVariant)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Insets.lg,
+              vertical: Insets.md,
             ),
-          ],
+            child: Row(
+              children: [
+                const Icon(Icons.lock_clock_rounded,
+                    size: 20, color: AppColors.amber),
+                const SizedBox(width: Insets.md),
+                Expanded(
+                  child: Text(
+                    l10n.windowClosed,
+                    style: context.text.bodySmall?.copyWith(
+                      color: scheme.onSurface,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       );
     }
 
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.attach_file),
-              onPressed: _openAttachSheet,
-            ),
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                minLines: 1,
-                maxLines: 5,
-                textInputAction: TextInputAction.newline,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                  hintText: l10n.composerHint,
-                  isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        border: Border(top: BorderSide(color: scheme.outlineVariant)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Insets.sm,
+            Insets.sm,
+            Insets.sm,
+            Insets.sm,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.add_circle_outline_rounded),
+                color: scheme.onSurfaceVariant,
+                onPressed: _openAttachSheet,
+              ),
+              Expanded(
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 44),
+                  decoration: BoxDecoration(
+                    color: scheme.surfaceContainerHigh,
+                    borderRadius: BorderRadius.circular(Radii.xl),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
+                  child: TextField(
+                    controller: _controller,
+                    minLines: 1,
+                    maxLines: 5,
+                    textInputAction: TextInputAction.newline,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      hintText: l10n.composerHint,
+                      isDense: true,
+                      filled: false,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Insets.lg,
+                        vertical: Insets.md,
+                      ),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 4),
-            IconButton.filled(
-              icon: const Icon(Icons.send),
-              onPressed: _hasText ? _sendText : null,
-            ),
-          ],
+              const SizedBox(width: Insets.sm),
+              _SendButton(enabled: _hasText, onTap: _sendText),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// Animated send button — fades from disabled grey to the signal accent as
+/// soon as the field has content.
+class _SendButton extends StatelessWidget {
+  const _SendButton({required this.enabled, required this.onTap});
+
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Motion.fast,
+      curve: Motion.standard,
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: enabled
+            ? AppColors.signal
+            : context.scheme.onSurface.withValues(alpha: 0.12),
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.arrow_upward_rounded),
+        color: enabled
+            ? AppColors.deepForest
+            : context.scheme.onSurface.withValues(alpha: 0.4),
+        onPressed: enabled ? onTap : null,
+      ),
+    );
+  }
+}
+
+class _AttachOption extends StatelessWidget {
+  const _AttachOption({
+    required this.icon,
+    required this.color,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final Color color;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      leading: Container(
+        width: 42,
+        height: 42,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.14),
+          borderRadius: BorderRadius.circular(Radii.md),
+        ),
+        child: Icon(icon, color: color, size: 22),
+      ),
+      title: Text(label, style: context.text.titleMedium),
     );
   }
 }

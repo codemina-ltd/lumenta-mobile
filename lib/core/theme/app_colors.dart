@@ -28,4 +28,28 @@ class AppColors {
   // Convenience light text colors on dark chrome
   static const onDarkHigh = Color(0xFFF5F1E8);
   static const onDarkMed = Color(0xFFB8BCB5);
+  static const onDarkLow = Color(0xFF7C8A85);
+
+  // --- Derived surface & text tones (Brand Identity v1.1, additive) ---------
+
+  /// Slightly lighter paper for raised cards on the light background.
+  static const paperRaised = Color(0xFFFBF8F1);
+
+  /// Hairline border on light surfaces — softer than [mist].
+  static const hairline = Color(0xFFE2DACB);
+
+  /// Forest tones for dark-mode surface stepping.
+  static const forest3 = Color(0xFF184039);
+  static const forestLine = Color(0xFF24403A);
+
+  /// Ink hierarchy on light surfaces (deep forest based).
+  static const inkHigh = deepForest;
+  static const inkMed = Color(0xFF55615C);
+  static const inkLow = Color(0xFF8A938E);
+
+  /// Soft tints for status/severity chips on light surfaces.
+  static const signalTint = Color(0xFFD8F3EA);
+  static const emberTint = Color(0xFFFFE2D9);
+  static const amberTint = Color(0xFFFBEDCF);
+  static const lilacTint = Color(0xFFEAE3FF);
 }
