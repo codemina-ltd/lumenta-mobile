@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1022568899950",
+    "project_id": "engageflow-490817",
+    "storage_bucket": "engageflow-490817.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022568899950:android:7a1df7465440bc4c330d7f",
+        "android_client_info": {
+          "package_name": "com.codemina.apps.lumenta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6QJfnMi41kXQpN1VU_KrNVOvr_v8nKrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
