@@ -2,7 +2,7 @@ name: mobile
 description: "Lumenta mobile companion app."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.11.0
@@ -56,10 +56,13 @@ dependencies:
   image_picker: ^1.1.2
   file_picker: ^8.1.6
 
-  # Permissions (Android 13+ POST_NOTIFICATIONS, iOS prompt)
-  permission_handler: ^11.3.1
+  # NOTE: permission_handler intentionally NOT used — FirebaseMessaging and
+  # image_picker request their own permissions. Its iOS pod compiles all
+  # permission modules (incl. CoreLocation), which triggers App Store
+  # ITMS-90683 (missing NSLocationWhenInUseUsageDescription) even when unused.
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
 
@@ -70,6 +73,11 @@ dev_dependencies:
   json_serializable: ^6.9.0
   riverpod_generator: ^2.6.3
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+
 flutter:
   uses-material-design: true
   generate: true
@@ -78,3 +86,4 @@ flutter:
     # Notification event strings (en/ar/fr), mirrored from the portal's
     # `notifications` i18n namespace. Title/body keys are server-provided.
     - assets/i18n/notifications/
+    - assets/images/
