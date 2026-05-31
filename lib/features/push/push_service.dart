@@ -50,37 +50,23 @@ class PushService {
   bool get isAvailable => _available;
 
   Future<void> init() async {
-    if (_initialized) {
-      debugPrint('[push] init() skipped — already initialized');
-      return;
-    }
+    if (_initialized) return;
     _initialized = true;
 
-    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
-      debugPrint(
-        '[push] init() aborted — unsupported platform '
-        '(kIsWeb=$kIsWeb, android=${!kIsWeb && Platform.isAndroid}, '
-        'ios=${!kIsWeb && Platform.isIOS})',
-      );
-      return;
-    }
+    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
 
-    debugPrint('[push] init() — initializing Firebase…');
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
       _available = true;
-      debugPrint('[push] Firebase initialized — push available');
     } catch (e) {
-      debugPrint('[push] Push disabled — Firebase not configured: $e');
+      if (kDebugMode) debugPrint('Push disabled — Firebase not configured: $e');
       return;
     }
 
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    debugPrint('[push] setting up local notifications…');
     await _setupLocalNotifications();
-    debugPrint('[push] local notifications ready');
 
     // Foreground messages: surface a local notification and refresh data.
     FirebaseMessaging.onMessage.listen(_onForegroundMessage);
@@ -89,11 +75,7 @@ class PushService {
     // Cold start from a notification tap. Don't await — on iOS this can block
     // until an APNs token arrives (never, on simulator / without APNs config),
     // which would stall the rest of init() incl. the permission request.
-    debugPrint('[push] fetching initial message (non-blocking)…');
     FirebaseMessaging.instance.getInitialMessage().then((initial) {
-      debugPrint(
-        '[push] initial message: ${initial == null ? 'none' : 'present'}',
-      );
       if (initial != null) {
         _routeFromData(initial.data);
       }
@@ -107,15 +89,11 @@ class PushService {
 
     // Register whenever the session becomes authenticated.
     _ref.listen<AuthState>(authControllerProvider, (prev, next) {
-      debugPrint(
-        '[push] auth status changed: ${prev?.status} -> ${next.status}',
-      );
       if (next.status == AuthStatus.authenticated) {
         registerForCurrentUser();
       }
     });
     final currentStatus = _ref.read(authControllerProvider).status;
-    debugPrint('[push] init() — current auth status: $currentStatus');
     if (currentStatus == AuthStatus.authenticated) {
       await registerForCurrentUser();
     }
@@ -157,17 +135,10 @@ class PushService {
 
   /// Request permission, fetch the token, and register it for the current user.
   Future<void> registerForCurrentUser() async {
-    debugPrint('[push] registerForCurrentUser() — available=$_available');
-    if (!_available) {
-      debugPrint('[push] registerForCurrentUser() aborted — push unavailable');
-      return;
-    }
-    debugPrint('[push] requesting notification permission…');
+    if (!_available) return;
     final settings = await FirebaseMessaging.instance.requestPermission();
-    debugPrint('[push] permission result: ${settings.authorizationStatus}');
     if (settings.authorizationStatus == AuthorizationStatus.denied) {
       // In-app feed still works; nothing to register.
-      debugPrint('[push] permission denied — skipping token registration');
       return;
     }
 
@@ -179,21 +150,13 @@ class PushService {
       String? apns;
       for (var attempt = 1; attempt <= 5; attempt++) {
         apns = await FirebaseMessaging.instance.getAPNSToken();
-        debugPrint(
-          '[push] APNs token attempt $attempt/5: '
-          '${apns == null ? 'null' : 'acquired'}',
-        );
         if (apns != null) break;
         await Future.delayed(const Duration(seconds: 1));
       }
-      if (apns == null) {
-        debugPrint('[push] no APNs token after retries — skipping FCM token');
-        return;
-      }
+      if (apns == null) return;
     }
 
     final token = await FirebaseMessaging.instance.getToken();
-    debugPrint('[push] FCM token: ${token == null ? 'null' : 'acquired'}');
     if (token != null) await _registerToken(token);
   }
 
