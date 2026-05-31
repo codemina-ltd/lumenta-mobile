@@ -2,7 +2,7 @@ name: mobile
 description: "Lumenta mobile companion app."
 publish_to: 'none'
 
-version: 1.0.0+5
+version: 1.0.0+6
 
 environment:
   sdk: ^3.11.0
@@ -34,8 +34,11 @@ dependencies:
   flutter_secure_storage: ^10.0.0
 
   # Firebase / FCM
-  firebase_core: ^3.8.0
-  firebase_messaging: ^15.1.5
+  # 16.x hardened APNs-token handling for the new iOS UIScene lifecycle; needs
+  # firebase_core 4.x. (15.x relied on AppDelegate-proxy swizzling that could
+  # miss the APNs token under the scene-based embedding, leaving it null.)
+  firebase_core: ^4.2.0
+  firebase_messaging: ^16.0.3
   # 19+ ships a Package.swift (Swift Package Manager support).
   flutter_local_notifications: ^19.0.0
 
@@ -81,6 +84,8 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   generate: true
+  config:
+    enable-lldb-debugging: false
 
   assets:
     # Notification event strings (en/ar/fr), mirrored from the portal's

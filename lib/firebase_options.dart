@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'engageflow-490817.firebasestorage.app',
     iosBundleId: 'com.codemina.apps.lumenta',
   );
+
 }
