@@ -52,9 +52,29 @@
   "loginNoRecaptcha": "La connexion n'est pas configurée (clé reCAPTCHA manquante).",
 
   "composerHint": "Message",
-  "windowClosed": "Hors de la fenêtre de 24 heures. Utilisez un modèle approuvé pour démarrer une nouvelle conversation.",
+  "windowClosed": "Hors de la fenêtre de 24 heures. Envoyez un modèle approuvé pour démarrer une nouvelle conversation.",
   "attachPhoto": "Photo",
   "attachCamera": "Appareil photo",
   "attachDocument": "Document",
-  "sendFailed": "Échec de l'envoi. Appuyez pour réessayer."
+  "sendFailed": "Échec de l'envoi. Appuyez pour réessayer.",
+
+  "sendTemplate": "Envoyer un modèle",
+  "attachTemplate": "Modèle",
+  "templatePickerTitle": "Choisir un modèle",
+  "templateSearchHint": "Rechercher des modèles",
+  "noApprovedTemplates": "Aucun modèle approuvé",
+  "noApprovedTemplatesHint": "Créez des modèles dans le portail web Lumenta.",
+  "templateFillTitle": "Remplir le modèle",
+  "templatePreview": "Aperçu",
+  "templateVarRequired": "Veuillez remplir : {names}",
+  "@templateVarRequired": {
+    "placeholders": {
+      "names": {}
+    }
+  },
+  "templateSendFailed": "Échec de l'envoi du modèle. Veuillez réessayer.",
+  "templateImageHeader": "Image",
+  "templateVideoHeader": "Vidéo",
+  "templateDocHeader": "Document",
+  "templateMarketingUsWarning": "Les modèles marketing vers des numéros américains peuvent être bloqués par Meta."
 }

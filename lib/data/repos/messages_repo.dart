@@ -51,6 +51,32 @@ class MessagesRepo {
     return Message.fromJson(res.data!);
   }
 
+  /// `POST /messages/templates` — send an approved template by internal id.
+  ///
+  /// Mirrors the portal's `sendTemplateMessage`: `templateVariables` keys are
+  /// positional (`"1"/"2"`) or named; `buttonVariables` is present only for
+  /// COPY_CODE templates; `language` is omitted (resolved server-side from the
+  /// template row). Works regardless of the 24h service window.
+  Future<Message> sendTemplate({
+    required String to,
+    required String templateId,
+    Map<String, String>? templateVariables,
+    Map<String, String>? buttonVariables,
+  }) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/messages/templates',
+      data: {
+        'to': to,
+        'templateId': templateId,
+        if (templateVariables != null && templateVariables.isNotEmpty)
+          'templateVariables': templateVariables,
+        if (buttonVariables != null && buttonVariables.isNotEmpty)
+          'buttonVariables': buttonVariables,
+      },
+    );
+    return Message.fromJson(res.data!);
+  }
+
   /// `POST /messages/send-media` — multipart media reply.
   Future<Message> sendMedia({
     required String to,

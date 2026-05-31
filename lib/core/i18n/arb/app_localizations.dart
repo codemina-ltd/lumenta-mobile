@@ -349,7 +349,7 @@ abstract class AppLocalizations {
   /// No description provided for @windowClosed.
   ///
   /// In en, this message translates to:
-  /// **'Outside the 24-hour window. Use an approved template to start a new conversation.'**
+  /// **'Outside the 24-hour window. Send an approved template to start a new conversation.'**
   String get windowClosed;
 
   /// No description provided for @attachPhoto.
@@ -375,6 +375,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t send. Tap to retry.'**
   String get sendFailed;
+
+  /// No description provided for @sendTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a template'**
+  String get sendTemplate;
+
+  /// No description provided for @attachTemplate.
+  ///
+  /// In en, this message translates to:
+  /// **'Template'**
+  String get attachTemplate;
+
+  /// No description provided for @templatePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a template'**
+  String get templatePickerTitle;
+
+  /// No description provided for @templateSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search templates'**
+  String get templateSearchHint;
+
+  /// No description provided for @noApprovedTemplates.
+  ///
+  /// In en, this message translates to:
+  /// **'No approved templates'**
+  String get noApprovedTemplates;
+
+  /// No description provided for @noApprovedTemplatesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create templates in the Lumenta web portal.'**
+  String get noApprovedTemplatesHint;
+
+  /// No description provided for @templateFillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the template'**
+  String get templateFillTitle;
+
+  /// No description provided for @templatePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get templatePreview;
+
+  /// No description provided for @templateVarRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in: {names}'**
+  String templateVarRequired(Object names);
+
+  /// No description provided for @templateSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the template. Please try again.'**
+  String get templateSendFailed;
+
+  /// No description provided for @templateImageHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get templateImageHeader;
+
+  /// No description provided for @templateVideoHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get templateVideoHeader;
+
+  /// No description provided for @templateDocHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Document'**
+  String get templateDocHeader;
+
+  /// No description provided for @templateMarketingUsWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing templates to US numbers may be blocked by Meta.'**
+  String get templateMarketingUsWarning;
 }
 
 class _AppLocalizationsDelegate

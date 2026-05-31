@@ -135,7 +135,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get windowClosed =>
-      'خارج نافذة الـ 24 ساعة. استخدم قالبًا معتمدًا لبدء محادثة جديدة.';
+      'خارج نافذة الـ 24 ساعة. أرسِل قالبًا معتمدًا لبدء محادثة جديدة.';
 
   @override
   String get attachPhoto => 'صورة';
@@ -148,4 +148,50 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sendFailed => 'تعذّر الإرسال. اضغط لإعادة المحاولة.';
+
+  @override
+  String get sendTemplate => 'إرسال قالب';
+
+  @override
+  String get attachTemplate => 'قالب';
+
+  @override
+  String get templatePickerTitle => 'اختر قالبًا';
+
+  @override
+  String get templateSearchHint => 'ابحث عن القوالب';
+
+  @override
+  String get noApprovedTemplates => 'لا توجد قوالب معتمدة';
+
+  @override
+  String get noApprovedTemplatesHint =>
+      'أنشئ القوالب من بوابة لومينتا على الويب.';
+
+  @override
+  String get templateFillTitle => 'املأ بيانات القالب';
+
+  @override
+  String get templatePreview => 'معاينة';
+
+  @override
+  String templateVarRequired(Object names) {
+    return 'يرجى ملء: $names';
+  }
+
+  @override
+  String get templateSendFailed => 'تعذّر إرسال القالب. حاول مرة أخرى.';
+
+  @override
+  String get templateImageHeader => 'صورة';
+
+  @override
+  String get templateVideoHeader => 'فيديو';
+
+  @override
+  String get templateDocHeader => 'مستند';
+
+  @override
+  String get templateMarketingUsWarning =>
+      'قد تحظر Meta القوالب التسويقية المرسلة إلى أرقام أمريكية.';
 }

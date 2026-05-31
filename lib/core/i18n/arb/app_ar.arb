@@ -52,9 +52,29 @@
   "loginNoRecaptcha": "تسجيل الدخول غير مهيأ (مفتاح reCAPTCHA مفقود).",
 
   "composerHint": "رسالة",
-  "windowClosed": "خارج نافذة الـ 24 ساعة. استخدم قالبًا معتمدًا لبدء محادثة جديدة.",
+  "windowClosed": "خارج نافذة الـ 24 ساعة. أرسِل قالبًا معتمدًا لبدء محادثة جديدة.",
   "attachPhoto": "صورة",
   "attachCamera": "الكاميرا",
   "attachDocument": "مستند",
-  "sendFailed": "تعذّر الإرسال. اضغط لإعادة المحاولة."
+  "sendFailed": "تعذّر الإرسال. اضغط لإعادة المحاولة.",
+
+  "sendTemplate": "إرسال قالب",
+  "attachTemplate": "قالب",
+  "templatePickerTitle": "اختر قالبًا",
+  "templateSearchHint": "ابحث عن القوالب",
+  "noApprovedTemplates": "لا توجد قوالب معتمدة",
+  "noApprovedTemplatesHint": "أنشئ القوالب من بوابة لومينتا على الويب.",
+  "templateFillTitle": "املأ بيانات القالب",
+  "templatePreview": "معاينة",
+  "templateVarRequired": "يرجى ملء: {names}",
+  "@templateVarRequired": {
+    "placeholders": {
+      "names": {}
+    }
+  },
+  "templateSendFailed": "تعذّر إرسال القالب. حاول مرة أخرى.",
+  "templateImageHeader": "صورة",
+  "templateVideoHeader": "فيديو",
+  "templateDocHeader": "مستند",
+  "templateMarketingUsWarning": "قد تحظر Meta القوالب التسويقية المرسلة إلى أرقام أمريكية."
 }

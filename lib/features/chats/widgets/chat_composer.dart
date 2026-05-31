@@ -7,6 +7,7 @@ import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../templates/template_picker_sheet.dart';
 import '../thread_controller.dart';
 
 /// Reply composer for the chat thread (Phase 7). Free-form sending is only
@@ -88,6 +89,17 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
     widget.onSent();
   }
 
+  /// Open the template pick → fill → send flow; scroll to the new bubble once
+  /// a template has been sent. Available in both window states.
+  Future<void> _openTemplateFlow() async {
+    final sent = await showTemplatePicker(
+      context: context,
+      clientId: widget.clientId,
+      to: widget.to,
+    );
+    if (sent == true) widget.onSent();
+  }
+
   void _openAttachSheet() {
     final l10n = AppLocalizations.of(context);
     showModalBottomSheet<void>(
@@ -130,6 +142,15 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
                   _pickDocument();
                 },
               ),
+              _AttachOption(
+                icon: Icons.description_rounded,
+                color: AppColors.lilac,
+                label: l10n.attachTemplate,
+                onTap: () {
+                  Navigator.pop(sheetCtx);
+                  _openTemplateFlow();
+                },
+              ),
             ],
           ),
         ),
@@ -156,16 +177,35 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
               horizontal: Insets.lg,
               vertical: Insets.md,
             ),
-            child: Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.lock_clock_rounded,
-                    size: 20, color: AppColors.amber),
-                const SizedBox(width: Insets.md),
-                Expanded(
-                  child: Text(
-                    l10n.windowClosed,
-                    style: context.text.bodySmall?.copyWith(
-                      color: scheme.onSurface,
+                Row(
+                  children: [
+                    const Icon(Icons.lock_clock_rounded,
+                        size: 20, color: AppColors.amber),
+                    const SizedBox(width: Insets.md),
+                    Expanded(
+                      child: Text(
+                        l10n.windowClosed,
+                        style: context.text.bodySmall?.copyWith(
+                          color: scheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Insets.md),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: _openTemplateFlow,
+                    icon: const Icon(Icons.description_rounded, size: 20),
+                    label: Text(l10n.sendTemplate),
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(48),
+                      backgroundColor: AppColors.signal,
+                      foregroundColor: AppColors.deepForest,
                     ),
                   ),
                 ),

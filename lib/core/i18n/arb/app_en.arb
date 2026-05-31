@@ -52,9 +52,29 @@
   "loginNoRecaptcha": "Login is not configured (missing reCAPTCHA key).",
 
   "composerHint": "Message",
-  "windowClosed": "Outside the 24-hour window. Use an approved template to start a new conversation.",
+  "windowClosed": "Outside the 24-hour window. Send an approved template to start a new conversation.",
   "attachPhoto": "Photo",
   "attachCamera": "Camera",
   "attachDocument": "Document",
-  "sendFailed": "Couldn't send. Tap to retry."
+  "sendFailed": "Couldn't send. Tap to retry.",
+
+  "sendTemplate": "Send a template",
+  "attachTemplate": "Template",
+  "templatePickerTitle": "Choose a template",
+  "templateSearchHint": "Search templates",
+  "noApprovedTemplates": "No approved templates",
+  "noApprovedTemplatesHint": "Create templates in the Lumenta web portal.",
+  "templateFillTitle": "Fill in the template",
+  "templatePreview": "Preview",
+  "templateVarRequired": "Please fill in: {names}",
+  "@templateVarRequired": {
+    "placeholders": {
+      "names": {}
+    }
+  },
+  "templateSendFailed": "Couldn't send the template. Please try again.",
+  "templateImageHeader": "Image",
+  "templateVideoHeader": "Video",
+  "templateDocHeader": "Document",
+  "templateMarketingUsWarning": "Marketing templates to US numbers may be blocked by Meta."
 }

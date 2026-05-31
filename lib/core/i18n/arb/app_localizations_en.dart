@@ -135,7 +135,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get windowClosed =>
-      'Outside the 24-hour window. Use an approved template to start a new conversation.';
+      'Outside the 24-hour window. Send an approved template to start a new conversation.';
 
   @override
   String get attachPhoto => 'Photo';
@@ -148,4 +148,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendFailed => 'Couldn\'t send. Tap to retry.';
+
+  @override
+  String get sendTemplate => 'Send a template';
+
+  @override
+  String get attachTemplate => 'Template';
+
+  @override
+  String get templatePickerTitle => 'Choose a template';
+
+  @override
+  String get templateSearchHint => 'Search templates';
+
+  @override
+  String get noApprovedTemplates => 'No approved templates';
+
+  @override
+  String get noApprovedTemplatesHint =>
+      'Create templates in the Lumenta web portal.';
+
+  @override
+  String get templateFillTitle => 'Fill in the template';
+
+  @override
+  String get templatePreview => 'Preview';
+
+  @override
+  String templateVarRequired(Object names) {
+    return 'Please fill in: $names';
+  }
+
+  @override
+  String get templateSendFailed =>
+      'Couldn\'t send the template. Please try again.';
+
+  @override
+  String get templateImageHeader => 'Image';
+
+  @override
+  String get templateVideoHeader => 'Video';
+
+  @override
+  String get templateDocHeader => 'Document';
+
+  @override
+  String get templateMarketingUsWarning =>
+      'Marketing templates to US numbers may be blocked by Meta.';
 }

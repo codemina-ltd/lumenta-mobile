@@ -135,7 +135,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get windowClosed =>
-      'Hors de la fenêtre de 24 heures. Utilisez un modèle approuvé pour démarrer une nouvelle conversation.';
+      'Hors de la fenêtre de 24 heures. Envoyez un modèle approuvé pour démarrer une nouvelle conversation.';
 
   @override
   String get attachPhoto => 'Photo';
@@ -148,4 +148,51 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get sendFailed => 'Échec de l\'envoi. Appuyez pour réessayer.';
+
+  @override
+  String get sendTemplate => 'Envoyer un modèle';
+
+  @override
+  String get attachTemplate => 'Modèle';
+
+  @override
+  String get templatePickerTitle => 'Choisir un modèle';
+
+  @override
+  String get templateSearchHint => 'Rechercher des modèles';
+
+  @override
+  String get noApprovedTemplates => 'Aucun modèle approuvé';
+
+  @override
+  String get noApprovedTemplatesHint =>
+      'Créez des modèles dans le portail web Lumenta.';
+
+  @override
+  String get templateFillTitle => 'Remplir le modèle';
+
+  @override
+  String get templatePreview => 'Aperçu';
+
+  @override
+  String templateVarRequired(Object names) {
+    return 'Veuillez remplir : $names';
+  }
+
+  @override
+  String get templateSendFailed =>
+      'Échec de l\'envoi du modèle. Veuillez réessayer.';
+
+  @override
+  String get templateImageHeader => 'Image';
+
+  @override
+  String get templateVideoHeader => 'Vidéo';
+
+  @override
+  String get templateDocHeader => 'Document';
+
+  @override
+  String get templateMarketingUsWarning =>
+      'Les modèles marketing vers des numéros américains peuvent être bloqués par Meta.';
 }

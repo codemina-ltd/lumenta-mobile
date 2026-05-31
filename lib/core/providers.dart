@@ -7,6 +7,7 @@ import '../data/repos/clients_repo.dart';
 import '../data/repos/device_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
+import '../data/repos/templates_repo.dart';
 import '../data/repos/tenant_repo.dart';
 import '../data/session/auth_session.dart';
 import '../data/storage/token_storage.dart';
@@ -37,6 +38,9 @@ final messagesRepoProvider = Provider<MessagesRepo>(
 );
 final notificationsRepoProvider = Provider<NotificationsRepo>(
   (ref) => NotificationsRepo(ref.watch(dioProvider)),
+);
+final templatesRepoProvider = Provider<TemplatesRepo>(
+  (ref) => TemplatesRepo(ref.watch(dioProvider)),
 );
 final deviceRepoProvider = Provider<DeviceRepo>(
   (ref) => DeviceRepo(ref.watch(dioProvider)),

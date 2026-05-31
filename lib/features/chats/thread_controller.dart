@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers.dart';
 import '../../data/models/message.dart';
+import '../../data/models/template.dart';
+import '../templates/template_vars.dart';
+import 'chats_controller.dart';
 
 @immutable
 class ThreadState {
@@ -99,6 +102,37 @@ class ThreadController extends StateNotifier<ThreadState> {
       _replace(temp.id, sent);
     } catch (_) {
       _markFailed(temp.id);
+    }
+  }
+
+  /// Send an approved template with an optimistic bubble. Unlike free-text,
+  /// this works regardless of the 24h service window. Returns the failure (if
+  /// any) so the UI can surface the provider error (e.g. Meta code 131049).
+  Future<Object?> sendTemplate({
+    required String to,
+    required Template template,
+    required Map<String, String> variables,
+    Map<String, String>? buttonVariables,
+  }) async {
+    final temp = _optimistic(
+      body: renderPreview(template, variables),
+      type: MessageType.text,
+    );
+    _insert(temp);
+    try {
+      final sent = await _ref.read(messagesRepoProvider).sendTemplate(
+            to: to,
+            templateId: template.id,
+            templateVariables: variables,
+            buttonVariables: buttonVariables,
+          );
+      _replace(temp.id, sent);
+      // Bump the conversation to the top of the chats list.
+      _ref.read(chatsControllerProvider.notifier).refresh();
+      return null;
+    } catch (e) {
+      _markFailed(temp.id);
+      return e;
     }
   }
 
