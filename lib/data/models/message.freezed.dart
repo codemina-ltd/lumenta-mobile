@@ -37,6 +37,8 @@ mixin _$Message {
   String? get locationAddress => throw _privateConstructorUsedError;
   String? get transcription => throw _privateConstructorUsedError;
   String? get transcriptionStatus => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get providerRawPayload =>
+      throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this Message to a JSON map.
@@ -68,6 +70,7 @@ abstract class $MessageCopyWith<$Res> {
     String? locationAddress,
     String? transcription,
     String? transcriptionStatus,
+    Map<String, dynamic>? providerRawPayload,
     String createdAt,
   });
 }
@@ -100,6 +103,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
     Object? locationAddress = freezed,
     Object? transcription = freezed,
     Object? transcriptionStatus = freezed,
+    Object? providerRawPayload = freezed,
     Object? createdAt = null,
   }) {
     return _then(
@@ -156,6 +160,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
                 ? _value.transcriptionStatus
                 : transcriptionStatus // ignore: cast_nullable_to_non_nullable
                       as String?,
+            providerRawPayload: freezed == providerRawPayload
+                ? _value.providerRawPayload
+                : providerRawPayload // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>?,
             createdAt: null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -189,6 +197,7 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
     String? locationAddress,
     String? transcription,
     String? transcriptionStatus,
+    Map<String, dynamic>? providerRawPayload,
     String createdAt,
   });
 }
@@ -220,6 +229,7 @@ class __$$MessageImplCopyWithImpl<$Res>
     Object? locationAddress = freezed,
     Object? transcription = freezed,
     Object? transcriptionStatus = freezed,
+    Object? providerRawPayload = freezed,
     Object? createdAt = null,
   }) {
     return _then(
@@ -276,6 +286,10 @@ class __$$MessageImplCopyWithImpl<$Res>
             ? _value.transcriptionStatus
             : transcriptionStatus // ignore: cast_nullable_to_non_nullable
                   as String?,
+        providerRawPayload: freezed == providerRawPayload
+            ? _value._providerRawPayload
+            : providerRawPayload // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>?,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -305,8 +319,10 @@ class _$MessageImpl extends _Message {
     this.locationAddress,
     this.transcription,
     this.transcriptionStatus,
+    final Map<String, dynamic>? providerRawPayload,
     required this.createdAt,
-  }) : super._();
+  }) : _providerRawPayload = providerRawPayload,
+       super._();
 
   factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageImplFromJson(json);
@@ -341,12 +357,23 @@ class _$MessageImpl extends _Message {
   final String? transcription;
   @override
   final String? transcriptionStatus;
+  final Map<String, dynamic>? _providerRawPayload;
+  @override
+  Map<String, dynamic>? get providerRawPayload {
+    final value = _providerRawPayload;
+    if (value == null) return null;
+    if (_providerRawPayload is EqualUnmodifiableMapView)
+      return _providerRawPayload;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   @override
   final String createdAt;
 
   @override
   String toString() {
-    return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, createdAt: $createdAt)';
+    return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, providerRawPayload: $providerRawPayload, createdAt: $createdAt)';
   }
 
   @override
@@ -377,6 +404,10 @@ class _$MessageImpl extends _Message {
                 other.transcription == transcription) &&
             (identical(other.transcriptionStatus, transcriptionStatus) ||
                 other.transcriptionStatus == transcriptionStatus) &&
+            const DeepCollectionEquality().equals(
+              other._providerRawPayload,
+              _providerRawPayload,
+            ) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
@@ -398,6 +429,7 @@ class _$MessageImpl extends _Message {
     locationAddress,
     transcription,
     transcriptionStatus,
+    const DeepCollectionEquality().hash(_providerRawPayload),
     createdAt,
   );
 
@@ -432,6 +464,7 @@ abstract class _Message extends Message {
     final String? locationAddress,
     final String? transcription,
     final String? transcriptionStatus,
+    final Map<String, dynamic>? providerRawPayload,
     required final String createdAt,
   }) = _$MessageImpl;
   const _Message._() : super._();
@@ -467,6 +500,8 @@ abstract class _Message extends Message {
   String? get transcription;
   @override
   String? get transcriptionStatus;
+  @override
+  Map<String, dynamic>? get providerRawPayload;
   @override
   String get createdAt;
 

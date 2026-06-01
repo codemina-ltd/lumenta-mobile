@@ -274,6 +274,42 @@ abstract class AppLocalizations {
   /// **'Contact'**
   String get previewContact;
 
+  /// No description provided for @flowResponseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive Response'**
+  String get flowResponseTitle;
+
+  /// No description provided for @flowResponseReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Response received'**
+  String get flowResponseReceived;
+
+  /// No description provided for @flowResponseDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Response Details'**
+  String get flowResponseDetailsTitle;
+
+  /// No description provided for @flowFieldColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Field'**
+  String get flowFieldColumn;
+
+  /// No description provided for @flowValueColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get flowValueColumn;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
   /// No description provided for @statusSent.
   ///
   /// In en, this message translates to:

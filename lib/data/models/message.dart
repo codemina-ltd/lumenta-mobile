@@ -1,4 +1,6 @@
 // ignore_for_file: invalid_annotation_target
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'message.freezed.dart';
@@ -75,6 +77,7 @@ class Message with _$Message {
     String? locationAddress,
     String? transcription,
     String? transcriptionStatus,
+    Map<String, dynamic>? providerRawPayload,
     required String createdAt,
   }) = _Message;
 
@@ -91,6 +94,44 @@ class Message with _$Message {
       messageType == MessageType.document ||
       messageType == MessageType.sticker;
   bool get transcriptionReady => transcriptionStatus == 'ready';
+
+  /// An inbound interactive message is a WhatsApp Flow response — the customer
+  /// submitted a form. Mirrors the portal's `ChatBubble` inbound-interactive
+  /// branch: the [body] holds the submitted form data as a JSON object.
+  bool get isFlowResponse =>
+      direction == MessageDirection.inbound &&
+      messageType == MessageType.interactive;
+
+  /// Flow name taken from the provider payload
+  /// (`messages[0].interactive.nfm_reply.name`), capitalised. Null when the
+  /// payload doesn't carry one, so callers can fall back to a generic label.
+  String? get flowName {
+    try {
+      final messages = providerRawPayload?['messages'];
+      if (messages is List && messages.isNotEmpty) {
+        final name = messages[0]?['interactive']?['nfm_reply']?['name'];
+        if (name is String && name.isNotEmpty) {
+          return name[0].toUpperCase() + name.substring(1);
+        }
+      }
+    } catch (_) {
+      // Fall through to null on any unexpected payload shape.
+    }
+    return null;
+  }
+
+  /// The parsed key/value pairs the customer submitted in the flow form.
+  /// Falls back to a single `rawBody` entry when [body] isn't valid JSON,
+  /// matching the portal's modal behaviour.
+  Map<String, dynamic> get flowResponseFields {
+    try {
+      final decoded = jsonDecode(body.isEmpty ? '{}' : body);
+      if (decoded is Map<String, dynamic>) return decoded;
+    } catch (_) {
+      // Fall through to raw body on parse failure.
+    }
+    return {'rawBody': body};
+  }
 
   DateTime get createdAtDate =>
       DateTime.tryParse(createdAt)?.toLocal() ?? DateTime.fromMillisecondsSinceEpoch(0);

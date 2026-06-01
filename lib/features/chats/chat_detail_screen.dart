@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -367,13 +369,20 @@ class _MessageBubble extends ConsumerWidget {
         );
       case MessageType.location:
         return _LocationContent(message: message, textColor: textColor);
+      case MessageType.interactive:
+        if (message.isFlowResponse) {
+          return _FlowResponseContent(message: message, textColor: textColor);
+        }
+        return _bodyText(textColor);
       default:
-        return Text(
-          message.body.isEmpty ? '…' : message.body,
-          style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
-        );
+        return _bodyText(textColor);
     }
   }
+
+  Widget _bodyText(Color textColor) => Text(
+        message.body.isEmpty ? '…' : message.body,
+        style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
+      );
 
   Widget _meta(BuildContext context, Color textColor, bool outbound) {
     return Row(
@@ -525,6 +534,178 @@ class _IconTile extends StatelessWidget {
           child: Text(label, style: TextStyle(color: textColor)),
         ),
       ],
+    );
+  }
+}
+
+/// Inbound WhatsApp Flow response — a tappable "Response received" card that
+/// opens the submitted form fields in a dialog. Mirrors the portal's
+/// `ChatBubble` inbound-interactive branch + "Customer Response Details" modal.
+class _FlowResponseContent extends StatelessWidget {
+  const _FlowResponseContent({required this.message, required this.textColor});
+  final Message message;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final title = message.flowName ?? l10n.flowResponseTitle;
+    return GestureDetector(
+      onTap: () => _showDetails(context),
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: AppColors.signalTint,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.description_outlined,
+              color: AppColors.signalDeep,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: Insets.md),
+          Flexible(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  l10n.flowResponseReceived,
+                  style: TextStyle(
+                    color: textColor.withValues(alpha: 0.7),
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDetails(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.flowResponseDetailsTitle),
+        content: _FlowResponseTable(fields: message.flowResponseFields),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(l10n.close),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Renders the submitted flow fields as a bordered Field/Value table.
+class _FlowResponseTable extends StatelessWidget {
+  const _FlowResponseTable({required this.fields});
+  final Map<String, dynamic> fields;
+
+  static String _label(String key) =>
+      key.isEmpty ? key : key[0].toUpperCase() + key.substring(1);
+
+  static String _value(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    if (value is Map || value is List) return jsonEncode(value);
+    return value.toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final border = TableBorder.all(color: AppColors.hairline);
+    final entries = fields.entries.toList();
+    return SizedBox(
+      width: double.maxFinite,
+      child: SingleChildScrollView(
+        child: Table(
+          border: border,
+          columnWidths: const {
+            0: FlexColumnWidth(0.4),
+            1: FlexColumnWidth(0.6),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: [
+            TableRow(
+              decoration: BoxDecoration(color: context.scheme.surfaceContainerHigh),
+              children: [
+                _HeaderCell(l10n.flowFieldColumn),
+                _HeaderCell(l10n.flowValueColumn),
+              ],
+            ),
+            for (final e in entries)
+              TableRow(
+                children: [
+                  _Cell(_label(e.key), bold: true),
+                  _Cell(_value(e.value)),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HeaderCell extends StatelessWidget {
+  const _HeaderCell(this.text);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.md,
+        vertical: Insets.sm,
+      ),
+      child: Text(
+        text,
+        style: context.text.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+      ),
+    );
+  }
+}
+
+class _Cell extends StatelessWidget {
+  const _Cell(this.text, {this.bold = false});
+  final String text;
+  final bool bold;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.md,
+        vertical: Insets.sm,
+      ),
+      child: Text(
+        text,
+        style: context.text.bodyMedium?.copyWith(
+          fontWeight: bold ? FontWeight.w600 : FontWeight.w400,
+        ),
+      ),
     );
   }
 }

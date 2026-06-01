@@ -97,6 +97,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get previewContact => 'Contact';
 
   @override
+  String get flowResponseTitle => 'Interactive Response';
+
+  @override
+  String get flowResponseReceived => 'Response received';
+
+  @override
+  String get flowResponseDetailsTitle => 'Customer Response Details';
+
+  @override
+  String get flowFieldColumn => 'Field';
+
+  @override
+  String get flowValueColumn => 'Value';
+
+  @override
+  String get close => 'Close';
+
+  @override
   String get statusSent => 'Sent';
 
   @override

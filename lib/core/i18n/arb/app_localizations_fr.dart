@@ -97,6 +97,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get previewContact => 'Contact';
 
   @override
+  String get flowResponseTitle => 'Réponse interactive';
+
+  @override
+  String get flowResponseReceived => 'Réponse reçue';
+
+  @override
+  String get flowResponseDetailsTitle => 'Détails de la réponse du client';
+
+  @override
+  String get flowFieldColumn => 'Champ';
+
+  @override
+  String get flowValueColumn => 'Valeur';
+
+  @override
+  String get close => 'Fermer';
+
+  @override
   String get statusSent => 'Envoyé';
 
   @override

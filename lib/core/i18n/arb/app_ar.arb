@@ -37,6 +37,13 @@
   "previewSticker": "ملصق",
   "previewContact": "جهة اتصال",
 
+  "flowResponseTitle": "رد تفاعلي",
+  "flowResponseReceived": "تم استلام الرد",
+  "flowResponseDetailsTitle": "تفاصيل رد العميل",
+  "flowFieldColumn": "الحقل",
+  "flowValueColumn": "القيمة",
+  "close": "إغلاق",
+
   "statusSent": "تم الإرسال",
   "statusDelivered": "تم التسليم",
   "statusRead": "تمت القراءة",

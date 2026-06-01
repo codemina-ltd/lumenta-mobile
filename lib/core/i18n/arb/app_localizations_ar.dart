@@ -97,6 +97,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get previewContact => 'جهة اتصال';
 
   @override
+  String get flowResponseTitle => 'رد تفاعلي';
+
+  @override
+  String get flowResponseReceived => 'تم استلام الرد';
+
+  @override
+  String get flowResponseDetailsTitle => 'تفاصيل رد العميل';
+
+  @override
+  String get flowFieldColumn => 'الحقل';
+
+  @override
+  String get flowValueColumn => 'القيمة';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
   String get statusSent => 'تم الإرسال';
 
   @override

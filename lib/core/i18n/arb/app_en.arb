@@ -37,6 +37,13 @@
   "previewSticker": "Sticker",
   "previewContact": "Contact",
 
+  "flowResponseTitle": "Interactive Response",
+  "flowResponseReceived": "Response received",
+  "flowResponseDetailsTitle": "Customer Response Details",
+  "flowFieldColumn": "Field",
+  "flowValueColumn": "Value",
+  "close": "Close",
+
   "statusSent": "Sent",
   "statusDelivered": "Delivered",
   "statusRead": "Read",

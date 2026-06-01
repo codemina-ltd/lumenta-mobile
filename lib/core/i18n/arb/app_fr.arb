@@ -37,6 +37,13 @@
   "previewSticker": "Sticker",
   "previewContact": "Contact",
 
+  "flowResponseTitle": "Réponse interactive",
+  "flowResponseReceived": "Réponse reçue",
+  "flowResponseDetailsTitle": "Détails de la réponse du client",
+  "flowFieldColumn": "Champ",
+  "flowValueColumn": "Valeur",
+  "close": "Fermer",
+
   "statusSent": "Envoyé",
   "statusDelivered": "Distribué",
   "statusRead": "Lu",
