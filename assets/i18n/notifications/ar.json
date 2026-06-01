@@ -177,6 +177,14 @@
     "published": {
       "title": "تم نشر التدفّق",
       "body": "تم نشر تدفّقك \"{{flowName}}\" وأصبح فعّالًا."
+    },
+    "response_received": {
+      "title": "رد جديد على Flow",
+      "body": "أرسل {{clientName}} نموذج Flow."
+    },
+    "endpoint_unhealthy": {
+      "title": "نقطة نهاية الـ Flow غير سليمة",
+      "body": "تجاوز المقياس {{metric}} للـ Flow «{{flowName}}» الحد ({{value}} مقابل {{threshold}})."
     }
   },
   "team": {

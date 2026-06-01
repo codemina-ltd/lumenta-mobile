@@ -177,6 +177,14 @@
     "published": {
       "title": "Flux publié",
       "body": "Votre flux « {{flowName}} » est désormais publié et actif."
+    },
+    "response_received": {
+      "title": "Nouvelle réponse de flow",
+      "body": "{{clientName}} a soumis un flow."
+    },
+    "endpoint_unhealthy": {
+      "title": "Point de terminaison de flow dégradé",
+      "body": "Le flow « {{flowName}} » — {{metric}} a dépassé son seuil ({{value}} vs {{threshold}})."
     }
   },
   "team": {

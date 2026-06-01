@@ -177,6 +177,14 @@
     "published": {
       "title": "Flow published",
       "body": "Your flow \"{{flowName}}\" is now published and live."
+    },
+    "response_received": {
+      "title": "New flow response",
+      "body": "{{clientName}} submitted a flow."
+    },
+    "endpoint_unhealthy": {
+      "title": "Flow endpoint unhealthy",
+      "body": "Flow \"{{flowName}}\" {{metric}} crossed its threshold ({{value}} vs {{threshold}})."
     }
   },
   "team": {
