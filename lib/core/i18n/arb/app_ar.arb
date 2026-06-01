@@ -39,7 +39,7 @@
 
   "flowResponseTitle": "رد تفاعلي",
   "flowResponseReceived": "تم استلام الرد",
-  "flowResponseDetailsTitle": "تفاصيل رد العميل",
+  "flowResponseDetailsTitle": "رد العميل",
   "flowFieldColumn": "الحقل",
   "flowValueColumn": "القيمة",
   "close": "إغلاق",

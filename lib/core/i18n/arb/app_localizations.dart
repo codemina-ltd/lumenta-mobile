@@ -289,7 +289,7 @@ abstract class AppLocalizations {
   /// No description provided for @flowResponseDetailsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Customer Response Details'**
+  /// **'Customer Response'**
   String get flowResponseDetailsTitle;
 
   /// No description provided for @flowFieldColumn.

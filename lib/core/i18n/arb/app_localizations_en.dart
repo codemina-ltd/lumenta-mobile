@@ -103,7 +103,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flowResponseReceived => 'Response received';
 
   @override
-  String get flowResponseDetailsTitle => 'Customer Response Details';
+  String get flowResponseDetailsTitle => 'Customer Response';
 
   @override
   String get flowFieldColumn => 'Field';

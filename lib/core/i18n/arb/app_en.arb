@@ -39,7 +39,7 @@
 
   "flowResponseTitle": "Interactive Response",
   "flowResponseReceived": "Response received",
-  "flowResponseDetailsTitle": "Customer Response Details",
+  "flowResponseDetailsTitle": "Customer Response",
   "flowFieldColumn": "Field",
   "flowValueColumn": "Value",
   "close": "Close",

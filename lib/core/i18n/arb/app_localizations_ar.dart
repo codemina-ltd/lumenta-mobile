@@ -103,7 +103,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get flowResponseReceived => 'تم استلام الرد';
 
   @override
-  String get flowResponseDetailsTitle => 'تفاصيل رد العميل';
+  String get flowResponseDetailsTitle => 'رد العميل';
 
   @override
   String get flowFieldColumn => 'الحقل';
