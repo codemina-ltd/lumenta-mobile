@@ -7,8 +7,9 @@ import '../../data/models/message.dart';
 String messagePreview(
   BuildContext context,
   MessageType? type,
-  String? body,
-) {
+  String? body, {
+  MessageDirection? direction,
+}) {
   final l10n = AppLocalizations.of(context);
   final text = (body ?? '').trim();
   switch (type) {
@@ -29,6 +30,14 @@ String messagePreview(
       return '🧩 ${l10n.previewSticker}';
     case MessageType.contacts:
       return '👤 ${l10n.previewContact}';
+    case MessageType.interactive:
+      // Inbound interactive = a WhatsApp Flow form submission; the body is raw
+      // JSON, so show a friendly label instead. Outbound interactive (CTA
+      // prompts) carry real text — fall through to it.
+      if (direction == MessageDirection.inbound) {
+        return '📋 ${l10n.flowResponseTitle}';
+      }
+      return text.isEmpty ? '…' : text;
     default:
       return text.isEmpty ? '…' : text;
   }

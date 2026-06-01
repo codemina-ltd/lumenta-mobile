@@ -99,6 +99,7 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
             context,
             conv.lastMessageType,
             conv.lastMessageBody,
+            direction: conv.lastMessageDirection,
           );
           final when = conv.lastMessageAtDate;
           final inbound =
