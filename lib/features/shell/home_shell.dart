@@ -33,6 +33,16 @@ class HomeShell extends ConsumerWidget {
         titleSpacing: Insets.lg,
         title: Text(titles[index]),
         actions: [
+          // On the notifications tab, offer a one-tap "mark all as read" while
+          // there are unread items. The controller updates state optimistically.
+          if (index == 2 && unread > 0)
+            IconButton(
+              icon: const Icon(Icons.done_all_rounded),
+              tooltip: l10n.markAllRead,
+              onPressed: () => ref
+                  .read(notificationsControllerProvider.notifier)
+                  .markAllRead(),
+            ),
           if (auth.activeTenant != null)
             _WorkspaceMenu(
               name: auth.activeTenant!.name,
