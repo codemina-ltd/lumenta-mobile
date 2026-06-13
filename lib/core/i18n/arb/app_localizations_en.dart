@@ -121,6 +121,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactCameFrom => 'Came from:';
 
   @override
+  String get ordersTitle => 'Orders';
+
+  @override
+  String get ordersEmpty => 'No orders for this contact';
+
+  @override
+  String get ordersActionFailed => 'Couldn\'t update. Please try again.';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override

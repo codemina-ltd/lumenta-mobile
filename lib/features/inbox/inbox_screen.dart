@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/providers.dart';
 import '../../data/models/inbox_thread.dart';
+import '../commerce/orders_sheet.dart';
 import '../contacts/contact_details_sheet.dart';
 import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
@@ -164,6 +165,14 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
               onTap: () {
                 Navigator.pop(sheetContext);
                 showContactDetailsSheet(context, thread.clientId);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart_outlined),
+              title: Text(l10n.ordersTitle),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                showOrdersSheet(context, thread.clientId);
               },
             ),
           ],

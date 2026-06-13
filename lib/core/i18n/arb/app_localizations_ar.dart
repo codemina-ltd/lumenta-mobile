@@ -121,6 +121,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contactCameFrom => 'أتى من:';
 
   @override
+  String get ordersTitle => 'الطلبات';
+
+  @override
+  String get ordersEmpty => 'لا توجد طلبات لهذا العميل';
+
+  @override
+  String get ordersActionFailed => 'تعذّر التحديث. حاول مرة أخرى.';
+
+  @override
   String get clientsTitle => 'العملاء';
 
   @override

@@ -322,6 +322,24 @@ abstract class AppLocalizations {
   /// **'Came from:'**
   String get contactCameFrom;
 
+  /// No description provided for @ordersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get ordersTitle;
+
+  /// No description provided for @ordersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders for this contact'**
+  String get ordersEmpty;
+
+  /// No description provided for @ordersActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update. Please try again.'**
+  String get ordersActionFailed;
+
   /// No description provided for @clientsTitle.
   ///
   /// In en, this message translates to:

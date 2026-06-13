@@ -42,6 +42,9 @@
   "contactLoadError": "تعذّر تحميل تفاصيل العميل.",
   "contactSaveFailed": "تعذّر الحفظ. حاول مرة أخرى.",
   "contactCameFrom": "أتى من:",
+  "ordersTitle": "الطلبات",
+  "ordersEmpty": "لا توجد طلبات لهذا العميل",
+  "ordersActionFailed": "تعذّر التحديث. حاول مرة أخرى.",
 
   "clientsTitle": "العملاء",
   "searchClients": "ابحث عن العملاء",

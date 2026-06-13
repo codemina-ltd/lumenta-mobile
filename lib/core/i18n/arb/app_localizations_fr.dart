@@ -124,6 +124,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get contactCameFrom => 'Provient de :';
 
   @override
+  String get ordersTitle => 'Commandes';
+
+  @override
+  String get ordersEmpty => 'Aucune commande pour ce contact';
+
+  @override
+  String get ordersActionFailed =>
+      'Échec de la mise à jour. Veuillez réessayer.';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override
