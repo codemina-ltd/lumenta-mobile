@@ -5,11 +5,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers.dart';
 import '../../data/models/client.dart';
+import '../../data/models/conversation_sender.dart';
+import '../../data/models/sender.dart';
+import '../auth/auth_controller.dart';
 
 /// Single client for the chat header (cached per client id).
 final clientProvider =
     FutureProvider.autoDispose.family<Client, String>((ref, id) async {
   return ref.read(clientsRepoProvider).getById(id);
+});
+
+/// Senders that have message history with this client — one thread tab each.
+/// Invalidated by [ThreadController] after a successful send so a first
+/// message via a new sender materialises its tab.
+final conversationSendersProvider = FutureProvider.autoDispose
+    .family<List<ConversationSender>, String>((ref, clientId) async {
+  return ref.read(messagesRepoProvider).conversationSenders(clientId);
+});
+
+/// All tenant senders (composer binding + "Start conversation via…").
+/// Re-created whenever the active tenant changes, so the list re-scopes.
+final tenantSendersProvider =
+    FutureProvider.autoDispose<List<Sender>>((ref) async {
+  ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+  return ref.read(sendersRepoProvider).findAll();
 });
 
 /// Auth headers for loading proxied media (`/messages/:id/media`).

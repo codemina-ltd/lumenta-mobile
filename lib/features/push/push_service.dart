@@ -11,6 +11,7 @@ import 'package:mobile/firebase_options.dart';
 import '../../core/providers.dart';
 import '../../core/router/app_router.dart';
 import '../auth/auth_controller.dart';
+import '../chats/chat_providers.dart';
 import '../chats/chats_controller.dart';
 import '../chats/thread_controller.dart';
 import '../notifications/notifications_controller.dart';
@@ -230,7 +231,12 @@ class PushService {
     _ref.invalidate(notificationsControllerProvider);
     final clientId = data['client_id'] as String?;
     if (clientId != null && clientId.isNotEmpty) {
-      _ref.invalidate(threadControllerProvider(clientId));
+      // Threads are keyed by (clientId, senderId) and the push doesn't say
+      // which sender tab is open — invalidate the whole family (autoDispose
+      // means only the open thread is alive) plus this client's tab list, so
+      // an inbound via a new sender materialises its tab.
+      _ref.invalidate(threadControllerProvider);
+      _ref.invalidate(conversationSendersProvider(clientId));
     }
   }
 

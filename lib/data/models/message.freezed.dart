@@ -39,6 +39,10 @@ mixin _$Message {
   String? get transcriptionStatus => throw _privateConstructorUsedError;
   Map<String, dynamic>? get providerRawPayload =>
       throw _privateConstructorUsedError;
+
+  /// Sender (WABA phone number) that carried this message. Null on legacy
+  /// rows written before sender attribution existed.
+  String? get senderId => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this Message to a JSON map.
@@ -71,6 +75,7 @@ abstract class $MessageCopyWith<$Res> {
     String? transcription,
     String? transcriptionStatus,
     Map<String, dynamic>? providerRawPayload,
+    String? senderId,
     String createdAt,
   });
 }
@@ -104,6 +109,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
     Object? transcription = freezed,
     Object? transcriptionStatus = freezed,
     Object? providerRawPayload = freezed,
+    Object? senderId = freezed,
     Object? createdAt = null,
   }) {
     return _then(
@@ -164,6 +170,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
                 ? _value.providerRawPayload
                 : providerRawPayload // ignore: cast_nullable_to_non_nullable
                       as Map<String, dynamic>?,
+            senderId: freezed == senderId
+                ? _value.senderId
+                : senderId // ignore: cast_nullable_to_non_nullable
+                      as String?,
             createdAt: null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -198,6 +208,7 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
     String? transcription,
     String? transcriptionStatus,
     Map<String, dynamic>? providerRawPayload,
+    String? senderId,
     String createdAt,
   });
 }
@@ -230,6 +241,7 @@ class __$$MessageImplCopyWithImpl<$Res>
     Object? transcription = freezed,
     Object? transcriptionStatus = freezed,
     Object? providerRawPayload = freezed,
+    Object? senderId = freezed,
     Object? createdAt = null,
   }) {
     return _then(
@@ -290,6 +302,10 @@ class __$$MessageImplCopyWithImpl<$Res>
             ? _value._providerRawPayload
             : providerRawPayload // ignore: cast_nullable_to_non_nullable
                   as Map<String, dynamic>?,
+        senderId: freezed == senderId
+            ? _value.senderId
+            : senderId // ignore: cast_nullable_to_non_nullable
+                  as String?,
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -320,6 +336,7 @@ class _$MessageImpl extends _Message {
     this.transcription,
     this.transcriptionStatus,
     final Map<String, dynamic>? providerRawPayload,
+    this.senderId,
     required this.createdAt,
   }) : _providerRawPayload = providerRawPayload,
        super._();
@@ -368,12 +385,16 @@ class _$MessageImpl extends _Message {
     return EqualUnmodifiableMapView(value);
   }
 
+  /// Sender (WABA phone number) that carried this message. Null on legacy
+  /// rows written before sender attribution existed.
+  @override
+  final String? senderId;
   @override
   final String createdAt;
 
   @override
   String toString() {
-    return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, providerRawPayload: $providerRawPayload, createdAt: $createdAt)';
+    return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, providerRawPayload: $providerRawPayload, senderId: $senderId, createdAt: $createdAt)';
   }
 
   @override
@@ -408,6 +429,8 @@ class _$MessageImpl extends _Message {
               other._providerRawPayload,
               _providerRawPayload,
             ) &&
+            (identical(other.senderId, senderId) ||
+                other.senderId == senderId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
@@ -430,6 +453,7 @@ class _$MessageImpl extends _Message {
     transcription,
     transcriptionStatus,
     const DeepCollectionEquality().hash(_providerRawPayload),
+    senderId,
     createdAt,
   );
 
@@ -465,6 +489,7 @@ abstract class _Message extends Message {
     final String? transcription,
     final String? transcriptionStatus,
     final Map<String, dynamic>? providerRawPayload,
+    final String? senderId,
     required final String createdAt,
   }) = _$MessageImpl;
   const _Message._() : super._();
@@ -502,6 +527,11 @@ abstract class _Message extends Message {
   String? get transcriptionStatus;
   @override
   Map<String, dynamic>? get providerRawPayload;
+
+  /// Sender (WABA phone number) that carried this message. Null on legacy
+  /// rows written before sender attribution existed.
+  @override
+  String? get senderId;
   @override
   String get createdAt;
 

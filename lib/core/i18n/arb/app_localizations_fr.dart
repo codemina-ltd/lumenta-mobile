@@ -168,6 +168,33 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sendFailed => 'Échec de l\'envoi. Appuyez pour réessayer.';
 
   @override
+  String get senderStartVia => 'Démarrer une conversation via…';
+
+  @override
+  String get senderDefaultTag => 'Par défaut';
+
+  @override
+  String get senderInactive => 'Ce numéro est inactif';
+
+  @override
+  String get senderInactiveComposer =>
+      'Ce numéro est inactif — l\'envoi est désactivé';
+
+  @override
+  String get senderNoHistory =>
+      'Aucun message via ce numéro pour le moment. Envoyez-en un pour démarrer la conversation.';
+
+  @override
+  String sendingAs(Object name, Object number) {
+    return 'Envoi en tant que $name · $number';
+  }
+
+  @override
+  String sendingAsNameOnly(Object name) {
+    return 'Envoi en tant que $name';
+  }
+
+  @override
   String get sendTemplate => 'Envoyer un modèle';
 
   @override

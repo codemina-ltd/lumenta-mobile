@@ -9,8 +9,11 @@ class TemplatesRepo {
 
   /// `GET /templates?status=approved` — the only templates sendable from chat.
   /// Mirrors the portal picker, which fetches `limit: 100` with no pagination.
+  /// [forSenderId] narrows to templates the sender can actually deliver
+  /// (WABA-aware filter, plan §3) — used by the per-sender thread composer.
   Future<Paginated<Template>> approved({
     String? search,
+    String? forSenderId,
     int page = 1,
     int limit = 100,
   }) async {
@@ -20,6 +23,7 @@ class TemplatesRepo {
         'status': 'approved',
         'limit': limit,
         'page': page,
+        'forSenderId': ?forSenderId,
         if (search != null && search.trim().isNotEmpty) 'search': search.trim(),
       },
     );

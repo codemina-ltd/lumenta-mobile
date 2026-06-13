@@ -65,6 +65,25 @@
   "attachDocument": "Document",
   "sendFailed": "Couldn't send. Tap to retry.",
 
+  "senderStartVia": "Start conversation via…",
+  "senderDefaultTag": "Default",
+  "senderInactive": "This number is inactive",
+  "senderInactiveComposer": "This number is inactive — sending is disabled",
+  "senderNoHistory": "No messages with this number yet. Send one to start the conversation.",
+  "sendingAs": "Sending as {name} · {number}",
+  "@sendingAs": {
+    "placeholders": {
+      "name": {},
+      "number": {}
+    }
+  },
+  "sendingAsNameOnly": "Sending as {name}",
+  "@sendingAsNameOnly": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+
   "sendTemplate": "Send a template",
   "attachTemplate": "Template",
   "templatePickerTitle": "Choose a template",

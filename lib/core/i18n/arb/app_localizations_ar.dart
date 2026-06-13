@@ -168,6 +168,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sendFailed => 'تعذّر الإرسال. اضغط لإعادة المحاولة.';
 
   @override
+  String get senderStartVia => 'بدء محادثة عبر…';
+
+  @override
+  String get senderDefaultTag => 'افتراضي';
+
+  @override
+  String get senderInactive => 'هذا الرقم غير نشط';
+
+  @override
+  String get senderInactiveComposer => 'هذا الرقم غير نشط — الإرسال معطّل';
+
+  @override
+  String get senderNoHistory =>
+      'لا توجد رسائل عبر هذا الرقم بعد. أرسل رسالة لبدء المحادثة.';
+
+  @override
+  String sendingAs(Object name, Object number) {
+    return 'الإرسال باسم $name · $number';
+  }
+
+  @override
+  String sendingAsNameOnly(Object name) {
+    return 'الإرسال باسم $name';
+  }
+
+  @override
   String get sendTemplate => 'إرسال قالب';
 
   @override

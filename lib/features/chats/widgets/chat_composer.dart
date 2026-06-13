@@ -13,19 +13,30 @@ import '../thread_controller.dart';
 /// Reply composer for the chat thread (Phase 7). Free-form sending is only
 /// allowed inside WhatsApp's 24-hour service window ([windowOpen]); otherwise
 /// it shows guidance to use an approved template.
+///
+/// Per-sender threads: the composer is bound to [threadKey] — every send
+/// (text, media, template) carries that thread's sender explicitly. When the
+/// sender tab bar is visible, [senderLabel] surfaces the routing as a
+/// "Sending as …" caption, and an inactive sender disables sending entirely.
 class ChatComposer extends ConsumerStatefulWidget {
   const ChatComposer({
     super.key,
-    required this.clientId,
+    required this.threadKey,
     required this.to,
     required this.windowOpen,
     required this.onSent,
+    this.senderLabel,
+    this.senderNumber,
+    this.senderActive = true,
   });
 
-  final String clientId;
+  final ThreadKey threadKey;
   final String to;
   final bool windowOpen;
   final VoidCallback onSent;
+  final String? senderLabel;
+  final String? senderNumber;
+  final bool senderActive;
 
   @override
   ConsumerState<ChatComposer> createState() => _ChatComposerState();
@@ -51,7 +62,7 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
   }
 
   ThreadController get _thread =>
-      ref.read(threadControllerProvider(widget.clientId).notifier);
+      ref.read(threadControllerProvider(widget.threadKey).notifier);
 
   void _sendText() {
     final body = _controller.text.trim();
@@ -94,7 +105,7 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
   Future<void> _openTemplateFlow() async {
     final sent = await showTemplatePicker(
       context: context,
-      clientId: widget.clientId,
+      threadKey: widget.threadKey,
       to: widget.to,
     );
     if (sent == true) widget.onSent();
@@ -158,10 +169,67 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
     );
   }
 
+  /// "Sending as {sender} · {number}" — keeps the routing visible whenever
+  /// the composer is bound to a specific sender.
+  Widget? _sendingAsCaption(BuildContext context, AppLocalizations l10n) {
+    final label = widget.senderLabel;
+    if (label == null) return null;
+    final number = widget.senderNumber;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Insets.xs),
+      child: Text(
+        number != null && number.isNotEmpty
+            ? l10n.sendingAs(label, number)
+            : l10n.sendingAsNameOnly(label),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: context.text.labelSmall?.copyWith(
+          color: context.scheme.onSurfaceVariant,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
+    final caption = _sendingAsCaption(context, l10n);
+
+    // Inactive sender: the thread stays readable, sending is fully disabled.
+    if (!widget.senderActive) {
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: scheme.surfaceContainerHigh,
+          border: Border(top: BorderSide(color: scheme.outlineVariant)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Insets.lg,
+              vertical: Insets.md,
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.do_not_disturb_on_outlined,
+                    size: 20, color: scheme.onSurfaceVariant),
+                const SizedBox(width: Insets.md),
+                Expanded(
+                  child: Text(
+                    l10n.senderInactiveComposer,
+                    style: context.text.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     if (!widget.windowOpen) {
       return Container(
@@ -180,6 +248,8 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (caption != null)
+                  Align(alignment: AlignmentDirectional.centerStart, child: caption),
                 Row(
                   children: [
                     const Icon(Icons.lock_clock_rounded,
@@ -230,14 +300,28 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
             Insets.sm,
             Insets.sm,
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline_rounded),
-                color: scheme.onSurfaceVariant,
-                onPressed: _openAttachSheet,
-              ),
+              if (caption != null)
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                    start: Insets.md,
+                    top: 2,
+                  ),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: caption,
+                  ),
+                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.add_circle_outline_rounded),
+                    color: scheme.onSurfaceVariant,
+                    onPressed: _openAttachSheet,
+                  ),
               Expanded(
                 child: Container(
                   constraints: const BoxConstraints(minHeight: 44),
@@ -266,8 +350,10 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
                   ),
                 ),
               ),
-              const SizedBox(width: Insets.sm),
-              _SendButton(enabled: _hasText, onTap: _sendText),
+                  const SizedBox(width: Insets.sm),
+                  _SendButton(enabled: _hasText, onTap: _sendText),
+                ],
+              ),
             ],
           ),
         ),

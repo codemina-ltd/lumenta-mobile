@@ -11,17 +11,18 @@ import 'template_vars.dart';
 
 /// Full-screen form for filling a template's body + button variables, with a
 /// live preview. Sends via [ThreadController.sendTemplate] and pops `true` on
-/// success so the caller can scroll the thread to the new bubble.
+/// success so the caller can scroll the thread to the new bubble. The send is
+/// bound to [threadKey]'s sender (per-sender thread tabs).
 class TemplateFillScreen extends ConsumerStatefulWidget {
   const TemplateFillScreen({
     super.key,
     required this.template,
-    required this.clientId,
+    required this.threadKey,
     required this.to,
   });
 
   final Template template;
-  final String clientId;
+  final ThreadKey threadKey;
   final String to;
 
   @override
@@ -81,7 +82,7 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
     setState(() => _sending = true);
     final btn = _buttonVariables;
     final error = await ref
-        .read(threadControllerProvider(widget.clientId).notifier)
+        .read(threadControllerProvider(widget.threadKey).notifier)
         .sendTemplate(
           to: widget.to,
           template: _t,

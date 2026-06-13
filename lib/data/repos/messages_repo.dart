@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../core/config/env.dart';
 import '../models/conversation.dart';
+import '../models/conversation_sender.dart';
 import '../models/message.dart';
 import '../models/paginated.dart';
 
@@ -25,16 +26,35 @@ class MessagesRepo {
   }
 
   /// `GET /clients/:id/messages` — the message thread for one client.
+  /// [senderId] filters to messages carried by that sender (per-sender thread
+  /// tabs); omit it for the full merged thread.
   Future<Paginated<Message>> thread(
     String clientId, {
     int page = 1,
     int limit = 30,
+    String? senderId,
   }) async {
     final res = await _dio.get<Map<String, dynamic>>(
       '/clients/$clientId/messages',
-      queryParameters: {'page': page, 'limit': limit},
+      queryParameters: {
+        'page': page,
+        'limit': limit,
+        'senderId': ?senderId,
+      },
     );
     return Paginated.fromJson(res.data!, Message.fromJson);
+  }
+
+  /// `GET /clients/:id/conversation-senders` — which senders have message
+  /// history with this client (one row each, most recent first). Backs the
+  /// per-sender thread tabs.
+  Future<List<ConversationSender>> conversationSenders(String clientId) async {
+    final res = await _dio.get<List<dynamic>>(
+      '/clients/$clientId/conversation-senders',
+    );
+    return (res.data ?? const [])
+        .map((e) => ConversationSender.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Authenticated proxy URL for a message's media (`GET /messages/:id/media`).
@@ -43,10 +63,16 @@ class MessagesRepo {
       '${Env.apiBaseUrl}/messages/$messageId/media';
 
   /// `POST /messages/send` — free-form text reply (24h service window).
-  Future<Message> sendText({required String to, required String body}) async {
+  /// [senderId] routes the reply via that sender; omitted, the server falls
+  /// back to the tenant default sender.
+  Future<Message> sendText({
+    required String to,
+    required String body,
+    String? senderId,
+  }) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/messages/send',
-      data: {'to': to, 'body': body},
+      data: {'to': to, 'body': body, 'senderId': ?senderId},
     );
     return Message.fromJson(res.data!);
   }
@@ -62,12 +88,14 @@ class MessagesRepo {
     required String templateId,
     Map<String, String>? templateVariables,
     Map<String, String>? buttonVariables,
+    String? senderId,
   }) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/messages/templates',
       data: {
         'to': to,
         'templateId': templateId,
+        'senderId': ?senderId,
         if (templateVariables != null && templateVariables.isNotEmpty)
           'templateVariables': templateVariables,
         if (buttonVariables != null && buttonVariables.isNotEmpty)
@@ -84,12 +112,14 @@ class MessagesRepo {
     required String filePath,
     String? caption,
     String? filename,
+    String? senderId,
   }) async {
     final form = FormData.fromMap({
       'to': to,
       'mediaType': mediaType,
       'caption': ?caption,
       'filename': ?filename,
+      'senderId': ?senderId,
       'file': await MultipartFile.fromFile(filePath, filename: filename),
     });
     final res = await _dio.post<Map<String, dynamic>>(

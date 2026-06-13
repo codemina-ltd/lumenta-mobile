@@ -38,6 +38,7 @@ _$MessageImpl _$$MessageImplFromJson(Map<String, dynamic> json) =>
       transcription: json['transcription'] as String?,
       transcriptionStatus: json['transcriptionStatus'] as String?,
       providerRawPayload: json['providerRawPayload'] as Map<String, dynamic>?,
+      senderId: json['senderId'] as String?,
       createdAt: json['createdAt'] as String,
     );
 
@@ -57,6 +58,7 @@ Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
       'transcription': instance.transcription,
       'transcriptionStatus': instance.transcriptionStatus,
       'providerRawPayload': instance.providerRawPayload,
+      'senderId': instance.senderId,
       'createdAt': instance.createdAt,
     };
 

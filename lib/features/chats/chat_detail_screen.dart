@@ -11,13 +11,16 @@ import '../../core/providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
+import '../../data/models/conversation_sender.dart';
 import '../../data/models/message.dart';
+import '../../data/models/sender.dart';
 import '../../data/storage/last_read_store.dart';
 import '../shared/widgets.dart';
 import 'chat_providers.dart';
 import 'thread_controller.dart';
 import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
+import 'widgets/sender_thread_bar.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({super.key, required this.clientId});
@@ -32,14 +35,21 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   final _scroll = ScrollController();
   bool _didInitialScroll = false;
 
+  /// The user's explicit tab choice; null until they pick one, in which case
+  /// the most recent conversation sender (or the tenant default) wins.
+  String? _selectedSenderId;
+
+  /// Resolved thread scope the scroll listener reads; null until the sender
+  /// lookups settle so the first thread fetch is already correctly scoped.
+  ThreadKey? _threadKey;
+
   @override
   void initState() {
     super.initState();
     _scroll.addListener(() {
-      if (_scroll.position.pixels <= 80) {
-        ref
-            .read(threadControllerProvider(widget.clientId).notifier)
-            .loadOlder();
+      final key = _threadKey;
+      if (key != null && _scroll.position.pixels <= 80) {
+        ref.read(threadControllerProvider(key).notifier).loadOlder();
       }
     });
   }
@@ -81,8 +91,52 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(threadControllerProvider(widget.clientId));
     final clientAsync = ref.watch(clientProvider(widget.clientId));
+
+    // ── Per-sender threads ──────────────────────────────────────────────
+    // Which senders have history with this client (tab list) + all tenant
+    // senders (composer binding, "Start via…"). If either lookup fails, fall
+    // back to the merged thread with no tab bar — pre-sender-threads
+    // behaviour. The hidden-bar case also keeps the thread merged so legacy
+    // rows without sender attribution stay visible.
+    final convAsync = ref.watch(conversationSendersProvider(widget.clientId));
+    final sendersAsync = ref.watch(tenantSendersProvider);
+    final sendersReady = (convAsync.hasValue || convAsync.hasError) &&
+        (sendersAsync.hasValue || sendersAsync.hasError);
+    final convSenders = convAsync.valueOrNull ?? const <ConversationSender>[];
+    final senders = sendersAsync.valueOrNull ?? const <Sender>[];
+    final showTabs =
+        sendersReady && (convSenders.length > 1 || senders.length > 1);
+
+    String? activeSenderId;
+    if (showTabs) {
+      final selected = _selectedSenderId;
+      activeSenderId = (selected != null &&
+              (senders.any((s) => s.id == selected) ||
+                  convSenders.any((c) => c.senderId == selected)))
+          ? selected
+          : convSenders.firstOrNull?.senderId ??
+              senders.where((s) => s.isDefault).firstOrNull?.id ??
+              senders.firstOrNull?.id;
+    }
+    final activeSender =
+        senders.where((s) => s.id == activeSenderId).firstOrNull;
+    final activeConv =
+        convSenders.where((c) => c.senderId == activeSenderId).firstOrNull;
+
+    final threadKey = sendersReady
+        ? (clientId: widget.clientId, senderId: activeSenderId)
+        : null;
+    if (threadKey != _threadKey) {
+      // Scope changed (tab click or initial resolution): re-run the
+      // scroll-to-bottom on the freshly loaded thread.
+      _threadKey = threadKey;
+      _didInitialScroll = false;
+    }
+
+    final state = threadKey == null
+        ? const ThreadState()
+        : ref.watch(threadControllerProvider(threadKey));
     final title = clientAsync.maybeWhen(
       data: (c) => c.displayName,
       orElse: () => '',
@@ -96,11 +150,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       orElse: () => null,
     );
 
-    ref.listen(threadControllerProvider(widget.clientId), (_, next) {
-      if (!next.loading && next.error == null) {
-        _onLoaded(next.messages.isEmpty ? null : next.messages.last.createdAtDate);
-      }
-    });
+    if (threadKey != null) {
+      ref.listen(threadControllerProvider(threadKey), (_, next) {
+        if (!next.loading && next.error == null) {
+          _onLoaded(
+              next.messages.isEmpty ? null : next.messages.last.createdAtDate);
+        }
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -144,22 +201,39 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       ),
       body: Column(
         children: [
-          Expanded(child: _body(context, state)),
-          if (clientAsync.hasValue && !state.loading)
+          if (showTabs)
+            SenderThreadBar(
+              conversationSenders: convSenders,
+              senders: senders,
+              activeSenderId: activeSenderId,
+              onSelect: (id) => setState(() => _selectedSenderId = id),
+            ),
+          Expanded(
+            child: threadKey == null
+                ? const Center(child: CircularProgressIndicator())
+                : _body(context, state, threadKey),
+          ),
+          if (clientAsync.hasValue && threadKey != null && !state.loading)
             ChatComposer(
-              clientId: widget.clientId,
+              threadKey: threadKey,
               to: clientAsync.value!.phoneNumber,
               windowOpen: _windowOpen(state),
               onSent: _scrollToBottom,
+              senderLabel:
+                  showTabs ? (activeSender?.label ?? activeConv?.label) : null,
+              senderNumber: showTabs
+                  ? (activeSender?.number ?? activeConv?.displayPhoneNumber)
+                  : null,
+              senderActive: !showTabs ||
+                  (activeSender?.isActive ?? activeConv?.isActive ?? true),
             ),
         ],
       ),
     );
   }
 
-  Widget _body(BuildContext context, ThreadState state) {
-    final controller =
-        ref.read(threadControllerProvider(widget.clientId).notifier);
+  Widget _body(BuildContext context, ThreadState state, ThreadKey threadKey) {
+    final controller = ref.read(threadControllerProvider(threadKey).notifier);
     if (state.loading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -168,7 +242,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     }
     if (state.messages.isEmpty) {
       final l10n = AppLocalizations.of(context);
-      return EmptyState(message: l10n.chatsEmpty, icon: Icons.forum_outlined);
+      // A sender-scoped empty thread is a "start the conversation via this
+      // number" state, not a generic no-chats state.
+      return EmptyState(
+        message: threadKey.senderId != null
+            ? l10n.senderNoHistory
+            : l10n.chatsEmpty,
+        icon: Icons.forum_outlined,
+      );
     }
 
     final rows = _buildRows(context, state.messages);

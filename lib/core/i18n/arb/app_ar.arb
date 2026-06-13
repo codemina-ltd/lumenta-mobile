@@ -65,6 +65,25 @@
   "attachDocument": "مستند",
   "sendFailed": "تعذّر الإرسال. اضغط لإعادة المحاولة.",
 
+  "senderStartVia": "بدء محادثة عبر…",
+  "senderDefaultTag": "افتراضي",
+  "senderInactive": "هذا الرقم غير نشط",
+  "senderInactiveComposer": "هذا الرقم غير نشط — الإرسال معطّل",
+  "senderNoHistory": "لا توجد رسائل عبر هذا الرقم بعد. أرسل رسالة لبدء المحادثة.",
+  "sendingAs": "الإرسال باسم {name} · {number}",
+  "@sendingAs": {
+    "placeholders": {
+      "name": {},
+      "number": {}
+    }
+  },
+  "sendingAsNameOnly": "الإرسال باسم {name}",
+  "@sendingAsNameOnly": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+
   "sendTemplate": "إرسال قالب",
   "attachTemplate": "قالب",
   "templatePickerTitle": "اختر قالبًا",

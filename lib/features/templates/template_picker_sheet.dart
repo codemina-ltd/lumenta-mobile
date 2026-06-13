@@ -8,6 +8,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/template.dart';
+import '../chats/thread_controller.dart';
 import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'template_fill_screen.dart';
@@ -16,10 +17,11 @@ import 'templates_controller.dart';
 
 /// Run the full pick → fill → send flow: a modal picker, then the fill screen.
 /// Returns `true` once a template has been sent so the caller can scroll the
-/// thread to the new bubble.
+/// thread to the new bubble. The picker lists only templates sendable by the
+/// thread's sender (`threadKey.senderId`); a merged thread shows them all.
 Future<bool?> showTemplatePicker({
   required BuildContext context,
-  required String clientId,
+  required ThreadKey threadKey,
   required String to,
 }) async {
   final template = await showModalBottomSheet<Template>(
@@ -28,14 +30,14 @@ Future<bool?> showTemplatePicker({
     useSafeArea: true,
     backgroundColor: Theme.of(context).colorScheme.surface,
     shape: const RoundedRectangleBorder(borderRadius: Radii.sheet),
-    builder: (_) => const _TemplatePickerSheet(),
+    builder: (_) => _TemplatePickerSheet(forSenderId: threadKey.senderId),
   );
   if (template == null || !context.mounted) return null;
   return Navigator.of(context).push<bool>(
     MaterialPageRoute(
       builder: (_) => TemplateFillScreen(
         template: template,
-        clientId: clientId,
+        threadKey: threadKey,
         to: to,
       ),
     ),
@@ -43,7 +45,9 @@ Future<bool?> showTemplatePicker({
 }
 
 class _TemplatePickerSheet extends ConsumerStatefulWidget {
-  const _TemplatePickerSheet();
+  const _TemplatePickerSheet({this.forSenderId});
+
+  final String? forSenderId;
 
   @override
   ConsumerState<_TemplatePickerSheet> createState() =>
@@ -64,15 +68,18 @@ class _TemplatePickerSheetState extends ConsumerState<_TemplatePickerSheet> {
   void _onSearchChanged(String value) {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 350), () {
-      ref.read(templatesControllerProvider.notifier).setSearch(value);
+      ref
+          .read(templatesControllerProvider(widget.forSenderId).notifier)
+          .setSearch(value);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final state = ref.watch(templatesControllerProvider);
-    final controller = ref.read(templatesControllerProvider.notifier);
+    final state = ref.watch(templatesControllerProvider(widget.forSenderId));
+    final controller =
+        ref.read(templatesControllerProvider(widget.forSenderId).notifier);
 
     return FractionallySizedBox(
       heightFactor: 0.85,

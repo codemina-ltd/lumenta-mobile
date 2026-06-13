@@ -5,7 +5,12 @@ import '../../core/providers.dart';
 import '../../data/models/message.dart';
 import '../../data/models/template.dart';
 import '../templates/template_vars.dart';
+import 'chat_providers.dart';
 import 'chats_controller.dart';
+
+/// Identifies one thread scope: a client, optionally narrowed to one sender
+/// (per-sender thread tabs). `senderId == null` is the full merged thread.
+typedef ThreadKey = ({String clientId, String? senderId});
 
 @immutable
 class ThreadState {
@@ -45,12 +50,19 @@ class ThreadState {
 }
 
 class ThreadController extends StateNotifier<ThreadState> {
-  ThreadController(this._ref, this.clientId) : super(const ThreadState()) {
+  ThreadController(this._ref, this.key) : super(const ThreadState()) {
     refresh();
   }
 
   final Ref _ref;
-  final String clientId;
+  final ThreadKey key;
+
+  String get clientId => key.clientId;
+
+  /// Sender carrying this thread; every send is bound to it explicitly so a
+  /// reply never silently falls back to the tenant default sender. Null only
+  /// in the merged single-sender thread, where the default fallback is right.
+  String? get senderId => key.senderId;
 
   final Map<String, Message> _byId = {};
 
@@ -68,8 +80,9 @@ class ThreadController extends StateNotifier<ThreadState> {
 
   Future<void> _loadPage(int page) async {
     try {
-      final result =
-          await _ref.read(messagesRepoProvider).thread(clientId, page: page);
+      final result = await _ref
+          .read(messagesRepoProvider)
+          .thread(clientId, page: page, senderId: senderId);
       for (final m in result.data) {
         _byId[m.id] = m;
       }
@@ -97,9 +110,11 @@ class ThreadController extends StateNotifier<ThreadState> {
     final temp = _optimistic(body: body, type: MessageType.text);
     _insert(temp);
     try {
-      final sent =
-          await _ref.read(messagesRepoProvider).sendText(to: to, body: body);
+      final sent = await _ref
+          .read(messagesRepoProvider)
+          .sendText(to: to, body: body, senderId: senderId);
       _replace(temp.id, sent);
+      _onSendSucceeded();
     } catch (_) {
       _markFailed(temp.id);
     }
@@ -125,8 +140,10 @@ class ThreadController extends StateNotifier<ThreadState> {
             templateId: template.id,
             templateVariables: variables,
             buttonVariables: buttonVariables,
+            senderId: senderId,
           );
       _replace(temp.id, sent);
+      _onSendSucceeded();
       // Bump the conversation to the top of the chats list.
       _ref.read(chatsControllerProvider.notifier).refresh();
       return null;
@@ -154,11 +171,19 @@ class ThreadController extends StateNotifier<ThreadState> {
             filePath: filePath,
             caption: caption,
             filename: filename,
+            senderId: senderId,
           );
       _replace(temp.id, sent);
+      _onSendSucceeded();
     } catch (_) {
       _markFailed(temp.id);
     }
+  }
+
+  /// A confirmed send may be the first message via this sender — refetch the
+  /// tab list so a thread started via "Start conversation via…" materialises.
+  void _onSendSucceeded() {
+    _ref.invalidate(conversationSendersProvider(clientId));
   }
 
   Message _optimistic({required String body, required MessageType type}) {
@@ -169,6 +194,7 @@ class ThreadController extends StateNotifier<ThreadState> {
       body: body,
       status: MessageStatus.sent,
       messageType: type,
+      senderId: senderId,
       createdAt: DateTime.now().toUtc().toIso8601String(),
     );
   }
@@ -212,7 +238,9 @@ class ThreadController extends StateNotifier<ThreadState> {
   }
 }
 
+/// One controller per thread scope — switching sender tabs switches to a
+/// separate controller (and message cache) keyed by `(clientId, senderId)`.
 final threadControllerProvider = StateNotifierProvider.autoDispose
-    .family<ThreadController, ThreadState, String>((ref, clientId) {
-  return ThreadController(ref, clientId);
+    .family<ThreadController, ThreadState, ThreadKey>((ref, key) {
+  return ThreadController(ref, key);
 });

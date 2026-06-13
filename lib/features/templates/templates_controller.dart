@@ -37,11 +37,16 @@ class TemplatesState {
 /// which fetches a single page of `limit: 100` with no pagination; search is
 /// applied server-side via the same `/templates` endpoint.
 class TemplatesController extends StateNotifier<TemplatesState> {
-  TemplatesController(this._ref) : super(const TemplatesState()) {
+  TemplatesController(this._ref, this.forSenderId)
+      : super(const TemplatesState()) {
     refresh();
   }
 
   final Ref _ref;
+
+  /// When set, the list is narrowed to templates the active thread's sender
+  /// can actually deliver (WABA-aware `forSenderId` filter).
+  final String? forSenderId;
 
   Future<void> refresh() async {
     state = state.copyWith(loading: true, clearError: true);
@@ -58,7 +63,7 @@ class TemplatesController extends StateNotifier<TemplatesState> {
     try {
       final result = await _ref
           .read(templatesRepoProvider)
-          .approved(search: state.search);
+          .approved(search: state.search, forSenderId: forSenderId);
       state = state.copyWith(
         items: result.data,
         loading: false,
@@ -70,9 +75,10 @@ class TemplatesController extends StateNotifier<TemplatesState> {
   }
 }
 
+/// Keyed by the sender the picker is filtering for (null = all templates).
 /// Re-created whenever the active tenant changes, so the list re-scopes.
-final templatesControllerProvider =
-    StateNotifierProvider.autoDispose<TemplatesController, TemplatesState>((ref) {
+final templatesControllerProvider = StateNotifierProvider.autoDispose
+    .family<TemplatesController, TemplatesState, String?>((ref, forSenderId) {
   ref.watch(authControllerProvider.select((s) => s.activeTenantId));
-  return TemplatesController(ref);
+  return TemplatesController(ref, forSenderId);
 });

@@ -412,6 +412,48 @@ abstract class AppLocalizations {
   /// **'Couldn\'t send. Tap to retry.'**
   String get sendFailed;
 
+  /// No description provided for @senderStartVia.
+  ///
+  /// In en, this message translates to:
+  /// **'Start conversation via…'**
+  String get senderStartVia;
+
+  /// No description provided for @senderDefaultTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get senderDefaultTag;
+
+  /// No description provided for @senderInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'This number is inactive'**
+  String get senderInactive;
+
+  /// No description provided for @senderInactiveComposer.
+  ///
+  /// In en, this message translates to:
+  /// **'This number is inactive — sending is disabled'**
+  String get senderInactiveComposer;
+
+  /// No description provided for @senderNoHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages with this number yet. Send one to start the conversation.'**
+  String get senderNoHistory;
+
+  /// No description provided for @sendingAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending as {name} · {number}'**
+  String sendingAs(Object name, Object number);
+
+  /// No description provided for @sendingAsNameOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending as {name}'**
+  String sendingAsNameOnly(Object name);
+
   /// No description provided for @sendTemplate.
   ///
   /// In en, this message translates to:

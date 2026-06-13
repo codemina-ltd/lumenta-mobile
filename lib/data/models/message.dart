@@ -78,6 +78,10 @@ class Message with _$Message {
     String? transcription,
     String? transcriptionStatus,
     Map<String, dynamic>? providerRawPayload,
+
+    /// Sender (WABA phone number) that carried this message. Null on legacy
+    /// rows written before sender attribution existed.
+    String? senderId,
     required String createdAt,
   }) = _Message;
 
