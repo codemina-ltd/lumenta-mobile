@@ -41,6 +41,7 @@
   "contactNoFields": "لا توجد حقول مخصصة",
   "contactLoadError": "تعذّر تحميل تفاصيل العميل.",
   "contactSaveFailed": "تعذّر الحفظ. حاول مرة أخرى.",
+  "contactCameFrom": "أتى من:",
 
   "clientsTitle": "العملاء",
   "searchClients": "ابحث عن العملاء",

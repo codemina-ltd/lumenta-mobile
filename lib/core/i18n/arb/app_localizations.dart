@@ -316,6 +316,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t save. Please try again.'**
   String get contactSaveFailed;
 
+  /// No description provided for @contactCameFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Came from:'**
+  String get contactCameFrom;
+
   /// No description provided for @clientsTitle.
   ///
   /// In en, this message translates to:

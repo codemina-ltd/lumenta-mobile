@@ -118,6 +118,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contactSaveFailed => 'تعذّر الحفظ. حاول مرة أخرى.';
 
   @override
+  String get contactCameFrom => 'أتى من:';
+
+  @override
   String get clientsTitle => 'العملاء';
 
   @override

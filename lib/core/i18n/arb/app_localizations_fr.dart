@@ -121,6 +121,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Échec de l\'enregistrement. Veuillez réessayer.';
 
   @override
+  String get contactCameFrom => 'Provient de :';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override

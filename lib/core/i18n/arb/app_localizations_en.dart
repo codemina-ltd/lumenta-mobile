@@ -118,6 +118,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactSaveFailed => 'Couldn\'t save. Please try again.';
 
   @override
+  String get contactCameFrom => 'Came from:';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override

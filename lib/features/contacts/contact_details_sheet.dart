@@ -5,6 +5,7 @@ import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/providers.dart';
 import '../../data/models/contact_field.dart';
 import '../../data/models/contact_profile.dart';
+import '../../data/repos/contacts_repo.dart';
 
 /// Opens the contact-CRM detail sheet for a client (LUMENTA_GROWTH plan §14):
 /// lifecycle + opt-in quick-edit and read of custom field values.
@@ -32,6 +33,7 @@ class _SheetState extends ConsumerState<_ContactDetailsSheet> {
   ContactProfileResponse? _data;
   List<ContactLifecycleStage> _stages = const [];
   List<ContactField> _fields = const [];
+  List<CtwaReferral> _ctwa = const [];
   bool _loading = true;
   bool _error = false;
 
@@ -48,12 +50,14 @@ class _SheetState extends ConsumerState<_ContactDetailsSheet> {
         repo.profile(widget.clientId),
         repo.lifecycleStages(),
         repo.fields(),
+        repo.ctwa(widget.clientId),
       ]);
       if (!mounted) return;
       setState(() {
         _data = results[0] as ContactProfileResponse;
         _stages = results[1] as List<ContactLifecycleStage>;
         _fields = results[2] as List<ContactField>;
+        _ctwa = results[3] as List<CtwaReferral>;
         _loading = false;
       });
     } catch (_) {
@@ -126,6 +130,31 @@ class _SheetState extends ConsumerState<_ContactDetailsSheet> {
                       l10n.contactDetails,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
+                    if (_ctwa.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.campaign_outlined, size: 18),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                '${l10n.contactCameFrom} ${_ctwa.first.label}',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 16),
                     Text(l10n.contactLifecycle,
                         style: Theme.of(context).textTheme.labelMedium),
