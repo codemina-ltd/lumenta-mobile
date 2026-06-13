@@ -95,6 +95,32 @@ class AppLocalizationsFr extends AppLocalizations {
   String get inboxSave => 'Enregistrer';
 
   @override
+  String get contactDetails => 'Détails du contact';
+
+  @override
+  String get contactLifecycle => 'Étape du cycle de vie';
+
+  @override
+  String get contactNoStage => 'Aucune étape';
+
+  @override
+  String get contactOptIn => 'Consentement marketing';
+
+  @override
+  String get contactFields => 'Champs personnalisés';
+
+  @override
+  String get contactNoFields => 'Aucun champ personnalisé';
+
+  @override
+  String get contactLoadError =>
+      'Impossible de charger les détails du contact.';
+
+  @override
+  String get contactSaveFailed =>
+      'Échec de l\'enregistrement. Veuillez réessayer.';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override

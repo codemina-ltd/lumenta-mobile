@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/http/dio_client.dart';
 import '../data/repos/auth_repo.dart';
 import '../data/repos/clients_repo.dart';
+import '../data/repos/contacts_repo.dart';
 import '../data/repos/device_repo.dart';
 import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
@@ -40,6 +41,9 @@ final messagesRepoProvider = Provider<MessagesRepo>(
 );
 final inboxRepoProvider = Provider<InboxRepo>(
   (ref) => InboxRepo(ref.watch(dioProvider)),
+);
+final contactsRepoProvider = Provider<ContactsRepo>(
+  (ref) => ContactsRepo(ref.watch(dioProvider)),
 );
 final notificationsRepoProvider = Provider<NotificationsRepo>(
   (ref) => NotificationsRepo(ref.watch(dioProvider)),

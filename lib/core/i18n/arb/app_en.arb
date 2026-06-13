@@ -33,6 +33,15 @@
   "inboxCancel": "Cancel",
   "inboxSave": "Save",
 
+  "contactDetails": "Contact details",
+  "contactLifecycle": "Lifecycle stage",
+  "contactNoStage": "No stage",
+  "contactOptIn": "Marketing opt-in",
+  "contactFields": "Custom fields",
+  "contactNoFields": "No custom fields",
+  "contactLoadError": "Couldn't load contact details.",
+  "contactSaveFailed": "Couldn't save. Please try again.",
+
   "clientsTitle": "Clients",
   "searchClients": "Search clients",
   "clientsEmpty": "No clients yet",

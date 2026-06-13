@@ -94,6 +94,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get inboxSave => 'حفظ';
 
   @override
+  String get contactDetails => 'تفاصيل العميل';
+
+  @override
+  String get contactLifecycle => 'مرحلة دورة الحياة';
+
+  @override
+  String get contactNoStage => 'بدون مرحلة';
+
+  @override
+  String get contactOptIn => 'الموافقة على التسويق';
+
+  @override
+  String get contactFields => 'الحقول المخصصة';
+
+  @override
+  String get contactNoFields => 'لا توجد حقول مخصصة';
+
+  @override
+  String get contactLoadError => 'تعذّر تحميل تفاصيل العميل.';
+
+  @override
+  String get contactSaveFailed => 'تعذّر الحفظ. حاول مرة أخرى.';
+
+  @override
   String get clientsTitle => 'العملاء';
 
   @override

@@ -94,6 +94,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inboxSave => 'Save';
 
   @override
+  String get contactDetails => 'Contact details';
+
+  @override
+  String get contactLifecycle => 'Lifecycle stage';
+
+  @override
+  String get contactNoStage => 'No stage';
+
+  @override
+  String get contactOptIn => 'Marketing opt-in';
+
+  @override
+  String get contactFields => 'Custom fields';
+
+  @override
+  String get contactNoFields => 'No custom fields';
+
+  @override
+  String get contactLoadError => 'Couldn\'t load contact details.';
+
+  @override
+  String get contactSaveFailed => 'Couldn\'t save. Please try again.';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override

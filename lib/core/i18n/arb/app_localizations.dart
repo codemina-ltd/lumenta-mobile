@@ -268,6 +268,54 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get inboxSave;
 
+  /// No description provided for @contactDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact details'**
+  String get contactDetails;
+
+  /// No description provided for @contactLifecycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifecycle stage'**
+  String get contactLifecycle;
+
+  /// No description provided for @contactNoStage.
+  ///
+  /// In en, this message translates to:
+  /// **'No stage'**
+  String get contactNoStage;
+
+  /// No description provided for @contactOptIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing opt-in'**
+  String get contactOptIn;
+
+  /// No description provided for @contactFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom fields'**
+  String get contactFields;
+
+  /// No description provided for @contactNoFields.
+  ///
+  /// In en, this message translates to:
+  /// **'No custom fields'**
+  String get contactNoFields;
+
+  /// No description provided for @contactLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load contact details.'**
+  String get contactLoadError;
+
+  /// No description provided for @contactSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save. Please try again.'**
+  String get contactSaveFailed;
+
   /// No description provided for @clientsTitle.
   ///
   /// In en, this message translates to:

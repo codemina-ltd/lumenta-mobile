@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/providers.dart';
 import '../../data/models/inbox_thread.dart';
+import '../contacts/contact_details_sheet.dart';
 import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'inbox_controller.dart';
@@ -155,6 +156,14 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
               onTap: () {
                 Navigator.pop(sheetContext);
                 _addNote(context, l10n, thread);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.badge_outlined),
+              title: Text(l10n.contactDetails),
+              onTap: () {
+                Navigator.pop(sheetContext);
+                showContactDetailsSheet(context, thread.clientId);
               },
             ),
           ],

@@ -33,6 +33,15 @@
   "inboxCancel": "Annuler",
   "inboxSave": "Enregistrer",
 
+  "contactDetails": "Détails du contact",
+  "contactLifecycle": "Étape du cycle de vie",
+  "contactNoStage": "Aucune étape",
+  "contactOptIn": "Consentement marketing",
+  "contactFields": "Champs personnalisés",
+  "contactNoFields": "Aucun champ personnalisé",
+  "contactLoadError": "Impossible de charger les détails du contact.",
+  "contactSaveFailed": "Échec de l'enregistrement. Veuillez réessayer.",
+
   "clientsTitle": "Clients",
   "searchClients": "Rechercher des clients",
   "clientsEmpty": "Aucun client pour le moment",

@@ -33,6 +33,15 @@
   "inboxCancel": "إلغاء",
   "inboxSave": "حفظ",
 
+  "contactDetails": "تفاصيل العميل",
+  "contactLifecycle": "مرحلة دورة الحياة",
+  "contactNoStage": "بدون مرحلة",
+  "contactOptIn": "الموافقة على التسويق",
+  "contactFields": "الحقول المخصصة",
+  "contactNoFields": "لا توجد حقول مخصصة",
+  "contactLoadError": "تعذّر تحميل تفاصيل العميل.",
+  "contactSaveFailed": "تعذّر الحفظ. حاول مرة أخرى.",
+
   "clientsTitle": "العملاء",
   "searchClients": "ابحث عن العملاء",
   "clientsEmpty": "لا يوجد عملاء بعد",
