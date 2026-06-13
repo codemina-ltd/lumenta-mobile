@@ -172,11 +172,101 @@ abstract class AppLocalizations {
   /// **'Chats'**
   String get navChats;
 
+  /// No description provided for @navInbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox'**
+  String get navInbox;
+
   /// No description provided for @navNotifications.
   ///
   /// In en, this message translates to:
   /// **'Notifications'**
   String get navNotifications;
+
+  /// No description provided for @inboxViewMine.
+  ///
+  /// In en, this message translates to:
+  /// **'Mine'**
+  String get inboxViewMine;
+
+  /// No description provided for @inboxViewUnassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassigned'**
+  String get inboxViewUnassigned;
+
+  /// No description provided for @inboxViewOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get inboxViewOpen;
+
+  /// No description provided for @inboxViewSnoozed.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed'**
+  String get inboxViewSnoozed;
+
+  /// No description provided for @inboxViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get inboxViewAll;
+
+  /// No description provided for @inboxEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations match this view'**
+  String get inboxEmpty;
+
+  /// No description provided for @inboxAssignToMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to me'**
+  String get inboxAssignToMe;
+
+  /// No description provided for @inboxStatusResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark resolved'**
+  String get inboxStatusResolved;
+
+  /// No description provided for @inboxStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark pending'**
+  String get inboxStatusPending;
+
+  /// No description provided for @inboxAddNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add internal note'**
+  String get inboxAddNote;
+
+  /// No description provided for @inboxNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal note — the customer never sees it'**
+  String get inboxNoteHint;
+
+  /// No description provided for @inboxActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get inboxActionFailed;
+
+  /// No description provided for @inboxCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get inboxCancel;
+
+  /// No description provided for @inboxSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get inboxSave;
 
   /// No description provided for @clientsTitle.
   ///

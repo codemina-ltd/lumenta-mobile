@@ -46,7 +46,53 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navChats => 'Discussions';
 
   @override
+  String get navInbox => 'Boîte';
+
+  @override
   String get navNotifications => 'Notifications';
+
+  @override
+  String get inboxViewMine => 'Les miennes';
+
+  @override
+  String get inboxViewUnassigned => 'Non attribuées';
+
+  @override
+  String get inboxViewOpen => 'Ouvertes';
+
+  @override
+  String get inboxViewSnoozed => 'Reportées';
+
+  @override
+  String get inboxViewAll => 'Toutes';
+
+  @override
+  String get inboxEmpty => 'Aucune conversation ne correspond à cette vue';
+
+  @override
+  String get inboxAssignToMe => 'M\'attribuer';
+
+  @override
+  String get inboxStatusResolved => 'Marquer résolue';
+
+  @override
+  String get inboxStatusPending => 'Marquer en attente';
+
+  @override
+  String get inboxAddNote => 'Ajouter une note interne';
+
+  @override
+  String get inboxNoteHint => 'Note interne — le client ne la voit jamais';
+
+  @override
+  String get inboxActionFailed =>
+      'Une erreur s\'est produite. Veuillez réessayer.';
+
+  @override
+  String get inboxCancel => 'Annuler';
+
+  @override
+  String get inboxSave => 'Enregistrer';
 
   @override
   String get clientsTitle => 'Clients';

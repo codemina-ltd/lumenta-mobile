@@ -15,7 +15,23 @@
 
   "navClients": "Clients",
   "navChats": "Chats",
+  "navInbox": "Inbox",
   "navNotifications": "Notifications",
+
+  "inboxViewMine": "Mine",
+  "inboxViewUnassigned": "Unassigned",
+  "inboxViewOpen": "Open",
+  "inboxViewSnoozed": "Snoozed",
+  "inboxViewAll": "All",
+  "inboxEmpty": "No conversations match this view",
+  "inboxAssignToMe": "Assign to me",
+  "inboxStatusResolved": "Mark resolved",
+  "inboxStatusPending": "Mark pending",
+  "inboxAddNote": "Add internal note",
+  "inboxNoteHint": "Internal note — the customer never sees it",
+  "inboxActionFailed": "Something went wrong. Please try again.",
+  "inboxCancel": "Cancel",
+  "inboxSave": "Save",
 
   "clientsTitle": "Clients",
   "searchClients": "Search clients",

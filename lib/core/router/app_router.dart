@@ -9,6 +9,7 @@ import '../../features/auth/tenant_picker_screen.dart';
 import '../../features/chats/chat_detail_screen.dart';
 import '../../features/chats/chats_screen.dart';
 import '../../features/clients/clients_screen.dart';
+import '../../features/inbox/inbox_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
 import '../../features/shell/home_shell.dart';
 
@@ -70,6 +71,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(path: '/chats', builder: (_, _) => const ChatsScreen()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/inbox', builder: (_, _) => const InboxScreen()),
             ],
           ),
           StatefulShellBranch(

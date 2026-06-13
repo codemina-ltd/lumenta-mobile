@@ -46,7 +46,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navChats => 'Chats';
 
   @override
+  String get navInbox => 'Inbox';
+
+  @override
   String get navNotifications => 'Notifications';
+
+  @override
+  String get inboxViewMine => 'Mine';
+
+  @override
+  String get inboxViewUnassigned => 'Unassigned';
+
+  @override
+  String get inboxViewOpen => 'Open';
+
+  @override
+  String get inboxViewSnoozed => 'Snoozed';
+
+  @override
+  String get inboxViewAll => 'All';
+
+  @override
+  String get inboxEmpty => 'No conversations match this view';
+
+  @override
+  String get inboxAssignToMe => 'Assign to me';
+
+  @override
+  String get inboxStatusResolved => 'Mark resolved';
+
+  @override
+  String get inboxStatusPending => 'Mark pending';
+
+  @override
+  String get inboxAddNote => 'Add internal note';
+
+  @override
+  String get inboxNoteHint => 'Internal note — the customer never sees it';
+
+  @override
+  String get inboxActionFailed => 'Something went wrong. Please try again.';
+
+  @override
+  String get inboxCancel => 'Cancel';
+
+  @override
+  String get inboxSave => 'Save';
 
   @override
   String get clientsTitle => 'Clients';

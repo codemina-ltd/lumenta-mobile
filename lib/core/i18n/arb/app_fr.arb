@@ -15,7 +15,23 @@
 
   "navClients": "Clients",
   "navChats": "Discussions",
+  "navInbox": "Boîte",
   "navNotifications": "Notifications",
+
+  "inboxViewMine": "Les miennes",
+  "inboxViewUnassigned": "Non attribuées",
+  "inboxViewOpen": "Ouvertes",
+  "inboxViewSnoozed": "Reportées",
+  "inboxViewAll": "Toutes",
+  "inboxEmpty": "Aucune conversation ne correspond à cette vue",
+  "inboxAssignToMe": "M'attribuer",
+  "inboxStatusResolved": "Marquer résolue",
+  "inboxStatusPending": "Marquer en attente",
+  "inboxAddNote": "Ajouter une note interne",
+  "inboxNoteHint": "Note interne — le client ne la voit jamais",
+  "inboxActionFailed": "Une erreur s'est produite. Veuillez réessayer.",
+  "inboxCancel": "Annuler",
+  "inboxSave": "Enregistrer",
 
   "clientsTitle": "Clients",
   "searchClients": "Rechercher des clients",

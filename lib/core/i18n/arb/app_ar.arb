@@ -15,7 +15,23 @@
 
   "navClients": "العملاء",
   "navChats": "المحادثات",
+  "navInbox": "الصندوق",
   "navNotifications": "الإشعارات",
+
+  "inboxViewMine": "الخاصة بي",
+  "inboxViewUnassigned": "غير مُسندة",
+  "inboxViewOpen": "مفتوحة",
+  "inboxViewSnoozed": "مؤجلة",
+  "inboxViewAll": "الكل",
+  "inboxEmpty": "لا توجد محادثات تطابق هذا العرض",
+  "inboxAssignToMe": "أسندها لي",
+  "inboxStatusResolved": "وضع تم الحل",
+  "inboxStatusPending": "وضع قيد الانتظار",
+  "inboxAddNote": "إضافة ملاحظة داخلية",
+  "inboxNoteHint": "ملاحظة داخلية — لن يراها العميل",
+  "inboxActionFailed": "حدث خطأ ما. حاول مرة أخرى.",
+  "inboxCancel": "إلغاء",
+  "inboxSave": "حفظ",
 
   "clientsTitle": "العملاء",
   "searchClients": "ابحث عن العملاء",
