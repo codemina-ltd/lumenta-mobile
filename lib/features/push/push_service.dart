@@ -244,7 +244,13 @@ class PushService {
   /// when the push targets a different workspace the user belongs to.
   void _routeFromData(Map<String, dynamic> data) {
     final clientId = data['client_id'] as String?;
-    if (clientId == null || clientId.isEmpty) return;
+    final threadId = data['thread_id'] as String?;
+    final hasChat = clientId != null && clientId.isNotEmpty;
+    final hasThread = threadId != null && threadId.isNotEmpty;
+    // Team Inbox pushes (assignment / @mention) carry client_id by default
+    // (decision 14-A) and route to the chat; a thread_id-only push falls back
+    // to the operator inbox tab.
+    if (!hasChat && !hasThread) return;
 
     final auth = _ref.read(authControllerProvider);
     final targetTenant = data['tenant_id'] as String?;
@@ -255,7 +261,7 @@ class PushService {
       _ref.read(authControllerProvider.notifier).selectTenant(targetTenant);
     }
 
-    _ref.read(routerProvider).go('/chats/$clientId');
+    _ref.read(routerProvider).go(hasChat ? '/chats/$clientId' : '/inbox');
   }
 }
 

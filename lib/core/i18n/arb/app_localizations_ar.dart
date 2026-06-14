@@ -46,7 +46,88 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navChats => 'المحادثات';
 
   @override
+  String get navInbox => 'الصندوق';
+
+  @override
   String get navNotifications => 'الإشعارات';
+
+  @override
+  String get inboxViewMine => 'الخاصة بي';
+
+  @override
+  String get inboxViewUnassigned => 'غير مُسندة';
+
+  @override
+  String get inboxViewOpen => 'مفتوحة';
+
+  @override
+  String get inboxViewSnoozed => 'مؤجلة';
+
+  @override
+  String get inboxViewAll => 'الكل';
+
+  @override
+  String get inboxEmpty => 'لا توجد محادثات تطابق هذا العرض';
+
+  @override
+  String get inboxAssignToMe => 'أسندها لي';
+
+  @override
+  String get inboxStatusResolved => 'وضع تم الحل';
+
+  @override
+  String get inboxStatusPending => 'وضع قيد الانتظار';
+
+  @override
+  String get inboxAddNote => 'إضافة ملاحظة داخلية';
+
+  @override
+  String get inboxNoteHint => 'ملاحظة داخلية — لن يراها العميل';
+
+  @override
+  String get inboxActionFailed => 'حدث خطأ ما. حاول مرة أخرى.';
+
+  @override
+  String get inboxCancel => 'إلغاء';
+
+  @override
+  String get inboxSave => 'حفظ';
+
+  @override
+  String get contactDetails => 'تفاصيل العميل';
+
+  @override
+  String get contactLifecycle => 'مرحلة دورة الحياة';
+
+  @override
+  String get contactNoStage => 'بدون مرحلة';
+
+  @override
+  String get contactOptIn => 'الموافقة على التسويق';
+
+  @override
+  String get contactFields => 'الحقول المخصصة';
+
+  @override
+  String get contactNoFields => 'لا توجد حقول مخصصة';
+
+  @override
+  String get contactLoadError => 'تعذّر تحميل تفاصيل العميل.';
+
+  @override
+  String get contactSaveFailed => 'تعذّر الحفظ. حاول مرة أخرى.';
+
+  @override
+  String get contactCameFrom => 'أتى من:';
+
+  @override
+  String get ordersTitle => 'الطلبات';
+
+  @override
+  String get ordersEmpty => 'لا توجد طلبات لهذا العميل';
+
+  @override
+  String get ordersActionFailed => 'تعذّر التحديث. حاول مرة أخرى.';
 
   @override
   String get clientsTitle => 'العملاء';

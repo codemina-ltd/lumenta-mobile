@@ -46,7 +46,92 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navChats => 'Discussions';
 
   @override
+  String get navInbox => 'Boîte';
+
+  @override
   String get navNotifications => 'Notifications';
+
+  @override
+  String get inboxViewMine => 'Les miennes';
+
+  @override
+  String get inboxViewUnassigned => 'Non attribuées';
+
+  @override
+  String get inboxViewOpen => 'Ouvertes';
+
+  @override
+  String get inboxViewSnoozed => 'Reportées';
+
+  @override
+  String get inboxViewAll => 'Toutes';
+
+  @override
+  String get inboxEmpty => 'Aucune conversation ne correspond à cette vue';
+
+  @override
+  String get inboxAssignToMe => 'M\'attribuer';
+
+  @override
+  String get inboxStatusResolved => 'Marquer résolue';
+
+  @override
+  String get inboxStatusPending => 'Marquer en attente';
+
+  @override
+  String get inboxAddNote => 'Ajouter une note interne';
+
+  @override
+  String get inboxNoteHint => 'Note interne — le client ne la voit jamais';
+
+  @override
+  String get inboxActionFailed =>
+      'Une erreur s\'est produite. Veuillez réessayer.';
+
+  @override
+  String get inboxCancel => 'Annuler';
+
+  @override
+  String get inboxSave => 'Enregistrer';
+
+  @override
+  String get contactDetails => 'Détails du contact';
+
+  @override
+  String get contactLifecycle => 'Étape du cycle de vie';
+
+  @override
+  String get contactNoStage => 'Aucune étape';
+
+  @override
+  String get contactOptIn => 'Consentement marketing';
+
+  @override
+  String get contactFields => 'Champs personnalisés';
+
+  @override
+  String get contactNoFields => 'Aucun champ personnalisé';
+
+  @override
+  String get contactLoadError =>
+      'Impossible de charger les détails du contact.';
+
+  @override
+  String get contactSaveFailed =>
+      'Échec de l\'enregistrement. Veuillez réessayer.';
+
+  @override
+  String get contactCameFrom => 'Provient de :';
+
+  @override
+  String get ordersTitle => 'Commandes';
+
+  @override
+  String get ordersEmpty => 'Aucune commande pour ce contact';
+
+  @override
+  String get ordersActionFailed =>
+      'Échec de la mise à jour. Veuillez réessayer.';
 
   @override
   String get clientsTitle => 'Clients';

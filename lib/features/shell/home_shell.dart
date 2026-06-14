@@ -25,7 +25,12 @@ class HomeShell extends ConsumerWidget {
       notificationsControllerProvider.select((s) => s.unreadCount),
     );
 
-    final titles = [l10n.navClients, l10n.navChats, l10n.navNotifications];
+    final titles = [
+      l10n.navClients,
+      l10n.navChats,
+      l10n.navInbox,
+      l10n.navNotifications,
+    ];
     final index = navigationShell.currentIndex;
 
     return Scaffold(
@@ -35,7 +40,7 @@ class HomeShell extends ConsumerWidget {
         actions: [
           // On the notifications tab, offer a one-tap "mark all as read" while
           // there are unread items. The controller updates state optimistically.
-          if (index == 2 && unread > 0)
+          if (index == 3 && unread > 0)
             IconButton(
               icon: const Icon(Icons.done_all_rounded),
               tooltip: l10n.markAllRead,
@@ -81,6 +86,11 @@ class HomeShell extends ConsumerWidget {
               icon: const Icon(Icons.forum_outlined),
               selectedIcon: const Icon(Icons.forum_rounded),
               label: l10n.navChats,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.inbox_outlined),
+              selectedIcon: const Icon(Icons.inbox_rounded),
+              label: l10n.navInbox,
             ),
             NavigationDestination(
               icon: Badge.count(
