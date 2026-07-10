@@ -103,7 +103,13 @@ class _AuthRefreshInterceptor extends Interceptor {
     if (refresh == null) return null;
     try {
       // Bare Dio (no interceptors) to avoid recursion.
-      final raw = Dio(BaseOptions(baseUrl: Env.apiBaseUrl));
+      final raw = Dio(
+        BaseOptions(
+          baseUrl: Env.apiBaseUrl,
+          connectTimeout: const Duration(seconds: 20),
+          receiveTimeout: const Duration(seconds: 30),
+        ),
+      );
       final res = await raw.post<Map<String, dynamic>>(
         '/auth/refresh',
         data: {'refreshToken': refresh},
@@ -117,8 +123,16 @@ class _AuthRefreshInterceptor extends Interceptor {
       }
       await session.setTokens(access, newRefresh);
       return access;
-    } on DioException {
-      await _expire();
+    } on DioException catch (e) {
+      // Only a definitive rejection from the server means the session is
+      // dead. Transient failures — offline at cold start, timeouts, 5xx —
+      // must keep the tokens so the next attempt can retry; clearing here
+      // used to sign users out whenever the first refresh raced a flaky
+      // network.
+      final status = e.response?.statusCode;
+      if (status == 401 || status == 403) {
+        await _expire();
+      }
       return null;
     }
   }

@@ -82,9 +82,29 @@ class AuthController extends StateNotifier<AuthState> {
     try {
       await _loadProfileAndTenants(preferredTenantId: _session.activeTenantId);
     } on DioException {
-      // Token invalid / network down → treat as logged out.
-      await _session.clear();
-      state = const AuthState(status: AuthStatus.unauthenticated);
+      // If the interceptor cleared the session, the refresh token was
+      // definitively rejected by the server — really logged out.
+      if (!_session.isAuthenticated) {
+        state = const AuthState(status: AuthStatus.unauthenticated);
+        return;
+      }
+      // Transient failure (offline at cold start, timeout, 5xx): keep the
+      // session. With a tenant already selected, enter the app — feature
+      // screens have their own error/retry states and the profile reloads
+      // on the next successful bootstrap. Wiping tokens here used to sign
+      // users out every time launch raced a flaky network.
+      final tenant = _session.activeTenantId;
+      if (tenant != null) {
+        state = AuthState(
+          status: AuthStatus.authenticated,
+          activeTenantId: tenant,
+        );
+      } else {
+        // No tenant chosen yet and no network to list tenants — nothing
+        // usable to show; fall back to login but keep it rare-path only.
+        await _session.clear();
+        state = const AuthState(status: AuthStatus.unauthenticated);
+      }
     }
   }
 
@@ -146,9 +166,12 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    // Best-effort server-side cleanup; local clear always happens.
+    // Best-effort server-side cleanup; local clear always happens. Sending
+    // the refresh token revokes only this device's session server-side,
+    // leaving the portal / other devices signed in.
+    final refreshToken = _session.refreshToken;
     try {
-      await _ref.read(authRepoProvider).logout();
+      await _ref.read(authRepoProvider).logout(refreshToken: refreshToken);
     } catch (_) {}
     await _session.clear();
     state = const AuthState(status: AuthStatus.unauthenticated);

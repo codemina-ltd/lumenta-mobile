@@ -51,10 +51,15 @@ class AuthRepo {
     return User.fromJson(res.data!);
   }
 
-  /// `POST /auth/logout` — best-effort server-side revocation.
-  Future<void> logout() async {
+  /// `POST /auth/logout` — best-effort server-side revocation. Passing this
+  /// device's [refreshToken] revokes only its session; omitting it revokes
+  /// every session for the user.
+  Future<void> logout({String? refreshToken}) async {
     try {
-      await _dio.post<void>('/auth/logout');
+      await _dio.post<void>(
+        '/auth/logout',
+        data: {'refreshToken': ?refreshToken},
+      );
     } on DioException {
       // Logout must succeed locally even if the network call fails.
     }
