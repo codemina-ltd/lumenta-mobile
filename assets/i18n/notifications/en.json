@@ -123,7 +123,8 @@
     "security": "Security",
     "export": "Report",
     "webhook": "Webhook",
-    "system": "System"
+    "system": "System",
+    "inbox": "Inbox"
   },
   "template": {
     "approved": {
@@ -147,6 +148,18 @@
     "connected": {
       "title": "Sender connected",
       "body": "{{senderName}} is connected and ready to send."
+    },
+    "disconnected": {
+      "title": "Sender disconnected",
+      "body": "A WhatsApp sender was disconnected and can no longer send messages. Reconnect it in your sender settings."
+    },
+    "tier_changed": {
+      "title": "Sender tier changed",
+      "body": "The messaging tier for {{senderName}} changed from {{oldTier}} to {{newTier}}."
+    },
+    "quality_degraded": {
+      "title": "Sender quality degraded",
+      "body": "The quality rating of one of your senders dropped. Review its health in your sender settings."
     }
   },
   "campaign": {
@@ -157,6 +170,10 @@
     "failed": {
       "title": "Campaign failed",
       "body": "Your campaign run was aborted: {{reason}}"
+    },
+    "131049_threshold": {
+      "title": "Campaign hitting WhatsApp limits",
+      "body": "WhatsApp is limiting delivery for this campaign (error 131049) — many recipients may not receive it. Pause it and review your targeting."
     },
     "scheduled_reminder": {
       "title": "Campaign starts soon",
@@ -235,6 +252,38 @@
       "body": "{{clientName}}: {{preview}}"
     }
   },
+  "inbox": {
+    "assigned_to_you": {
+      "title": "Conversation assigned to you",
+      "body": "The conversation with {{clientName}} was assigned to you."
+    },
+    "mention": {
+      "title": "{{authorName}} mentioned you",
+      "body": "{{authorName}} mentioned you in a note on the conversation with {{clientName}}."
+    },
+    "sla_breach": {
+      "title": "Conversation awaiting reply",
+      "body": "{{clientName}} has been waiting more than {{waitedMinutes}} minutes without a reply."
+    }
+  },
+  "system": {
+    "security_alert": {
+      "title": "Security alert",
+      "body": "Unusual activity was detected on your account. Review your security settings now."
+    }
+  },
+  "webhook": {
+    "delivery_unroutable": {
+      "title": "Webhook events can't be routed",
+      "body": "Incoming WhatsApp events couldn't be matched to any of your senders. Review your sender configuration."
+    }
+  },
+  "integration": {
+    "failed": {
+      "title": "Integration failed",
+      "body": "One of your integrations stopped working. Check its configuration in Settings."
+    }
+  },
   "lume": {
     "draft_ready": {
       "title": "Lume drafted a reply",
@@ -289,6 +338,20 @@
     "refund_issued": {
       "title": "Credit top-up refunded",
       "body": "A refund of {{amount}} was issued against a previous top-up. New balance: {{balance}}."
+    }
+  },
+  "compliance": {
+    "account_suspended": {
+      "title": "Account suspended",
+      "body": "Your account was suspended for a compliance violation. Sending is disabled. Contact support@lumenta.co for reactivation."
+    },
+    "account_reactivated": {
+      "title": "Account reactivated",
+      "body": "Your account has been reactivated. Sending is enabled again."
+    },
+    "send_blocked": {
+      "title": "Sending blocked",
+      "body": "A message could not be sent because your account is suspended for a compliance violation."
     }
   }
 }

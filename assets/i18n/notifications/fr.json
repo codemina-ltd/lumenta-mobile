@@ -123,7 +123,8 @@
     "security": "Sécurité",
     "export": "Rapport",
     "webhook": "Webhook",
-    "system": "Système"
+    "system": "Système",
+    "inbox": "Boîte de réception"
   },
   "template": {
     "approved": {
@@ -147,6 +148,18 @@
     "connected": {
       "title": "Expéditeur connecté",
       "body": "{{senderName}} est connecté et prêt à envoyer."
+    },
+    "disconnected": {
+      "title": "Expéditeur déconnecté",
+      "body": "Un expéditeur WhatsApp a été déconnecté et ne peut plus envoyer de messages. Reconnectez-le dans les paramètres des expéditeurs."
+    },
+    "tier_changed": {
+      "title": "Palier d'expéditeur modifié",
+      "body": "Le palier d'envoi de {{senderName}} est passé de {{oldTier}} à {{newTier}}."
+    },
+    "quality_degraded": {
+      "title": "Qualité de l'expéditeur dégradée",
+      "body": "La note de qualité de l'un de vos expéditeurs a baissé. Vérifiez son état dans les paramètres des expéditeurs."
     }
   },
   "campaign": {
@@ -157,6 +170,10 @@
     "failed": {
       "title": "Échec de la campagne",
       "body": "L'exécution de votre campagne a été interrompue : {{reason}}"
+    },
+    "131049_threshold": {
+      "title": "Campagne limitée par WhatsApp",
+      "body": "WhatsApp limite la livraison de cette campagne (erreur 131049) — de nombreux destinataires pourraient ne pas la recevoir. Mettez-la en pause et vérifiez votre ciblage."
     },
     "scheduled_reminder": {
       "title": "La campagne démarre bientôt",
@@ -235,6 +252,38 @@
       "body": "{{clientName}} : {{preview}}"
     }
   },
+  "inbox": {
+    "assigned_to_you": {
+      "title": "Conversation qui vous est assignée",
+      "body": "La conversation avec {{clientName}} vous a été assignée."
+    },
+    "mention": {
+      "title": "{{authorName}} vous a mentionné",
+      "body": "{{authorName}} vous a mentionné dans une note sur la conversation avec {{clientName}}."
+    },
+    "sla_breach": {
+      "title": "Conversation en attente de réponse",
+      "body": "{{clientName}} attend une réponse depuis plus de {{waitedMinutes}} minutes."
+    }
+  },
+  "system": {
+    "security_alert": {
+      "title": "Alerte de sécurité",
+      "body": "Une activité inhabituelle a été détectée sur votre compte. Vérifiez vos paramètres de sécurité sans attendre."
+    }
+  },
+  "webhook": {
+    "delivery_unroutable": {
+      "title": "Événements webhook non routables",
+      "body": "Des événements WhatsApp entrants n'ont pu être associés à aucun de vos expéditeurs. Vérifiez la configuration de vos expéditeurs."
+    }
+  },
+  "integration": {
+    "failed": {
+      "title": "Échec d'intégration",
+      "body": "L'une de vos intégrations a cessé de fonctionner. Vérifiez sa configuration dans les paramètres."
+    }
+  },
   "lume": {
     "draft_ready": {
       "title": "Lume a rédigé une réponse",
@@ -289,6 +338,20 @@
     "refund_issued": {
       "title": "Recharge remboursée",
       "body": "Un remboursement de {{amount}} a été émis sur une recharge précédente. Nouveau solde : {{balance}}."
+    }
+  },
+  "compliance": {
+    "account_suspended": {
+      "title": "Compte suspendu",
+      "body": "Votre compte a été suspendu pour violation des règles de conformité. Les envois sont désactivés. Contactez support@lumenta.co pour la réactivation."
+    },
+    "account_reactivated": {
+      "title": "Compte réactivé",
+      "body": "Votre compte a été réactivé. Les envois sont de nouveau autorisés."
+    },
+    "send_blocked": {
+      "title": "Envoi bloqué",
+      "body": "Un message n'a pas pu être envoyé car votre compte est suspendu pour violation des règles de conformité."
     }
   }
 }
