@@ -2,7 +2,7 @@ name: mobile
 description: "Lumenta mobile companion app."
 publish_to: 'none'
 
-version: 1.0.0+15
+version: 1.0.0+16
 
 environment:
   sdk: ^3.11.0
@@ -58,6 +58,7 @@ dependencies:
   # Reply composer attachments (Phase 7)
   image_picker: ^1.1.2
   file_picker: ^8.1.6
+  share_plus: ^12.0.2
 
   # NOTE: permission_handler intentionally NOT used — FirebaseMessaging and
   # image_picker request their own permissions. Its iOS pod compiles all

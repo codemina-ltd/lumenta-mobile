@@ -20,6 +20,7 @@ import 'chat_providers.dart';
 import 'thread_controller.dart';
 import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
+import 'widgets/message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
@@ -101,7 +102,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     // rows without sender attribution stay visible.
     final convAsync = ref.watch(conversationSendersProvider(widget.clientId));
     final sendersAsync = ref.watch(tenantSendersProvider);
-    final sendersReady = (convAsync.hasValue || convAsync.hasError) &&
+    final sendersReady =
+        (convAsync.hasValue || convAsync.hasError) &&
         (sendersAsync.hasValue || sendersAsync.hasError);
     final convSenders = convAsync.valueOrNull ?? const <ConversationSender>[];
     final senders = sendersAsync.valueOrNull ?? const <Sender>[];
@@ -111,18 +113,21 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     String? activeSenderId;
     if (showTabs) {
       final selected = _selectedSenderId;
-      activeSenderId = (selected != null &&
+      activeSenderId =
+          (selected != null &&
               (senders.any((s) => s.id == selected) ||
                   convSenders.any((c) => c.senderId == selected)))
           ? selected
           : convSenders.firstOrNull?.senderId ??
-              senders.where((s) => s.isDefault).firstOrNull?.id ??
-              senders.firstOrNull?.id;
+                senders.where((s) => s.isDefault).firstOrNull?.id ??
+                senders.firstOrNull?.id;
     }
-    final activeSender =
-        senders.where((s) => s.id == activeSenderId).firstOrNull;
-    final activeConv =
-        convSenders.where((c) => c.senderId == activeSenderId).firstOrNull;
+    final activeSender = senders
+        .where((s) => s.id == activeSenderId)
+        .firstOrNull;
+    final activeConv = convSenders
+        .where((c) => c.senderId == activeSenderId)
+        .firstOrNull;
 
     final threadKey = sendersReady
         ? (clientId: widget.clientId, senderId: activeSenderId)
@@ -154,7 +159,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       ref.listen(threadControllerProvider(threadKey), (_, next) {
         if (!next.loading && next.error == null) {
           _onLoaded(
-              next.messages.isEmpty ? null : next.messages.last.createdAtDate);
+            next.messages.isEmpty ? null : next.messages.last.createdAtDate,
+          );
         }
       });
     }
@@ -219,12 +225,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               to: clientAsync.value!.phoneNumber,
               windowOpen: _windowOpen(state),
               onSent: _scrollToBottom,
-              senderLabel:
-                  showTabs ? (activeSender?.label ?? activeConv?.label) : null,
+              senderLabel: showTabs
+                  ? (activeSender?.label ?? activeConv?.label)
+                  : null,
               senderNumber: showTabs
                   ? (activeSender?.number ?? activeConv?.displayPhoneNumber)
                   : null,
-              senderActive: !showTabs ||
+              senderActive:
+                  !showTabs ||
                   (activeSender?.isActive ?? activeConv?.isActive ?? true),
             ),
         ],
@@ -276,7 +284,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         final row = rows[i - (state.loadingOlder ? 1 : 0)];
         return row.isHeader
             ? _DayHeader(label: row.headerLabel!)
-            : _MessageBubble(message: row.message!);
+            : _MessageBubble(message: row.message!, threadKey: threadKey);
       },
     );
   }
@@ -298,12 +306,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 }
 
 class _Row {
-  _Row.header(this.headerLabel)
-    : isHeader = true,
-      message = null;
-  _Row.message(this.message)
-    : isHeader = false,
-      headerLabel = null;
+  _Row.header(this.headerLabel) : isHeader = true, message = null;
+  _Row.message(this.message) : isHeader = false, headerLabel = null;
 
   final bool isHeader;
   final String? headerLabel;
@@ -319,10 +323,7 @@ class _DayHeader extends StatelessWidget {
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: Insets.md),
-        padding: const EdgeInsets.symmetric(
-          horizontal: Insets.md,
-          vertical: 5,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: 5),
         decoration: BoxDecoration(
           color: context.scheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(Radii.pill),
@@ -340,8 +341,9 @@ class _DayHeader extends StatelessWidget {
 }
 
 class _MessageBubble extends ConsumerWidget {
-  const _MessageBubble({required this.message});
+  const _MessageBubble({required this.message, required this.threadKey});
   final Message message;
+  final ThreadKey threadKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -353,44 +355,57 @@ class _MessageBubble extends ConsumerWidget {
 
     return Align(
       alignment: outbound ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.78,
+      child: GestureDetector(
+        onLongPress: () => showMessageActions(
+          context,
+          ref,
+          message: message,
+          threadKey: threadKey,
         ),
-        margin: const EdgeInsets.symmetric(
-          horizontal: Insets.md,
-          vertical: 3,
-        ),
-        padding: const EdgeInsets.fromLTRB(Insets.md, Insets.sm, Insets.md, 6),
-        decoration: BoxDecoration(
-          color: bubbleColor,
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(Radii.md),
-            topRight: const Radius.circular(Radii.md),
-            bottomLeft: Radius.circular(outbound ? Radii.md : 4),
-            bottomRight: Radius.circular(outbound ? 4 : Radii.md),
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.78,
           ),
-          border: (!outbound && isLight)
-              ? Border.all(color: AppColors.hairline)
-              : null,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.deepForest.withValues(
-                alpha: isLight ? 0.05 : 0.18,
-              ),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
+          margin: const EdgeInsets.symmetric(
+            horizontal: Insets.md,
+            vertical: 3,
+          ),
+          padding: const EdgeInsets.fromLTRB(
+            Insets.md,
+            Insets.sm,
+            Insets.md,
+            6,
+          ),
+          decoration: BoxDecoration(
+            color: bubbleColor,
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(Radii.md),
+              topRight: const Radius.circular(Radii.md),
+              bottomLeft: Radius.circular(outbound ? Radii.md : 4),
+              bottomRight: Radius.circular(outbound ? 4 : Radii.md),
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _content(context, ref, textColor),
-            const SizedBox(height: 2),
-            _meta(context, textColor, outbound),
-          ],
+            border: (!outbound && isLight)
+                ? Border.all(color: AppColors.hairline)
+                : null,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.deepForest.withValues(
+                  alpha: isLight ? 0.05 : 0.18,
+                ),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _content(context, ref, textColor),
+              const SizedBox(height: 2),
+              _meta(context, textColor, outbound),
+            ],
+          ),
         ),
       ),
     );
@@ -461,9 +476,9 @@ class _MessageBubble extends ConsumerWidget {
   }
 
   Widget _bodyText(Color textColor) => Text(
-        message.body.isEmpty ? '…' : message.body,
-        style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
-      );
+    message.body.isEmpty ? '…' : message.body,
+    style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
+  );
 
   Widget _meta(BuildContext context, Color textColor, bool outbound) {
     return Row(
@@ -566,10 +581,7 @@ class _ImageContent extends StatelessWidget {
           children: [
             InteractiveViewer(
               child: Center(
-                child: CachedNetworkImage(
-                  imageUrl: url,
-                  httpHeaders: headers,
-                ),
+                child: CachedNetworkImage(imageUrl: url, httpHeaders: headers),
               ),
             ),
             Positioned(
@@ -730,7 +742,9 @@ class _FlowResponseTable extends StatelessWidget {
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: [
             TableRow(
-              decoration: BoxDecoration(color: context.scheme.surfaceContainerHigh),
+              decoration: BoxDecoration(
+                color: context.scheme.surfaceContainerHigh,
+              ),
               children: [
                 _HeaderCell(l10n.flowFieldColumn),
                 _HeaderCell(l10n.flowValueColumn),
@@ -799,8 +813,8 @@ class _LocationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = message.locationName ?? message.locationAddress;
-    final coords = (message.locationLatitude != null &&
-            message.locationLongitude != null)
+    final coords =
+        (message.locationLatitude != null && message.locationLongitude != null)
         ? '${message.locationLatitude}, ${message.locationLongitude}'
         : null;
     return Row(

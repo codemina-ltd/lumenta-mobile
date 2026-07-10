@@ -321,4 +321,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get templateMarketingUsWarning =>
       'Marketing templates to US numbers may be blocked by Meta.';
+
+  @override
+  String get messageActionCopy => 'Copy';
+
+  @override
+  String get messageActionForward => 'Forward';
+
+  @override
+  String get messageActionShare => 'Share';
+
+  @override
+  String get messageCopied => 'Copied to clipboard';
+
+  @override
+  String get forwardTitle => 'Forward to…';
+
+  @override
+  String forwardSent(Object name) {
+    return 'Forwarded to $name';
+  }
+
+  @override
+  String get forwardFailed => 'Couldn\'t forward. Please try again.';
+
+  @override
+  String get shareFailed => 'Couldn\'t share. Please try again.';
 }

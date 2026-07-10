@@ -699,6 +699,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Marketing templates to US numbers may be blocked by Meta.'**
   String get templateMarketingUsWarning;
+
+  /// No description provided for @messageActionCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get messageActionCopy;
+
+  /// No description provided for @messageActionForward.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward'**
+  String get messageActionForward;
+
+  /// No description provided for @messageActionShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get messageActionShare;
+
+  /// No description provided for @messageCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get messageCopied;
+
+  /// No description provided for @forwardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward to…'**
+  String get forwardTitle;
+
+  /// No description provided for @forwardSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Forwarded to {name}'**
+  String forwardSent(Object name);
+
+  /// No description provided for @forwardFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t forward. Please try again.'**
+  String get forwardFailed;
+
+  /// No description provided for @shareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t share. Please try again.'**
+  String get shareFailed;
 }
 
 class _AppLocalizationsDelegate

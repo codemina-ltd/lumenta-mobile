@@ -319,4 +319,30 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get templateMarketingUsWarning =>
       'قد تحظر Meta القوالب التسويقية المرسلة إلى أرقام أمريكية.';
+
+  @override
+  String get messageActionCopy => 'نسخ';
+
+  @override
+  String get messageActionForward => 'إعادة توجيه';
+
+  @override
+  String get messageActionShare => 'مشاركة';
+
+  @override
+  String get messageCopied => 'تم النسخ إلى الحافظة';
+
+  @override
+  String get forwardTitle => 'إعادة التوجيه إلى…';
+
+  @override
+  String forwardSent(Object name) {
+    return 'تمت إعادة التوجيه إلى $name';
+  }
+
+  @override
+  String get forwardFailed => 'تعذّرت إعادة التوجيه. حاول مرة أخرى.';
+
+  @override
+  String get shareFailed => 'تعذّرت المشاركة. حاول مرة أخرى.';
 }

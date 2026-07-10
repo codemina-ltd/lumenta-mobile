@@ -325,4 +325,30 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get templateMarketingUsWarning =>
       'Les modèles marketing vers des numéros américains peuvent être bloqués par Meta.';
+
+  @override
+  String get messageActionCopy => 'Copier';
+
+  @override
+  String get messageActionForward => 'Transférer';
+
+  @override
+  String get messageActionShare => 'Partager';
+
+  @override
+  String get messageCopied => 'Copié dans le presse-papiers';
+
+  @override
+  String get forwardTitle => 'Transférer à…';
+
+  @override
+  String forwardSent(Object name) {
+    return 'Transféré à $name';
+  }
+
+  @override
+  String get forwardFailed => 'Impossible de transférer. Veuillez réessayer.';
+
+  @override
+  String get shareFailed => 'Impossible de partager. Veuillez réessayer.';
 }
