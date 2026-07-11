@@ -11,6 +11,7 @@ import '../../features/chats/chats_screen.dart';
 import '../../features/clients/clients_screen.dart';
 import '../../features/inbox/inbox_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
+import '../../features/profile/profile_screen.dart';
 import '../../features/shell/home_shell.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -51,6 +52,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/select-tenant',
         builder: (_, _) => const TenantPickerScreen(),
+      ),
+      // Root-level (outside the tab shell) like chat detail, so it stacks on
+      // top of whichever tab it was opened from.
+      GoRoute(
+        path: '/profile',
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ProfileScreen(),
       ),
       GoRoute(
         path: '/chats/:clientId',

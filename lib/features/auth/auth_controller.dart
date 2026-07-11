@@ -157,6 +157,12 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  /// Replace the cached profile after a successful `/me` mutation so every
+  /// watcher (locale, avatar, display name) picks up the change immediately.
+  void applyUser(User user) {
+    state = state.copyWith(user: user);
+  }
+
   Future<void> selectTenant(String tenantId) async {
     await _session.setActiveTenant(tenantId);
     state = state.copyWith(

@@ -52,6 +52,7 @@ class HomeShell extends ConsumerWidget {
             _WorkspaceMenu(
               name: auth.activeTenant!.name,
               canSwitch: auth.tenants.length > 1,
+              onProfile: () => context.push('/profile'),
               onSwitch: () => context.go('/select-tenant'),
               onLogout: () async {
                 // Unregister the device while the token is still valid, then
@@ -119,12 +120,14 @@ class _WorkspaceMenu extends StatelessWidget {
   const _WorkspaceMenu({
     required this.name,
     required this.canSwitch,
+    required this.onProfile,
     required this.onSwitch,
     required this.onLogout,
   });
 
   final String name;
   final bool canSwitch;
+  final VoidCallback onProfile;
   final VoidCallback onSwitch;
   final Future<void> Function() onLogout;
 
@@ -139,13 +142,25 @@ class _WorkspaceMenu extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(Radii.md)),
       ),
       onSelected: (value) {
-        if (value == 'switch') {
+        if (value == 'profile') {
+          onProfile();
+        } else if (value == 'switch') {
           onSwitch();
         } else if (value == 'logout') {
           onLogout();
         }
       },
       itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 'profile',
+          child: Row(
+            children: [
+              const Icon(Icons.person_outline_rounded, size: 20),
+              const SizedBox(width: Insets.md),
+              Text(l10n.profileTitle),
+            ],
+          ),
+        ),
         if (canSwitch)
           PopupMenuItem(
             value: 'switch',

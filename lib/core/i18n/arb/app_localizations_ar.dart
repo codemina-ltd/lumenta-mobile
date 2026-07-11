@@ -321,6 +321,148 @@ class AppLocalizationsAr extends AppLocalizations {
       'قد تحظر Meta القوالب التسويقية المرسلة إلى أرقام أمريكية.';
 
   @override
+  String get profileTitle => 'الملف الشخصي';
+
+  @override
+  String get profilePictureTitle => 'الصورة الشخصية';
+
+  @override
+  String get profileUploadPicture => 'رفع صورة';
+
+  @override
+  String get profileRemovePicture => 'إزالة';
+
+  @override
+  String get profileIdentityTitle => 'الهوية';
+
+  @override
+  String get profileFullNameLabel => 'الاسم الكامل';
+
+  @override
+  String get profileNameTooShort => 'أدخل حرفين على الأقل';
+
+  @override
+  String get profilePhoneLabel => 'رقم الهاتف';
+
+  @override
+  String get profilePhoneHelper =>
+      'بالتنسيق الدولي، أرقام فقط (رمز الدولة، بدون علامة +).';
+
+  @override
+  String get profilePhoneInvalid =>
+      'أرقام فقط: رمز الدولة + الرقم (7–15 رقمًا)';
+
+  @override
+  String get profileLanguageLabel => 'اللغة';
+
+  @override
+  String get profileTimezoneLabel => 'المنطقة الزمنية';
+
+  @override
+  String get profileTimezoneSearchHint => 'ابحث عن منطقة زمنية';
+
+  @override
+  String get profileSaveChanges => 'حفظ التغييرات';
+
+  @override
+  String get profileSaved => 'تم تحديث الملف الشخصي';
+
+  @override
+  String get profileSaveFailed => 'تعذّر الحفظ. حاول مرة أخرى.';
+
+  @override
+  String get profileAppearanceTitle => 'المظهر';
+
+  @override
+  String get profileFontLabel => 'خط العرض';
+
+  @override
+  String get profileFontHelper => 'يُستخدم في البوابة للإنجليزية والفرنسية.';
+
+  @override
+  String get profileSaveFont => 'حفظ الخط';
+
+  @override
+  String get profileFontSaved => 'تم تحديث الخط';
+
+  @override
+  String get profileEmailTitle => 'البريد الإلكتروني';
+
+  @override
+  String get profileCurrentEmail => 'البريد الحالي';
+
+  @override
+  String get profileChangeEmail => 'تغيير البريد الإلكتروني';
+
+  @override
+  String get profileNewEmailLabel => 'البريد الإلكتروني الجديد';
+
+  @override
+  String get profileEmailInvalid => 'أدخل بريدًا إلكترونيًا صالحًا';
+
+  @override
+  String profileEmailPending(Object email) {
+    return 'بانتظار تأكيد $email';
+  }
+
+  @override
+  String profileEmailChangeRequested(Object email) {
+    return 'أُرسل رابط التأكيد إلى $email. تنتهي صلاحيته خلال 24 ساعة.';
+  }
+
+  @override
+  String get profileEmailTaken => 'هذا البريد الإلكتروني مسجّل بالفعل.';
+
+  @override
+  String get profileEmailChangeInvalid =>
+      'طلب تغيير البريد غير صالح أو انتهت صلاحيته.';
+
+  @override
+  String get profileSendLink => 'إرسال الرابط';
+
+  @override
+  String get profilePasswordTitle => 'كلمة المرور';
+
+  @override
+  String get profileCurrentPasswordLabel => 'كلمة المرور الحالية';
+
+  @override
+  String get profileNewPasswordLabel => 'كلمة المرور الجديدة';
+
+  @override
+  String get profileConfirmPasswordLabel => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get profileUpdatePassword => 'تحديث كلمة المرور';
+
+  @override
+  String get profilePasswordUpdated =>
+      'تم تحديث كلمة المرور. تم تسجيل الخروج من الأجهزة الأخرى.';
+
+  @override
+  String get profilePasswordMin => '8 أحرف على الأقل';
+
+  @override
+  String get profilePasswordMismatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get profilePasswordIncorrect => 'كلمة المرور الحالية غير صحيحة.';
+
+  @override
+  String get profileFieldRequired => 'مطلوب';
+
+  @override
+  String get profileAvatarTooLarge =>
+      'الصورة كبيرة جدًا (الحد الأقصى 2 ميغابايت).';
+
+  @override
+  String get profileAvatarInvalidType =>
+      'نوع الصورة غير مدعوم. استخدم PNG أو JPG أو GIF أو WebP.';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
   String get messageActionCopy => 'نسخ';
 
   @override

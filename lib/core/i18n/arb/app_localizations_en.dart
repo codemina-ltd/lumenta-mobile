@@ -323,6 +323,148 @@ class AppLocalizationsEn extends AppLocalizations {
       'Marketing templates to US numbers may be blocked by Meta.';
 
   @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profilePictureTitle => 'Profile picture';
+
+  @override
+  String get profileUploadPicture => 'Upload picture';
+
+  @override
+  String get profileRemovePicture => 'Remove';
+
+  @override
+  String get profileIdentityTitle => 'Identity';
+
+  @override
+  String get profileFullNameLabel => 'Full name';
+
+  @override
+  String get profileNameTooShort => 'Enter at least 2 characters';
+
+  @override
+  String get profilePhoneLabel => 'Phone number';
+
+  @override
+  String get profilePhoneHelper =>
+      'International format, digits only (country code, no + sign).';
+
+  @override
+  String get profilePhoneInvalid =>
+      'Digits only: country code + number (7–15 digits)';
+
+  @override
+  String get profileLanguageLabel => 'Language';
+
+  @override
+  String get profileTimezoneLabel => 'Time zone';
+
+  @override
+  String get profileTimezoneSearchHint => 'Search time zones';
+
+  @override
+  String get profileSaveChanges => 'Save changes';
+
+  @override
+  String get profileSaved => 'Profile updated';
+
+  @override
+  String get profileSaveFailed => 'Couldn\'t save. Please try again.';
+
+  @override
+  String get profileAppearanceTitle => 'Appearance';
+
+  @override
+  String get profileFontLabel => 'Display font';
+
+  @override
+  String get profileFontHelper =>
+      'Used across the portal for English and French.';
+
+  @override
+  String get profileSaveFont => 'Save font';
+
+  @override
+  String get profileFontSaved => 'Font updated';
+
+  @override
+  String get profileEmailTitle => 'Email address';
+
+  @override
+  String get profileCurrentEmail => 'Current email';
+
+  @override
+  String get profileChangeEmail => 'Change email';
+
+  @override
+  String get profileNewEmailLabel => 'New email';
+
+  @override
+  String get profileEmailInvalid => 'Enter a valid email address';
+
+  @override
+  String profileEmailPending(Object email) {
+    return 'Waiting for confirmation of $email';
+  }
+
+  @override
+  String profileEmailChangeRequested(Object email) {
+    return 'Confirmation link sent to $email. It expires in 24 hours.';
+  }
+
+  @override
+  String get profileEmailTaken => 'That email is already registered.';
+
+  @override
+  String get profileEmailChangeInvalid =>
+      'The email change request is invalid or has expired.';
+
+  @override
+  String get profileSendLink => 'Send link';
+
+  @override
+  String get profilePasswordTitle => 'Password';
+
+  @override
+  String get profileCurrentPasswordLabel => 'Current password';
+
+  @override
+  String get profileNewPasswordLabel => 'New password';
+
+  @override
+  String get profileConfirmPasswordLabel => 'Confirm new password';
+
+  @override
+  String get profileUpdatePassword => 'Update password';
+
+  @override
+  String get profilePasswordUpdated =>
+      'Password updated. Other devices were signed out.';
+
+  @override
+  String get profilePasswordMin => 'At least 8 characters';
+
+  @override
+  String get profilePasswordMismatch => 'Passwords don\'t match';
+
+  @override
+  String get profilePasswordIncorrect => 'Current password is incorrect.';
+
+  @override
+  String get profileFieldRequired => 'Required';
+
+  @override
+  String get profileAvatarTooLarge => 'Image is too large (max 2 MB).';
+
+  @override
+  String get profileAvatarInvalidType =>
+      'Unsupported image type. Use PNG, JPG, GIF, or WebP.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
   String get messageActionCopy => 'Copy';
 
   @override

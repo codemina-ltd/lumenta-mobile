@@ -700,6 +700,270 @@ abstract class AppLocalizations {
   /// **'Marketing templates to US numbers may be blocked by Meta.'**
   String get templateMarketingUsWarning;
 
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// No description provided for @profilePictureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile picture'**
+  String get profilePictureTitle;
+
+  /// No description provided for @profileUploadPicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload picture'**
+  String get profileUploadPicture;
+
+  /// No description provided for @profileRemovePicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get profileRemovePicture;
+
+  /// No description provided for @profileIdentityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity'**
+  String get profileIdentityTitle;
+
+  /// No description provided for @profileFullNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get profileFullNameLabel;
+
+  /// No description provided for @profileNameTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter at least 2 characters'**
+  String get profileNameTooShort;
+
+  /// No description provided for @profilePhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get profilePhoneLabel;
+
+  /// No description provided for @profilePhoneHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'International format, digits only (country code, no + sign).'**
+  String get profilePhoneHelper;
+
+  /// No description provided for @profilePhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Digits only: country code + number (7–15 digits)'**
+  String get profilePhoneInvalid;
+
+  /// No description provided for @profileLanguageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profileLanguageLabel;
+
+  /// No description provided for @profileTimezoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time zone'**
+  String get profileTimezoneLabel;
+
+  /// No description provided for @profileTimezoneSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search time zones'**
+  String get profileTimezoneSearchHint;
+
+  /// No description provided for @profileSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get profileSaveChanges;
+
+  /// No description provided for @profileSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileSaved;
+
+  /// No description provided for @profileSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save. Please try again.'**
+  String get profileSaveFailed;
+
+  /// No description provided for @profileAppearanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profileAppearanceTitle;
+
+  /// No description provided for @profileFontLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Display font'**
+  String get profileFontLabel;
+
+  /// No description provided for @profileFontHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Used across the portal for English and French.'**
+  String get profileFontHelper;
+
+  /// No description provided for @profileSaveFont.
+  ///
+  /// In en, this message translates to:
+  /// **'Save font'**
+  String get profileSaveFont;
+
+  /// No description provided for @profileFontSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Font updated'**
+  String get profileFontSaved;
+
+  /// No description provided for @profileEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address'**
+  String get profileEmailTitle;
+
+  /// No description provided for @profileCurrentEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Current email'**
+  String get profileCurrentEmail;
+
+  /// No description provided for @profileChangeEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email'**
+  String get profileChangeEmail;
+
+  /// No description provided for @profileNewEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New email'**
+  String get profileNewEmailLabel;
+
+  /// No description provided for @profileEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get profileEmailInvalid;
+
+  /// No description provided for @profileEmailPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for confirmation of {email}'**
+  String profileEmailPending(Object email);
+
+  /// No description provided for @profileEmailChangeRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation link sent to {email}. It expires in 24 hours.'**
+  String profileEmailChangeRequested(Object email);
+
+  /// No description provided for @profileEmailTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'That email is already registered.'**
+  String get profileEmailTaken;
+
+  /// No description provided for @profileEmailChangeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The email change request is invalid or has expired.'**
+  String get profileEmailChangeInvalid;
+
+  /// No description provided for @profileSendLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send link'**
+  String get profileSendLink;
+
+  /// No description provided for @profilePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get profilePasswordTitle;
+
+  /// No description provided for @profileCurrentPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get profileCurrentPasswordLabel;
+
+  /// No description provided for @profileNewPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get profileNewPasswordLabel;
+
+  /// No description provided for @profileConfirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get profileConfirmPasswordLabel;
+
+  /// No description provided for @profileUpdatePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Update password'**
+  String get profileUpdatePassword;
+
+  /// No description provided for @profilePasswordUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated. Other devices were signed out.'**
+  String get profilePasswordUpdated;
+
+  /// No description provided for @profilePasswordMin.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters'**
+  String get profilePasswordMin;
+
+  /// No description provided for @profilePasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords don\'t match'**
+  String get profilePasswordMismatch;
+
+  /// No description provided for @profilePasswordIncorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password is incorrect.'**
+  String get profilePasswordIncorrect;
+
+  /// No description provided for @profileFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get profileFieldRequired;
+
+  /// No description provided for @profileAvatarTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Image is too large (max 2 MB).'**
+  String get profileAvatarTooLarge;
+
+  /// No description provided for @profileAvatarInvalidType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported image type. Use PNG, JPG, GIF, or WebP.'**
+  String get profileAvatarInvalidType;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
   /// No description provided for @messageActionCopy.
   ///
   /// In en, this message translates to:

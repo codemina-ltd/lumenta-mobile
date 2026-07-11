@@ -327,6 +327,152 @@ class AppLocalizationsFr extends AppLocalizations {
       'Les modèles marketing vers des numéros américains peuvent être bloqués par Meta.';
 
   @override
+  String get profileTitle => 'Profil';
+
+  @override
+  String get profilePictureTitle => 'Photo de profil';
+
+  @override
+  String get profileUploadPicture => 'Importer une photo';
+
+  @override
+  String get profileRemovePicture => 'Supprimer';
+
+  @override
+  String get profileIdentityTitle => 'Identité';
+
+  @override
+  String get profileFullNameLabel => 'Nom complet';
+
+  @override
+  String get profileNameTooShort => 'Saisissez au moins 2 caractères';
+
+  @override
+  String get profilePhoneLabel => 'Numéro de téléphone';
+
+  @override
+  String get profilePhoneHelper =>
+      'Format international, chiffres uniquement (indicatif pays, sans signe +).';
+
+  @override
+  String get profilePhoneInvalid =>
+      'Chiffres uniquement : indicatif + numéro (7 à 15 chiffres)';
+
+  @override
+  String get profileLanguageLabel => 'Langue';
+
+  @override
+  String get profileTimezoneLabel => 'Fuseau horaire';
+
+  @override
+  String get profileTimezoneSearchHint => 'Rechercher un fuseau horaire';
+
+  @override
+  String get profileSaveChanges => 'Enregistrer les modifications';
+
+  @override
+  String get profileSaved => 'Profil mis à jour';
+
+  @override
+  String get profileSaveFailed =>
+      'Enregistrement impossible. Veuillez réessayer.';
+
+  @override
+  String get profileAppearanceTitle => 'Apparence';
+
+  @override
+  String get profileFontLabel => 'Police d\'affichage';
+
+  @override
+  String get profileFontHelper =>
+      'Utilisée dans le portail pour l\'anglais et le français.';
+
+  @override
+  String get profileSaveFont => 'Enregistrer la police';
+
+  @override
+  String get profileFontSaved => 'Police mise à jour';
+
+  @override
+  String get profileEmailTitle => 'Adresse e-mail';
+
+  @override
+  String get profileCurrentEmail => 'E-mail actuel';
+
+  @override
+  String get profileChangeEmail => 'Changer d\'e-mail';
+
+  @override
+  String get profileNewEmailLabel => 'Nouvel e-mail';
+
+  @override
+  String get profileEmailInvalid => 'Saisissez une adresse e-mail valide';
+
+  @override
+  String profileEmailPending(Object email) {
+    return 'En attente de confirmation de $email';
+  }
+
+  @override
+  String profileEmailChangeRequested(Object email) {
+    return 'Lien de confirmation envoyé à $email. Il expire dans 24 heures.';
+  }
+
+  @override
+  String get profileEmailTaken => 'Cette adresse e-mail est déjà enregistrée.';
+
+  @override
+  String get profileEmailChangeInvalid =>
+      'La demande de changement d\'e-mail est invalide ou a expiré.';
+
+  @override
+  String get profileSendLink => 'Envoyer le lien';
+
+  @override
+  String get profilePasswordTitle => 'Mot de passe';
+
+  @override
+  String get profileCurrentPasswordLabel => 'Mot de passe actuel';
+
+  @override
+  String get profileNewPasswordLabel => 'Nouveau mot de passe';
+
+  @override
+  String get profileConfirmPasswordLabel => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get profileUpdatePassword => 'Mettre à jour le mot de passe';
+
+  @override
+  String get profilePasswordUpdated =>
+      'Mot de passe mis à jour. Les autres appareils ont été déconnectés.';
+
+  @override
+  String get profilePasswordMin => 'Au moins 8 caractères';
+
+  @override
+  String get profilePasswordMismatch =>
+      'Les mots de passe ne correspondent pas';
+
+  @override
+  String get profilePasswordIncorrect =>
+      'Le mot de passe actuel est incorrect.';
+
+  @override
+  String get profileFieldRequired => 'Obligatoire';
+
+  @override
+  String get profileAvatarTooLarge =>
+      'L\'image est trop volumineuse (2 Mo max).';
+
+  @override
+  String get profileAvatarInvalidType =>
+      'Type d\'image non pris en charge. Utilisez PNG, JPG, GIF ou WebP.';
+
+  @override
+  String get cancel => 'Annuler';
+
+  @override
   String get messageActionCopy => 'Copier';
 
   @override

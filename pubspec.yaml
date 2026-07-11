@@ -2,7 +2,7 @@ name: mobile
 description: "Lumenta mobile companion app."
 publish_to: 'none'
 
-version: 1.0.0+19
+version: 1.0.0+20
 
 environment:
   sdk: ^3.11.0
@@ -59,6 +59,10 @@ dependencies:
   image_picker: ^1.1.2
   file_picker: ^8.1.6
   share_plus: ^12.0.2
+
+  # IANA time-zone database for the profile time-zone picker (the portal gets
+  # this from the browser's Intl API; Flutter has no built-in tz list).
+  timezone: ^0.10.1
 
   # NOTE: permission_handler intentionally NOT used — FirebaseMessaging and
   # image_picker request their own permissions. Its iOS pod compiles all
