@@ -118,13 +118,22 @@ class AppTheme {
 
   static TextStyle get monoStyle => GoogleFonts.jetBrainsMono();
 
+  /// Style for emoji-only text (reaction pills/pickers). Inter Tight ships
+  /// its own monochrome glyphs for some emoji (e.g. U+2764 ❤), which would
+  /// paint in the text color instead of the color-emoji glyph — route
+  /// straight to the platform emoji font so emoji always render in color.
+  static TextStyle emojiStyle({double? fontSize}) => TextStyle(
+    fontSize: fontSize,
+    fontFamily: 'Apple Color Emoji',
+    fontFamilyFallback: const ['Noto Color Emoji'],
+  );
+
   /// Inter Tight throughout, with tightened tracking on display/headline sizes
   /// for a more deliberate, premium masthead feel.
   static TextTheme _textTheme(TextTheme base, Color color) {
-    final t = GoogleFonts.interTightTextTheme(base).apply(
-      bodyColor: color,
-      displayColor: color,
-    );
+    final t = GoogleFonts.interTightTextTheme(
+      base,
+    ).apply(bodyColor: color, displayColor: color);
     return t.copyWith(
       displaySmall: t.displaySmall?.copyWith(
         fontWeight: FontWeight.w700,
@@ -175,7 +184,9 @@ class AppTheme {
           surfaceContainerLowest: isDark
               ? AppColors.deepForest
               : AppColors.paper,
-          surfaceContainerLow: isDark ? AppColors.forest2 : AppColors.paperRaised,
+          surfaceContainerLow: isDark
+              ? AppColors.forest2
+              : AppColors.paperRaised,
           surfaceContainer: isDark ? AppColors.forest2 : AppColors.paperRaised,
           surfaceContainerHigh: isDark
               ? AppColors.forest3
@@ -246,7 +257,9 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: isDark ? AppColors.forest2 : AppColors.paperRaised,
-        hintStyle: textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+        hintStyle: textTheme.bodyMedium?.copyWith(
+          color: scheme.onSurfaceVariant,
+        ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: Insets.lg,
           vertical: Insets.md,
@@ -306,7 +319,9 @@ class AppTheme {
         height: 68,
         backgroundColor: isDark ? AppColors.forest2 : AppColors.paperRaised,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: AppColors.signal.withValues(alpha: isDark ? 0.22 : 0.18),
+        indicatorColor: AppColors.signal.withValues(
+          alpha: isDark ? 0.22 : 0.18,
+        ),
         indicatorShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(Radii.pill)),
         ),

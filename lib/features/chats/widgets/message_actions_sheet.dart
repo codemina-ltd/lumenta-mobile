@@ -305,7 +305,7 @@ class _ReactionButton extends StatelessWidget {
                 shape: BoxShape.circle,
               )
             : null,
-        child: Text(emoji, style: const TextStyle(fontSize: 26)),
+        child: Text(emoji, style: AppTheme.emojiStyle(fontSize: 26)),
       ),
     );
   }

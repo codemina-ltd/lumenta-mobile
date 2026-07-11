@@ -557,7 +557,10 @@ class _ReactionPill extends StatelessWidget {
           ),
         ],
       ),
-      child: Text(reaction, style: const TextStyle(fontSize: 15, height: 1.2)),
+      child: Text(
+        reaction,
+        style: AppTheme.emojiStyle(fontSize: 15).copyWith(height: 1.2),
+      ),
     );
   }
 }
