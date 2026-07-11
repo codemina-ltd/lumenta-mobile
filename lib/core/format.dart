@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
+// intl ships its own TextDirection; hide it so Flutter's is the one in scope.
+import 'package:intl/intl.dart' hide TextDirection;
 
 import 'i18n/arb/app_localizations.dart';
 
@@ -40,4 +41,12 @@ class Fmt {
     final locale = Localizations.localeOf(context).toString();
     return DateFormat.jm(locale).format(when);
   }
+
+  /// Paint direction for message text, resolved from the content itself
+  /// rather than the app locale: an Arabic body lays out RTL inside its
+  /// bubble even in an English UI, and vice versa.
+  static TextDirection textDirectionFor(String text) =>
+      Bidi.detectRtlDirectionality(text)
+      ? TextDirection.rtl
+      : TextDirection.ltr;
 }

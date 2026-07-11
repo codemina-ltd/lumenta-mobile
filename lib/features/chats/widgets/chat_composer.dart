@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/format.dart';
 import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
@@ -46,12 +47,24 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
   final _controller = TextEditingController();
   bool _hasText = false;
 
+  /// Direction of the draft, detected from its content so Arabic input lays
+  /// out RTL even in an English UI. Null while empty → follow the app locale
+  /// (keeps the hint aligned with the UI language).
+  TextDirection? _inputDirection;
+
   @override
   void initState() {
     super.initState();
     _controller.addListener(() {
-      final has = _controller.text.trim().isNotEmpty;
-      if (has != _hasText) setState(() => _hasText = has);
+      final text = _controller.text;
+      final has = text.trim().isNotEmpty;
+      final dir = has ? Fmt.textDirectionFor(text) : null;
+      if (has != _hasText || dir != _inputDirection) {
+        setState(() {
+          _hasText = has;
+          _inputDirection = dir;
+        });
+      }
     });
   }
 
@@ -213,8 +226,11 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
             ),
             child: Row(
               children: [
-                Icon(Icons.do_not_disturb_on_outlined,
-                    size: 20, color: scheme.onSurfaceVariant),
+                Icon(
+                  Icons.do_not_disturb_on_outlined,
+                  size: 20,
+                  color: scheme.onSurfaceVariant,
+                ),
                 const SizedBox(width: Insets.md),
                 Expanded(
                   child: Text(
@@ -249,11 +265,17 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (caption != null)
-                  Align(alignment: AlignmentDirectional.centerStart, child: caption),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: caption,
+                  ),
                 Row(
                   children: [
-                    const Icon(Icons.lock_clock_rounded,
-                        size: 20, color: AppColors.amber),
+                    const Icon(
+                      Icons.lock_clock_rounded,
+                      size: 20,
+                      color: AppColors.amber,
+                    ),
                     const SizedBox(width: Insets.md),
                     Expanded(
                       child: Text(
@@ -322,34 +344,35 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
                     color: scheme.onSurfaceVariant,
                     onPressed: _openAttachSheet,
                   ),
-              Expanded(
-                child: Container(
-                  constraints: const BoxConstraints(minHeight: 44),
-                  decoration: BoxDecoration(
-                    color: scheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(Radii.xl),
-                  ),
-                  child: TextField(
-                    controller: _controller,
-                    minLines: 1,
-                    maxLines: 5,
-                    textInputAction: TextInputAction.newline,
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                      hintText: l10n.composerHint,
-                      isDense: true,
-                      filled: false,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: Insets.lg,
-                        vertical: Insets.md,
+                  Expanded(
+                    child: Container(
+                      constraints: const BoxConstraints(minHeight: 44),
+                      decoration: BoxDecoration(
+                        color: scheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(Radii.xl),
                       ),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
+                      child: TextField(
+                        controller: _controller,
+                        textDirection: _inputDirection,
+                        minLines: 1,
+                        maxLines: 5,
+                        textInputAction: TextInputAction.newline,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: l10n.composerHint,
+                          isDense: true,
+                          filled: false,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: Insets.lg,
+                            vertical: Insets.md,
+                          ),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
                   const SizedBox(width: Insets.sm),
                   _SendButton(enabled: _hasText, onTap: _sendText),
                 ],

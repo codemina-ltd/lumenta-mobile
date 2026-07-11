@@ -440,6 +440,7 @@ class _MessageBubble extends ConsumerWidget {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   message.transcription!,
+                  textDirection: Fmt.textDirectionFor(message.transcription!),
                   style: TextStyle(
                     color: textColor.withValues(alpha: 0.85),
                     fontStyle: FontStyle.italic,
@@ -477,6 +478,7 @@ class _MessageBubble extends ConsumerWidget {
 
   Widget _bodyText(Color textColor) => Text(
     message.body.isEmpty ? '…' : message.body,
+    textDirection: Fmt.textDirectionFor(message.body),
     style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
   );
 
@@ -564,6 +566,7 @@ class _ImageContent extends StatelessWidget {
             padding: const EdgeInsets.only(top: 6),
             child: Text(
               caption,
+              textDirection: Fmt.textDirectionFor(caption),
               style: TextStyle(color: textColor, height: 1.35),
             ),
           ),
@@ -624,7 +627,11 @@ class _IconTile extends StatelessWidget {
         ),
         const SizedBox(width: Insets.md),
         Flexible(
-          child: Text(label, style: TextStyle(color: textColor)),
+          child: Text(
+            label,
+            textDirection: Fmt.textDirectionFor(label),
+            style: TextStyle(color: textColor),
+          ),
         ),
       ],
     );
