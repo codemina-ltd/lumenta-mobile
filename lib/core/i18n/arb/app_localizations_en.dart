@@ -347,4 +347,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareFailed => 'Couldn\'t share. Please try again.';
+
+  @override
+  String get reactionFailed => 'Couldn\'t send the reaction. Please try again.';
 }

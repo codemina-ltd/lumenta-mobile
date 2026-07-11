@@ -145,5 +145,6 @@
     }
   },
   "forwardFailed": "Couldn't forward. Please try again.",
-  "shareFailed": "Couldn't share. Please try again."
+  "shareFailed": "Couldn't share. Please try again.",
+  "reactionFailed": "Couldn't send the reaction. Please try again."
 }

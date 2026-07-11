@@ -351,4 +351,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get shareFailed => 'Impossible de partager. Veuillez réessayer.';
+
+  @override
+  String get reactionFailed =>
+      'Impossible d\'envoyer la réaction. Veuillez réessayer.';
 }

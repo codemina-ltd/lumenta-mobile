@@ -747,6 +747,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t share. Please try again.'**
   String get shareFailed;
+
+  /// No description provided for @reactionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the reaction. Please try again.'**
+  String get reactionFailed;
 }
 
 class _AppLocalizationsDelegate

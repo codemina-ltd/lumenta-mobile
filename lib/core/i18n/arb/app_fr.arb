@@ -145,5 +145,6 @@
     }
   },
   "forwardFailed": "Impossible de transférer. Veuillez réessayer.",
-  "shareFailed": "Impossible de partager. Veuillez réessayer."
+  "shareFailed": "Impossible de partager. Veuillez réessayer.",
+  "reactionFailed": "Impossible d'envoyer la réaction. Veuillez réessayer."
 }

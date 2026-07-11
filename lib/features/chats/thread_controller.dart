@@ -135,7 +135,9 @@ class ThreadController extends StateNotifier<ThreadState> {
     );
     _insert(temp);
     try {
-      final sent = await _ref.read(messagesRepoProvider).sendTemplate(
+      final sent = await _ref
+          .read(messagesRepoProvider)
+          .sendTemplate(
             to: to,
             templateId: template.id,
             templateVariables: variables,
@@ -165,7 +167,9 @@ class ThreadController extends StateNotifier<ThreadState> {
     final temp = _optimistic(body: caption ?? '', type: type);
     _insert(temp);
     try {
-      final sent = await _ref.read(messagesRepoProvider).sendMedia(
+      final sent = await _ref
+          .read(messagesRepoProvider)
+          .sendMedia(
             to: to,
             mediaType: mediaType,
             filePath: filePath,
@@ -177,6 +181,27 @@ class ThreadController extends StateNotifier<ThreadState> {
       _onSendSucceeded();
     } catch (_) {
       _markFailed(temp.id);
+    }
+  }
+
+  /// React (or un-react, [emoji] null) to an inbound message. The pill flips
+  /// optimistically and reverts on failure. Returns true on success.
+  Future<bool> sendReaction(String messageId, String? emoji) async {
+    final current = _byId[messageId];
+    if (current == null) return false;
+    _byId[messageId] = current.copyWith(reaction: emoji);
+    _resort();
+    try {
+      final updated = await _ref
+          .read(messagesRepoProvider)
+          .sendReaction(messageId: messageId, emoji: emoji);
+      _byId[messageId] = updated;
+      _resort();
+      return true;
+    } catch (_) {
+      _byId[messageId] = current;
+      _resort();
+      return false;
     }
   }
 
@@ -242,5 +267,5 @@ class ThreadController extends StateNotifier<ThreadState> {
 /// separate controller (and message cache) keyed by `(clientId, senderId)`.
 final threadControllerProvider = StateNotifierProvider.autoDispose
     .family<ThreadController, ThreadState, ThreadKey>((ref, key) {
-  return ThreadController(ref, key);
-});
+      return ThreadController(ref, key);
+    });

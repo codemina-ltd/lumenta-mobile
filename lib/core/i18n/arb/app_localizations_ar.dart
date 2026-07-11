@@ -345,4 +345,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get shareFailed => 'تعذّرت المشاركة. حاول مرة أخرى.';
+
+  @override
+  String get reactionFailed => 'تعذّر إرسال التفاعل. حاول مرة أخرى.';
 }

@@ -36,11 +36,7 @@ class MessagesRepo {
   }) async {
     final res = await _dio.get<Map<String, dynamic>>(
       '/clients/$clientId/messages',
-      queryParameters: {
-        'page': page,
-        'limit': limit,
-        'senderId': ?senderId,
-      },
+      queryParameters: {'page': page, 'limit': limit, 'senderId': ?senderId},
     );
     return Paginated.fromJson(res.data!, Message.fromJson);
   }
@@ -101,6 +97,20 @@ class MessagesRepo {
         if (buttonVariables != null && buttonVariables.isNotEmpty)
           'buttonVariables': buttonVariables,
       },
+    );
+    return Message.fromJson(res.data!);
+  }
+
+  /// `POST /messages/:id/reaction` — react to an inbound client message with
+  /// an emoji; null/empty removes an existing reaction. Returns the updated
+  /// message (with `reaction` set server-side).
+  Future<Message> sendReaction({
+    required String messageId,
+    String? emoji,
+  }) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/messages/$messageId/reaction',
+      data: {'emoji': emoji ?? ''},
     );
     return Message.fromJson(res.data!);
   }

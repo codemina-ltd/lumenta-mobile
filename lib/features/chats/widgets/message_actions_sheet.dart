@@ -20,11 +20,23 @@ import '../thread_controller.dart';
 
 enum _MessageAction { copy, forward, share }
 
-/// Long-press actions for a chat bubble: copy, forward, share.
+/// Emoji picked from the quick-reaction row; [emoji] null means "remove the
+/// current reaction".
+class _ReactionChoice {
+  const _ReactionChoice(this.emoji);
+  final String? emoji;
+}
+
+/// WhatsApp's default quick-reaction palette (mirrors the portal).
+const _quickReactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+
+/// Long-press actions for a chat bubble: react (inbound only), copy, forward,
+/// share.
 ///
 /// Which actions appear depends on the message: copy/share need extractable
-/// text or media; forward needs text or re-uploadable media. Flow responses
-/// (submitted form JSON) expose none, so the sheet silently doesn't open.
+/// text or media; forward needs text or re-uploadable media; reacting needs
+/// an inbound (client) message. A message offering none of these (e.g. an
+/// outbound flow message) silently doesn't open the sheet.
 Future<void> showMessageActions(
   BuildContext context,
   WidgetRef ref, {
@@ -35,13 +47,14 @@ Future<void> showMessageActions(
   final canCopy = text != null;
   final canForward = message.hasMedia || text != null;
   final canShare = message.hasMedia || text != null;
-  if (!canCopy && !canForward && !canShare) return;
+  final canReact = !message.isOutbound;
+  if (!canCopy && !canForward && !canShare && !canReact) return;
 
   HapticFeedback.mediumImpact();
   final l10n = AppLocalizations.of(context);
   final messenger = ScaffoldMessenger.of(context);
 
-  final action = await showModalBottomSheet<_MessageAction>(
+  final action = await showModalBottomSheet<Object>(
     context: context,
     builder: (sheetCtx) => SafeArea(
       child: Padding(
@@ -49,6 +62,28 @@ Future<void> showMessageActions(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (canReact)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: Insets.sm),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (final emoji in _quickReactions)
+                      _ReactionButton(
+                        emoji: emoji,
+                        selected: message.reaction == emoji,
+                        // Re-picking the current emoji removes it, like
+                        // WhatsApp.
+                        onTap: () => Navigator.pop(
+                          sheetCtx,
+                          _ReactionChoice(
+                            message.reaction == emoji ? null : emoji,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             if (canCopy)
               _ActionTile(
                 icon: Icons.copy_rounded,
@@ -77,7 +112,17 @@ Future<void> showMessageActions(
   );
   if (action == null || !context.mounted) return;
 
-  switch (action) {
+  if (action is _ReactionChoice) {
+    final ok = await ref
+        .read(threadControllerProvider(threadKey).notifier)
+        .sendReaction(message.id, action.emoji);
+    if (!ok) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.reactionFailed)));
+    }
+    return;
+  }
+
+  switch (action as _MessageAction) {
     case _MessageAction.copy:
       await Clipboard.setData(ClipboardData(text: text!));
       messenger.showSnackBar(SnackBar(content: Text(l10n.messageCopied)));
@@ -231,6 +276,38 @@ String _extensionFor(String? mime) {
       // image/png → png, video/mp4 → mp4, audio/aac → aac, …
       final subtype = mime.split('/').last.split(';').first.trim();
       return subtype.isEmpty ? 'bin' : subtype;
+  }
+}
+
+class _ReactionButton extends StatelessWidget {
+  const _ReactionButton({
+    required this.emoji,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String emoji;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      customBorder: const CircleBorder(),
+      child: Container(
+        width: 44,
+        height: 44,
+        alignment: Alignment.center,
+        decoration: selected
+            ? const BoxDecoration(
+                color: AppColors.signalTint,
+                shape: BoxShape.circle,
+              )
+            : null,
+        child: Text(emoji, style: const TextStyle(fontSize: 26)),
+      ),
+    );
   }
 }
 
