@@ -37,6 +37,10 @@ mixin _$Message {
   String? get locationAddress => throw _privateConstructorUsedError;
   String? get transcription => throw _privateConstructorUsedError;
   String? get transcriptionStatus => throw _privateConstructorUsedError;
+
+  /// Emoji the customer reacted with (webhook writes it onto the reacted-to
+  /// message row); null / empty when there is no active reaction.
+  String? get reaction => throw _privateConstructorUsedError;
   Map<String, dynamic>? get providerRawPayload =>
       throw _privateConstructorUsedError;
 
@@ -74,6 +78,7 @@ abstract class $MessageCopyWith<$Res> {
     String? locationAddress,
     String? transcription,
     String? transcriptionStatus,
+    String? reaction,
     Map<String, dynamic>? providerRawPayload,
     String? senderId,
     String createdAt,
@@ -108,6 +113,7 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
     Object? locationAddress = freezed,
     Object? transcription = freezed,
     Object? transcriptionStatus = freezed,
+    Object? reaction = freezed,
     Object? providerRawPayload = freezed,
     Object? senderId = freezed,
     Object? createdAt = null,
@@ -166,6 +172,10 @@ class _$MessageCopyWithImpl<$Res, $Val extends Message>
                 ? _value.transcriptionStatus
                 : transcriptionStatus // ignore: cast_nullable_to_non_nullable
                       as String?,
+            reaction: freezed == reaction
+                ? _value.reaction
+                : reaction // ignore: cast_nullable_to_non_nullable
+                      as String?,
             providerRawPayload: freezed == providerRawPayload
                 ? _value.providerRawPayload
                 : providerRawPayload // ignore: cast_nullable_to_non_nullable
@@ -207,6 +217,7 @@ abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
     String? locationAddress,
     String? transcription,
     String? transcriptionStatus,
+    String? reaction,
     Map<String, dynamic>? providerRawPayload,
     String? senderId,
     String createdAt,
@@ -240,6 +251,7 @@ class __$$MessageImplCopyWithImpl<$Res>
     Object? locationAddress = freezed,
     Object? transcription = freezed,
     Object? transcriptionStatus = freezed,
+    Object? reaction = freezed,
     Object? providerRawPayload = freezed,
     Object? senderId = freezed,
     Object? createdAt = null,
@@ -298,6 +310,10 @@ class __$$MessageImplCopyWithImpl<$Res>
             ? _value.transcriptionStatus
             : transcriptionStatus // ignore: cast_nullable_to_non_nullable
                   as String?,
+        reaction: freezed == reaction
+            ? _value.reaction
+            : reaction // ignore: cast_nullable_to_non_nullable
+                  as String?,
         providerRawPayload: freezed == providerRawPayload
             ? _value._providerRawPayload
             : providerRawPayload // ignore: cast_nullable_to_non_nullable
@@ -335,6 +351,7 @@ class _$MessageImpl extends _Message {
     this.locationAddress,
     this.transcription,
     this.transcriptionStatus,
+    this.reaction,
     final Map<String, dynamic>? providerRawPayload,
     this.senderId,
     required this.createdAt,
@@ -374,6 +391,11 @@ class _$MessageImpl extends _Message {
   final String? transcription;
   @override
   final String? transcriptionStatus;
+
+  /// Emoji the customer reacted with (webhook writes it onto the reacted-to
+  /// message row); null / empty when there is no active reaction.
+  @override
+  final String? reaction;
   final Map<String, dynamic>? _providerRawPayload;
   @override
   Map<String, dynamic>? get providerRawPayload {
@@ -394,7 +416,7 @@ class _$MessageImpl extends _Message {
 
   @override
   String toString() {
-    return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, providerRawPayload: $providerRawPayload, senderId: $senderId, createdAt: $createdAt)';
+    return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, senderId: $senderId, createdAt: $createdAt)';
   }
 
   @override
@@ -425,6 +447,8 @@ class _$MessageImpl extends _Message {
                 other.transcription == transcription) &&
             (identical(other.transcriptionStatus, transcriptionStatus) ||
                 other.transcriptionStatus == transcriptionStatus) &&
+            (identical(other.reaction, reaction) ||
+                other.reaction == reaction) &&
             const DeepCollectionEquality().equals(
               other._providerRawPayload,
               _providerRawPayload,
@@ -452,6 +476,7 @@ class _$MessageImpl extends _Message {
     locationAddress,
     transcription,
     transcriptionStatus,
+    reaction,
     const DeepCollectionEquality().hash(_providerRawPayload),
     senderId,
     createdAt,
@@ -488,6 +513,7 @@ abstract class _Message extends Message {
     final String? locationAddress,
     final String? transcription,
     final String? transcriptionStatus,
+    final String? reaction,
     final Map<String, dynamic>? providerRawPayload,
     final String? senderId,
     required final String createdAt,
@@ -525,6 +551,11 @@ abstract class _Message extends Message {
   String? get transcription;
   @override
   String? get transcriptionStatus;
+
+  /// Emoji the customer reacted with (webhook writes it onto the reacted-to
+  /// message row); null / empty when there is no active reaction.
+  @override
+  String? get reaction;
   @override
   Map<String, dynamic>? get providerRawPayload;
 

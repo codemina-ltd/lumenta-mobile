@@ -353,6 +353,44 @@ class _MessageBubble extends ConsumerWidget {
     final textColor = outbound ? chat.outboundText : chat.inboundText;
     final isLight = context.scheme.brightness == Brightness.light;
 
+    final bubble = Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.78,
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: 3),
+      padding: const EdgeInsets.fromLTRB(Insets.md, Insets.sm, Insets.md, 6),
+      decoration: BoxDecoration(
+        color: bubbleColor,
+        borderRadius: BorderRadius.only(
+          topLeft: const Radius.circular(Radii.md),
+          topRight: const Radius.circular(Radii.md),
+          bottomLeft: Radius.circular(outbound ? Radii.md : 4),
+          bottomRight: Radius.circular(outbound ? 4 : Radii.md),
+        ),
+        border: (!outbound && isLight)
+            ? Border.all(color: AppColors.hairline)
+            : null,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.deepForest.withValues(
+              alpha: isLight ? 0.05 : 0.18,
+            ),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _content(context, ref, textColor),
+          const SizedBox(height: 2),
+          _meta(context, textColor, outbound),
+        ],
+      ),
+    );
+
     return Align(
       alignment: outbound ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
@@ -362,51 +400,27 @@ class _MessageBubble extends ConsumerWidget {
           message: message,
           threadKey: threadKey,
         ),
-        child: Container(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.78,
-          ),
-          margin: const EdgeInsets.symmetric(
-            horizontal: Insets.md,
-            vertical: 3,
-          ),
-          padding: const EdgeInsets.fromLTRB(
-            Insets.md,
-            Insets.sm,
-            Insets.md,
-            6,
-          ),
-          decoration: BoxDecoration(
-            color: bubbleColor,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(Radii.md),
-              topRight: const Radius.circular(Radii.md),
-              bottomLeft: Radius.circular(outbound ? Radii.md : 4),
-              bottomRight: Radius.circular(outbound ? 4 : Radii.md),
-            ),
-            border: (!outbound && isLight)
-                ? Border.all(color: AppColors.hairline)
-                : null,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.deepForest.withValues(
-                  alpha: isLight ? 0.05 : 0.18,
-                ),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _content(context, ref, textColor),
-              const SizedBox(height: 2),
-              _meta(context, textColor, outbound),
-            ],
-          ),
-        ),
+        child: message.hasReaction
+            // Reaction pill overlaps the bubble's bottom corner (mirrors the
+            // portal's ChatBubble): the bubble reserves extra space below and
+            // the pill hangs into it.
+            ? Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 14),
+                    child: bubble,
+                  ),
+                  // Physical right, like the portal pins the pill at right: 8
+                  // regardless of writing direction.
+                  Positioned(
+                    bottom: 0,
+                    right: Insets.md + Insets.sm,
+                    child: _ReactionPill(reaction: message.reaction!),
+                  ),
+                ],
+              )
+            : bubble,
       ),
     );
   }
@@ -517,6 +531,34 @@ class _MessageBubble extends ConsumerWidget {
     if (message.status == MessageStatus.read) return AppColors.lilac;
     if (message.status == MessageStatus.failed) return AppColors.ember;
     return textColor.withValues(alpha: 0.6);
+  }
+}
+
+/// Customer's emoji reaction, floated over the bubble's bottom corner —
+/// mirrors the portal's ChatBubble reaction chip.
+class _ReactionPill extends StatelessWidget {
+  const _ReactionPill({required this.reaction});
+  final String reaction;
+
+  @override
+  Widget build(BuildContext context) {
+    final isLight = context.scheme.brightness == Brightness.light;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        color: isLight ? Colors.white : context.scheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(Radii.lg),
+        border: isLight ? Border.all(color: AppColors.hairline) : null,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.deepForest.withValues(alpha: isLight ? 0.12 : 0.3),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Text(reaction, style: const TextStyle(fontSize: 15, height: 1.2)),
+    );
   }
 }
 

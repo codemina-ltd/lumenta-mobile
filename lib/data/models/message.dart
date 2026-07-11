@@ -77,6 +77,10 @@ class Message with _$Message {
     String? locationAddress,
     String? transcription,
     String? transcriptionStatus,
+
+    /// Emoji the customer reacted with (webhook writes it onto the reacted-to
+    /// message row); null / empty when there is no active reaction.
+    String? reaction,
     Map<String, dynamic>? providerRawPayload,
 
     /// Sender (WABA phone number) that carried this message. Null on legacy
@@ -98,6 +102,7 @@ class Message with _$Message {
       messageType == MessageType.document ||
       messageType == MessageType.sticker;
   bool get transcriptionReady => transcriptionStatus == 'ready';
+  bool get hasReaction => reaction != null && reaction!.isNotEmpty;
 
   /// An inbound interactive message is a WhatsApp Flow response — the customer
   /// submitted a form. Mirrors the portal's `ChatBubble` inbound-interactive
@@ -138,5 +143,6 @@ class Message with _$Message {
   }
 
   DateTime get createdAtDate =>
-      DateTime.tryParse(createdAt)?.toLocal() ?? DateTime.fromMillisecondsSinceEpoch(0);
+      DateTime.tryParse(createdAt)?.toLocal() ??
+      DateTime.fromMillisecondsSinceEpoch(0);
 }
