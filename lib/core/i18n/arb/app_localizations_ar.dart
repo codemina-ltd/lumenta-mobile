@@ -94,6 +94,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String get inboxSave => 'حفظ';
 
   @override
+  String get inboxReopen => 'إعادة فتح';
+
+  @override
+  String get inboxAssignToMember => 'إسناد إلى عضو…';
+
+  @override
+  String get inboxUnassign => 'إلغاء الإسناد';
+
+  @override
+  String get inboxSnoozeUntil => 'تأجيل حتى…';
+
+  @override
+  String get inboxPriority => 'الأولوية';
+
+  @override
+  String get inboxPriorityLow => 'منخفضة';
+
+  @override
+  String get inboxPriorityNormal => 'عادية';
+
+  @override
+  String get inboxPriorityHigh => 'مرتفعة';
+
+  @override
+  String get inboxLabels => 'الوسوم';
+
+  @override
+  String get inboxNoLabels => 'لا توجد وسوم بعد';
+
+  @override
+  String get inboxAssigneeUnassigned => 'غير مُسندة';
+
+  @override
   String get contactDetails => 'تفاصيل العميل';
 
   @override

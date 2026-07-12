@@ -268,6 +268,72 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get inboxSave;
 
+  /// No description provided for @inboxReopen.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen'**
+  String get inboxReopen;
+
+  /// No description provided for @inboxAssignToMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to member…'**
+  String get inboxAssignToMember;
+
+  /// No description provided for @inboxUnassign.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassign'**
+  String get inboxUnassign;
+
+  /// No description provided for @inboxSnoozeUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze until…'**
+  String get inboxSnoozeUntil;
+
+  /// No description provided for @inboxPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get inboxPriority;
+
+  /// No description provided for @inboxPriorityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get inboxPriorityLow;
+
+  /// No description provided for @inboxPriorityNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get inboxPriorityNormal;
+
+  /// No description provided for @inboxPriorityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get inboxPriorityHigh;
+
+  /// No description provided for @inboxLabels.
+  ///
+  /// In en, this message translates to:
+  /// **'Labels'**
+  String get inboxLabels;
+
+  /// No description provided for @inboxNoLabels.
+  ///
+  /// In en, this message translates to:
+  /// **'No labels defined yet'**
+  String get inboxNoLabels;
+
+  /// No description provided for @inboxAssigneeUnassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassigned'**
+  String get inboxAssigneeUnassigned;
+
   /// No description provided for @contactDetails.
   ///
   /// In en, this message translates to:

@@ -3,7 +3,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers.dart';
 import '../../data/models/inbox_thread.dart';
+import '../../data/repos/tenant_repo.dart';
 import '../auth/auth_controller.dart';
+
+/// Members of the active workspace — shared by the thread tiles (assignee
+/// names) and the admin assignee picker. Deliberately not autoDispose:
+/// membership changes rarely, and refetching on every inbox visit would
+/// work against the inbox's request-budget discipline. Switching workspaces
+/// recomputes it via the `activeTenantId` watch.
+final tenantMembersProvider = FutureProvider<List<TenantMemberLite>>((
+  ref,
+) async {
+  final tenantId = ref.watch(
+    authControllerProvider.select((s) => s.activeTenantId),
+  );
+  if (tenantId == null) return const [];
+  return ref.watch(tenantRepoProvider).members(tenantId);
+});
 
 /// Saved views for the operator inbox (LUMENTA_GROWTH plan §1.3 / §14).
 enum InboxView { mine, unassigned, open, snoozed, all }
@@ -71,10 +87,15 @@ class InboxController extends Notifier<InboxState> {
   Future<void> assignTo(String id, String? userId) async =>
       _fold(await ref.read(inboxRepoProvider).assign(id, userId));
 
-  Future<void> setStatus(String id, String status, {String? snoozedUntil}) async =>
-      _fold(await ref
-          .read(inboxRepoProvider)
-          .changeStatus(id, status, snoozedUntil: snoozedUntil));
+  Future<void> setStatus(
+    String id,
+    String status, {
+    String? snoozedUntil,
+  }) async => _fold(
+    await ref
+        .read(inboxRepoProvider)
+        .changeStatus(id, status, snoozedUntil: snoozedUntil),
+  );
 
   Future<void> setPriority(String id, String priority) async =>
       _fold(await ref.read(inboxRepoProvider).changePriority(id, priority));

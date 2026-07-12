@@ -95,6 +95,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String get inboxSave => 'Enregistrer';
 
   @override
+  String get inboxReopen => 'Rouvrir';
+
+  @override
+  String get inboxAssignToMember => 'Attribuer à un membre…';
+
+  @override
+  String get inboxUnassign => 'Retirer l\'attribution';
+
+  @override
+  String get inboxSnoozeUntil => 'Reporter jusqu\'à…';
+
+  @override
+  String get inboxPriority => 'Priorité';
+
+  @override
+  String get inboxPriorityLow => 'Basse';
+
+  @override
+  String get inboxPriorityNormal => 'Normale';
+
+  @override
+  String get inboxPriorityHigh => 'Haute';
+
+  @override
+  String get inboxLabels => 'Étiquettes';
+
+  @override
+  String get inboxNoLabels => 'Aucune étiquette pour l\'instant';
+
+  @override
+  String get inboxAssigneeUnassigned => 'Non attribuée';
+
+  @override
   String get contactDetails => 'Détails du contact';
 
   @override
