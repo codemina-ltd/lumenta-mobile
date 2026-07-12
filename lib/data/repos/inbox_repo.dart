@@ -78,6 +78,15 @@ class InboxRepo {
     return InboxThread.fromJson(res.data!);
   }
 
+  /// `PATCH /inbox/threads/:id/priority`.
+  Future<InboxThread> changePriority(String id, String priority) async {
+    final res = await _dio.patch<Map<String, dynamic>>(
+      '/inbox/threads/$id/priority',
+      data: {'priority': priority},
+    );
+    return InboxThread.fromJson(res.data!);
+  }
+
   /// `POST /inbox/threads/:id/labels`.
   Future<InboxThread> applyLabel(String id, String labelId) async {
     final res = await _dio.post<Map<String, dynamic>>(

@@ -56,6 +56,67 @@ class InboxController extends Notifier<InboxState> {
     return const InboxState();
   }
 
+  // ── Mutations ────────────────────────────────────────────────────────────
+  // Every thread action returns the updated thread from the server, so we
+  // fold it into the in-memory list instead of refetching `/inbox/threads`
+  // (mirrors the portal's RTK Query cache-write pattern — refetch-per-action
+  // is what drove the API rate limit). A thread that stops matching the
+  // active view is dropped; one that newly matches arrives with the next
+  // pull-to-refresh.
+
+  Future<void> assignToMe(String id) async =>
+      _fold(await ref.read(inboxRepoProvider).assignToMe(id));
+
+  /// Assign to a member, or pass `null` to unassign.
+  Future<void> assignTo(String id, String? userId) async =>
+      _fold(await ref.read(inboxRepoProvider).assign(id, userId));
+
+  Future<void> setStatus(String id, String status, {String? snoozedUntil}) async =>
+      _fold(await ref
+          .read(inboxRepoProvider)
+          .changeStatus(id, status, snoozedUntil: snoozedUntil));
+
+  Future<void> setPriority(String id, String priority) async =>
+      _fold(await ref.read(inboxRepoProvider).changePriority(id, priority));
+
+  Future<void> applyLabel(String id, String labelId) async =>
+      _fold(await ref.read(inboxRepoProvider).applyLabel(id, labelId));
+
+  Future<void> removeLabel(String id, String labelId) async =>
+      _fold(await ref.read(inboxRepoProvider).removeLabel(id, labelId));
+
+  /// Optimistic badge clear when the operator opens a thread. A server
+  /// failure is deliberately swallowed — the badge reappears on the next
+  /// refresh, and blocking navigation over it would be worse.
+  Future<void> markReadOnOpen(InboxThread thread) async {
+    if (thread.unreadCount == 0) return;
+    _fold(thread.copyWith(unreadCount: 0));
+    try {
+      await ref.read(inboxRepoProvider).markRead(thread.id);
+    } catch (_) {}
+  }
+
+  bool _matchesView(InboxThread t) => switch (state.view) {
+    InboxView.mine =>
+      t.assignedUserId == ref.read(authControllerProvider).user?.id,
+    InboxView.unassigned => t.assignedUserId == null,
+    InboxView.open => t.status == 'open',
+    InboxView.snoozed => t.status == 'snoozed',
+    InboxView.all => true,
+  };
+
+  void _fold(InboxThread updated) {
+    final idx = state.items.indexWhere((t) => t.id == updated.id);
+    if (idx == -1) return;
+    final items = [...state.items];
+    if (_matchesView(updated)) {
+      items[idx] = updated;
+    } else {
+      items.removeAt(idx);
+    }
+    state = state.copyWith(items: items);
+  }
+
   void setView(InboxView view) {
     if (view == state.view) return;
     state = state.copyWith(view: view, items: const [], page: 0);
