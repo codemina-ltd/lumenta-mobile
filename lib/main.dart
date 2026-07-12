@@ -27,7 +27,7 @@ Future<void> main() async {
   // Load notification string bundles + restore local read cursors, then kick
   // off session bootstrap (the splash screen shows until it resolves).
   await NotificationI18n.load();
-  await container.read(lastReadStoreProvider).hydrate();
+  await container.read(lastReadStoreProvider.notifier).hydrate();
   unawaited(container.read(authControllerProvider.notifier).bootstrap());
 
   runApp(

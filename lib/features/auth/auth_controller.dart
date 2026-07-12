@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/providers.dart';
 import '../../data/models/tenant.dart';
 import '../../data/models/user.dart';
+import '../../data/session/auth_session.dart';
 import 'recaptcha_service.dart';
 
 enum AuthStatus { bootstrapping, unauthenticated, needsTenant, authenticated }
@@ -55,19 +56,20 @@ class AuthState {
   }
 }
 
-class AuthController extends StateNotifier<AuthState> {
-  AuthController(this._ref) : super(const AuthState()) {
+class AuthController extends Notifier<AuthState> {
+  AuthSession get _session => ref.read(authSessionProvider);
+
+  @override
+  AuthState build() {
     // React to a refresh failure (session cleared by the Dio interceptor).
-    _session.addListener(_onSessionChanged);
+    final session = _session;
+    session.addListener(_onSessionChanged);
+    ref.onDispose(() => session.removeListener(_onSessionChanged));
+    return const AuthState();
   }
 
-  final Ref _ref;
-
-  late final _session = _ref.read(authSessionProvider);
-
   void _onSessionChanged() {
-    if (!_session.isAuthenticated &&
-        state.status == AuthStatus.authenticated) {
+    if (!_session.isAuthenticated && state.status == AuthStatus.authenticated) {
       state = const AuthState(status: AuthStatus.unauthenticated);
     }
   }
@@ -111,14 +113,17 @@ class AuthController extends StateNotifier<AuthState> {
   Future<void> login(String email, String password) async {
     state = state.copyWith(busy: true, clearError: true);
     try {
-      final recaptcha = _ref.read(recaptchaServiceProvider);
+      final recaptcha = ref.read(recaptchaServiceProvider);
       final token = await recaptcha.tokenForLogin();
-      final result = await _ref.read(authRepoProvider).login(
+      final result = await ref
+          .read(authRepoProvider)
+          .login(
             email: email,
             password: password,
             recaptchaToken: token,
-            recaptchaPlatform:
-                defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android',
+            recaptchaPlatform: defaultTargetPlatform == TargetPlatform.iOS
+                ? 'ios'
+                : 'android',
           );
       await _session.setTokens(result.accessToken, result.refreshToken);
       await _loadProfileAndTenants(preferredTenantId: _session.activeTenantId);
@@ -130,8 +135,8 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> _loadProfileAndTenants({String? preferredTenantId}) async {
-    final user = await _ref.read(authRepoProvider).me();
-    final tenants = await _ref.read(tenantRepoProvider).listMine();
+    final user = await ref.read(authRepoProvider).me();
+    final tenants = await ref.read(tenantRepoProvider).listMine();
 
     String? active = preferredTenantId;
     final hasPreferred = tenants.any((t) => t.id == active);
@@ -177,27 +182,20 @@ class AuthController extends StateNotifier<AuthState> {
     // leaving the portal / other devices signed in.
     final refreshToken = _session.refreshToken;
     try {
-      await _ref.read(authRepoProvider).logout(refreshToken: refreshToken);
+      await ref.read(authRepoProvider).logout(refreshToken: refreshToken);
     } catch (_) {}
     await _session.clear();
     state = const AuthState(status: AuthStatus.unauthenticated);
   }
-
-  @override
-  void dispose() {
-    _session.removeListener(_onSessionChanged);
-    super.dispose();
-  }
 }
 
-final authControllerProvider =
-    StateNotifierProvider<AuthController, AuthState>((ref) {
-  return AuthController(ref);
-});
+final authControllerProvider = NotifierProvider<AuthController, AuthState>(
+  AuthController.new,
+);
 
 /// Active locale, hydrated from the user profile after login (mirrors the
 /// portal's `useHydrateLocaleFromMe`). Null = follow system locale.
-final localeProvider = StateProvider<Locale?>((ref) {
+final localeProvider = Provider<Locale?>((ref) {
   final user = ref.watch(authControllerProvider.select((s) => s.user));
   final code = user?.locale;
   if (code == null || code.isEmpty) return null;

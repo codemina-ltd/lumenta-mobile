@@ -64,7 +64,9 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   void _onLoaded(DateTime? newest) {
     // Clear unread for this chat.
     if (newest != null) {
-      ref.read(lastReadStoreProvider).markRead(widget.clientId, newest);
+      ref
+          .read(lastReadStoreProvider.notifier)
+          .markRead(widget.clientId, newest);
     }
     if (!_didInitialScroll) {
       _didInitialScroll = true;
@@ -105,8 +107,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     final sendersReady =
         (convAsync.hasValue || convAsync.hasError) &&
         (sendersAsync.hasValue || sendersAsync.hasError);
-    final convSenders = convAsync.valueOrNull ?? const <ConversationSender>[];
-    final senders = sendersAsync.valueOrNull ?? const <Sender>[];
+    final convSenders = convAsync.value ?? const <ConversationSender>[];
+    final senders = sendersAsync.value ?? const <Sender>[];
     final showTabs =
         sendersReady && (convSenders.length > 1 || senders.length > 1);
 

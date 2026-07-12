@@ -48,12 +48,13 @@ class InboxState {
   );
 }
 
-class InboxController extends StateNotifier<InboxState> {
-  InboxController(this._ref) : super(const InboxState()) {
-    refresh();
+class InboxController extends Notifier<InboxState> {
+  @override
+  InboxState build() {
+    // Deferred: build() must return the initial state before `state` is used.
+    Future.microtask(refresh);
+    return const InboxState();
   }
-
-  final Ref _ref;
 
   void setView(InboxView view) {
     if (view == state.view) return;
@@ -74,8 +75,8 @@ class InboxController extends StateNotifier<InboxState> {
 
   Future<void> _load(int page, {required bool replace}) async {
     try {
-      final repo = _ref.read(inboxRepoProvider);
-      final myId = _ref.read(authControllerProvider).user?.id;
+      final repo = ref.read(inboxRepoProvider);
+      final myId = ref.read(authControllerProvider).user?.id;
       final result = await repo.threads(
         page: page,
         status: switch (state.view) {
@@ -86,9 +87,7 @@ class InboxController extends StateNotifier<InboxState> {
         assignedUserId: state.view == InboxView.mine ? myId : null,
         unassigned: state.view == InboxView.unassigned ? true : null,
       );
-      final items = replace
-          ? result.data
-          : [...state.items, ...result.data];
+      final items = replace ? result.data : [...state.items, ...result.data];
       state = state.copyWith(
         items: items,
         loading: false,
@@ -103,7 +102,6 @@ class InboxController extends StateNotifier<InboxState> {
   }
 }
 
-final inboxControllerProvider =
-    StateNotifierProvider<InboxController, InboxState>(
-      (ref) => InboxController(ref),
-    );
+final inboxControllerProvider = NotifierProvider<InboxController, InboxState>(
+  InboxController.new,
+);

@@ -49,13 +49,17 @@ class ThreadState {
   );
 }
 
-class ThreadController extends StateNotifier<ThreadState> {
-  ThreadController(this._ref, this.key) : super(const ThreadState()) {
-    refresh();
-  }
+class ThreadController extends Notifier<ThreadState> {
+  ThreadController(this.key);
 
-  final Ref _ref;
   final ThreadKey key;
+
+  @override
+  ThreadState build() {
+    // Deferred: build() must return the initial state before `state` is used.
+    Future.microtask(refresh);
+    return const ThreadState();
+  }
 
   String get clientId => key.clientId;
 
@@ -80,7 +84,7 @@ class ThreadController extends StateNotifier<ThreadState> {
 
   Future<void> _loadPage(int page) async {
     try {
-      final result = await _ref
+      final result = await ref
           .read(messagesRepoProvider)
           .thread(clientId, page: page, senderId: senderId);
       for (final m in result.data) {
@@ -110,7 +114,7 @@ class ThreadController extends StateNotifier<ThreadState> {
     final temp = _optimistic(body: body, type: MessageType.text);
     _insert(temp);
     try {
-      final sent = await _ref
+      final sent = await ref
           .read(messagesRepoProvider)
           .sendText(to: to, body: body, senderId: senderId);
       _replace(temp.id, sent);
@@ -135,7 +139,7 @@ class ThreadController extends StateNotifier<ThreadState> {
     );
     _insert(temp);
     try {
-      final sent = await _ref
+      final sent = await ref
           .read(messagesRepoProvider)
           .sendTemplate(
             to: to,
@@ -147,7 +151,7 @@ class ThreadController extends StateNotifier<ThreadState> {
       _replace(temp.id, sent);
       _onSendSucceeded();
       // Bump the conversation to the top of the chats list.
-      _ref.read(chatsControllerProvider.notifier).refresh();
+      ref.read(chatsControllerProvider.notifier).refresh();
       return null;
     } catch (e) {
       _markFailed(temp.id);
@@ -167,7 +171,7 @@ class ThreadController extends StateNotifier<ThreadState> {
     final temp = _optimistic(body: caption ?? '', type: type);
     _insert(temp);
     try {
-      final sent = await _ref
+      final sent = await ref
           .read(messagesRepoProvider)
           .sendMedia(
             to: to,
@@ -192,7 +196,7 @@ class ThreadController extends StateNotifier<ThreadState> {
     _byId[messageId] = current.copyWith(reaction: emoji);
     _resort();
     try {
-      final updated = await _ref
+      final updated = await ref
           .read(messagesRepoProvider)
           .sendReaction(messageId: messageId, emoji: emoji);
       _byId[messageId] = updated;
@@ -208,7 +212,7 @@ class ThreadController extends StateNotifier<ThreadState> {
   /// A confirmed send may be the first message via this sender — refetch the
   /// tab list so a thread started via "Start conversation via…" materialises.
   void _onSendSucceeded() {
-    _ref.invalidate(conversationSendersProvider(clientId));
+    ref.invalidate(conversationSendersProvider(clientId));
   }
 
   Message _optimistic({required String body, required MessageType type}) {
@@ -265,7 +269,5 @@ class ThreadController extends StateNotifier<ThreadState> {
 
 /// One controller per thread scope — switching sender tabs switches to a
 /// separate controller (and message cache) keyed by `(clientId, senderId)`.
-final threadControllerProvider = StateNotifierProvider.autoDispose
-    .family<ThreadController, ThreadState, ThreadKey>((ref, key) {
-      return ThreadController(ref, key);
-    });
+final threadControllerProvider = NotifierProvider.autoDispose
+    .family<ThreadController, ThreadState, ThreadKey>(ThreadController.new);

@@ -45,18 +45,21 @@ class NotificationsState {
   );
 }
 
-class NotificationsController extends StateNotifier<NotificationsState> {
-  NotificationsController(this._ref) : super(const NotificationsState()) {
-    refresh();
+class NotificationsController extends Notifier<NotificationsState> {
+  @override
+  NotificationsState build() {
+    // Re-created whenever the active tenant changes, so the list re-scopes.
+    ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+    // Deferred: build() must return the initial state before `state` is used.
+    Future.microtask(refresh);
+    return const NotificationsState();
   }
-
-  final Ref _ref;
 
   Future<void> refresh() async {
     state = state.copyWith(loading: true, clearError: true);
     try {
-      final page = await _ref.read(notificationsRepoProvider).list();
-      final count = await _ref.read(notificationsRepoProvider).unreadCount();
+      final page = await ref.read(notificationsRepoProvider).list();
+      final count = await ref.read(notificationsRepoProvider).unreadCount();
       state = state.copyWith(
         items: page.data,
         loading: false,
@@ -74,7 +77,7 @@ class NotificationsController extends StateNotifier<NotificationsState> {
     if (state.loadingMore || !state.hasMore || state.loading) return;
     state = state.copyWith(loadingMore: true);
     try {
-      final page = await _ref
+      final page = await ref
           .read(notificationsRepoProvider)
           .list(cursor: state.cursor);
       state = state.copyWith(
@@ -100,7 +103,7 @@ class NotificationsController extends StateNotifier<NotificationsState> {
       unreadCount: (state.unreadCount - 1).clamp(0, 1 << 30),
     );
     try {
-      await _ref.read(notificationsRepoProvider).markRead(id);
+      await ref.read(notificationsRepoProvider).markRead(id);
     } catch (_) {
       // Optimistic; refresh will reconcile on next pull.
     }
@@ -108,19 +111,20 @@ class NotificationsController extends StateNotifier<NotificationsState> {
 
   Future<void> markAllRead() async {
     final updated = state.items
-        .map((n) => n.isRead
-            ? n
-            : n.copyWith(readAt: DateTime.now().toUtc().toIso8601String()))
+        .map(
+          (n) => n.isRead
+              ? n
+              : n.copyWith(readAt: DateTime.now().toUtc().toIso8601String()),
+        )
         .toList();
     state = state.copyWith(items: updated, unreadCount: 0);
     try {
-      await _ref.read(notificationsRepoProvider).markAllRead();
+      await ref.read(notificationsRepoProvider).markAllRead();
     } catch (_) {}
   }
 }
 
-final notificationsControllerProvider = StateNotifierProvider.autoDispose<
-    NotificationsController, NotificationsState>((ref) {
-  ref.watch(authControllerProvider.select((s) => s.activeTenantId));
-  return NotificationsController(ref);
-});
+final notificationsControllerProvider =
+    NotifierProvider.autoDispose<NotificationsController, NotificationsState>(
+      NotificationsController.new,
+    );

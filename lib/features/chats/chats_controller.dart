@@ -49,12 +49,15 @@ class ChatsState {
   );
 }
 
-class ChatsController extends StateNotifier<ChatsState> {
-  ChatsController(this._ref) : super(const ChatsState()) {
-    refresh();
+class ChatsController extends Notifier<ChatsState> {
+  @override
+  ChatsState build() {
+    // Re-created whenever the active tenant changes, so the list re-scopes.
+    ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+    // Deferred: build() must return the initial state before `state` is used.
+    Future.microtask(refresh);
+    return const ChatsState();
   }
-
-  final Ref _ref;
 
   Future<void> refresh() async {
     state = state.copyWith(
@@ -73,8 +76,9 @@ class ChatsController extends StateNotifier<ChatsState> {
 
   Future<void> _loadPage(int page, {required bool replace}) async {
     try {
-      final result =
-          await _ref.read(messagesRepoProvider).conversations(page: page);
+      final result = await ref
+          .read(messagesRepoProvider)
+          .conversations(page: page);
       final items = replace ? result.data : [...state.items, ...result.data];
       state = state.copyWith(
         items: items,
@@ -99,7 +103,6 @@ class ChatsController extends StateNotifier<ChatsState> {
 }
 
 final chatsControllerProvider =
-    StateNotifierProvider.autoDispose<ChatsController, ChatsState>((ref) {
-  ref.watch(authControllerProvider.select((s) => s.activeTenantId));
-  return ChatsController(ref);
-});
+    NotifierProvider.autoDispose<ChatsController, ChatsState>(
+      ChatsController.new,
+    );

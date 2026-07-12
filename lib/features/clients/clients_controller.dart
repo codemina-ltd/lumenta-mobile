@@ -45,12 +45,15 @@ class ClientsState {
   );
 }
 
-class ClientsController extends StateNotifier<ClientsState> {
-  ClientsController(this._ref) : super(const ClientsState()) {
-    refresh();
+class ClientsController extends Notifier<ClientsState> {
+  @override
+  ClientsState build() {
+    // Re-created whenever the active tenant changes, so the list re-scopes.
+    ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+    // Deferred: build() must return the initial state before `state` is used.
+    Future.microtask(refresh);
+    return const ClientsState();
   }
-
-  final Ref _ref;
 
   Future<void> refresh() async {
     state = state.copyWith(loading: true, clearError: true);
@@ -71,12 +74,10 @@ class ClientsController extends StateNotifier<ClientsState> {
 
   Future<void> _loadPage(int page, {required bool replace}) async {
     try {
-      final result = await _ref
+      final result = await ref
           .read(clientsRepoProvider)
           .list(search: state.search, page: page);
-      final items = replace
-          ? result.data
-          : [...state.items, ...result.data];
+      final items = replace ? result.data : [...state.items, ...result.data];
       state = state.copyWith(
         items: items,
         loading: false,
@@ -91,9 +92,7 @@ class ClientsController extends StateNotifier<ClientsState> {
   }
 }
 
-/// Re-created whenever the active tenant changes, so the list re-scopes.
 final clientsControllerProvider =
-    StateNotifierProvider.autoDispose<ClientsController, ClientsState>((ref) {
-  ref.watch(authControllerProvider.select((s) => s.activeTenantId));
-  return ClientsController(ref);
-});
+    NotifierProvider.autoDispose<ClientsController, ClientsState>(
+      ClientsController.new,
+    );

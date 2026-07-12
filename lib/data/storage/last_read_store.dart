@@ -4,32 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// Per-chat last-read timestamps kept on-device (D7). The schema has no
-/// per-user inbound read state, so unread badges are driven locally.
-class LastReadStore extends ChangeNotifier {
-  LastReadStore([FlutterSecureStorage? storage])
-    : _storage = storage ?? const FlutterSecureStorage();
+/// Immutable snapshot of the per-chat last-read timestamps. Watching widgets
+/// query it directly (`isUnread`); mutations go through [LastReadStore].
+@immutable
+class LastReadState {
+  const LastReadState(this._map);
 
-  final FlutterSecureStorage _storage;
-  static const _key = 'chat_last_read';
-
-  Map<String, String> _map = {};
-  bool _loaded = false;
-
-  Future<void> _ensureLoaded() async {
-    if (_loaded) return;
-    final raw = await _storage.read(key: _key);
-    if (raw != null) {
-      try {
-        _map = Map<String, String>.from(jsonDecode(raw) as Map);
-      } catch (_) {
-        _map = {};
-      }
-    }
-    _loaded = true;
-  }
-
-  Future<void> hydrate() => _ensureLoaded();
+  final Map<String, String> _map;
 
   DateTime? lastRead(String clientId) {
     final iso = _map[clientId];
@@ -43,17 +24,46 @@ class LastReadStore extends ChangeNotifier {
     if (read == null) return true;
     return lastMessageAt.isAfter(read);
   }
+}
+
+/// Per-chat last-read timestamps kept on-device (D7). The schema has no
+/// per-user inbound read state, so unread badges are driven locally.
+class LastReadStore extends Notifier<LastReadState> {
+  static const _storage = FlutterSecureStorage();
+  static const _key = 'chat_last_read';
+
+  Map<String, String> _map = {};
+  bool _loaded = false;
+
+  @override
+  LastReadState build() => const LastReadState({});
+
+  Future<void> _ensureLoaded() async {
+    if (_loaded) return;
+    final raw = await _storage.read(key: _key);
+    if (raw != null) {
+      try {
+        _map = Map<String, String>.from(jsonDecode(raw) as Map);
+      } catch (_) {
+        _map = {};
+      }
+    }
+    _loaded = true;
+    state = LastReadState(Map.unmodifiable(_map));
+  }
+
+  Future<void> hydrate() => _ensureLoaded();
 
   Future<void> markRead(String clientId, DateTime when) async {
     await _ensureLoaded();
-    final existing = lastRead(clientId);
+    final existing = state.lastRead(clientId);
     if (existing != null && !when.isAfter(existing)) return;
     _map[clientId] = when.toIso8601String();
     await _storage.write(key: _key, value: jsonEncode(_map));
-    notifyListeners();
+    state = LastReadState(Map.unmodifiable(_map));
   }
 }
 
-final lastReadStoreProvider = ChangeNotifierProvider<LastReadStore>((ref) {
-  return LastReadStore();
-});
+final lastReadStoreProvider = NotifierProvider<LastReadStore, LastReadState>(
+  LastReadStore.new,
+);
