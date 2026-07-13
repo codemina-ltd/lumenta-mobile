@@ -6,8 +6,8 @@ part of 'contact_field.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ContactFieldImpl _$$ContactFieldImplFromJson(Map<String, dynamic> json) =>
-    _$ContactFieldImpl(
+_ContactField _$ContactFieldFromJson(Map<String, dynamic> json) =>
+    _ContactField(
       id: json['id'] as String,
       key: json['key'] as String,
       label: json['label'] as String,
@@ -19,7 +19,7 @@ _$ContactFieldImpl _$$ContactFieldImplFromJson(Map<String, dynamic> json) =>
       displayOrder: (json['displayOrder'] as num?)?.toInt() ?? 0,
     );
 
-Map<String, dynamic> _$$ContactFieldImplToJson(_$ContactFieldImpl instance) =>
+Map<String, dynamic> _$ContactFieldToJson(_ContactField instance) =>
     <String, dynamic>{
       'id': instance.id,
       'key': instance.key,
@@ -30,9 +30,9 @@ Map<String, dynamic> _$$ContactFieldImplToJson(_$ContactFieldImpl instance) =>
       'displayOrder': instance.displayOrder,
     };
 
-_$ContactLifecycleStageImpl _$$ContactLifecycleStageImplFromJson(
+_ContactLifecycleStage _$ContactLifecycleStageFromJson(
   Map<String, dynamic> json,
-) => _$ContactLifecycleStageImpl(
+) => _ContactLifecycleStage(
   id: json['id'] as String,
   key: json['key'] as String,
   label: json['label'] as String,
@@ -41,8 +41,8 @@ _$ContactLifecycleStageImpl _$$ContactLifecycleStageImplFromJson(
   isDefault: json['isDefault'] as bool? ?? false,
 );
 
-Map<String, dynamic> _$$ContactLifecycleStageImplToJson(
-  _$ContactLifecycleStageImpl instance,
+Map<String, dynamic> _$ContactLifecycleStageToJson(
+  _ContactLifecycleStage instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'key': instance.key,

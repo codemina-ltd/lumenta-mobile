@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,326 +9,289 @@ part of 'conversation.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-Conversation _$ConversationFromJson(Map<String, dynamic> json) {
-  return _Conversation.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Conversation {
-  /// Client id (the chat is keyed by client).
-  @JsonKey(readValue: _clientId)
-  String get clientId => throw _privateConstructorUsedError;
-  String get phoneNumber => throw _privateConstructorUsedError;
-  String? get profileName => throw _privateConstructorUsedError;
-  String? get lastMessageBody => throw _privateConstructorUsedError;
-  @JsonKey(unknownEnumValue: MessageType.text)
-  MessageType? get lastMessageType => throw _privateConstructorUsedError;
-  @JsonKey(unknownEnumValue: MessageDirection.inbound)
-  MessageDirection? get lastMessageDirection =>
-      throw _privateConstructorUsedError;
-  String? get lastMessageAt => throw _privateConstructorUsedError;
+
+/// Client id (the chat is keyed by client).
+@JsonKey(readValue: _clientId) String get clientId; String get phoneNumber; String? get profileName; String? get lastMessageBody;@JsonKey(unknownEnumValue: MessageType.text) MessageType? get lastMessageType;@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? get lastMessageDirection; String? get lastMessageAt;
+/// Create a copy of Conversation
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ConversationCopyWith<Conversation> get copyWith => _$ConversationCopyWithImpl<Conversation>(this as Conversation, _$identity);
 
   /// Serializes this Conversation to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of Conversation
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ConversationCopyWith<Conversation> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Conversation&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.lastMessageBody, lastMessageBody) || other.lastMessageBody == lastMessageBody)&&(identical(other.lastMessageType, lastMessageType) || other.lastMessageType == lastMessageType)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,clientId,phoneNumber,profileName,lastMessageBody,lastMessageType,lastMessageDirection,lastMessageAt);
+
+@override
+String toString() {
+  return 'Conversation(clientId: $clientId, phoneNumber: $phoneNumber, profileName: $profileName, lastMessageBody: $lastMessageBody, lastMessageType: $lastMessageType, lastMessageDirection: $lastMessageDirection, lastMessageAt: $lastMessageAt)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ConversationCopyWith<$Res> {
-  factory $ConversationCopyWith(
-    Conversation value,
-    $Res Function(Conversation) then,
-  ) = _$ConversationCopyWithImpl<$Res, Conversation>;
-  @useResult
-  $Res call({
-    @JsonKey(readValue: _clientId) String clientId,
-    String phoneNumber,
-    String? profileName,
-    String? lastMessageBody,
-    @JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    MessageDirection? lastMessageDirection,
-    String? lastMessageAt,
-  });
-}
+abstract mixin class $ConversationCopyWith<$Res>  {
+  factory $ConversationCopyWith(Conversation value, $Res Function(Conversation) _then) = _$ConversationCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(readValue: _clientId) String clientId, String phoneNumber, String? profileName, String? lastMessageBody,@JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? lastMessageDirection, String? lastMessageAt
+});
 
+
+
+
+}
 /// @nodoc
-class _$ConversationCopyWithImpl<$Res, $Val extends Conversation>
+class _$ConversationCopyWithImpl<$Res>
     implements $ConversationCopyWith<$Res> {
-  _$ConversationCopyWithImpl(this._value, this._then);
+  _$ConversationCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Conversation _self;
+  final $Res Function(Conversation) _then;
 
-  /// Create a copy of Conversation
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? clientId = null,
-    Object? phoneNumber = null,
-    Object? profileName = freezed,
-    Object? lastMessageBody = freezed,
-    Object? lastMessageType = freezed,
-    Object? lastMessageDirection = freezed,
-    Object? lastMessageAt = freezed,
-  }) {
-    return _then(
-      _value.copyWith(
-            clientId: null == clientId
-                ? _value.clientId
-                : clientId // ignore: cast_nullable_to_non_nullable
-                      as String,
-            phoneNumber: null == phoneNumber
-                ? _value.phoneNumber
-                : phoneNumber // ignore: cast_nullable_to_non_nullable
-                      as String,
-            profileName: freezed == profileName
-                ? _value.profileName
-                : profileName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            lastMessageBody: freezed == lastMessageBody
-                ? _value.lastMessageBody
-                : lastMessageBody // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            lastMessageType: freezed == lastMessageType
-                ? _value.lastMessageType
-                : lastMessageType // ignore: cast_nullable_to_non_nullable
-                      as MessageType?,
-            lastMessageDirection: freezed == lastMessageDirection
-                ? _value.lastMessageDirection
-                : lastMessageDirection // ignore: cast_nullable_to_non_nullable
-                      as MessageDirection?,
-            lastMessageAt: freezed == lastMessageAt
-                ? _value.lastMessageAt
-                : lastMessageAt // ignore: cast_nullable_to_non_nullable
-                      as String?,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of Conversation
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? phoneNumber = null,Object? profileName = freezed,Object? lastMessageBody = freezed,Object? lastMessageType = freezed,Object? lastMessageDirection = freezed,Object? lastMessageAt = freezed,}) {
+  return _then(_self.copyWith(
+clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String?,lastMessageBody: freezed == lastMessageBody ? _self.lastMessageBody : lastMessageBody // ignore: cast_nullable_to_non_nullable
+as String?,lastMessageType: freezed == lastMessageType ? _self.lastMessageType : lastMessageType // ignore: cast_nullable_to_non_nullable
+as MessageType?,lastMessageDirection: freezed == lastMessageDirection ? _self.lastMessageDirection : lastMessageDirection // ignore: cast_nullable_to_non_nullable
+as MessageDirection?,lastMessageAt: freezed == lastMessageAt ? _self.lastMessageAt : lastMessageAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$ConversationImplCopyWith<$Res>
-    implements $ConversationCopyWith<$Res> {
-  factory _$$ConversationImplCopyWith(
-    _$ConversationImpl value,
-    $Res Function(_$ConversationImpl) then,
-  ) = __$$ConversationImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({
-    @JsonKey(readValue: _clientId) String clientId,
-    String phoneNumber,
-    String? profileName,
-    String? lastMessageBody,
-    @JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    MessageDirection? lastMessageDirection,
-    String? lastMessageAt,
-  });
 }
 
-/// @nodoc
-class __$$ConversationImplCopyWithImpl<$Res>
-    extends _$ConversationCopyWithImpl<$Res, _$ConversationImpl>
-    implements _$$ConversationImplCopyWith<$Res> {
-  __$$ConversationImplCopyWithImpl(
-    _$ConversationImpl _value,
-    $Res Function(_$ConversationImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of Conversation
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? clientId = null,
-    Object? phoneNumber = null,
-    Object? profileName = freezed,
-    Object? lastMessageBody = freezed,
-    Object? lastMessageType = freezed,
-    Object? lastMessageDirection = freezed,
-    Object? lastMessageAt = freezed,
-  }) {
-    return _then(
-      _$ConversationImpl(
-        clientId: null == clientId
-            ? _value.clientId
-            : clientId // ignore: cast_nullable_to_non_nullable
-                  as String,
-        phoneNumber: null == phoneNumber
-            ? _value.phoneNumber
-            : phoneNumber // ignore: cast_nullable_to_non_nullable
-                  as String,
-        profileName: freezed == profileName
-            ? _value.profileName
-            : profileName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        lastMessageBody: freezed == lastMessageBody
-            ? _value.lastMessageBody
-            : lastMessageBody // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        lastMessageType: freezed == lastMessageType
-            ? _value.lastMessageType
-            : lastMessageType // ignore: cast_nullable_to_non_nullable
-                  as MessageType?,
-        lastMessageDirection: freezed == lastMessageDirection
-            ? _value.lastMessageDirection
-            : lastMessageDirection // ignore: cast_nullable_to_non_nullable
-                  as MessageDirection?,
-        lastMessageAt: freezed == lastMessageAt
-            ? _value.lastMessageAt
-            : lastMessageAt // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [Conversation].
+extension ConversationPatterns on Conversation {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Conversation value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Conversation() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Conversation value)  $default,){
+final _that = this;
+switch (_that) {
+case _Conversation():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Conversation value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Conversation() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _clientId)  String clientId,  String phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Conversation() when $default != null:
+return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMessageBody,_that.lastMessageType,_that.lastMessageDirection,_that.lastMessageAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _clientId)  String clientId,  String phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)  $default,) {final _that = this;
+switch (_that) {
+case _Conversation():
+return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMessageBody,_that.lastMessageType,_that.lastMessageDirection,_that.lastMessageAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _clientId)  String clientId,  String phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)?  $default,) {final _that = this;
+switch (_that) {
+case _Conversation() when $default != null:
+return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMessageBody,_that.lastMessageType,_that.lastMessageDirection,_that.lastMessageAt);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ConversationImpl extends _Conversation {
-  const _$ConversationImpl({
-    @JsonKey(readValue: _clientId) required this.clientId,
-    required this.phoneNumber,
-    this.profileName,
-    this.lastMessageBody,
-    @JsonKey(unknownEnumValue: MessageType.text) this.lastMessageType,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    this.lastMessageDirection,
-    this.lastMessageAt,
-  }) : super._();
 
-  factory _$ConversationImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ConversationImplFromJson(json);
+class _Conversation extends Conversation {
+  const _Conversation({@JsonKey(readValue: _clientId) required this.clientId, required this.phoneNumber, this.profileName, this.lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text) this.lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound) this.lastMessageDirection, this.lastMessageAt}): super._();
+  factory _Conversation.fromJson(Map<String, dynamic> json) => _$ConversationFromJson(json);
 
-  /// Client id (the chat is keyed by client).
-  @override
-  @JsonKey(readValue: _clientId)
-  final String clientId;
-  @override
-  final String phoneNumber;
-  @override
-  final String? profileName;
-  @override
-  final String? lastMessageBody;
-  @override
-  @JsonKey(unknownEnumValue: MessageType.text)
-  final MessageType? lastMessageType;
-  @override
-  @JsonKey(unknownEnumValue: MessageDirection.inbound)
-  final MessageDirection? lastMessageDirection;
-  @override
-  final String? lastMessageAt;
+/// Client id (the chat is keyed by client).
+@override@JsonKey(readValue: _clientId) final  String clientId;
+@override final  String phoneNumber;
+@override final  String? profileName;
+@override final  String? lastMessageBody;
+@override@JsonKey(unknownEnumValue: MessageType.text) final  MessageType? lastMessageType;
+@override@JsonKey(unknownEnumValue: MessageDirection.inbound) final  MessageDirection? lastMessageDirection;
+@override final  String? lastMessageAt;
 
-  @override
-  String toString() {
-    return 'Conversation(clientId: $clientId, phoneNumber: $phoneNumber, profileName: $profileName, lastMessageBody: $lastMessageBody, lastMessageType: $lastMessageType, lastMessageDirection: $lastMessageDirection, lastMessageAt: $lastMessageAt)';
-  }
+/// Create a copy of Conversation
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ConversationCopyWith<_Conversation> get copyWith => __$ConversationCopyWithImpl<_Conversation>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ConversationImpl &&
-            (identical(other.clientId, clientId) ||
-                other.clientId == clientId) &&
-            (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber) &&
-            (identical(other.profileName, profileName) ||
-                other.profileName == profileName) &&
-            (identical(other.lastMessageBody, lastMessageBody) ||
-                other.lastMessageBody == lastMessageBody) &&
-            (identical(other.lastMessageType, lastMessageType) ||
-                other.lastMessageType == lastMessageType) &&
-            (identical(other.lastMessageDirection, lastMessageDirection) ||
-                other.lastMessageDirection == lastMessageDirection) &&
-            (identical(other.lastMessageAt, lastMessageAt) ||
-                other.lastMessageAt == lastMessageAt));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    clientId,
-    phoneNumber,
-    profileName,
-    lastMessageBody,
-    lastMessageType,
-    lastMessageDirection,
-    lastMessageAt,
-  );
-
-  /// Create a copy of Conversation
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ConversationImplCopyWith<_$ConversationImpl> get copyWith =>
-      __$$ConversationImplCopyWithImpl<_$ConversationImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ConversationImplToJson(this);
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$ConversationToJson(this, );
 }
 
-abstract class _Conversation extends Conversation {
-  const factory _Conversation({
-    @JsonKey(readValue: _clientId) required final String clientId,
-    required final String phoneNumber,
-    final String? profileName,
-    final String? lastMessageBody,
-    @JsonKey(unknownEnumValue: MessageType.text)
-    final MessageType? lastMessageType,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    final MessageDirection? lastMessageDirection,
-    final String? lastMessageAt,
-  }) = _$ConversationImpl;
-  const _Conversation._() : super._();
-
-  factory _Conversation.fromJson(Map<String, dynamic> json) =
-      _$ConversationImpl.fromJson;
-
-  /// Client id (the chat is keyed by client).
-  @override
-  @JsonKey(readValue: _clientId)
-  String get clientId;
-  @override
-  String get phoneNumber;
-  @override
-  String? get profileName;
-  @override
-  String? get lastMessageBody;
-  @override
-  @JsonKey(unknownEnumValue: MessageType.text)
-  MessageType? get lastMessageType;
-  @override
-  @JsonKey(unknownEnumValue: MessageDirection.inbound)
-  MessageDirection? get lastMessageDirection;
-  @override
-  String? get lastMessageAt;
-
-  /// Create a copy of Conversation
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ConversationImplCopyWith<_$ConversationImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Conversation&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.lastMessageBody, lastMessageBody) || other.lastMessageBody == lastMessageBody)&&(identical(other.lastMessageType, lastMessageType) || other.lastMessageType == lastMessageType)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,clientId,phoneNumber,profileName,lastMessageBody,lastMessageType,lastMessageDirection,lastMessageAt);
+
+@override
+String toString() {
+  return 'Conversation(clientId: $clientId, phoneNumber: $phoneNumber, profileName: $profileName, lastMessageBody: $lastMessageBody, lastMessageType: $lastMessageType, lastMessageDirection: $lastMessageDirection, lastMessageAt: $lastMessageAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ConversationCopyWith<$Res> implements $ConversationCopyWith<$Res> {
+  factory _$ConversationCopyWith(_Conversation value, $Res Function(_Conversation) _then) = __$ConversationCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(readValue: _clientId) String clientId, String phoneNumber, String? profileName, String? lastMessageBody,@JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? lastMessageDirection, String? lastMessageAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$ConversationCopyWithImpl<$Res>
+    implements _$ConversationCopyWith<$Res> {
+  __$ConversationCopyWithImpl(this._self, this._then);
+
+  final _Conversation _self;
+  final $Res Function(_Conversation) _then;
+
+/// Create a copy of Conversation
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? clientId = null,Object? phoneNumber = null,Object? profileName = freezed,Object? lastMessageBody = freezed,Object? lastMessageType = freezed,Object? lastMessageDirection = freezed,Object? lastMessageAt = freezed,}) {
+  return _then(_Conversation(
+clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String?,lastMessageBody: freezed == lastMessageBody ? _self.lastMessageBody : lastMessageBody // ignore: cast_nullable_to_non_nullable
+as String?,lastMessageType: freezed == lastMessageType ? _self.lastMessageType : lastMessageType // ignore: cast_nullable_to_non_nullable
+as MessageType?,lastMessageDirection: freezed == lastMessageDirection ? _self.lastMessageDirection : lastMessageDirection // ignore: cast_nullable_to_non_nullable
+as MessageDirection?,lastMessageAt: freezed == lastMessageAt ? _self.lastMessageAt : lastMessageAt // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+// dart format on

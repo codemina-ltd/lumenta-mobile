@@ -6,7 +6,7 @@ part of 'sender.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SenderImpl _$$SenderImplFromJson(Map<String, dynamic> json) => _$SenderImpl(
+_Sender _$SenderFromJson(Map<String, dynamic> json) => _Sender(
   id: json['id'] as String,
   displayName: json['displayName'] as String? ?? '',
   phoneNumber: json['phoneNumber'] as String?,
@@ -21,15 +21,14 @@ _$SenderImpl _$$SenderImplFromJson(Map<String, dynamic> json) => _$SenderImpl(
   isDefault: json['isDefault'] as bool? ?? false,
 );
 
-Map<String, dynamic> _$$SenderImplToJson(_$SenderImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'displayName': instance.displayName,
-      'phoneNumber': instance.phoneNumber,
-      'displayPhoneNumber': instance.displayPhoneNumber,
-      'status': _$SenderStatusEnumMap[instance.status]!,
-      'isDefault': instance.isDefault,
-    };
+Map<String, dynamic> _$SenderToJson(_Sender instance) => <String, dynamic>{
+  'id': instance.id,
+  'displayName': instance.displayName,
+  'phoneNumber': instance.phoneNumber,
+  'displayPhoneNumber': instance.displayPhoneNumber,
+  'status': _$SenderStatusEnumMap[instance.status]!,
+  'isDefault': instance.isDefault,
+};
 
 const _$SenderStatusEnumMap = {
   SenderStatus.pending: 'pending',

@@ -57,7 +57,7 @@ enum MessageType {
 
 /// A single message from `GET /v1/clients/:id/messages`.
 @freezed
-class Message with _$Message {
+abstract class Message with _$Message {
   const factory Message({
     required String id,
     @JsonKey(unknownEnumValue: MessageDirection.inbound)
@@ -86,6 +86,10 @@ class Message with _$Message {
     /// Sender (WABA phone number) that carried this message. Null on legacy
     /// rows written before sender attribution existed.
     String? senderId,
+
+    /// "Delete for everyone" tombstone. When set, the server has cleared
+    /// body/media and the bubble renders a "message deleted" placeholder.
+    String? deletedForEveryoneAt,
     required String createdAt,
   }) = _Message;
 
@@ -103,6 +107,7 @@ class Message with _$Message {
       messageType == MessageType.sticker;
   bool get transcriptionReady => transcriptionStatus == 'ready';
   bool get hasReaction => reaction != null && reaction!.isNotEmpty;
+  bool get isDeleted => deletedForEveryoneAt != null;
 
   /// An inbound interactive message is a WhatsApp Flow response — the customer
   /// submitted a form. Mirrors the portal's `ChatBubble` inbound-interactive

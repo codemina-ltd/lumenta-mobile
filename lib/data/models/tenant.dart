@@ -5,7 +5,7 @@ part 'tenant.g.dart';
 
 /// One workspace membership from `GET /v1/tenants`.
 @freezed
-class TenantSummary with _$TenantSummary {
+abstract class TenantSummary with _$TenantSummary {
   const factory TenantSummary({
     required String id,
     required String name,

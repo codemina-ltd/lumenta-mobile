@@ -7,7 +7,7 @@ part 'contact_profile.g.dart';
 /// Per-(tenant, client) CRM profile (LUMENTA_GROWTH plan §2.1). Mobile shows
 /// lifecycle + opt-in read + quick-edit (§14).
 @freezed
-class ContactProfile with _$ContactProfile {
+abstract class ContactProfile with _$ContactProfile {
   const factory ContactProfile({
     required String id,
     required String clientId,
@@ -27,7 +27,7 @@ class ContactProfile with _$ContactProfile {
 
 /// `GET /contacts/:clientId/profile` envelope.
 @freezed
-class ContactProfileResponse with _$ContactProfileResponse {
+abstract class ContactProfileResponse with _$ContactProfileResponse {
   const factory ContactProfileResponse({
     ContactProfile? profile,
     @Default(<String, String>{}) Map<String, String> fieldValues,

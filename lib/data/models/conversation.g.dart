@@ -6,8 +6,8 @@ part of 'conversation.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ConversationImpl _$$ConversationImplFromJson(Map<String, dynamic> json) =>
-    _$ConversationImpl(
+_Conversation _$ConversationFromJson(Map<String, dynamic> json) =>
+    _Conversation(
       clientId: _clientId(json, 'clientId') as String,
       phoneNumber: json['phoneNumber'] as String,
       profileName: json['profileName'] as String?,
@@ -25,7 +25,7 @@ _$ConversationImpl _$$ConversationImplFromJson(Map<String, dynamic> json) =>
       lastMessageAt: json['lastMessageAt'] as String?,
     );
 
-Map<String, dynamic> _$$ConversationImplToJson(_$ConversationImpl instance) =>
+Map<String, dynamic> _$ConversationToJson(_Conversation instance) =>
     <String, dynamic>{
       'clientId': instance.clientId,
       'phoneNumber': instance.phoneNumber,

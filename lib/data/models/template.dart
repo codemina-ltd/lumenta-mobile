@@ -11,7 +11,7 @@ part 'template.g.dart';
 /// for positional templates, `{ param_name, example }[]` for named ones), so
 /// they stay untyped here and are interpreted in the util.
 @freezed
-class Template with _$Template {
+abstract class Template with _$Template {
   const factory Template({
     required String id,
     @Default('') String name,

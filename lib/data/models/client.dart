@@ -5,7 +5,7 @@ part 'client.g.dart';
 
 /// A tenant client from `GET /v1/clients`.
 @freezed
-class Client with _$Client {
+abstract class Client with _$Client {
   const factory Client({
     required String id,
     required String phoneNumber,

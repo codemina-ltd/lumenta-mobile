@@ -11,7 +11,7 @@ part 'conversation_sender.g.dart';
 /// from `GET /v1/clients/:id/conversation-senders` — one row per sender,
 /// ordered by most recent activity. Backs the per-sender thread tabs.
 @freezed
-class ConversationSender with _$ConversationSender {
+abstract class ConversationSender with _$ConversationSender {
   const factory ConversationSender({
     required String senderId,
     String? displayName,

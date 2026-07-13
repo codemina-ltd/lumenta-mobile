@@ -534,4 +534,31 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get reactionFailed =>
       'Impossible d\'envoyer la réaction. Veuillez réessayer.';
+
+  @override
+  String get messageActionDeleteForMe => 'Supprimer pour moi';
+
+  @override
+  String get messageActionDeleteForEveryone => 'Supprimer pour tout le monde';
+
+  @override
+  String get deleteMessageTitle => 'Supprimer le message ?';
+
+  @override
+  String get deleteForMeConfirm =>
+      'Ce message sera retiré de votre vue uniquement. Les autres membres de l\'équipe le verront toujours.';
+
+  @override
+  String get deleteForEveryoneConfirm =>
+      'Ce message sera supprimé pour tous les membres de l\'équipe. Le client conservera sa copie sur WhatsApp.';
+
+  @override
+  String get deleteConfirmAction => 'Supprimer';
+
+  @override
+  String get deleteMessageFailed =>
+      'Impossible de supprimer le message. Veuillez réessayer.';
+
+  @override
+  String get messageDeleted => 'Ce message a été supprimé';
 }

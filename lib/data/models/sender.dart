@@ -19,7 +19,7 @@ enum SenderStatus {
 /// Only the fields the per-sender chat threads need; the endpoint returns
 /// more (profile, tier, provider) which are ignored here.
 @freezed
-class Sender with _$Sender {
+abstract class Sender with _$Sender {
   const factory Sender({
     required String id,
     @Default('') String displayName,

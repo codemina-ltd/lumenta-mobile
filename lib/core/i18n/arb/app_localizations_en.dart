@@ -525,4 +525,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reactionFailed => 'Couldn\'t send the reaction. Please try again.';
+
+  @override
+  String get messageActionDeleteForMe => 'Delete for me';
+
+  @override
+  String get messageActionDeleteForEveryone => 'Delete for everyone';
+
+  @override
+  String get deleteMessageTitle => 'Delete message?';
+
+  @override
+  String get deleteForMeConfirm =>
+      'This message will be removed from your view only. Other team members will still see it.';
+
+  @override
+  String get deleteForEveryoneConfirm =>
+      'This message will be deleted for all team members. The client\'s WhatsApp will keep its copy.';
+
+  @override
+  String get deleteConfirmAction => 'Delete';
+
+  @override
+  String get deleteMessageFailed =>
+      'Couldn\'t delete the message. Please try again.';
+
+  @override
+  String get messageDeleted => 'This message was deleted';
 }

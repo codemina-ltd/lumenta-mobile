@@ -7,7 +7,7 @@ part 'inbox_note.g.dart';
 /// An internal-only note on a thread (LUMENTA_GROWTH plan §1.1). Never sent to
 /// the customer.
 @freezed
-class InboxNote with _$InboxNote {
+abstract class InboxNote with _$InboxNote {
   const factory InboxNote({
     required String id,
     required String threadId,

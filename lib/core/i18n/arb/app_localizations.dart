@@ -1083,6 +1083,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t send the reaction. Please try again.'**
   String get reactionFailed;
+
+  /// No description provided for @messageActionDeleteForMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete for me'**
+  String get messageActionDeleteForMe;
+
+  /// No description provided for @messageActionDeleteForEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete for everyone'**
+  String get messageActionDeleteForEveryone;
+
+  /// No description provided for @deleteMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete message?'**
+  String get deleteMessageTitle;
+
+  /// No description provided for @deleteForMeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This message will be removed from your view only. Other team members will still see it.'**
+  String get deleteForMeConfirm;
+
+  /// No description provided for @deleteForEveryoneConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This message will be deleted for all team members. The client\'s WhatsApp will keep its copy.'**
+  String get deleteForEveryoneConfirm;
+
+  /// No description provided for @deleteConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteConfirmAction;
+
+  /// No description provided for @deleteMessageFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete the message. Please try again.'**
+  String get deleteMessageFailed;
+
+  /// No description provided for @messageDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'This message was deleted'**
+  String get messageDeleted;
 }
 
 class _AppLocalizationsDelegate

@@ -6,9 +6,9 @@ part of 'notification.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AppNotificationImpl _$$AppNotificationImplFromJson(
+_AppNotification _$AppNotificationFromJson(
   Map<String, dynamic> json,
-) => _$AppNotificationImpl(
+) => _AppNotification(
   id: json['id'] as String,
   eventKey: json['eventKey'] as String,
   category: json['category'] as String?,
@@ -33,24 +33,23 @@ _$AppNotificationImpl _$$AppNotificationImplFromJson(
   createdAt: json['createdAt'] as String,
 );
 
-Map<String, dynamic> _$$AppNotificationImplToJson(
-  _$AppNotificationImpl instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'eventKey': instance.eventKey,
-  'category': instance.category,
-  'severity': _$NotificationSeverityEnumMap[instance.severity]!,
-  'titleKey': instance.titleKey,
-  'titleParams': instance.titleParams,
-  'bodyKey': instance.bodyKey,
-  'bodyParams': instance.bodyParams,
-  'resourceType': instance.resourceType,
-  'resourceId': instance.resourceId,
-  'actionUrl': instance.actionUrl,
-  'readAt': instance.readAt,
-  'archivedAt': instance.archivedAt,
-  'createdAt': instance.createdAt,
-};
+Map<String, dynamic> _$AppNotificationToJson(_AppNotification instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'eventKey': instance.eventKey,
+      'category': instance.category,
+      'severity': _$NotificationSeverityEnumMap[instance.severity]!,
+      'titleKey': instance.titleKey,
+      'titleParams': instance.titleParams,
+      'bodyKey': instance.bodyKey,
+      'bodyParams': instance.bodyParams,
+      'resourceType': instance.resourceType,
+      'resourceId': instance.resourceId,
+      'actionUrl': instance.actionUrl,
+      'readAt': instance.readAt,
+      'archivedAt': instance.archivedAt,
+      'createdAt': instance.createdAt,
+    };
 
 const _$NotificationSeverityEnumMap = {
   NotificationSeverity.info: 'info',

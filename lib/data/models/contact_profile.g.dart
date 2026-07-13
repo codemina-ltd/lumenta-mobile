@@ -6,8 +6,8 @@ part of 'contact_profile.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ContactProfileImpl _$$ContactProfileImplFromJson(Map<String, dynamic> json) =>
-    _$ContactProfileImpl(
+_ContactProfile _$ContactProfileFromJson(Map<String, dynamic> json) =>
+    _ContactProfile(
       id: json['id'] as String,
       clientId: json['clientId'] as String,
       lifecycleStageId: json['lifecycleStageId'] as String?,
@@ -20,24 +20,23 @@ _$ContactProfileImpl _$$ContactProfileImplFromJson(Map<String, dynamic> json) =>
       lastContactedAt: json['lastContactedAt'] as String?,
     );
 
-Map<String, dynamic> _$$ContactProfileImplToJson(
-  _$ContactProfileImpl instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'clientId': instance.clientId,
-  'lifecycleStageId': instance.lifecycleStageId,
-  'source': instance.source,
-  'displayName': instance.displayName,
-  'locale': instance.locale,
-  'optInMarketing': instance.optInMarketing,
-  'optInAt': instance.optInAt,
-  'firstContactedAt': instance.firstContactedAt,
-  'lastContactedAt': instance.lastContactedAt,
-};
+Map<String, dynamic> _$ContactProfileToJson(_ContactProfile instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'clientId': instance.clientId,
+      'lifecycleStageId': instance.lifecycleStageId,
+      'source': instance.source,
+      'displayName': instance.displayName,
+      'locale': instance.locale,
+      'optInMarketing': instance.optInMarketing,
+      'optInAt': instance.optInAt,
+      'firstContactedAt': instance.firstContactedAt,
+      'lastContactedAt': instance.lastContactedAt,
+    };
 
-_$ContactProfileResponseImpl _$$ContactProfileResponseImplFromJson(
+_ContactProfileResponse _$ContactProfileResponseFromJson(
   Map<String, dynamic> json,
-) => _$ContactProfileResponseImpl(
+) => _ContactProfileResponse(
   profile: json['profile'] == null
       ? null
       : ContactProfile.fromJson(json['profile'] as Map<String, dynamic>),
@@ -48,8 +47,8 @@ _$ContactProfileResponseImpl _$$ContactProfileResponseImplFromJson(
       const <String, String>{},
 );
 
-Map<String, dynamic> _$$ContactProfileResponseImplToJson(
-  _$ContactProfileResponseImpl instance,
+Map<String, dynamic> _$ContactProfileResponseToJson(
+  _ContactProfileResponse instance,
 ) => <String, dynamic>{
   'profile': instance.profile,
   'fieldValues': instance.fieldValues,

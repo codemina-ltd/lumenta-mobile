@@ -6,7 +6,7 @@ part 'inbox_label.g.dart';
 
 /// A tenant-defined label applied to inbox threads (LUMENTA_GROWTH plan §1.1).
 @freezed
-class InboxLabel with _$InboxLabel {
+abstract class InboxLabel with _$InboxLabel {
   const factory InboxLabel({
     required String id,
     required String name,

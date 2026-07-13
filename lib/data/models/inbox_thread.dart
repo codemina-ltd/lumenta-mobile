@@ -8,7 +8,7 @@ part 'inbox_thread.g.dart';
 
 /// Contact summary embedded on a thread (the operator's "who is this").
 @freezed
-class InboxThreadContact with _$InboxThreadContact {
+abstract class InboxThreadContact with _$InboxThreadContact {
   const factory InboxThreadContact({
     required String id,
     required String phoneNumber,
@@ -23,7 +23,7 @@ class InboxThreadContact with _$InboxThreadContact {
 /// (LUMENTA_GROWTH plan §1.1). The mobile app is the operate-on-the-go
 /// surface (§14): read, assign, change status, label, note.
 @freezed
-class InboxThread with _$InboxThread {
+abstract class InboxThread with _$InboxThread {
   const factory InboxThread({
     required String id,
     required String senderId,

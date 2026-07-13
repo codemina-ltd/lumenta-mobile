@@ -6,16 +6,15 @@ part of 'inbox_note.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$InboxNoteImpl _$$InboxNoteImplFromJson(Map<String, dynamic> json) =>
-    _$InboxNoteImpl(
-      id: json['id'] as String,
-      threadId: json['threadId'] as String,
-      authorUserId: json['authorUserId'] as String,
-      body: json['body'] as String,
-      createdAt: json['createdAt'] as String?,
-    );
+_InboxNote _$InboxNoteFromJson(Map<String, dynamic> json) => _InboxNote(
+  id: json['id'] as String,
+  threadId: json['threadId'] as String,
+  authorUserId: json['authorUserId'] as String,
+  body: json['body'] as String,
+  createdAt: json['createdAt'] as String?,
+);
 
-Map<String, dynamic> _$$InboxNoteImplToJson(_$InboxNoteImpl instance) =>
+Map<String, dynamic> _$InboxNoteToJson(_InboxNote instance) =>
     <String, dynamic>{
       'id': instance.id,
       'threadId': instance.threadId,

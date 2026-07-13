@@ -5,7 +5,7 @@ part 'user.g.dart';
 
 /// Current user profile from `GET /v1/me`.
 @freezed
-class User with _$User {
+abstract class User with _$User {
   const factory User({
     required String id,
     String? email,

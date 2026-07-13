@@ -6,8 +6,8 @@ part of 'tenant.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TenantSummaryImpl _$$TenantSummaryImplFromJson(Map<String, dynamic> json) =>
-    _$TenantSummaryImpl(
+_TenantSummary _$TenantSummaryFromJson(Map<String, dynamic> json) =>
+    _TenantSummary(
       id: json['id'] as String,
       name: json['name'] as String,
       slug: json['slug'] as String?,
@@ -16,7 +16,7 @@ _$TenantSummaryImpl _$$TenantSummaryImplFromJson(Map<String, dynamic> json) =>
       suspendedReason: json['suspendedReason'] as String?,
     );
 
-Map<String, dynamic> _$$TenantSummaryImplToJson(_$TenantSummaryImpl instance) =>
+Map<String, dynamic> _$TenantSummaryToJson(_TenantSummary instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

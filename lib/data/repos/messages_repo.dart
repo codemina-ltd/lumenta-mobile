@@ -115,6 +115,20 @@ class MessagesRepo {
     return Message.fromJson(res.data!);
   }
 
+  /// `DELETE /messages/:id?scope=me|everyone` — delete a message.
+  /// `me` hides it from this user only; `everyone` tombstones it for the
+  /// whole workspace (outbound messages only). Returns the updated message.
+  Future<Message> deleteMessage({
+    required String messageId,
+    required String scope,
+  }) async {
+    final res = await _dio.delete<Map<String, dynamic>>(
+      '/messages/$messageId',
+      queryParameters: {'scope': scope},
+    );
+    return Message.fromJson(res.data!);
+  }
+
   /// `POST /messages/send-media` — multipart media reply.
   Future<Message> sendMedia({
     required String to,

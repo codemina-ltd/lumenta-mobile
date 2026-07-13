@@ -523,4 +523,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reactionFailed => 'تعذّر إرسال التفاعل. حاول مرة أخرى.';
+
+  @override
+  String get messageActionDeleteForMe => 'حذف لديّ';
+
+  @override
+  String get messageActionDeleteForEveryone => 'حذف لدى الجميع';
+
+  @override
+  String get deleteMessageTitle => 'حذف الرسالة؟';
+
+  @override
+  String get deleteForMeConfirm =>
+      'ستتم إزالة هذه الرسالة من عرضك فقط، وسيظل بإمكان بقية أعضاء الفريق رؤيتها.';
+
+  @override
+  String get deleteForEveryoneConfirm =>
+      'سيتم حذف هذه الرسالة لجميع أعضاء الفريق، وستبقى نسخة العميل في واتساب كما هي.';
+
+  @override
+  String get deleteConfirmAction => 'حذف';
+
+  @override
+  String get deleteMessageFailed => 'تعذّر حذف الرسالة. حاول مرة أخرى.';
+
+  @override
+  String get messageDeleted => 'تم حذف هذه الرسالة';
 }

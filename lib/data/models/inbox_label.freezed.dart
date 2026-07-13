@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,196 +9,275 @@ part of 'inbox_label.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-InboxLabel _$InboxLabelFromJson(Map<String, dynamic> json) {
-  return _InboxLabel.fromJson(json);
-}
 
 /// @nodoc
 mixin _$InboxLabel {
-  String get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String get color => throw _privateConstructorUsedError;
+
+ String get id; String get name; String get color;
+/// Create a copy of InboxLabel
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$InboxLabelCopyWith<InboxLabel> get copyWith => _$InboxLabelCopyWithImpl<InboxLabel>(this as InboxLabel, _$identity);
 
   /// Serializes this InboxLabel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of InboxLabel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $InboxLabelCopyWith<InboxLabel> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxLabel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,color);
+
+@override
+String toString() {
+  return 'InboxLabel(id: $id, name: $name, color: $color)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $InboxLabelCopyWith<$Res> {
-  factory $InboxLabelCopyWith(
-    InboxLabel value,
-    $Res Function(InboxLabel) then,
-  ) = _$InboxLabelCopyWithImpl<$Res, InboxLabel>;
-  @useResult
-  $Res call({String id, String name, String color});
-}
+abstract mixin class $InboxLabelCopyWith<$Res>  {
+  factory $InboxLabelCopyWith(InboxLabel value, $Res Function(InboxLabel) _then) = _$InboxLabelCopyWithImpl;
+@useResult
+$Res call({
+ String id, String name, String color
+});
 
+
+
+
+}
 /// @nodoc
-class _$InboxLabelCopyWithImpl<$Res, $Val extends InboxLabel>
+class _$InboxLabelCopyWithImpl<$Res>
     implements $InboxLabelCopyWith<$Res> {
-  _$InboxLabelCopyWithImpl(this._value, this._then);
+  _$InboxLabelCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final InboxLabel _self;
+  final $Res Function(InboxLabel) _then;
 
-  /// Create a copy of InboxLabel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? id = null, Object? name = null, Object? color = null}) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            name: null == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                      as String,
-            color: null == color
-                ? _value.color
-                : color // ignore: cast_nullable_to_non_nullable
-                      as String,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of InboxLabel
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? color = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$InboxLabelImplCopyWith<$Res>
-    implements $InboxLabelCopyWith<$Res> {
-  factory _$$InboxLabelImplCopyWith(
-    _$InboxLabelImpl value,
-    $Res Function(_$InboxLabelImpl) then,
-  ) = __$$InboxLabelImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String id, String name, String color});
 }
 
-/// @nodoc
-class __$$InboxLabelImplCopyWithImpl<$Res>
-    extends _$InboxLabelCopyWithImpl<$Res, _$InboxLabelImpl>
-    implements _$$InboxLabelImplCopyWith<$Res> {
-  __$$InboxLabelImplCopyWithImpl(
-    _$InboxLabelImpl _value,
-    $Res Function(_$InboxLabelImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of InboxLabel
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? id = null, Object? name = null, Object? color = null}) {
-    return _then(
-      _$InboxLabelImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as String,
-        name: null == name
-            ? _value.name
-            : name // ignore: cast_nullable_to_non_nullable
-                  as String,
-        color: null == color
-            ? _value.color
-            : color // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [InboxLabel].
+extension InboxLabelPatterns on InboxLabel {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _InboxLabel value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _InboxLabel() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _InboxLabel value)  $default,){
+final _that = this;
+switch (_that) {
+case _InboxLabel():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _InboxLabel value)?  $default,){
+final _that = this;
+switch (_that) {
+case _InboxLabel() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String color)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _InboxLabel() when $default != null:
+return $default(_that.id,_that.name,_that.color);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String color)  $default,) {final _that = this;
+switch (_that) {
+case _InboxLabel():
+return $default(_that.id,_that.name,_that.color);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String color)?  $default,) {final _that = this;
+switch (_that) {
+case _InboxLabel() when $default != null:
+return $default(_that.id,_that.name,_that.color);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$InboxLabelImpl implements _InboxLabel {
-  const _$InboxLabelImpl({
-    required this.id,
-    required this.name,
-    this.color = '#00C896',
-  });
 
-  factory _$InboxLabelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$InboxLabelImplFromJson(json);
+class _InboxLabel implements InboxLabel {
+  const _InboxLabel({required this.id, required this.name, this.color = '#00C896'});
+  factory _InboxLabel.fromJson(Map<String, dynamic> json) => _$InboxLabelFromJson(json);
 
-  @override
-  final String id;
-  @override
-  final String name;
-  @override
-  @JsonKey()
-  final String color;
+@override final  String id;
+@override final  String name;
+@override@JsonKey() final  String color;
 
-  @override
-  String toString() {
-    return 'InboxLabel(id: $id, name: $name, color: $color)';
-  }
+/// Create a copy of InboxLabel
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$InboxLabelCopyWith<_InboxLabel> get copyWith => __$InboxLabelCopyWithImpl<_InboxLabel>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$InboxLabelImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.color, color) || other.color == color));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, id, name, color);
-
-  /// Create a copy of InboxLabel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$InboxLabelImplCopyWith<_$InboxLabelImpl> get copyWith =>
-      __$$InboxLabelImplCopyWithImpl<_$InboxLabelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$InboxLabelImplToJson(this);
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$InboxLabelToJson(this, );
 }
 
-abstract class _InboxLabel implements InboxLabel {
-  const factory _InboxLabel({
-    required final String id,
-    required final String name,
-    final String color,
-  }) = _$InboxLabelImpl;
-
-  factory _InboxLabel.fromJson(Map<String, dynamic> json) =
-      _$InboxLabelImpl.fromJson;
-
-  @override
-  String get id;
-  @override
-  String get name;
-  @override
-  String get color;
-
-  /// Create a copy of InboxLabel
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$InboxLabelImplCopyWith<_$InboxLabelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxLabel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.color, color) || other.color == color));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,name,color);
+
+@override
+String toString() {
+  return 'InboxLabel(id: $id, name: $name, color: $color)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$InboxLabelCopyWith<$Res> implements $InboxLabelCopyWith<$Res> {
+  factory _$InboxLabelCopyWith(_InboxLabel value, $Res Function(_InboxLabel) _then) = __$InboxLabelCopyWithImpl;
+@override @useResult
+$Res call({
+ String id, String name, String color
+});
+
+
+
+
+}
+/// @nodoc
+class __$InboxLabelCopyWithImpl<$Res>
+    implements _$InboxLabelCopyWith<$Res> {
+  __$InboxLabelCopyWithImpl(this._self, this._then);
+
+  final _InboxLabel _self;
+  final $Res Function(_InboxLabel) _then;
+
+/// Create a copy of InboxLabel
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? color = null,}) {
+  return _then(_InboxLabel(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

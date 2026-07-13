@@ -212,5 +212,14 @@
   },
   "forwardFailed": "Couldn't forward. Please try again.",
   "shareFailed": "Couldn't share. Please try again.",
-  "reactionFailed": "Couldn't send the reaction. Please try again."
+  "reactionFailed": "Couldn't send the reaction. Please try again.",
+
+  "messageActionDeleteForMe": "Delete for me",
+  "messageActionDeleteForEveryone": "Delete for everyone",
+  "deleteMessageTitle": "Delete message?",
+  "deleteForMeConfirm": "This message will be removed from your view only. Other team members will still see it.",
+  "deleteForEveryoneConfirm": "This message will be deleted for all team members. The client's WhatsApp will keep its copy.",
+  "deleteConfirmAction": "Delete",
+  "deleteMessageFailed": "Couldn't delete the message. Please try again.",
+  "messageDeleted": "This message was deleted"
 }

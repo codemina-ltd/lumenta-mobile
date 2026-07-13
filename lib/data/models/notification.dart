@@ -18,7 +18,7 @@ enum NotificationSeverity {
 /// An in-app notification from `GET /v1/notifications`. Title/body are stored as
 /// i18n keys + params (rendered client-side via NotificationI18n).
 @freezed
-class AppNotification with _$AppNotification {
+abstract class AppNotification with _$AppNotification {
   const factory AppNotification({
     required String id,
     required String eventKey,

@@ -18,7 +18,7 @@ import '../chat_providers.dart';
 import '../chats_controller.dart';
 import '../thread_controller.dart';
 
-enum _MessageAction { copy, forward, share }
+enum _MessageAction { copy, forward, share, deleteForMe, deleteForEveryone }
 
 /// Emoji picked from the quick-reaction row; [emoji] null means "remove the
 /// current reaction".
@@ -31,12 +31,13 @@ class _ReactionChoice {
 const _quickReactions = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 
 /// Long-press actions for a chat bubble: react (inbound only), copy, forward,
-/// share.
+/// share, delete (for me / for everyone).
 ///
 /// Which actions appear depends on the message: copy/share need extractable
 /// text or media; forward needs text or re-uploadable media; reacting needs
-/// an inbound (client) message. A message offering none of these (e.g. an
-/// outbound flow message) silently doesn't open the sheet.
+/// an inbound (client) message; deleting needs a persisted (non-optimistic)
+/// row, and "delete for everyone" additionally an outbound, not-yet-deleted
+/// one. A message offering none of these silently doesn't open the sheet.
 Future<void> showMessageActions(
   BuildContext context,
   WidgetRef ref, {
@@ -47,8 +48,20 @@ Future<void> showMessageActions(
   final canCopy = text != null;
   final canForward = message.hasMedia || text != null;
   final canShare = message.hasMedia || text != null;
-  final canReact = !message.isOutbound;
-  if (!canCopy && !canForward && !canShare && !canReact) return;
+  final canReact = !message.isOutbound && !message.isDeleted;
+  // Optimistic bubbles carry a synthetic `temp_` id the API doesn't know.
+  final isPersisted = !message.id.startsWith('temp_');
+  final canDeleteForMe = isPersisted;
+  final canDeleteForEveryone =
+      isPersisted && message.isOutbound && !message.isDeleted;
+  if (!canCopy &&
+      !canForward &&
+      !canShare &&
+      !canReact &&
+      !canDeleteForMe &&
+      !canDeleteForEveryone) {
+    return;
+  }
 
   HapticFeedback.mediumImpact();
   final l10n = AppLocalizations.of(context);
@@ -105,6 +118,22 @@ Future<void> showMessageActions(
                 label: l10n.messageActionShare,
                 onTap: () => Navigator.pop(sheetCtx, _MessageAction.share),
               ),
+            if (canDeleteForMe)
+              _ActionTile(
+                icon: Icons.delete_outline_rounded,
+                color: AppColors.ember,
+                label: l10n.messageActionDeleteForMe,
+                onTap: () =>
+                    Navigator.pop(sheetCtx, _MessageAction.deleteForMe),
+              ),
+            if (canDeleteForEveryone)
+              _ActionTile(
+                icon: Icons.delete_forever_rounded,
+                color: AppColors.ember,
+                label: l10n.messageActionDeleteForEveryone,
+                onTap: () =>
+                    Navigator.pop(sheetCtx, _MessageAction.deleteForEveryone),
+              ),
           ],
         ),
       ),
@@ -137,12 +166,49 @@ Future<void> showMessageActions(
       );
       if (client == null) return;
       await _forward(ref, messenger, l10n, message, text, threadKey, client);
+    case _MessageAction.deleteForMe:
+    case _MessageAction.deleteForEveryone:
+      final forEveryone = action == _MessageAction.deleteForEveryone;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogCtx) => AlertDialog(
+          title: Text(l10n.deleteMessageTitle),
+          content: Text(
+            forEveryone
+                ? l10n.deleteForEveryoneConfirm
+                : l10n.deleteForMeConfirm,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogCtx, false),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(dialogCtx, true),
+              style: TextButton.styleFrom(foregroundColor: AppColors.ember),
+              child: Text(l10n.deleteConfirmAction),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+      final controller = ref.read(
+        threadControllerProvider(threadKey).notifier,
+      );
+      final ok = forEveryone
+          ? await controller.deleteForEveryone(message.id)
+          : await controller.deleteForMe(message.id);
+      if (!ok) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.deleteMessageFailed)),
+        );
+      }
   }
 }
 
 /// Text worth copying/sharing/forwarding, or null when the message has none.
 String? _extractText(Message m) {
-  if (m.isFlowResponse) return null;
+  if (m.isDeleted || m.isFlowResponse) return null;
   if (m.messageType == MessageType.location) {
     final coords = (m.locationLatitude != null && m.locationLongitude != null)
         ? '${m.locationLatitude}, ${m.locationLongitude}'

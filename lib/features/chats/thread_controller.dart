@@ -209,6 +209,55 @@ class ThreadController extends Notifier<ThreadState> {
     }
   }
 
+  /// Hide a message from this user's view ("delete for me"). The bubble
+  /// disappears optimistically and comes back on failure. Returns true on
+  /// success.
+  Future<bool> deleteForMe(String messageId) async {
+    final current = _byId.remove(messageId);
+    if (current == null) return false;
+    _resort();
+    try {
+      await ref
+          .read(messagesRepoProvider)
+          .deleteMessage(messageId: messageId, scope: 'me');
+      return true;
+    } catch (_) {
+      _byId[messageId] = current;
+      _resort();
+      return false;
+    }
+  }
+
+  /// Tombstone a message for every workspace member ("delete for everyone",
+  /// outbound only — mirrors the API rule). The bubble flips to a "message
+  /// deleted" placeholder optimistically and reverts on failure. Returns true
+  /// on success.
+  Future<bool> deleteForEveryone(String messageId) async {
+    final current = _byId[messageId];
+    if (current == null) return false;
+    _byId[messageId] = current.copyWith(
+      deletedForEveryoneAt: DateTime.now().toUtc().toIso8601String(),
+      body: '',
+      messageType: MessageType.text,
+      mediaUrl: null,
+      mediaMimeType: null,
+      reaction: null,
+    );
+    _resort();
+    try {
+      final updated = await ref
+          .read(messagesRepoProvider)
+          .deleteMessage(messageId: messageId, scope: 'everyone');
+      _byId[messageId] = updated;
+      _resort();
+      return true;
+    } catch (_) {
+      _byId[messageId] = current;
+      _resort();
+      return false;
+    }
+  }
+
   /// A confirmed send may be the first message via this sender — refetch the
   /// tab list so a thread started via "Start conversation via…" materialises.
   void _onSendSucceeded() {

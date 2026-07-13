@@ -10,7 +10,7 @@ part 'conversation.g.dart';
 /// contract (one entry per client with its last message). The backend endpoint
 /// is a deferred prerequisite; field names follow the agreed contract.
 @freezed
-class Conversation with _$Conversation {
+abstract class Conversation with _$Conversation {
   const factory Conversation({
     /// Client id (the chat is keyed by client).
     @JsonKey(readValue: _clientId) required String clientId,

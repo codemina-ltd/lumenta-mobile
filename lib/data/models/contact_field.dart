@@ -6,7 +6,7 @@ part 'contact_field.g.dart';
 
 /// A tenant-defined typed custom field (LUMENTA_GROWTH plan §2.1).
 @freezed
-class ContactField with _$ContactField {
+abstract class ContactField with _$ContactField {
   const factory ContactField({
     required String id,
     required String key,
@@ -23,7 +23,7 @@ class ContactField with _$ContactField {
 
 /// A tenant-editable lifecycle stage (LUMENTA_GROWTH plan §2.1).
 @freezed
-class ContactLifecycleStage with _$ContactLifecycleStage {
+abstract class ContactLifecycleStage with _$ContactLifecycleStage {
   const factory ContactLifecycleStage({
     required String id,
     required String key,

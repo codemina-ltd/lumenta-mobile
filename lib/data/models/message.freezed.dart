@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,567 +9,340 @@ part of 'message.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-Message _$MessageFromJson(Map<String, dynamic> json) {
-  return _Message.fromJson(json);
-}
 
 /// @nodoc
 mixin _$Message {
-  String get id => throw _privateConstructorUsedError;
-  @JsonKey(unknownEnumValue: MessageDirection.inbound)
-  MessageDirection get direction => throw _privateConstructorUsedError;
-  String get body => throw _privateConstructorUsedError;
-  @JsonKey(unknownEnumValue: MessageStatus.sent)
-  MessageStatus get status => throw _privateConstructorUsedError;
-  @JsonKey(unknownEnumValue: MessageType.unknown)
-  MessageType get messageType => throw _privateConstructorUsedError;
-  String? get mediaUrl => throw _privateConstructorUsedError;
-  String? get mediaMimeType => throw _privateConstructorUsedError;
-  String? get locationLatitude => throw _privateConstructorUsedError;
-  String? get locationLongitude => throw _privateConstructorUsedError;
-  String? get locationName => throw _privateConstructorUsedError;
-  String? get locationAddress => throw _privateConstructorUsedError;
-  String? get transcription => throw _privateConstructorUsedError;
-  String? get transcriptionStatus => throw _privateConstructorUsedError;
 
-  /// Emoji the customer reacted with (webhook writes it onto the reacted-to
-  /// message row); null / empty when there is no active reaction.
-  String? get reaction => throw _privateConstructorUsedError;
-  Map<String, dynamic>? get providerRawPayload =>
-      throw _privateConstructorUsedError;
-
-  /// Sender (WABA phone number) that carried this message. Null on legacy
-  /// rows written before sender attribution existed.
-  String? get senderId => throw _privateConstructorUsedError;
-  String get createdAt => throw _privateConstructorUsedError;
+ String get id;@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection get direction; String get body;@JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus get status;@JsonKey(unknownEnumValue: MessageType.unknown) MessageType get messageType; String? get mediaUrl; String? get mediaMimeType; String? get locationLatitude; String? get locationLongitude; String? get locationName; String? get locationAddress; String? get transcription; String? get transcriptionStatus;/// Emoji the customer reacted with (webhook writes it onto the reacted-to
+/// message row); null / empty when there is no active reaction.
+ String? get reaction; Map<String, dynamic>? get providerRawPayload;/// Sender (WABA phone number) that carried this message. Null on legacy
+/// rows written before sender attribution existed.
+ String? get senderId;/// "Delete for everyone" tombstone. When set, the server has cleared
+/// body/media and the bubble renders a "message deleted" placeholder.
+ String? get deletedForEveryoneAt; String get createdAt;
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MessageCopyWith<Message> get copyWith => _$MessageCopyWithImpl<Message>(this as Message, _$identity);
 
   /// Serializes this Message to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of Message
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $MessageCopyWith<Message> get copyWith => throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Message&&(identical(other.id, id) || other.id == id)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.body, body) || other.body == body)&&(identical(other.status, status) || other.status == status)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl)&&(identical(other.mediaMimeType, mediaMimeType) || other.mediaMimeType == mediaMimeType)&&(identical(other.locationLatitude, locationLatitude) || other.locationLatitude == locationLatitude)&&(identical(other.locationLongitude, locationLongitude) || other.locationLongitude == locationLongitude)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationAddress, locationAddress) || other.locationAddress == locationAddress)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.transcriptionStatus, transcriptionStatus) || other.transcriptionStatus == transcriptionStatus)&&(identical(other.reaction, reaction) || other.reaction == reaction)&&const DeepCollectionEquality().equals(other.providerRawPayload, providerRawPayload)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.deletedForEveryoneAt, deletedForEveryoneAt) || other.deletedForEveryoneAt == deletedForEveryoneAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,direction,body,status,messageType,mediaUrl,mediaMimeType,locationLatitude,locationLongitude,locationName,locationAddress,transcription,transcriptionStatus,reaction,const DeepCollectionEquality().hash(providerRawPayload),senderId,deletedForEveryoneAt,createdAt);
+
+@override
+String toString() {
+  return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, senderId: $senderId, deletedForEveryoneAt: $deletedForEveryoneAt, createdAt: $createdAt)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $MessageCopyWith<$Res> {
-  factory $MessageCopyWith(Message value, $Res Function(Message) then) =
-      _$MessageCopyWithImpl<$Res, Message>;
-  @useResult
-  $Res call({
-    String id,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    MessageDirection direction,
-    String body,
-    @JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,
-    @JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType,
-    String? mediaUrl,
-    String? mediaMimeType,
-    String? locationLatitude,
-    String? locationLongitude,
-    String? locationName,
-    String? locationAddress,
-    String? transcription,
-    String? transcriptionStatus,
-    String? reaction,
-    Map<String, dynamic>? providerRawPayload,
-    String? senderId,
-    String createdAt,
-  });
-}
+abstract mixin class $MessageCopyWith<$Res>  {
+  factory $MessageCopyWith(Message value, $Res Function(Message) _then) = _$MessageCopyWithImpl;
+@useResult
+$Res call({
+ String id,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection direction, String body,@JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,@JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType, String? mediaUrl, String? mediaMimeType, String? locationLatitude, String? locationLongitude, String? locationName, String? locationAddress, String? transcription, String? transcriptionStatus, String? reaction, Map<String, dynamic>? providerRawPayload, String? senderId, String? deletedForEveryoneAt, String createdAt
+});
 
+
+
+
+}
 /// @nodoc
-class _$MessageCopyWithImpl<$Res, $Val extends Message>
+class _$MessageCopyWithImpl<$Res>
     implements $MessageCopyWith<$Res> {
-  _$MessageCopyWithImpl(this._value, this._then);
+  _$MessageCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Message _self;
+  final $Res Function(Message) _then;
 
-  /// Create a copy of Message
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? direction = null,
-    Object? body = null,
-    Object? status = null,
-    Object? messageType = null,
-    Object? mediaUrl = freezed,
-    Object? mediaMimeType = freezed,
-    Object? locationLatitude = freezed,
-    Object? locationLongitude = freezed,
-    Object? locationName = freezed,
-    Object? locationAddress = freezed,
-    Object? transcription = freezed,
-    Object? transcriptionStatus = freezed,
-    Object? reaction = freezed,
-    Object? providerRawPayload = freezed,
-    Object? senderId = freezed,
-    Object? createdAt = null,
-  }) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            direction: null == direction
-                ? _value.direction
-                : direction // ignore: cast_nullable_to_non_nullable
-                      as MessageDirection,
-            body: null == body
-                ? _value.body
-                : body // ignore: cast_nullable_to_non_nullable
-                      as String,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as MessageStatus,
-            messageType: null == messageType
-                ? _value.messageType
-                : messageType // ignore: cast_nullable_to_non_nullable
-                      as MessageType,
-            mediaUrl: freezed == mediaUrl
-                ? _value.mediaUrl
-                : mediaUrl // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            mediaMimeType: freezed == mediaMimeType
-                ? _value.mediaMimeType
-                : mediaMimeType // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            locationLatitude: freezed == locationLatitude
-                ? _value.locationLatitude
-                : locationLatitude // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            locationLongitude: freezed == locationLongitude
-                ? _value.locationLongitude
-                : locationLongitude // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            locationName: freezed == locationName
-                ? _value.locationName
-                : locationName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            locationAddress: freezed == locationAddress
-                ? _value.locationAddress
-                : locationAddress // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            transcription: freezed == transcription
-                ? _value.transcription
-                : transcription // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            transcriptionStatus: freezed == transcriptionStatus
-                ? _value.transcriptionStatus
-                : transcriptionStatus // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            reaction: freezed == reaction
-                ? _value.reaction
-                : reaction // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            providerRawPayload: freezed == providerRawPayload
-                ? _value.providerRawPayload
-                : providerRawPayload // ignore: cast_nullable_to_non_nullable
-                      as Map<String, dynamic>?,
-            senderId: freezed == senderId
-                ? _value.senderId
-                : senderId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            createdAt: null == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as String,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? direction = null,Object? body = null,Object? status = null,Object? messageType = null,Object? mediaUrl = freezed,Object? mediaMimeType = freezed,Object? locationLatitude = freezed,Object? locationLongitude = freezed,Object? locationName = freezed,Object? locationAddress = freezed,Object? transcription = freezed,Object? transcriptionStatus = freezed,Object? reaction = freezed,Object? providerRawPayload = freezed,Object? senderId = freezed,Object? deletedForEveryoneAt = freezed,Object? createdAt = null,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,direction: null == direction ? _self.direction : direction // ignore: cast_nullable_to_non_nullable
+as MessageDirection,body: null == body ? _self.body : body // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as MessageStatus,messageType: null == messageType ? _self.messageType : messageType // ignore: cast_nullable_to_non_nullable
+as MessageType,mediaUrl: freezed == mediaUrl ? _self.mediaUrl : mediaUrl // ignore: cast_nullable_to_non_nullable
+as String?,mediaMimeType: freezed == mediaMimeType ? _self.mediaMimeType : mediaMimeType // ignore: cast_nullable_to_non_nullable
+as String?,locationLatitude: freezed == locationLatitude ? _self.locationLatitude : locationLatitude // ignore: cast_nullable_to_non_nullable
+as String?,locationLongitude: freezed == locationLongitude ? _self.locationLongitude : locationLongitude // ignore: cast_nullable_to_non_nullable
+as String?,locationName: freezed == locationName ? _self.locationName : locationName // ignore: cast_nullable_to_non_nullable
+as String?,locationAddress: freezed == locationAddress ? _self.locationAddress : locationAddress // ignore: cast_nullable_to_non_nullable
+as String?,transcription: freezed == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
+as String?,transcriptionStatus: freezed == transcriptionStatus ? _self.transcriptionStatus : transcriptionStatus // ignore: cast_nullable_to_non_nullable
+as String?,reaction: freezed == reaction ? _self.reaction : reaction // ignore: cast_nullable_to_non_nullable
+as String?,providerRawPayload: freezed == providerRawPayload ? _self.providerRawPayload : providerRawPayload // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,senderId: freezed == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
+as String?,deletedForEveryoneAt: freezed == deletedForEveryoneAt ? _self.deletedForEveryoneAt : deletedForEveryoneAt // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$MessageImplCopyWith<$Res> implements $MessageCopyWith<$Res> {
-  factory _$$MessageImplCopyWith(
-    _$MessageImpl value,
-    $Res Function(_$MessageImpl) then,
-  ) = __$$MessageImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({
-    String id,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    MessageDirection direction,
-    String body,
-    @JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,
-    @JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType,
-    String? mediaUrl,
-    String? mediaMimeType,
-    String? locationLatitude,
-    String? locationLongitude,
-    String? locationName,
-    String? locationAddress,
-    String? transcription,
-    String? transcriptionStatus,
-    String? reaction,
-    Map<String, dynamic>? providerRawPayload,
-    String? senderId,
-    String createdAt,
-  });
 }
 
-/// @nodoc
-class __$$MessageImplCopyWithImpl<$Res>
-    extends _$MessageCopyWithImpl<$Res, _$MessageImpl>
-    implements _$$MessageImplCopyWith<$Res> {
-  __$$MessageImplCopyWithImpl(
-    _$MessageImpl _value,
-    $Res Function(_$MessageImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of Message
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? direction = null,
-    Object? body = null,
-    Object? status = null,
-    Object? messageType = null,
-    Object? mediaUrl = freezed,
-    Object? mediaMimeType = freezed,
-    Object? locationLatitude = freezed,
-    Object? locationLongitude = freezed,
-    Object? locationName = freezed,
-    Object? locationAddress = freezed,
-    Object? transcription = freezed,
-    Object? transcriptionStatus = freezed,
-    Object? reaction = freezed,
-    Object? providerRawPayload = freezed,
-    Object? senderId = freezed,
-    Object? createdAt = null,
-  }) {
-    return _then(
-      _$MessageImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as String,
-        direction: null == direction
-            ? _value.direction
-            : direction // ignore: cast_nullable_to_non_nullable
-                  as MessageDirection,
-        body: null == body
-            ? _value.body
-            : body // ignore: cast_nullable_to_non_nullable
-                  as String,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as MessageStatus,
-        messageType: null == messageType
-            ? _value.messageType
-            : messageType // ignore: cast_nullable_to_non_nullable
-                  as MessageType,
-        mediaUrl: freezed == mediaUrl
-            ? _value.mediaUrl
-            : mediaUrl // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        mediaMimeType: freezed == mediaMimeType
-            ? _value.mediaMimeType
-            : mediaMimeType // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        locationLatitude: freezed == locationLatitude
-            ? _value.locationLatitude
-            : locationLatitude // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        locationLongitude: freezed == locationLongitude
-            ? _value.locationLongitude
-            : locationLongitude // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        locationName: freezed == locationName
-            ? _value.locationName
-            : locationName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        locationAddress: freezed == locationAddress
-            ? _value.locationAddress
-            : locationAddress // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        transcription: freezed == transcription
-            ? _value.transcription
-            : transcription // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        transcriptionStatus: freezed == transcriptionStatus
-            ? _value.transcriptionStatus
-            : transcriptionStatus // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        reaction: freezed == reaction
-            ? _value.reaction
-            : reaction // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        providerRawPayload: freezed == providerRawPayload
-            ? _value._providerRawPayload
-            : providerRawPayload // ignore: cast_nullable_to_non_nullable
-                  as Map<String, dynamic>?,
-        senderId: freezed == senderId
-            ? _value.senderId
-            : senderId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        createdAt: null == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [Message].
+extension MessagePatterns on Message {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Message value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Message value)  $default,){
+final _that = this;
+switch (_that) {
+case _Message():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Message value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload,  String? senderId,  String? deletedForEveryoneAt,  String createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.senderId,_that.deletedForEveryoneAt,_that.createdAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload,  String? senderId,  String? deletedForEveryoneAt,  String createdAt)  $default,) {final _that = this;
+switch (_that) {
+case _Message():
+return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.senderId,_that.deletedForEveryoneAt,_that.createdAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload,  String? senderId,  String? deletedForEveryoneAt,  String createdAt)?  $default,) {final _that = this;
+switch (_that) {
+case _Message() when $default != null:
+return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.senderId,_that.deletedForEveryoneAt,_that.createdAt);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$MessageImpl extends _Message {
-  const _$MessageImpl({
-    required this.id,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    required this.direction,
-    this.body = '',
-    @JsonKey(unknownEnumValue: MessageStatus.sent)
-    this.status = MessageStatus.sent,
-    @JsonKey(unknownEnumValue: MessageType.unknown)
-    this.messageType = MessageType.text,
-    this.mediaUrl,
-    this.mediaMimeType,
-    this.locationLatitude,
-    this.locationLongitude,
-    this.locationName,
-    this.locationAddress,
-    this.transcription,
-    this.transcriptionStatus,
-    this.reaction,
-    final Map<String, dynamic>? providerRawPayload,
-    this.senderId,
-    required this.createdAt,
-  }) : _providerRawPayload = providerRawPayload,
-       super._();
 
-  factory _$MessageImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MessageImplFromJson(json);
+class _Message extends Message {
+  const _Message({required this.id, @JsonKey(unknownEnumValue: MessageDirection.inbound) required this.direction, this.body = '', @JsonKey(unknownEnumValue: MessageStatus.sent) this.status = MessageStatus.sent, @JsonKey(unknownEnumValue: MessageType.unknown) this.messageType = MessageType.text, this.mediaUrl, this.mediaMimeType, this.locationLatitude, this.locationLongitude, this.locationName, this.locationAddress, this.transcription, this.transcriptionStatus, this.reaction, final  Map<String, dynamic>? providerRawPayload, this.senderId, this.deletedForEveryoneAt, required this.createdAt}): _providerRawPayload = providerRawPayload,super._();
+  factory _Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
 
-  @override
-  final String id;
-  @override
-  @JsonKey(unknownEnumValue: MessageDirection.inbound)
-  final MessageDirection direction;
-  @override
-  @JsonKey()
-  final String body;
-  @override
-  @JsonKey(unknownEnumValue: MessageStatus.sent)
-  final MessageStatus status;
-  @override
-  @JsonKey(unknownEnumValue: MessageType.unknown)
-  final MessageType messageType;
-  @override
-  final String? mediaUrl;
-  @override
-  final String? mediaMimeType;
-  @override
-  final String? locationLatitude;
-  @override
-  final String? locationLongitude;
-  @override
-  final String? locationName;
-  @override
-  final String? locationAddress;
-  @override
-  final String? transcription;
-  @override
-  final String? transcriptionStatus;
-
-  /// Emoji the customer reacted with (webhook writes it onto the reacted-to
-  /// message row); null / empty when there is no active reaction.
-  @override
-  final String? reaction;
-  final Map<String, dynamic>? _providerRawPayload;
-  @override
-  Map<String, dynamic>? get providerRawPayload {
-    final value = _providerRawPayload;
-    if (value == null) return null;
-    if (_providerRawPayload is EqualUnmodifiableMapView)
-      return _providerRawPayload;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
-  }
-
-  /// Sender (WABA phone number) that carried this message. Null on legacy
-  /// rows written before sender attribution existed.
-  @override
-  final String? senderId;
-  @override
-  final String createdAt;
-
-  @override
-  String toString() {
-    return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, senderId: $senderId, createdAt: $createdAt)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MessageImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.direction, direction) ||
-                other.direction == direction) &&
-            (identical(other.body, body) || other.body == body) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.messageType, messageType) ||
-                other.messageType == messageType) &&
-            (identical(other.mediaUrl, mediaUrl) ||
-                other.mediaUrl == mediaUrl) &&
-            (identical(other.mediaMimeType, mediaMimeType) ||
-                other.mediaMimeType == mediaMimeType) &&
-            (identical(other.locationLatitude, locationLatitude) ||
-                other.locationLatitude == locationLatitude) &&
-            (identical(other.locationLongitude, locationLongitude) ||
-                other.locationLongitude == locationLongitude) &&
-            (identical(other.locationName, locationName) ||
-                other.locationName == locationName) &&
-            (identical(other.locationAddress, locationAddress) ||
-                other.locationAddress == locationAddress) &&
-            (identical(other.transcription, transcription) ||
-                other.transcription == transcription) &&
-            (identical(other.transcriptionStatus, transcriptionStatus) ||
-                other.transcriptionStatus == transcriptionStatus) &&
-            (identical(other.reaction, reaction) ||
-                other.reaction == reaction) &&
-            const DeepCollectionEquality().equals(
-              other._providerRawPayload,
-              _providerRawPayload,
-            ) &&
-            (identical(other.senderId, senderId) ||
-                other.senderId == senderId) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    direction,
-    body,
-    status,
-    messageType,
-    mediaUrl,
-    mediaMimeType,
-    locationLatitude,
-    locationLongitude,
-    locationName,
-    locationAddress,
-    transcription,
-    transcriptionStatus,
-    reaction,
-    const DeepCollectionEquality().hash(_providerRawPayload),
-    senderId,
-    createdAt,
-  );
-
-  /// Create a copy of Message
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>
-      __$$MessageImplCopyWithImpl<_$MessageImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MessageImplToJson(this);
-  }
+@override final  String id;
+@override@JsonKey(unknownEnumValue: MessageDirection.inbound) final  MessageDirection direction;
+@override@JsonKey() final  String body;
+@override@JsonKey(unknownEnumValue: MessageStatus.sent) final  MessageStatus status;
+@override@JsonKey(unknownEnumValue: MessageType.unknown) final  MessageType messageType;
+@override final  String? mediaUrl;
+@override final  String? mediaMimeType;
+@override final  String? locationLatitude;
+@override final  String? locationLongitude;
+@override final  String? locationName;
+@override final  String? locationAddress;
+@override final  String? transcription;
+@override final  String? transcriptionStatus;
+/// Emoji the customer reacted with (webhook writes it onto the reacted-to
+/// message row); null / empty when there is no active reaction.
+@override final  String? reaction;
+ final  Map<String, dynamic>? _providerRawPayload;
+@override Map<String, dynamic>? get providerRawPayload {
+  final value = _providerRawPayload;
+  if (value == null) return null;
+  if (_providerRawPayload is EqualUnmodifiableMapView) return _providerRawPayload;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
 }
 
-abstract class _Message extends Message {
-  const factory _Message({
-    required final String id,
-    @JsonKey(unknownEnumValue: MessageDirection.inbound)
-    required final MessageDirection direction,
-    final String body,
-    @JsonKey(unknownEnumValue: MessageStatus.sent) final MessageStatus status,
-    @JsonKey(unknownEnumValue: MessageType.unknown)
-    final MessageType messageType,
-    final String? mediaUrl,
-    final String? mediaMimeType,
-    final String? locationLatitude,
-    final String? locationLongitude,
-    final String? locationName,
-    final String? locationAddress,
-    final String? transcription,
-    final String? transcriptionStatus,
-    final String? reaction,
-    final Map<String, dynamic>? providerRawPayload,
-    final String? senderId,
-    required final String createdAt,
-  }) = _$MessageImpl;
-  const _Message._() : super._();
+/// Sender (WABA phone number) that carried this message. Null on legacy
+/// rows written before sender attribution existed.
+@override final  String? senderId;
+/// "Delete for everyone" tombstone. When set, the server has cleared
+/// body/media and the bubble renders a "message deleted" placeholder.
+@override final  String? deletedForEveryoneAt;
+@override final  String createdAt;
 
-  factory _Message.fromJson(Map<String, dynamic> json) = _$MessageImpl.fromJson;
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$MessageCopyWith<_Message> get copyWith => __$MessageCopyWithImpl<_Message>(this, _$identity);
 
-  @override
-  String get id;
-  @override
-  @JsonKey(unknownEnumValue: MessageDirection.inbound)
-  MessageDirection get direction;
-  @override
-  String get body;
-  @override
-  @JsonKey(unknownEnumValue: MessageStatus.sent)
-  MessageStatus get status;
-  @override
-  @JsonKey(unknownEnumValue: MessageType.unknown)
-  MessageType get messageType;
-  @override
-  String? get mediaUrl;
-  @override
-  String? get mediaMimeType;
-  @override
-  String? get locationLatitude;
-  @override
-  String? get locationLongitude;
-  @override
-  String? get locationName;
-  @override
-  String? get locationAddress;
-  @override
-  String? get transcription;
-  @override
-  String? get transcriptionStatus;
-
-  /// Emoji the customer reacted with (webhook writes it onto the reacted-to
-  /// message row); null / empty when there is no active reaction.
-  @override
-  String? get reaction;
-  @override
-  Map<String, dynamic>? get providerRawPayload;
-
-  /// Sender (WABA phone number) that carried this message. Null on legacy
-  /// rows written before sender attribution existed.
-  @override
-  String? get senderId;
-  @override
-  String get createdAt;
-
-  /// Create a copy of Message
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+Map<String, dynamic> toJson() {
+  return _$MessageToJson(this, );
 }
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Message&&(identical(other.id, id) || other.id == id)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.body, body) || other.body == body)&&(identical(other.status, status) || other.status == status)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl)&&(identical(other.mediaMimeType, mediaMimeType) || other.mediaMimeType == mediaMimeType)&&(identical(other.locationLatitude, locationLatitude) || other.locationLatitude == locationLatitude)&&(identical(other.locationLongitude, locationLongitude) || other.locationLongitude == locationLongitude)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationAddress, locationAddress) || other.locationAddress == locationAddress)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.transcriptionStatus, transcriptionStatus) || other.transcriptionStatus == transcriptionStatus)&&(identical(other.reaction, reaction) || other.reaction == reaction)&&const DeepCollectionEquality().equals(other._providerRawPayload, _providerRawPayload)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.deletedForEveryoneAt, deletedForEveryoneAt) || other.deletedForEveryoneAt == deletedForEveryoneAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,direction,body,status,messageType,mediaUrl,mediaMimeType,locationLatitude,locationLongitude,locationName,locationAddress,transcription,transcriptionStatus,reaction,const DeepCollectionEquality().hash(_providerRawPayload),senderId,deletedForEveryoneAt,createdAt);
+
+@override
+String toString() {
+  return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, senderId: $senderId, deletedForEveryoneAt: $deletedForEveryoneAt, createdAt: $createdAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
+  factory _$MessageCopyWith(_Message value, $Res Function(_Message) _then) = __$MessageCopyWithImpl;
+@override @useResult
+$Res call({
+ String id,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection direction, String body,@JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,@JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType, String? mediaUrl, String? mediaMimeType, String? locationLatitude, String? locationLongitude, String? locationName, String? locationAddress, String? transcription, String? transcriptionStatus, String? reaction, Map<String, dynamic>? providerRawPayload, String? senderId, String? deletedForEveryoneAt, String createdAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$MessageCopyWithImpl<$Res>
+    implements _$MessageCopyWith<$Res> {
+  __$MessageCopyWithImpl(this._self, this._then);
+
+  final _Message _self;
+  final $Res Function(_Message) _then;
+
+/// Create a copy of Message
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? direction = null,Object? body = null,Object? status = null,Object? messageType = null,Object? mediaUrl = freezed,Object? mediaMimeType = freezed,Object? locationLatitude = freezed,Object? locationLongitude = freezed,Object? locationName = freezed,Object? locationAddress = freezed,Object? transcription = freezed,Object? transcriptionStatus = freezed,Object? reaction = freezed,Object? providerRawPayload = freezed,Object? senderId = freezed,Object? deletedForEveryoneAt = freezed,Object? createdAt = null,}) {
+  return _then(_Message(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,direction: null == direction ? _self.direction : direction // ignore: cast_nullable_to_non_nullable
+as MessageDirection,body: null == body ? _self.body : body // ignore: cast_nullable_to_non_nullable
+as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as MessageStatus,messageType: null == messageType ? _self.messageType : messageType // ignore: cast_nullable_to_non_nullable
+as MessageType,mediaUrl: freezed == mediaUrl ? _self.mediaUrl : mediaUrl // ignore: cast_nullable_to_non_nullable
+as String?,mediaMimeType: freezed == mediaMimeType ? _self.mediaMimeType : mediaMimeType // ignore: cast_nullable_to_non_nullable
+as String?,locationLatitude: freezed == locationLatitude ? _self.locationLatitude : locationLatitude // ignore: cast_nullable_to_non_nullable
+as String?,locationLongitude: freezed == locationLongitude ? _self.locationLongitude : locationLongitude // ignore: cast_nullable_to_non_nullable
+as String?,locationName: freezed == locationName ? _self.locationName : locationName // ignore: cast_nullable_to_non_nullable
+as String?,locationAddress: freezed == locationAddress ? _self.locationAddress : locationAddress // ignore: cast_nullable_to_non_nullable
+as String?,transcription: freezed == transcription ? _self.transcription : transcription // ignore: cast_nullable_to_non_nullable
+as String?,transcriptionStatus: freezed == transcriptionStatus ? _self.transcriptionStatus : transcriptionStatus // ignore: cast_nullable_to_non_nullable
+as String?,reaction: freezed == reaction ? _self.reaction : reaction // ignore: cast_nullable_to_non_nullable
+as String?,providerRawPayload: freezed == providerRawPayload ? _self._providerRawPayload : providerRawPayload // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,senderId: freezed == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
+as String?,deletedForEveryoneAt: freezed == deletedForEveryoneAt ? _self.deletedForEveryoneAt : deletedForEveryoneAt // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

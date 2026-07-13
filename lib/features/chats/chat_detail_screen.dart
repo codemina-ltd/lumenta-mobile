@@ -428,6 +428,28 @@ class _MessageBubble extends ConsumerWidget {
   }
 
   Widget _content(BuildContext context, WidgetRef ref, Color textColor) {
+    if (message.isDeleted) {
+      // Tombstone placeholder — mirrors the portal's deleted bubble.
+      final muted = textColor.withValues(alpha: 0.7);
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.block_rounded, size: 15, color: muted),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              AppLocalizations.of(context).messageDeleted,
+              style: TextStyle(
+                color: muted,
+                fontStyle: FontStyle.italic,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     final repo = ref.read(messagesRepoProvider);
     final headers = ref.watch(mediaHeadersProvider);
     final url = repo.mediaUrl(message.id);

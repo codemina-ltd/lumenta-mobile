@@ -212,5 +212,14 @@
   },
   "forwardFailed": "Impossible de transférer. Veuillez réessayer.",
   "shareFailed": "Impossible de partager. Veuillez réessayer.",
-  "reactionFailed": "Impossible d'envoyer la réaction. Veuillez réessayer."
+  "reactionFailed": "Impossible d'envoyer la réaction. Veuillez réessayer.",
+
+  "messageActionDeleteForMe": "Supprimer pour moi",
+  "messageActionDeleteForEveryone": "Supprimer pour tout le monde",
+  "deleteMessageTitle": "Supprimer le message ?",
+  "deleteForMeConfirm": "Ce message sera retiré de votre vue uniquement. Les autres membres de l'équipe le verront toujours.",
+  "deleteForEveryoneConfirm": "Ce message sera supprimé pour tous les membres de l'équipe. Le client conservera sa copie sur WhatsApp.",
+  "deleteConfirmAction": "Supprimer",
+  "deleteMessageFailed": "Impossible de supprimer le message. Veuillez réessayer.",
+  "messageDeleted": "Ce message a été supprimé"
 }

@@ -6,63 +6,63 @@ part of 'message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MessageImpl _$$MessageImplFromJson(Map<String, dynamic> json) =>
-    _$MessageImpl(
-      id: json['id'] as String,
-      direction: $enumDecode(
-        _$MessageDirectionEnumMap,
-        json['direction'],
-        unknownValue: MessageDirection.inbound,
-      ),
-      body: json['body'] as String? ?? '',
-      status:
-          $enumDecodeNullable(
-            _$MessageStatusEnumMap,
-            json['status'],
-            unknownValue: MessageStatus.sent,
-          ) ??
-          MessageStatus.sent,
-      messageType:
-          $enumDecodeNullable(
-            _$MessageTypeEnumMap,
-            json['messageType'],
-            unknownValue: MessageType.unknown,
-          ) ??
-          MessageType.text,
-      mediaUrl: json['mediaUrl'] as String?,
-      mediaMimeType: json['mediaMimeType'] as String?,
-      locationLatitude: json['locationLatitude'] as String?,
-      locationLongitude: json['locationLongitude'] as String?,
-      locationName: json['locationName'] as String?,
-      locationAddress: json['locationAddress'] as String?,
-      transcription: json['transcription'] as String?,
-      transcriptionStatus: json['transcriptionStatus'] as String?,
-      reaction: json['reaction'] as String?,
-      providerRawPayload: json['providerRawPayload'] as Map<String, dynamic>?,
-      senderId: json['senderId'] as String?,
-      createdAt: json['createdAt'] as String,
-    );
+_Message _$MessageFromJson(Map<String, dynamic> json) => _Message(
+  id: json['id'] as String,
+  direction: $enumDecode(
+    _$MessageDirectionEnumMap,
+    json['direction'],
+    unknownValue: MessageDirection.inbound,
+  ),
+  body: json['body'] as String? ?? '',
+  status:
+      $enumDecodeNullable(
+        _$MessageStatusEnumMap,
+        json['status'],
+        unknownValue: MessageStatus.sent,
+      ) ??
+      MessageStatus.sent,
+  messageType:
+      $enumDecodeNullable(
+        _$MessageTypeEnumMap,
+        json['messageType'],
+        unknownValue: MessageType.unknown,
+      ) ??
+      MessageType.text,
+  mediaUrl: json['mediaUrl'] as String?,
+  mediaMimeType: json['mediaMimeType'] as String?,
+  locationLatitude: json['locationLatitude'] as String?,
+  locationLongitude: json['locationLongitude'] as String?,
+  locationName: json['locationName'] as String?,
+  locationAddress: json['locationAddress'] as String?,
+  transcription: json['transcription'] as String?,
+  transcriptionStatus: json['transcriptionStatus'] as String?,
+  reaction: json['reaction'] as String?,
+  providerRawPayload: json['providerRawPayload'] as Map<String, dynamic>?,
+  senderId: json['senderId'] as String?,
+  deletedForEveryoneAt: json['deletedForEveryoneAt'] as String?,
+  createdAt: json['createdAt'] as String,
+);
 
-Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'direction': _$MessageDirectionEnumMap[instance.direction]!,
-      'body': instance.body,
-      'status': _$MessageStatusEnumMap[instance.status]!,
-      'messageType': _$MessageTypeEnumMap[instance.messageType]!,
-      'mediaUrl': instance.mediaUrl,
-      'mediaMimeType': instance.mediaMimeType,
-      'locationLatitude': instance.locationLatitude,
-      'locationLongitude': instance.locationLongitude,
-      'locationName': instance.locationName,
-      'locationAddress': instance.locationAddress,
-      'transcription': instance.transcription,
-      'transcriptionStatus': instance.transcriptionStatus,
-      'reaction': instance.reaction,
-      'providerRawPayload': instance.providerRawPayload,
-      'senderId': instance.senderId,
-      'createdAt': instance.createdAt,
-    };
+Map<String, dynamic> _$MessageToJson(_Message instance) => <String, dynamic>{
+  'id': instance.id,
+  'direction': _$MessageDirectionEnumMap[instance.direction]!,
+  'body': instance.body,
+  'status': _$MessageStatusEnumMap[instance.status]!,
+  'messageType': _$MessageTypeEnumMap[instance.messageType]!,
+  'mediaUrl': instance.mediaUrl,
+  'mediaMimeType': instance.mediaMimeType,
+  'locationLatitude': instance.locationLatitude,
+  'locationLongitude': instance.locationLongitude,
+  'locationName': instance.locationName,
+  'locationAddress': instance.locationAddress,
+  'transcription': instance.transcription,
+  'transcriptionStatus': instance.transcriptionStatus,
+  'reaction': instance.reaction,
+  'providerRawPayload': instance.providerRawPayload,
+  'senderId': instance.senderId,
+  'deletedForEveryoneAt': instance.deletedForEveryoneAt,
+  'createdAt': instance.createdAt,
+};
 
 const _$MessageDirectionEnumMap = {
   MessageDirection.inbound: 'inbound',

@@ -212,5 +212,14 @@
   },
   "forwardFailed": "تعذّرت إعادة التوجيه. حاول مرة أخرى.",
   "shareFailed": "تعذّرت المشاركة. حاول مرة أخرى.",
-  "reactionFailed": "تعذّر إرسال التفاعل. حاول مرة أخرى."
+  "reactionFailed": "تعذّر إرسال التفاعل. حاول مرة أخرى.",
+
+  "messageActionDeleteForMe": "حذف لديّ",
+  "messageActionDeleteForEveryone": "حذف لدى الجميع",
+  "deleteMessageTitle": "حذف الرسالة؟",
+  "deleteForMeConfirm": "ستتم إزالة هذه الرسالة من عرضك فقط، وسيظل بإمكان بقية أعضاء الفريق رؤيتها.",
+  "deleteForEveryoneConfirm": "سيتم حذف هذه الرسالة لجميع أعضاء الفريق، وستبقى نسخة العميل في واتساب كما هي.",
+  "deleteConfirmAction": "حذف",
+  "deleteMessageFailed": "تعذّر حذف الرسالة. حاول مرة أخرى.",
+  "messageDeleted": "تم حذف هذه الرسالة"
 }
