@@ -45,7 +45,7 @@ void main() {
       expect(isBold(parts[1]), isTrue);
     });
 
-    test('matches multiple tokens independently', () {
+    test('matches multiple tokens, expanding each to the whole word', () {
       final span = highlightMatches(
         'infrastructure upgrade complete',
         'infra compl',
@@ -55,7 +55,19 @@ void main() {
           .where(isBold)
           .map(textOf)
           .toList();
-      expect(bolded, ['infra', 'compl']);
+      // Whole words, not just the matched prefixes: span boundaries inside
+      // a word break Arabic letter joining, so hits grow to word edges.
+      expect(bolded, ['infrastructure', 'complete']);
+    });
+
+    test('never splits inside an Arabic word (letter joining stays intact)',
+        () {
+      final span = highlightMatches('السمنودي كلينك', 'سم', null);
+      final parts = span.children!;
+      // One highlighted span carrying the whole first word, then the rest.
+      expect(parts.map(textOf).toList(), ['السمنودي', ' كلينك']);
+      expect(isBold(parts[0]), isTrue);
+      expect(isBold(parts[1]), isFalse);
     });
 
     test('returns plain span when nothing matches or query is empty', () {
@@ -68,6 +80,20 @@ void main() {
       final span = highlightMatches('price (usd)', '(usd)', null);
       final bolded = span.children!.where(isBold).map(textOf).toList();
       expect(bolded, ['(usd)']);
+    });
+
+    test('adjacent token hits in one word merge into a single span', () {
+      final span = highlightMatches('infrastructure', 'infra struct', null);
+      expect(span.children!.map(textOf).toList(), ['infrastructure']);
+    });
+  });
+
+  group('contentDirection', () {
+    test('detects RTL for Arabic and LTR for Latin', () {
+      expect(contentDirection('السمنودي كلينك'), TextDirection.rtl);
+      expect(contentDirection('Smart Health Clinic'), TextDirection.ltr);
+      // Mixed content follows the dominant/first strong direction.
+      expect(contentDirection('مرحبا Lumenta'), TextDirection.rtl);
     });
   });
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart' show Bidi;
 
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/theme/app_dimens.dart';
@@ -92,8 +93,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             );
           }
           return ListView.separated(
-            keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior.onDrag,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.only(bottom: Insets.lg),
             itemCount: state.results.length,
             separatorBuilder: (_, _) => Divider(
@@ -178,9 +178,13 @@ class _ResultRow extends StatelessWidget {
                       client.displayName,
                       query,
                       context.text.titleMedium,
+                      highlightColor: context.scheme.primary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
+                    // Let the name's own script drive bidi order and the
+                    // ellipsis side, independent of the app locale.
+                    textDirection: contentDirection(client.displayName),
                   ),
                   const SizedBox(height: 2),
                   Text(
@@ -207,9 +211,13 @@ class _ResultRow extends StatelessWidget {
                               context.text.bodySmall?.copyWith(
                                 color: context.scheme.onSurfaceVariant,
                               ),
+                              highlightColor: context.scheme.primary,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
+                            textDirection: contentDirection(
+                              contextMatch.snippet,
+                            ),
                           ),
                         ),
                       ],
@@ -231,11 +239,28 @@ class _ResultRow extends StatelessWidget {
   }
 }
 
-/// Builds a [TextSpan] with every query-token occurrence bolded.
+/// Direction of a text run detected from its own content, so an Arabic name
+/// or snippet renders RTL (correct bidi order + ellipsis side) even while the
+/// app UI is English, and vice versa.
+@visibleForTesting
+TextDirection contentDirection(String text) =>
+    Bidi.detectRtlDirectionality(text) ? TextDirection.rtl : TextDirection.ltr;
+
+/// Builds a [TextSpan] highlighting every query-token occurrence.
 /// Case-insensitive; tokens are matched independently, mirroring the
 /// server's per-token prefix search.
+///
+/// Each hit is expanded to the **whole whitespace-delimited word** before
+/// styling. Splitting a word into multiple spans breaks letter joining in
+/// connected scripts (Arabic renders with visible gaps, e.g. "الـسمنودي"),
+/// so span boundaries must never fall inside a word.
 @visibleForTesting
-TextSpan highlightMatches(String text, String query, TextStyle? style) {
+TextSpan highlightMatches(
+  String text,
+  String query,
+  TextStyle? style, {
+  Color? highlightColor,
+}) {
   final tokens = query
       .trim()
       .split(RegExp(r'\s+'))
@@ -246,19 +271,46 @@ TextSpan highlightMatches(String text, String query, TextStyle? style) {
     return TextSpan(text: text, style: style);
   }
   final pattern = RegExp(tokens.join('|'), caseSensitive: false);
-  final bold = (style ?? const TextStyle()).copyWith(
+  final matches = pattern.allMatches(text).toList();
+  if (matches.isEmpty) return TextSpan(text: text, style: style);
+
+  // Expand every hit to word boundaries, then merge overlapping ranges.
+  bool isSpace(String ch) => ch == ' ' || ch == '\n' || ch == '\t';
+  final ranges = <(int, int)>[];
+  for (final m in matches) {
+    var start = m.start;
+    while (start > 0 && !isSpace(text[start - 1])) {
+      start--;
+    }
+    var end = m.end;
+    while (end < text.length && !isSpace(text[end])) {
+      end++;
+    }
+    if (ranges.isNotEmpty && start <= ranges.last.$2) {
+      ranges.last = (
+        ranges.last.$1,
+        end > ranges.last.$2 ? end : ranges.last.$2,
+      );
+    } else {
+      ranges.add((start, end));
+    }
+  }
+
+  // Bold alone is nearly invisible in Arabic type at small sizes; a tint
+  // makes the hit readable in both scripts.
+  final highlight = (style ?? const TextStyle()).copyWith(
     fontWeight: FontWeight.w700,
+    color: highlightColor,
   );
   final children = <TextSpan>[];
   var cursor = 0;
-  for (final m in pattern.allMatches(text)) {
-    if (m.start > cursor) {
-      children.add(TextSpan(text: text.substring(cursor, m.start)));
+  for (final (start, end) in ranges) {
+    if (start > cursor) {
+      children.add(TextSpan(text: text.substring(cursor, start)));
     }
-    children.add(TextSpan(text: text.substring(m.start, m.end), style: bold));
-    cursor = m.end;
+    children.add(TextSpan(text: text.substring(start, end), style: highlight));
+    cursor = end;
   }
-  if (children.isEmpty) return TextSpan(text: text, style: style);
   if (cursor < text.length) {
     children.add(TextSpan(text: text.substring(cursor)));
   }
