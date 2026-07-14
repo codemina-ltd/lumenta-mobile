@@ -10,6 +10,7 @@ import '../data/repos/device_repo.dart';
 import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
+import '../data/repos/reminders_repo.dart';
 import '../data/repos/senders_repo.dart';
 import '../data/repos/templates_repo.dart';
 import '../data/repos/tenant_repo.dart';
@@ -51,6 +52,9 @@ final commerceRepoProvider = Provider<CommerceRepo>(
 );
 final notificationsRepoProvider = Provider<NotificationsRepo>(
   (ref) => NotificationsRepo(ref.watch(dioProvider)),
+);
+final remindersRepoProvider = Provider<RemindersRepo>(
+  (ref) => RemindersRepo(ref.watch(dioProvider)),
 );
 final templatesRepoProvider = Provider<TemplatesRepo>(
   (ref) => TemplatesRepo(ref.watch(dioProvider)),

@@ -266,6 +266,20 @@
       "body": "ينتظر {{clientName}} ردًا منذ أكثر من {{waitedMinutes}} دقيقة."
     }
   },
+  "reminder": {
+    "assigned": {
+      "title": "تم إسناد تذكير إليك",
+      "body": "\"{{title}}\" — موعد الاستحقاق {{dueAt}}."
+    },
+    "due": {
+      "title": "حان موعد التذكير: {{title}}",
+      "body": "حان موعد تذكيرك \"{{title}}\" ({{dueAt}})."
+    },
+    "overdue": {
+      "title": "تذكير متأخر: {{title}}",
+      "body": "كان موعد \"{{title}}\" في {{dueAt}} وما زال مفتوحًا."
+    }
+  },
   "system": {
     "security_alert": {
       "title": "تنبيه أمني",

@@ -1,23 +1,19 @@
 {
   "@@locale": "en",
   "appTitle": "Lumenta",
-
   "loginTitle": "Sign in",
   "loginSubtitle": "Welcome back to Lumenta",
   "emailLabel": "Email",
   "passwordLabel": "Password",
   "loginButton": "Sign in",
   "loginError": "Couldn't sign in. Check your details and try again.",
-
   "tenantPickerTitle": "Choose a workspace",
   "switchTenant": "Switch workspace",
   "logout": "Log out",
-
   "navClients": "Clients",
   "navChats": "Chats",
   "navInbox": "Inbox",
   "navNotifications": "Notifications",
-
   "inboxViewMine": "Mine",
   "inboxViewUnassigned": "Unassigned",
   "inboxViewOpen": "Open",
@@ -43,7 +39,6 @@
   "inboxLabels": "Labels",
   "inboxNoLabels": "No labels defined yet",
   "inboxAssigneeUnassigned": "Unassigned",
-
   "contactDetails": "Contact details",
   "contactLifecycle": "Lifecycle stage",
   "contactNoStage": "No stage",
@@ -56,18 +51,14 @@
   "ordersTitle": "Orders",
   "ordersEmpty": "No orders for this contact",
   "ordersActionFailed": "Couldn't update. Please try again.",
-
   "clientsTitle": "Clients",
   "searchClients": "Search clients",
   "clientsEmpty": "No clients yet",
-
   "chatsTitle": "Chats",
   "chatsEmpty": "No conversations yet",
-
   "notificationsTitle": "Notifications",
   "notificationsEmpty": "You're all caught up",
   "markAllRead": "Mark all as read",
-
   "previewPhoto": "Photo",
   "previewVoice": "Voice note",
   "previewAudio": "Audio",
@@ -76,35 +67,29 @@
   "previewLocation": "Location",
   "previewSticker": "Sticker",
   "previewContact": "Contact",
-
   "flowResponseTitle": "Interactive Response",
   "flowResponseReceived": "Response received",
   "flowResponseDetailsTitle": "Customer Response",
   "flowFieldColumn": "Field",
   "flowValueColumn": "Value",
   "close": "Close",
-
   "statusSent": "Sent",
   "statusDelivered": "Delivered",
   "statusRead": "Read",
   "statusFailed": "Failed",
-
   "retry": "Retry",
   "loadingError": "Something went wrong",
   "today": "Today",
   "yesterday": "Yesterday",
-
   "transcription": "Transcription",
   "openDocument": "Open document",
   "loginNoRecaptcha": "Login is not configured (missing reCAPTCHA key).",
-
   "composerHint": "Message",
   "windowClosed": "Outside the 24-hour window. Send an approved template to start a new conversation.",
   "attachPhoto": "Photo",
   "attachCamera": "Camera",
   "attachDocument": "Document",
   "sendFailed": "Couldn't send. Tap to retry.",
-
   "senderStartVia": "Start conversation via…",
   "senderDefaultTag": "Default",
   "senderInactive": "This number is inactive",
@@ -123,7 +108,6 @@
       "name": {}
     }
   },
-
   "sendTemplate": "Send a template",
   "attachTemplate": "Template",
   "templatePickerTitle": "Choose a template",
@@ -143,7 +127,6 @@
   "templateVideoHeader": "Video",
   "templateDocHeader": "Document",
   "templateMarketingUsWarning": "Marketing templates to US numbers may be blocked by Meta.",
-
   "profileTitle": "Profile",
   "profilePictureTitle": "Profile picture",
   "profileUploadPicture": "Upload picture",
@@ -198,7 +181,6 @@
   "profileAvatarTooLarge": "Image is too large (max 2 MB).",
   "profileAvatarInvalidType": "Unsupported image type. Use PNG, JPG, GIF, or WebP.",
   "cancel": "Cancel",
-
   "messageActionCopy": "Copy",
   "messageActionForward": "Forward",
   "messageActionShare": "Share",
@@ -213,7 +195,6 @@
   "forwardFailed": "Couldn't forward. Please try again.",
   "shareFailed": "Couldn't share. Please try again.",
   "reactionFailed": "Couldn't send the reaction. Please try again.",
-
   "messageActionDeleteForMe": "Delete for me",
   "messageActionDeleteForEveryone": "Delete for everyone",
   "deleteMessageTitle": "Delete message?",
@@ -221,5 +202,22 @@
   "deleteForEveryoneConfirm": "This message will be deleted for all team members. The client's WhatsApp will keep its copy.",
   "deleteConfirmAction": "Delete",
   "deleteMessageFailed": "Couldn't delete the message. Please try again.",
-  "messageDeleted": "This message was deleted"
+  "messageDeleted": "This message was deleted",
+  "navReminders": "Reminders",
+  "remindersOverdue": "Overdue",
+  "remindersToday": "Due today",
+  "remindersUpcoming": "Upcoming",
+  "remindersEmptyTitle": "All caught up",
+  "remindersEmptyBody": "No open reminders assigned to you. Create them from the portal or the conversation view.",
+  "reminderComplete": "Mark as done",
+  "reminderCompleted": "Reminder completed",
+  "reminderSnooze15m": "Snooze 15 minutes",
+  "reminderSnooze1h": "Snooze 1 hour",
+  "reminderSnooze3h": "Snooze 3 hours",
+  "reminderSnoozeTomorrow": "Snooze until tomorrow 9:00",
+  "reminderSnoozed": "Reminder snoozed",
+  "reminderActionFailed": "Something went wrong — please try again",
+  "reminderOpenConversation": "Open conversation",
+  "reminderOverdueLabel": "Overdue",
+  "reminderActions": "Reminder actions"
 }

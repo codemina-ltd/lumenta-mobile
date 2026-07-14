@@ -12,6 +12,7 @@ import '../../features/clients/clients_screen.dart';
 import '../../features/inbox/inbox_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
 import '../../features/profile/profile_screen.dart';
+import '../../features/reminders/reminders_screen.dart';
 import '../../features/shell/home_shell.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -84,6 +85,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(path: '/inbox', builder: (_, _) => const InboxScreen()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/reminders',
+                builder: (_, _) => const RemindersScreen(),
+              ),
             ],
           ),
           StatefulShellBranch(

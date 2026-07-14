@@ -266,6 +266,20 @@
       "body": "{{clientName}} has been waiting more than {{waitedMinutes}} minutes without a reply."
     }
   },
+  "reminder": {
+    "assigned": {
+      "title": "Reminder assigned to you",
+      "body": "\"{{title}}\" — due {{dueAt}}."
+    },
+    "due": {
+      "title": "Reminder due: {{title}}",
+      "body": "Your reminder \"{{title}}\" is due ({{dueAt}})."
+    },
+    "overdue": {
+      "title": "Reminder overdue: {{title}}",
+      "body": "\"{{title}}\" was due {{dueAt}} and is still open."
+    }
+  },
   "system": {
     "security_alert": {
       "title": "Security alert",

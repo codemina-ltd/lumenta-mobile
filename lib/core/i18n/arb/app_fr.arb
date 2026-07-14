@@ -1,23 +1,19 @@
 {
   "@@locale": "fr",
   "appTitle": "Lumenta",
-
   "loginTitle": "Connexion",
   "loginSubtitle": "Content de vous revoir sur Lumenta",
   "emailLabel": "E-mail",
   "passwordLabel": "Mot de passe",
   "loginButton": "Se connecter",
   "loginError": "Connexion impossible. Vérifiez vos informations et réessayez.",
-
   "tenantPickerTitle": "Choisir un espace de travail",
   "switchTenant": "Changer d'espace",
   "logout": "Se déconnecter",
-
   "navClients": "Clients",
   "navChats": "Discussions",
   "navInbox": "Boîte",
   "navNotifications": "Notifications",
-
   "inboxViewMine": "Les miennes",
   "inboxViewUnassigned": "Non attribuées",
   "inboxViewOpen": "Ouvertes",
@@ -43,7 +39,6 @@
   "inboxLabels": "Étiquettes",
   "inboxNoLabels": "Aucune étiquette pour l'instant",
   "inboxAssigneeUnassigned": "Non attribuée",
-
   "contactDetails": "Détails du contact",
   "contactLifecycle": "Étape du cycle de vie",
   "contactNoStage": "Aucune étape",
@@ -56,18 +51,14 @@
   "ordersTitle": "Commandes",
   "ordersEmpty": "Aucune commande pour ce contact",
   "ordersActionFailed": "Échec de la mise à jour. Veuillez réessayer.",
-
   "clientsTitle": "Clients",
   "searchClients": "Rechercher des clients",
   "clientsEmpty": "Aucun client pour le moment",
-
   "chatsTitle": "Discussions",
   "chatsEmpty": "Aucune conversation pour le moment",
-
   "notificationsTitle": "Notifications",
   "notificationsEmpty": "Vous êtes à jour",
   "markAllRead": "Tout marquer comme lu",
-
   "previewPhoto": "Photo",
   "previewVoice": "Note vocale",
   "previewAudio": "Audio",
@@ -76,35 +67,29 @@
   "previewLocation": "Position",
   "previewSticker": "Sticker",
   "previewContact": "Contact",
-
   "flowResponseTitle": "Réponse interactive",
   "flowResponseReceived": "Réponse reçue",
   "flowResponseDetailsTitle": "Détails de la réponse du client",
   "flowFieldColumn": "Champ",
   "flowValueColumn": "Valeur",
   "close": "Fermer",
-
   "statusSent": "Envoyé",
   "statusDelivered": "Distribué",
   "statusRead": "Lu",
   "statusFailed": "Échec",
-
   "retry": "Réessayer",
   "loadingError": "Une erreur est survenue",
   "today": "Aujourd'hui",
   "yesterday": "Hier",
-
   "transcription": "Transcription",
   "openDocument": "Ouvrir le document",
   "loginNoRecaptcha": "La connexion n'est pas configurée (clé reCAPTCHA manquante).",
-
   "composerHint": "Message",
   "windowClosed": "Hors de la fenêtre de 24 heures. Envoyez un modèle approuvé pour démarrer une nouvelle conversation.",
   "attachPhoto": "Photo",
   "attachCamera": "Appareil photo",
   "attachDocument": "Document",
   "sendFailed": "Échec de l'envoi. Appuyez pour réessayer.",
-
   "senderStartVia": "Démarrer une conversation via…",
   "senderDefaultTag": "Par défaut",
   "senderInactive": "Ce numéro est inactif",
@@ -123,7 +108,6 @@
       "name": {}
     }
   },
-
   "sendTemplate": "Envoyer un modèle",
   "attachTemplate": "Modèle",
   "templatePickerTitle": "Choisir un modèle",
@@ -143,7 +127,6 @@
   "templateVideoHeader": "Vidéo",
   "templateDocHeader": "Document",
   "templateMarketingUsWarning": "Les modèles marketing vers des numéros américains peuvent être bloqués par Meta.",
-
   "profileTitle": "Profil",
   "profilePictureTitle": "Photo de profil",
   "profileUploadPicture": "Importer une photo",
@@ -198,7 +181,6 @@
   "profileAvatarTooLarge": "L'image est trop volumineuse (2 Mo max).",
   "profileAvatarInvalidType": "Type d'image non pris en charge. Utilisez PNG, JPG, GIF ou WebP.",
   "cancel": "Annuler",
-
   "messageActionCopy": "Copier",
   "messageActionForward": "Transférer",
   "messageActionShare": "Partager",
@@ -213,7 +195,6 @@
   "forwardFailed": "Impossible de transférer. Veuillez réessayer.",
   "shareFailed": "Impossible de partager. Veuillez réessayer.",
   "reactionFailed": "Impossible d'envoyer la réaction. Veuillez réessayer.",
-
   "messageActionDeleteForMe": "Supprimer pour moi",
   "messageActionDeleteForEveryone": "Supprimer pour tout le monde",
   "deleteMessageTitle": "Supprimer le message ?",
@@ -221,5 +202,22 @@
   "deleteForEveryoneConfirm": "Ce message sera supprimé pour tous les membres de l'équipe. Le client conservera sa copie sur WhatsApp.",
   "deleteConfirmAction": "Supprimer",
   "deleteMessageFailed": "Impossible de supprimer le message. Veuillez réessayer.",
-  "messageDeleted": "Ce message a été supprimé"
+  "messageDeleted": "Ce message a été supprimé",
+  "navReminders": "Rappels",
+  "remindersOverdue": "En retard",
+  "remindersToday": "Aujourd'hui",
+  "remindersUpcoming": "À venir",
+  "remindersEmptyTitle": "Tout est à jour",
+  "remindersEmptyBody": "Aucun rappel ouvert ne vous est assigné. Créez-les depuis le portail ou la conversation.",
+  "reminderComplete": "Marquer comme fait",
+  "reminderCompleted": "Rappel terminé",
+  "reminderSnooze15m": "Reporter de 15 minutes",
+  "reminderSnooze1h": "Reporter d'1 heure",
+  "reminderSnooze3h": "Reporter de 3 heures",
+  "reminderSnoozeTomorrow": "Reporter à demain 9h00",
+  "reminderSnoozed": "Rappel reporté",
+  "reminderActionFailed": "Une erreur est survenue — veuillez réessayer",
+  "reminderOpenConversation": "Ouvrir la conversation",
+  "reminderOverdueLabel": "En retard",
+  "reminderActions": "Actions du rappel"
 }

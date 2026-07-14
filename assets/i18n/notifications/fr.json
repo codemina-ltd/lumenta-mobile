@@ -266,6 +266,20 @@
       "body": "{{clientName}} attend une réponse depuis plus de {{waitedMinutes}} minutes."
     }
   },
+  "reminder": {
+    "assigned": {
+      "title": "Rappel qui vous est assigné",
+      "body": "\"{{title}}\" — échéance {{dueAt}}."
+    },
+    "due": {
+      "title": "Rappel à échéance : {{title}}",
+      "body": "Votre rappel \"{{title}}\" arrive à échéance ({{dueAt}})."
+    },
+    "overdue": {
+      "title": "Rappel en retard : {{title}}",
+      "body": "\"{{title}}\" était attendu le {{dueAt}} et est toujours ouvert."
+    }
+  },
   "system": {
     "security_alert": {
       "title": "Alerte de sécurité",

@@ -1,23 +1,19 @@
 {
   "@@locale": "ar",
   "appTitle": "لومينتا",
-
   "loginTitle": "تسجيل الدخول",
   "loginSubtitle": "مرحبًا بعودتك إلى لومينتا",
   "emailLabel": "البريد الإلكتروني",
   "passwordLabel": "كلمة المرور",
   "loginButton": "تسجيل الدخول",
   "loginError": "تعذّر تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى.",
-
   "tenantPickerTitle": "اختر مساحة عمل",
   "switchTenant": "تبديل مساحة العمل",
   "logout": "تسجيل الخروج",
-
   "navClients": "العملاء",
   "navChats": "المحادثات",
   "navInbox": "الصندوق",
   "navNotifications": "الإشعارات",
-
   "inboxViewMine": "الخاصة بي",
   "inboxViewUnassigned": "غير مُسندة",
   "inboxViewOpen": "مفتوحة",
@@ -43,7 +39,6 @@
   "inboxLabels": "الوسوم",
   "inboxNoLabels": "لا توجد وسوم بعد",
   "inboxAssigneeUnassigned": "غير مُسندة",
-
   "contactDetails": "تفاصيل العميل",
   "contactLifecycle": "مرحلة دورة الحياة",
   "contactNoStage": "بدون مرحلة",
@@ -56,18 +51,14 @@
   "ordersTitle": "الطلبات",
   "ordersEmpty": "لا توجد طلبات لهذا العميل",
   "ordersActionFailed": "تعذّر التحديث. حاول مرة أخرى.",
-
   "clientsTitle": "العملاء",
   "searchClients": "ابحث عن العملاء",
   "clientsEmpty": "لا يوجد عملاء بعد",
-
   "chatsTitle": "المحادثات",
   "chatsEmpty": "لا توجد محادثات بعد",
-
   "notificationsTitle": "الإشعارات",
   "notificationsEmpty": "لقد اطّلعت على كل شيء",
   "markAllRead": "تعليم الكل كمقروء",
-
   "previewPhoto": "صورة",
   "previewVoice": "رسالة صوتية",
   "previewAudio": "صوت",
@@ -76,35 +67,29 @@
   "previewLocation": "موقع",
   "previewSticker": "ملصق",
   "previewContact": "جهة اتصال",
-
   "flowResponseTitle": "رد تفاعلي",
   "flowResponseReceived": "تم استلام الرد",
   "flowResponseDetailsTitle": "رد العميل",
   "flowFieldColumn": "الحقل",
   "flowValueColumn": "القيمة",
   "close": "إغلاق",
-
   "statusSent": "تم الإرسال",
   "statusDelivered": "تم التسليم",
   "statusRead": "تمت القراءة",
   "statusFailed": "فشل",
-
   "retry": "إعادة المحاولة",
   "loadingError": "حدث خطأ ما",
   "today": "اليوم",
   "yesterday": "أمس",
-
   "transcription": "النص المكتوب",
   "openDocument": "فتح المستند",
   "loginNoRecaptcha": "تسجيل الدخول غير مهيأ (مفتاح reCAPTCHA مفقود).",
-
   "composerHint": "رسالة",
   "windowClosed": "خارج نافذة الـ 24 ساعة. أرسِل قالبًا معتمدًا لبدء محادثة جديدة.",
   "attachPhoto": "صورة",
   "attachCamera": "الكاميرا",
   "attachDocument": "مستند",
   "sendFailed": "تعذّر الإرسال. اضغط لإعادة المحاولة.",
-
   "senderStartVia": "بدء محادثة عبر…",
   "senderDefaultTag": "افتراضي",
   "senderInactive": "هذا الرقم غير نشط",
@@ -123,7 +108,6 @@
       "name": {}
     }
   },
-
   "sendTemplate": "إرسال قالب",
   "attachTemplate": "قالب",
   "templatePickerTitle": "اختر قالبًا",
@@ -143,7 +127,6 @@
   "templateVideoHeader": "فيديو",
   "templateDocHeader": "مستند",
   "templateMarketingUsWarning": "قد تحظر Meta القوالب التسويقية المرسلة إلى أرقام أمريكية.",
-
   "profileTitle": "الملف الشخصي",
   "profilePictureTitle": "الصورة الشخصية",
   "profileUploadPicture": "رفع صورة",
@@ -198,7 +181,6 @@
   "profileAvatarTooLarge": "الصورة كبيرة جدًا (الحد الأقصى 2 ميغابايت).",
   "profileAvatarInvalidType": "نوع الصورة غير مدعوم. استخدم PNG أو JPG أو GIF أو WebP.",
   "cancel": "إلغاء",
-
   "messageActionCopy": "نسخ",
   "messageActionForward": "إعادة توجيه",
   "messageActionShare": "مشاركة",
@@ -213,7 +195,6 @@
   "forwardFailed": "تعذّرت إعادة التوجيه. حاول مرة أخرى.",
   "shareFailed": "تعذّرت المشاركة. حاول مرة أخرى.",
   "reactionFailed": "تعذّر إرسال التفاعل. حاول مرة أخرى.",
-
   "messageActionDeleteForMe": "حذف لديّ",
   "messageActionDeleteForEveryone": "حذف لدى الجميع",
   "deleteMessageTitle": "حذف الرسالة؟",
@@ -221,5 +202,22 @@
   "deleteForEveryoneConfirm": "سيتم حذف هذه الرسالة لجميع أعضاء الفريق، وستبقى نسخة العميل في واتساب كما هي.",
   "deleteConfirmAction": "حذف",
   "deleteMessageFailed": "تعذّر حذف الرسالة. حاول مرة أخرى.",
-  "messageDeleted": "تم حذف هذه الرسالة"
+  "messageDeleted": "تم حذف هذه الرسالة",
+  "navReminders": "التذكيرات",
+  "remindersOverdue": "متأخرة",
+  "remindersToday": "مستحقة اليوم",
+  "remindersUpcoming": "قادمة",
+  "remindersEmptyTitle": "كل شيء تحت السيطرة",
+  "remindersEmptyBody": "لا توجد تذكيرات مفتوحة مسندة إليك. يمكنك إنشاؤها من البوابة أو من شاشة المحادثة.",
+  "reminderComplete": "وضع علامة تم",
+  "reminderCompleted": "اكتمل التذكير",
+  "reminderSnooze15m": "تأجيل 15 دقيقة",
+  "reminderSnooze1h": "تأجيل ساعة",
+  "reminderSnooze3h": "تأجيل 3 ساعات",
+  "reminderSnoozeTomorrow": "تأجيل حتى الغد 9:00",
+  "reminderSnoozed": "تم تأجيل التذكير",
+  "reminderActionFailed": "حدث خطأ ما — حاول مرة أخرى",
+  "reminderOpenConversation": "فتح المحادثة",
+  "reminderOverdueLabel": "متأخر",
+  "reminderActions": "إجراءات التذكير"
 }

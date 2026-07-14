@@ -247,10 +247,15 @@ class PushService {
     final threadId = data['thread_id'] as String?;
     final hasChat = clientId != null && clientId.isNotEmpty;
     final hasThread = threadId != null && threadId.isNotEmpty;
-    // Team Inbox pushes (assignment / @mention) carry client_id by default
-    // (decision 14-A) and route to the chat; a thread_id-only push falls back
-    // to the operator inbox tab.
-    if (!hasChat && !hasThread) return;
+    // Fallback for pushes whose resource isn't a message/client (e.g.
+    // reminders): the FCM data block always carries `action_url`, so parse
+    // the SPA path with the same shapes the in-app feed understands.
+    final target = hasChat
+        ? '/chats/$clientId'
+        : hasThread
+        ? '/inbox'
+        : _routeFromActionUrl(data['action_url'] as String?);
+    if (target == null) return;
 
     final auth = _ref.read(authControllerProvider);
     final targetTenant = data['tenant_id'] as String?;
@@ -261,7 +266,20 @@ class PushService {
       _ref.read(authControllerProvider.notifier).selectTenant(targetTenant);
     }
 
-    _ref.read(routerProvider).go(hasChat ? '/chats/$clientId' : '/inbox');
+    _ref.read(routerProvider).go(target);
+  }
+
+  /// Map a portal-relative `action_url` to a mobile route: conversation
+  /// deep-links (same regex as the notifications screen) or the reminders
+  /// tab; anything else is not routable on mobile.
+  String? _routeFromActionUrl(String? url) {
+    if (url == null || url.isEmpty) return null;
+    final chat = RegExp(
+      r'/(?:conversations|clients|chats)/([\w-]+)',
+    ).firstMatch(url);
+    if (chat != null) return '/chats/${chat.group(1)}';
+    if (url.startsWith('/reminders')) return '/reminders';
+    return null;
   }
 }
 

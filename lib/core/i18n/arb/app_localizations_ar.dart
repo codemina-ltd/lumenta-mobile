@@ -549,4 +549,56 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get messageDeleted => 'تم حذف هذه الرسالة';
+
+  @override
+  String get navReminders => 'التذكيرات';
+
+  @override
+  String get remindersOverdue => 'متأخرة';
+
+  @override
+  String get remindersToday => 'مستحقة اليوم';
+
+  @override
+  String get remindersUpcoming => 'قادمة';
+
+  @override
+  String get remindersEmptyTitle => 'كل شيء تحت السيطرة';
+
+  @override
+  String get remindersEmptyBody =>
+      'لا توجد تذكيرات مفتوحة مسندة إليك. يمكنك إنشاؤها من البوابة أو من شاشة المحادثة.';
+
+  @override
+  String get reminderComplete => 'وضع علامة تم';
+
+  @override
+  String get reminderCompleted => 'اكتمل التذكير';
+
+  @override
+  String get reminderSnooze15m => 'تأجيل 15 دقيقة';
+
+  @override
+  String get reminderSnooze1h => 'تأجيل ساعة';
+
+  @override
+  String get reminderSnooze3h => 'تأجيل 3 ساعات';
+
+  @override
+  String get reminderSnoozeTomorrow => 'تأجيل حتى الغد 9:00';
+
+  @override
+  String get reminderSnoozed => 'تم تأجيل التذكير';
+
+  @override
+  String get reminderActionFailed => 'حدث خطأ ما — حاول مرة أخرى';
+
+  @override
+  String get reminderOpenConversation => 'فتح المحادثة';
+
+  @override
+  String get reminderOverdueLabel => 'متأخر';
+
+  @override
+  String get reminderActions => 'إجراءات التذكير';
 }

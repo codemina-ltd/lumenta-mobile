@@ -1131,6 +1131,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This message was deleted'**
   String get messageDeleted;
+
+  /// No description provided for @navReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get navReminders;
+
+  /// No description provided for @remindersOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get remindersOverdue;
+
+  /// No description provided for @remindersToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Due today'**
+  String get remindersToday;
+
+  /// No description provided for @remindersUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get remindersUpcoming;
+
+  /// No description provided for @remindersEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up'**
+  String get remindersEmptyTitle;
+
+  /// No description provided for @remindersEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No open reminders assigned to you. Create them from the portal or the conversation view.'**
+  String get remindersEmptyBody;
+
+  /// No description provided for @reminderComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as done'**
+  String get reminderComplete;
+
+  /// No description provided for @reminderCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder completed'**
+  String get reminderCompleted;
+
+  /// No description provided for @reminderSnooze15m.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze 15 minutes'**
+  String get reminderSnooze15m;
+
+  /// No description provided for @reminderSnooze1h.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze 1 hour'**
+  String get reminderSnooze1h;
+
+  /// No description provided for @reminderSnooze3h.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze 3 hours'**
+  String get reminderSnooze3h;
+
+  /// No description provided for @reminderSnoozeTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze until tomorrow 9:00'**
+  String get reminderSnoozeTomorrow;
+
+  /// No description provided for @reminderSnoozed.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder snoozed'**
+  String get reminderSnoozed;
+
+  /// No description provided for @reminderActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong — please try again'**
+  String get reminderActionFailed;
+
+  /// No description provided for @reminderOpenConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Open conversation'**
+  String get reminderOpenConversation;
+
+  /// No description provided for @reminderOverdueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get reminderOverdueLabel;
+
+  /// No description provided for @reminderActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder actions'**
+  String get reminderActions;
 }
 
 class _AppLocalizationsDelegate

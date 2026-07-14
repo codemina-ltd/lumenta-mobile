@@ -552,4 +552,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messageDeleted => 'This message was deleted';
+
+  @override
+  String get navReminders => 'Reminders';
+
+  @override
+  String get remindersOverdue => 'Overdue';
+
+  @override
+  String get remindersToday => 'Due today';
+
+  @override
+  String get remindersUpcoming => 'Upcoming';
+
+  @override
+  String get remindersEmptyTitle => 'All caught up';
+
+  @override
+  String get remindersEmptyBody =>
+      'No open reminders assigned to you. Create them from the portal or the conversation view.';
+
+  @override
+  String get reminderComplete => 'Mark as done';
+
+  @override
+  String get reminderCompleted => 'Reminder completed';
+
+  @override
+  String get reminderSnooze15m => 'Snooze 15 minutes';
+
+  @override
+  String get reminderSnooze1h => 'Snooze 1 hour';
+
+  @override
+  String get reminderSnooze3h => 'Snooze 3 hours';
+
+  @override
+  String get reminderSnoozeTomorrow => 'Snooze until tomorrow 9:00';
+
+  @override
+  String get reminderSnoozed => 'Reminder snoozed';
+
+  @override
+  String get reminderActionFailed => 'Something went wrong — please try again';
+
+  @override
+  String get reminderOpenConversation => 'Open conversation';
+
+  @override
+  String get reminderOverdueLabel => 'Overdue';
+
+  @override
+  String get reminderActions => 'Reminder actions';
 }
