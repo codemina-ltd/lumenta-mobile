@@ -37,9 +37,13 @@ class Fmt {
     return DateFormat.yMMMMd(locale).format(day);
   }
 
+  /// Bubble timestamp — always 12-hour ("7:09 PM"), matching the portal.
+  /// Not `jm`: that pattern goes 24-hour in fr/ar locales, and chat bubbles
+  /// should read 12-hour everywhere. The day-period marker still localizes
+  /// (PM / م / PM).
   static String timeOfDay(BuildContext context, DateTime when) {
     final locale = Localizations.localeOf(context).toString();
-    return DateFormat.jm(locale).format(when);
+    return DateFormat('h:mm a', locale).format(when);
   }
 
   /// Paint direction for message text, resolved from the content itself
