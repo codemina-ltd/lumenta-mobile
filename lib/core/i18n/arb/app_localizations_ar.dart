@@ -181,6 +181,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatAssign => 'إسناد إلى عضو في الفريق';
 
   @override
+  String get chatNoteAdded => 'تمت إضافة الملاحظة الداخلية';
+
+  @override
   String get notificationsTitle => 'الإشعارات';
 
   @override

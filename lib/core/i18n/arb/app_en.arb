@@ -57,6 +57,7 @@
   "chatsTitle": "Chats",
   "chatsEmpty": "No conversations yet",
   "chatAssign": "Assign to team member",
+  "chatNoteAdded": "Internal note added",
   "notificationsTitle": "Notifications",
   "notificationsEmpty": "You're all caught up",
   "markAllRead": "Mark all as read",

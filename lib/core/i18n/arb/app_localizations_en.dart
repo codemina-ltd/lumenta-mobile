@@ -181,6 +181,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatAssign => 'Assign to team member';
 
   @override
+  String get chatNoteAdded => 'Internal note added';
+
+  @override
   String get notificationsTitle => 'Notifications';
 
   @override

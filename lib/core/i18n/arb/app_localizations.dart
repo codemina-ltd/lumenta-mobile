@@ -442,6 +442,12 @@ abstract class AppLocalizations {
   /// **'Assign to team member'**
   String get chatAssign;
 
+  /// No description provided for @chatNoteAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal note added'**
+  String get chatNoteAdded;
+
   /// No description provided for @notificationsTitle.
   ///
   /// In en, this message translates to:

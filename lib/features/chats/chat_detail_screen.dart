@@ -18,6 +18,7 @@ import '../../data/storage/last_read_store.dart';
 import '../shared/widgets.dart';
 import 'chat_providers.dart';
 import 'thread_controller.dart';
+import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
@@ -207,7 +208,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             ),
           ],
         ),
-        actions: [if (threadKey != null) _assignAction(context, threadKey)],
+        actions: [if (threadKey != null) ..._threadActions(context, threadKey)],
       ),
       body: Column(
         children: [
@@ -244,17 +245,24 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     );
   }
 
-  /// "Assign to team member" app-bar action. Assignment lives on the Team
-  /// Inbox thread behind this chat; the action only appears once that thread
-  /// resolves (a chat with no messages has no thread to assign).
-  Widget _assignAction(BuildContext context, ThreadKey threadKey) {
+  /// App-bar actions that operate on the Team Inbox thread behind this chat
+  /// (internal note + assign to team member). They only appear once that
+  /// thread resolves (a chat with no messages has no thread to act on).
+  List<Widget> _threadActions(BuildContext context, ThreadKey threadKey) {
     final thread = ref.watch(chatInboxThreadProvider(threadKey)).asData?.value;
-    if (thread == null) return const SizedBox.shrink();
-    return IconButton(
-      tooltip: AppLocalizations.of(context).chatAssign,
-      icon: const Icon(Icons.person_add_alt_1_rounded),
-      onPressed: () => showAssignThreadSheet(context, ref, thread),
-    );
+    if (thread == null) return const [];
+    return [
+      IconButton(
+        tooltip: AppLocalizations.of(context).inboxAddNote,
+        icon: const Icon(Icons.sticky_note_2_outlined),
+        onPressed: () => showAddNoteDialog(context, ref, thread),
+      ),
+      IconButton(
+        tooltip: AppLocalizations.of(context).chatAssign,
+        icon: const Icon(Icons.person_add_alt_1_rounded),
+        onPressed: () => showAssignThreadSheet(context, ref, thread),
+      ),
+    ];
   }
 
   Widget _body(BuildContext context, ThreadState state, ThreadKey threadKey) {
