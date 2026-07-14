@@ -178,6 +178,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatsEmpty => 'لا توجد محادثات بعد';
 
   @override
+  String get chatAssign => 'إسناد إلى عضو في الفريق';
+
+  @override
   String get notificationsTitle => 'الإشعارات';
 
   @override

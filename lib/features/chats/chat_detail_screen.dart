@@ -18,6 +18,7 @@ import '../../data/storage/last_read_store.dart';
 import '../shared/widgets.dart';
 import 'chat_providers.dart';
 import 'thread_controller.dart';
+import 'widgets/assign_thread_sheet.dart';
 import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
 import 'widgets/message_actions_sheet.dart';
@@ -206,6 +207,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             ),
           ],
         ),
+        actions: [if (threadKey != null) _assignAction(context, threadKey)],
       ),
       body: Column(
         children: [
@@ -239,6 +241,19 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             ),
         ],
       ),
+    );
+  }
+
+  /// "Assign to team member" app-bar action. Assignment lives on the Team
+  /// Inbox thread behind this chat; the action only appears once that thread
+  /// resolves (a chat with no messages has no thread to assign).
+  Widget _assignAction(BuildContext context, ThreadKey threadKey) {
+    final thread = ref.watch(chatInboxThreadProvider(threadKey)).asData?.value;
+    if (thread == null) return const SizedBox.shrink();
+    return IconButton(
+      tooltip: AppLocalizations.of(context).chatAssign,
+      icon: const Icon(Icons.person_add_alt_1_rounded),
+      onPressed: () => showAssignThreadSheet(context, ref, thread),
     );
   }
 

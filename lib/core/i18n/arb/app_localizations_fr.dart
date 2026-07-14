@@ -182,6 +182,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get chatsEmpty => 'Aucune conversation pour le moment';
 
   @override
+  String get chatAssign => 'Assigner à un membre de l\'équipe';
+
+  @override
   String get notificationsTitle => 'Notifications';
 
   @override

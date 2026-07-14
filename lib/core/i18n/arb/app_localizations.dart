@@ -436,6 +436,12 @@ abstract class AppLocalizations {
   /// **'No conversations yet'**
   String get chatsEmpty;
 
+  /// No description provided for @chatAssign.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to team member'**
+  String get chatAssign;
+
   /// No description provided for @notificationsTitle.
   ///
   /// In en, this message translates to:

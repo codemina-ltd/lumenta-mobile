@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/providers.dart';
 import '../../data/models/client.dart';
 import '../../data/models/conversation_sender.dart';
+import '../../data/models/inbox_thread.dart';
 import '../../data/models/sender.dart';
 import '../auth/auth_controller.dart';
 
@@ -30,6 +31,22 @@ final tenantSendersProvider =
   ref.watch(authControllerProvider.select((s) => s.activeTenantId));
   return ref.read(sendersRepoProvider).findAll();
 });
+
+/// The Team Inbox thread behind a chat — assignment lives on the thread
+/// (keyed by client + sender), not on the conversation. Null when no thread
+/// exists yet (no messages persisted for this scope), which hides the assign
+/// action. The key is structurally identical to ThreadKey; it is spelled out
+/// here so this file stays below thread_controller in the import graph.
+final chatInboxThreadProvider = FutureProvider.autoDispose
+    .family<InboxThread?, ({String clientId, String? senderId})>((
+      ref,
+      key,
+    ) async {
+      final page = await ref
+          .read(inboxRepoProvider)
+          .threads(clientId: key.clientId, senderId: key.senderId, limit: 1);
+      return page.data.isEmpty ? null : page.data.first;
+    });
 
 /// Auth headers for loading proxied media (`/messages/:id/media`).
 final mediaHeadersProvider = Provider<Map<String, String>>((ref) {

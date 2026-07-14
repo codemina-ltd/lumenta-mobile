@@ -17,6 +17,7 @@ class InboxRepo {
     bool? unassigned,
     String? labelId,
     String? senderId,
+    String? clientId,
     String? search,
     int page = 1,
     int limit = 30,
@@ -31,6 +32,7 @@ class InboxRepo {
         if (unassigned == true) 'unassigned': true,
         'labelId': ?labelId,
         'senderId': ?senderId,
+        'clientId': ?clientId,
         'search': ?search,
       },
     );
