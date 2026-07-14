@@ -10,6 +10,7 @@ import '../auth/auth_controller.dart';
 import '../notifications/notifications_controller.dart';
 import '../push/push_service.dart';
 import '../reminders/reminders_controller.dart';
+import 'app_nav_bar.dart';
 
 /// App chrome for the three primary tabs: app bar (workspace switch + logout)
 /// and a bottom navigation bar. Body is the branch's [navigationShell].
@@ -71,66 +72,41 @@ class HomeShell extends ConsumerWidget {
         ],
       ),
       body: navigationShell,
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: context.scheme.outlineVariant),
-          ),
+      bottomNavigationBar: AppNavBar(
+        selectedIndex: index,
+        onSelect: (i) => navigationShell.goBranch(
+          i,
+          initialLocation: i == index,
         ),
-        child: NavigationBar(
-          selectedIndex: index,
-          onDestinationSelected: (i) => navigationShell.goBranch(
-            i,
-            initialLocation: i == index,
+        destinations: [
+          AppNavDestination(
+            icon: Icons.people_alt_outlined,
+            selectedIcon: Icons.people_alt_rounded,
+            label: l10n.navClients,
           ),
-          destinations: [
-            NavigationDestination(
-              icon: const Icon(Icons.people_alt_outlined),
-              selectedIcon: const Icon(Icons.people_alt_rounded),
-              label: l10n.navClients,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.forum_outlined),
-              selectedIcon: const Icon(Icons.forum_rounded),
-              label: l10n.navChats,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.inbox_outlined),
-              selectedIcon: const Icon(Icons.inbox_rounded),
-              label: l10n.navInbox,
-            ),
-            NavigationDestination(
-              icon: Badge.count(
-                count: remindersDue,
-                isLabelVisible: remindersDue > 0,
-                backgroundColor: AppColors.ember,
-                child: const Icon(Icons.alarm_outlined),
-              ),
-              selectedIcon: Badge.count(
-                count: remindersDue,
-                isLabelVisible: remindersDue > 0,
-                backgroundColor: AppColors.ember,
-                child: const Icon(Icons.alarm_rounded),
-              ),
-              label: l10n.navReminders,
-            ),
-            NavigationDestination(
-              icon: Badge.count(
-                count: unread,
-                isLabelVisible: unread > 0,
-                backgroundColor: AppColors.ember,
-                child: const Icon(Icons.notifications_none_rounded),
-              ),
-              selectedIcon: Badge.count(
-                count: unread,
-                isLabelVisible: unread > 0,
-                backgroundColor: AppColors.ember,
-                child: const Icon(Icons.notifications_rounded),
-              ),
-              label: l10n.navNotifications,
-            ),
-          ],
-        ),
+          AppNavDestination(
+            icon: Icons.forum_outlined,
+            selectedIcon: Icons.forum_rounded,
+            label: l10n.navChats,
+          ),
+          AppNavDestination(
+            icon: Icons.inbox_outlined,
+            selectedIcon: Icons.inbox_rounded,
+            label: l10n.navInbox,
+          ),
+          AppNavDestination(
+            icon: Icons.alarm_outlined,
+            selectedIcon: Icons.alarm_rounded,
+            label: l10n.navReminders,
+            badgeCount: remindersDue,
+          ),
+          AppNavDestination(
+            icon: Icons.notifications_none_rounded,
+            selectedIcon: Icons.notifications_rounded,
+            label: l10n.navNotifications,
+            badgeCount: unread,
+          ),
+        ],
       ),
     );
   }

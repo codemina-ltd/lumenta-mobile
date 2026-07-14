@@ -315,35 +315,6 @@ class AppTheme {
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(foregroundColor: scheme.onSurfaceVariant),
       ),
-      navigationBarTheme: NavigationBarThemeData(
-        height: 68,
-        backgroundColor: isDark ? AppColors.forest2 : AppColors.paperRaised,
-        surfaceTintColor: Colors.transparent,
-        indicatorColor: AppColors.signal.withValues(
-          alpha: isDark ? 0.22 : 0.18,
-        ),
-        indicatorShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(Radii.pill)),
-        ),
-        elevation: 0,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        labelTextStyle: WidgetStateProperty.resolveWith((states) {
-          final selected = states.contains(WidgetState.selected);
-          return textTheme.labelSmall?.copyWith(
-            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-            color: selected ? scheme.onSurface : scheme.onSurfaceVariant,
-          );
-        }),
-        iconTheme: WidgetStateProperty.resolveWith((states) {
-          final selected = states.contains(WidgetState.selected);
-          return IconThemeData(
-            size: 24,
-            color: selected
-                ? (isDark ? AppColors.signal : AppColors.signalDeep)
-                : scheme.onSurfaceVariant,
-          );
-        }),
-      ),
       chipTheme: ChipThemeData(
         backgroundColor: scheme.surfaceContainerHigh,
         side: BorderSide.none,

@@ -77,6 +77,26 @@ class Shadows {
     ];
   }
 
+  /// Upward-cast elevation for the bottom navigation dock.
+  static List<BoxShadow> dock(Brightness brightness) {
+    if (brightness == Brightness.dark) {
+      return const [
+        BoxShadow(
+          color: Color(0x40000000),
+          blurRadius: 20,
+          offset: Offset(0, -6),
+        ),
+      ];
+    }
+    return [
+      BoxShadow(
+        color: AppColors.deepForest.withValues(alpha: 0.08),
+        blurRadius: 22,
+        offset: const Offset(0, -8),
+      ),
+    ];
+  }
+
   /// Stronger elevation for floating elements (FAB, raised composer).
   static List<BoxShadow> lifted(Brightness brightness) {
     if (brightness == Brightness.dark) {

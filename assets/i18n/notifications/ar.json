@@ -278,6 +278,18 @@
     "overdue": {
       "title": "تذكير متأخر: {{title}}",
       "body": "كان موعد \"{{title}}\" في {{dueAt}} وما زال مفتوحًا."
+    },
+    "suggested": {
+      "title": "اقتراح متابعة: {{clientName}}",
+      "body": "ينتظر {{clientName}} ردًا منذ {{waitedMinutes}} دقيقة — أنشأنا لك \"{{title}}\"."
+    },
+    "window_closing": {
+      "title": "نافذة الخدمة على وشك الإغلاق: {{clientName}}",
+      "body": "ستُغلق نافذة الرد المجاني مع {{clientName}} خلال ساعتين تقريبًا — بعدها ستحتاج إلى قالب مدفوع."
+    },
+    "queue_due": {
+      "title": "تذكير غير مُسند مستحق",
+      "body": "حان موعد \"{{title}}\" ({{dueAt}}) ولم يستلمه أحد بعد."
     }
   },
   "system": {

@@ -278,6 +278,18 @@
     "overdue": {
       "title": "Rappel en retard : {{title}}",
       "body": "\"{{title}}\" était attendu le {{dueAt}} et est toujours ouvert."
+    },
+    "suggested": {
+      "title": "Suivi suggéré : {{clientName}}",
+      "body": "{{clientName}} attend une réponse depuis {{waitedMinutes}} min — nous avons créé « {{title}} » pour vous."
+    },
+    "window_closing": {
+      "title": "Fenêtre de service bientôt fermée : {{clientName}}",
+      "body": "La fenêtre de réponse gratuite avec {{clientName}} se ferme dans environ 2 heures — ensuite un modèle payant sera nécessaire."
+    },
+    "queue_due": {
+      "title": "Rappel non assigné à échéance",
+      "body": "« {{title}} » est à échéance ({{dueAt}}) et personne ne l'a encore pris."
     }
   },
   "system": {

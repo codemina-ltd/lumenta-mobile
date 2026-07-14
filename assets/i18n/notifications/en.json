@@ -278,6 +278,18 @@
     "overdue": {
       "title": "Reminder overdue: {{title}}",
       "body": "\"{{title}}\" was due {{dueAt}} and is still open."
+    },
+    "suggested": {
+      "title": "Follow-up suggested: {{clientName}}",
+      "body": "{{clientName}} has been waiting {{waitedMinutes}} min without a reply — we set up \"{{title}}\" for you."
+    },
+    "window_closing": {
+      "title": "Service window closing: {{clientName}}",
+      "body": "The free reply window with {{clientName}} closes in about 2 hours — after that a paid template is needed."
+    },
+    "queue_due": {
+      "title": "Unassigned reminder due",
+      "body": "\"{{title}}\" is due ({{dueAt}}) and nobody has claimed it yet."
     }
   },
   "system": {

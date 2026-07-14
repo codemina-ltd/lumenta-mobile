@@ -12,6 +12,26 @@ enum ReminderStatus {
   cancelled,
 }
 
+enum ReminderRecurrence {
+  @JsonValue('none')
+  none,
+  @JsonValue('daily')
+  daily,
+  @JsonValue('weekly')
+  weekly,
+  @JsonValue('monthly')
+  monthly,
+}
+
+enum ReminderSource {
+  @JsonValue('manual')
+  manual,
+  @JsonValue('auto_unanswered')
+  autoUnanswered,
+  @JsonValue('auto_window')
+  autoWindow,
+}
+
 enum ReminderPriority {
   @JsonValue('low')
   low,
@@ -29,8 +49,11 @@ abstract class Reminder with _$Reminder {
     required String id,
     String? clientId,
     String? messageId,
-    required String assignedToUserId,
-    required String createdByUserId,
+    /// NULL = the shared team queue (visible in the portal; the mobile
+    /// list is mine-only so queue rows normally don't appear here).
+    String? assignedToUserId,
+    /// NULL = created by a smart trigger.
+    String? createdByUserId,
     required String title,
     String? notes,
     @JsonKey(unknownEnumValue: ReminderPriority.normal)
@@ -40,6 +63,12 @@ abstract class Reminder with _$Reminder {
     @JsonKey(unknownEnumValue: ReminderStatus.pending)
     @Default(ReminderStatus.pending)
     ReminderStatus status,
+    @JsonKey(unknownEnumValue: ReminderRecurrence.none)
+    @Default(ReminderRecurrence.none)
+    ReminderRecurrence recurrence,
+    @JsonKey(unknownEnumValue: ReminderSource.manual)
+    @Default(ReminderSource.manual)
+    ReminderSource source,
     @Default(0) int snoozeCount,
   }) = _Reminder;
 
