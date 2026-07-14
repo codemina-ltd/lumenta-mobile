@@ -169,6 +169,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchClients => 'Search clients';
 
   @override
+  String get searchGlobalTitle => 'Search';
+
+  @override
+  String get searchGlobalHint => 'Search clients, messages, notes…';
+
+  @override
+  String get searchMinChars =>
+      'Type at least 2 characters to search across clients, messages, notes and more';
+
+  @override
+  String searchNoResults(Object query) {
+    return 'No matches for “$query”';
+  }
+
+  @override
+  String get searchSourceCustomField => 'Custom field';
+
+  @override
+  String get searchSourceMessage => 'Message';
+
+  @override
+  String get searchSourceNote => 'Note';
+
+  @override
+  String get searchSourceHeadline => 'Ad headline';
+
+  @override
   String get clientsEmpty => 'No clients yet';
 
   @override

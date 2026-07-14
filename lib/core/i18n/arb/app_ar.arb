@@ -53,6 +53,19 @@
   "ordersActionFailed": "تعذّر التحديث. حاول مرة أخرى.",
   "clientsTitle": "العملاء",
   "searchClients": "ابحث عن العملاء",
+  "searchGlobalTitle": "البحث",
+  "searchGlobalHint": "ابحث عن العملاء والرسائل والملاحظات…",
+  "searchMinChars": "اكتب حرفين على الأقل للبحث في العملاء والرسائل والملاحظات والمزيد",
+  "searchNoResults": "لا توجد نتائج لـ «{query}»",
+  "@searchNoResults": {
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "searchSourceCustomField": "حقل مخصص",
+  "searchSourceMessage": "رسالة",
+  "searchSourceNote": "ملاحظة",
+  "searchSourceHeadline": "عنوان الإعلان",
   "clientsEmpty": "لا يوجد عملاء بعد",
   "chatsTitle": "المحادثات",
   "chatsEmpty": "لا توجد محادثات بعد",

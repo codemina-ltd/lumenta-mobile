@@ -13,6 +13,7 @@ import '../../features/inbox/inbox_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/reminders/reminders_screen.dart';
+import '../../features/search/search_screen.dart';
 import '../../features/shell/home_shell.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -66,6 +67,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder: (_, state) =>
             ChatDetailScreen(clientId: state.pathParameters['clientId']!),
+      ),
+      GoRoute(
+        path: '/search',
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const SearchScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (_, _, navigationShell) =>

@@ -418,6 +418,54 @@ abstract class AppLocalizations {
   /// **'Search clients'**
   String get searchClients;
 
+  /// No description provided for @searchGlobalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchGlobalTitle;
+
+  /// No description provided for @searchGlobalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search clients, messages, notes…'**
+  String get searchGlobalHint;
+
+  /// No description provided for @searchMinChars.
+  ///
+  /// In en, this message translates to:
+  /// **'Type at least 2 characters to search across clients, messages, notes and more'**
+  String get searchMinChars;
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matches for “{query}”'**
+  String searchNoResults(Object query);
+
+  /// No description provided for @searchSourceCustomField.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom field'**
+  String get searchSourceCustomField;
+
+  /// No description provided for @searchSourceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get searchSourceMessage;
+
+  /// No description provided for @searchSourceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get searchSourceNote;
+
+  /// No description provided for @searchSourceHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad headline'**
+  String get searchSourceHeadline;
+
   /// No description provided for @clientsEmpty.
   ///
   /// In en, this message translates to:

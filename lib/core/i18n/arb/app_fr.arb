@@ -53,6 +53,19 @@
   "ordersActionFailed": "Échec de la mise à jour. Veuillez réessayer.",
   "clientsTitle": "Clients",
   "searchClients": "Rechercher des clients",
+  "searchGlobalTitle": "Recherche",
+  "searchGlobalHint": "Rechercher clients, messages, notes…",
+  "searchMinChars": "Saisissez au moins 2 caractères pour rechercher parmi les clients, messages, notes et plus",
+  "searchNoResults": "Aucun résultat pour « {query} »",
+  "@searchNoResults": {
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "searchSourceCustomField": "Champ personnalisé",
+  "searchSourceMessage": "Message",
+  "searchSourceNote": "Note",
+  "searchSourceHeadline": "Titre de l’annonce",
   "clientsEmpty": "Aucun client pour le moment",
   "chatsTitle": "Discussions",
   "chatsEmpty": "Aucune conversation pour le moment",

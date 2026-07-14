@@ -11,6 +11,7 @@ import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
 import '../data/repos/reminders_repo.dart';
+import '../data/repos/search_repo.dart';
 import '../data/repos/senders_repo.dart';
 import '../data/repos/templates_repo.dart';
 import '../data/repos/tenant_repo.dart';
@@ -55,6 +56,9 @@ final notificationsRepoProvider = Provider<NotificationsRepo>(
 );
 final remindersRepoProvider = Provider<RemindersRepo>(
   (ref) => RemindersRepo(ref.watch(dioProvider)),
+);
+final searchRepoProvider = Provider<SearchRepo>(
+  (ref) => SearchRepo(ref.watch(dioProvider)),
 );
 final templatesRepoProvider = Provider<TemplatesRepo>(
   (ref) => TemplatesRepo(ref.watch(dioProvider)),

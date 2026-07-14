@@ -45,6 +45,11 @@ class HomeShell extends ConsumerWidget {
         titleSpacing: Insets.lg,
         title: Text(titles[index]),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search_rounded),
+            tooltip: l10n.searchGlobalTitle,
+            onPressed: () => context.push('/search'),
+          ),
           // On the notifications tab, offer a one-tap "mark all as read" while
           // there are unread items. The controller updates state optimistically.
           if (index == 4 && unread > 0)

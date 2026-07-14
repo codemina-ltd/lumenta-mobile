@@ -169,6 +169,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String get searchClients => 'ابحث عن العملاء';
 
   @override
+  String get searchGlobalTitle => 'البحث';
+
+  @override
+  String get searchGlobalHint => 'ابحث عن العملاء والرسائل والملاحظات…';
+
+  @override
+  String get searchMinChars =>
+      'اكتب حرفين على الأقل للبحث في العملاء والرسائل والملاحظات والمزيد';
+
+  @override
+  String searchNoResults(Object query) {
+    return 'لا توجد نتائج لـ «$query»';
+  }
+
+  @override
+  String get searchSourceCustomField => 'حقل مخصص';
+
+  @override
+  String get searchSourceMessage => 'رسالة';
+
+  @override
+  String get searchSourceNote => 'ملاحظة';
+
+  @override
+  String get searchSourceHeadline => 'عنوان الإعلان';
+
+  @override
   String get clientsEmpty => 'لا يوجد عملاء بعد';
 
   @override

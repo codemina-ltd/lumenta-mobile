@@ -53,6 +53,19 @@
   "ordersActionFailed": "Couldn't update. Please try again.",
   "clientsTitle": "Clients",
   "searchClients": "Search clients",
+  "searchGlobalTitle": "Search",
+  "searchGlobalHint": "Search clients, messages, notes…",
+  "searchMinChars": "Type at least 2 characters to search across clients, messages, notes and more",
+  "searchNoResults": "No matches for “{query}”",
+  "@searchNoResults": {
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "searchSourceCustomField": "Custom field",
+  "searchSourceMessage": "Message",
+  "searchSourceNote": "Note",
+  "searchSourceHeadline": "Ad headline",
   "clientsEmpty": "No clients yet",
   "chatsTitle": "Chats",
   "chatsEmpty": "No conversations yet",
