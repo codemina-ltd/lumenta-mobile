@@ -42,32 +42,10 @@ class TemplateMessageContent extends ConsumerWidget {
     final template = async.asData?.value;
     if (template == null) return _plainBody();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (!template.isCarousel) ...?_header(context, template),
-        _formattedText(message.body, textColor, fontSize: 15),
-        if (!template.isCarousel &&
-            (template.footerText?.isNotEmpty ?? false)) ...[
-          const SizedBox(height: 4),
-          Text(
-            template.footerText!,
-            textDirection: Fmt.textDirectionFor(template.footerText!),
-            style: TextStyle(
-              color: textColor.withValues(alpha: 0.65),
-              fontSize: 12,
-            ),
-          ),
-        ],
-        if (template.isCarousel)
-          Padding(
-            padding: const EdgeInsets.only(top: Insets.sm),
-            child: _CarouselStrip(cards: template.carouselCards!),
-          )
-        else if (template.buttons?.isNotEmpty ?? false)
-          _TemplateButtons(buttons: template.buttons!, textColor: textColor),
-      ],
+    return TemplateContentView(
+      template: template,
+      body: message.body,
+      textColor: textColor,
     );
   }
 
@@ -76,6 +54,102 @@ class TemplateMessageContent extends ConsumerWidget {
     textDirection: Fmt.textDirectionFor(message.body),
     style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
   );
+}
+
+/// The visible content of a template message — header (text or media),
+/// formatted body, footer, buttons, and the carousel strip — factored out so
+/// both the sent-message bubble ([TemplateMessageContent]) and the
+/// send-template preview render pixel-identically. [body] is the already
+/// personalised text (the sent message body, or the live-filled preview);
+/// [template] supplies the structure and presigned media.
+class TemplateContentView extends StatelessWidget {
+  const TemplateContentView({
+    super.key,
+    required this.template,
+    required this.body,
+    required this.textColor,
+    this.sidePadding = 0,
+    this.topPadding = 0,
+  });
+
+  final Template template;
+  final String body;
+  final Color textColor;
+
+  /// Extra horizontal inset applied to every section EXCEPT a media header, so
+  /// the header image/video can sit closer to the bubble edges than the body
+  /// text. Callers that shrink the bubble's own horizontal padding pass the
+  /// difference here to hold the body at its original inset. Zero (the default,
+  /// used by the sent-message bubble) keeps media and body on one shared inset.
+  final double sidePadding;
+
+  /// Extra top inset applied to the content ONLY when no media header leads, so
+  /// a media header (which always leads) can hug the top edge while a text or
+  /// bodied template keeps its original top padding. Callers that shrink the
+  /// bubble's own top padding pass the difference here. Zero by default.
+  final double topPadding;
+
+  /// Whether the header is media (image/video/document/location) rather than
+  /// text — media bleeds toward the edges; a text header aligns with the body.
+  bool get _hasMediaHeader {
+    final format = template.headerFormat;
+    return !template.isCarousel &&
+        format != null &&
+        format.isNotEmpty &&
+        format != 'TEXT';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaHeader = _hasMediaHeader ? _header(context, template) : null;
+
+    // Everything but a media header shares the body's inset; the media header
+    // (when present) sits outside it, closer to the bubble edges.
+    final content = Padding(
+      padding: EdgeInsets.only(
+        left: sidePadding,
+        right: sidePadding,
+        // A leading media header hugs the top; a leading text/body keeps its
+        // original top inset.
+        top: mediaHeader == null ? topPadding : 0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (mediaHeader == null && !template.isCarousel)
+            ...?_header(context, template),
+          _formattedText(body, textColor, fontSize: 15),
+          if (!template.isCarousel &&
+              (template.footerText?.isNotEmpty ?? false)) ...[
+            const SizedBox(height: 4),
+            Text(
+              template.footerText!,
+              textDirection: Fmt.textDirectionFor(template.footerText!),
+              style: TextStyle(
+                color: textColor.withValues(alpha: 0.65),
+                fontSize: 12,
+              ),
+            ),
+          ],
+          if (template.isCarousel)
+            Padding(
+              padding: const EdgeInsets.only(top: Insets.sm),
+              child: _CarouselStrip(cards: template.carouselCards!),
+            )
+          else if (template.buttons?.isNotEmpty ?? false)
+            _TemplateButtons(buttons: template.buttons!, textColor: textColor),
+        ],
+      ),
+    );
+
+    if (mediaHeader == null) return content;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [...mediaHeader, content],
+    );
+  }
 
   /// Header widgets for standard templates, or null when the template has
   /// no header.
@@ -105,14 +179,17 @@ class TemplateMessageContent extends ConsumerWidget {
       return [
         ClipRRect(
           borderRadius: BorderRadius.circular(Radii.sm),
+          // Fill the bubble's content width (matching the portal's
+          // `width: 100%` header media) instead of a fixed tile, so the media
+          // spans the bubble when a long body widens it.
           child: CachedNetworkImage(
             imageUrl: t.headerMediaUrl!,
             fit: BoxFit.cover,
-            width: 230,
-            height: 130,
+            width: double.infinity,
+            height: 170,
             placeholder: (_, _) => Container(
-              width: 230,
-              height: 130,
+              width: double.infinity,
+              height: 170,
               color: Colors.black.withValues(alpha: 0.05),
               child: const Center(child: CircularProgressIndicator()),
             ),
@@ -137,8 +214,8 @@ class TemplateMessageContent extends ConsumerWidget {
 
   Widget _mediaPlaceholder(IconData icon, String label) {
     return Container(
-      width: 230,
-      height: 96,
+      width: double.infinity,
+      height: 120,
       decoration: BoxDecoration(
         color: textColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(Radii.sm),

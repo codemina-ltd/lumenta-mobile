@@ -6,7 +6,9 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/template.dart';
+import '../chats/chat_providers.dart';
 import '../chats/thread_controller.dart';
+import '../chats/widgets/template_bubble.dart';
 import 'template_vars.dart';
 
 /// Full-screen form for filling a template's body + button variables, with a
@@ -223,17 +225,27 @@ class _Field extends StatelessWidget {
   }
 }
 
-/// Live preview styled like an outbound chat bubble.
-class _PreviewCard extends StatelessWidget {
+/// Live preview styled like an outbound chat bubble. Renders the full template
+/// — header (text or media), formatted body with live-filled variables, footer,
+/// buttons, and carousel — through [TemplateContentView] so it matches the sent
+/// bubble (and the portal) exactly. The template handed in comes from the list
+/// endpoint, which omits presigned media URLs; [chatTemplateProvider] fetches
+/// the detail so header/carousel images can render. The preview shows
+/// immediately with the list template and upgrades in place once detail loads.
+class _PreviewCard extends ConsumerWidget {
   const _PreviewCard({required this.template, required this.variables});
 
   final Template template;
   final Map<String, String> variables;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final chat = context.chat;
+    final detail = ref.watch(chatTemplateProvider(template.id)).asData?.value;
+    // Body is rendered from the list template (whose fields the form was built
+    // from); the detail template only enriches media/structure.
+    final structural = detail ?? template;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -250,10 +262,15 @@ class _PreviewCard extends StatelessWidget {
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.82,
             ),
+            // Narrow padding so a media header sits close to the bubble's top
+            // and sides (its Radii.sm corners then nest concentrically in the
+            // bubble's Radii.md corners); TemplateContentView adds the
+            // difference back to the body so text keeps its Insets.md sides and
+            // Insets.sm top.
             padding: const EdgeInsets.fromLTRB(
-              Insets.md,
-              Insets.sm,
-              Insets.md,
+              Insets.xs,
+              Insets.xs,
+              Insets.xs,
               Insets.sm,
             ),
             decoration: BoxDecoration(
@@ -265,78 +282,16 @@ class _PreviewCard extends StatelessWidget {
                 bottomRight: Radius.circular(4),
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (template.hasMediaHeader)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: Insets.sm),
-                    child: _HeaderChip(template: template),
-                  ),
-                Text(
-                  renderPreview(template, variables),
-                  style: TextStyle(
-                    color: chat.outboundText,
-                    fontSize: 15,
-                    height: 1.35,
-                  ),
-                ),
-                if (template.footerText != null &&
-                    template.footerText!.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Text(
-                      template.footerText!,
-                      style: TextStyle(
-                        color: chat.outboundText.withValues(alpha: 0.7),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-              ],
+            child: TemplateContentView(
+              template: structural,
+              body: renderPreview(template, variables),
+              textColor: chat.outboundText,
+              sidePadding: Insets.md - Insets.xs,
+              topPadding: Insets.sm - Insets.xs,
             ),
           ),
         ),
       ],
-    );
-  }
-}
-
-class _HeaderChip extends StatelessWidget {
-  const _HeaderChip({required this.template});
-
-  final Template template;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final chat = context.chat;
-    final (icon, label) = switch (template.headerFormat) {
-      'IMAGE' => (Icons.image_rounded, l10n.templateImageHeader),
-      'VIDEO' => (Icons.videocam_rounded, l10n.templateVideoHeader),
-      _ => (Icons.insert_drive_file_rounded, l10n.templateDocHeader),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Insets.sm,
-        vertical: Insets.xs,
-      ),
-      decoration: BoxDecoration(
-        color: chat.outboundText.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(Radii.sm),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: chat.outboundText),
-          const SizedBox(width: Insets.xs),
-          Text(
-            label,
-            style: TextStyle(color: chat.outboundText, fontSize: 12),
-          ),
-        ],
-      ),
     );
   }
 }
