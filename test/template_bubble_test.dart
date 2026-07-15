@@ -239,4 +239,43 @@ void main() {
 
     expect(mediaTop, lessThan(headerTop));
   });
+
+  testWidgets('preview renders carousel templates with the preview padding', (
+    tester,
+  ) async {
+    const template = Template(
+      id: 'p6',
+      body: 'Our top picks',
+      carouselCards: [
+        TemplateCarouselCard(
+          headerFormat: 'IMAGE',
+          body: 'Save {{1}}',
+          bodyExample: [
+            ['15%'],
+          ],
+          buttons: [
+            {'type': 'URL', 'text': 'Shop now', 'url': 'https://x.com'},
+          ],
+        ),
+        TemplateCarouselCard(
+          headerFormat: 'IMAGE',
+          body: 'New arrivals',
+          buttons: [
+            {'type': 'QUICK_REPLY', 'text': 'Tell me more'},
+          ],
+        ),
+      ],
+    );
+    // The preview passes non-zero side/top padding; carousels must still show.
+    await tester.pumpWidget(
+      _previewHost(template, 'Our top picks', sidePadding: 8, topPadding: 4),
+    );
+    await tester.pumpAndSettle();
+
+    // Shared bubble message + first card with its stored sample substituted
+    // and its button — the swipeable strip renders under the preview padding.
+    expect(find.text('Our top picks'), findsOneWidget);
+    expect(find.text('Save 15%'), findsOneWidget);
+    expect(find.text('Shop now'), findsOneWidget);
+  });
 }
