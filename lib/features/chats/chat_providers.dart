@@ -8,6 +8,7 @@ import '../../data/models/client.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/inbox_thread.dart';
 import '../../data/models/sender.dart';
+import '../../data/models/template.dart';
 import '../auth/auth_controller.dart';
 
 /// Single client for the chat header (cached per client id).
@@ -47,6 +48,18 @@ final chatInboxThreadProvider = FutureProvider.autoDispose
           .threads(clientId: key.clientId, senderId: key.senderId, limit: 1);
       return page.data.isEmpty ? null : page.data.first;
     });
+
+/// Template detail behind an outbound template message — drives the rich
+/// template bubble (header media, footer, buttons, carousel). Cached for the
+/// session (NOT autoDispose) so scrolling a thread doesn't refetch the same
+/// template per recycled bubble; re-scoped when the active tenant changes.
+final chatTemplateProvider = FutureProvider.family<Template, String>((
+  ref,
+  templateId,
+) async {
+  ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+  return ref.read(templatesRepoProvider).byId(templateId);
+});
 
 /// Auth headers for loading proxied media (`/messages/:id/media`).
 final mediaHeadersProvider = Provider<Map<String, String>>((ref) {

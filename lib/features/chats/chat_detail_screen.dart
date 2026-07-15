@@ -24,6 +24,7 @@ import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
 import 'widgets/message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
+import 'widgets/template_bubble.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({super.key, required this.clientId});
@@ -532,6 +533,10 @@ class _MessageBubble extends ConsumerWidget {
           return _FlowResponseContent(message: message, textColor: textColor);
         }
         return _bodyText(textColor);
+      case MessageType.template:
+        // Rich template rendering (header media, footer, buttons, carousel);
+        // falls back internally to the plain body for legacy/external rows.
+        return TemplateMessageContent(message: message, textColor: textColor);
       default:
         return _bodyText(textColor);
     }

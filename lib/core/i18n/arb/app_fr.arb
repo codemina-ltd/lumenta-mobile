@@ -139,6 +139,8 @@
   },
   "templateSendFailed": "Échec de l'envoi du modèle. Veuillez réessayer.",
   "templateImageHeader": "Image",
+  "templateSeeAllOptions": "Voir toutes les options",
+  "templateAllOptionsTitle": "Toutes les options",
   "templateVideoHeader": "Vidéo",
   "templateDocHeader": "Document",
   "templateMarketingUsWarning": "Les modèles marketing vers des numéros américains peuvent être bloqués par Meta.",

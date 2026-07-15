@@ -139,6 +139,8 @@
   },
   "templateSendFailed": "Couldn't send the template. Please try again.",
   "templateImageHeader": "Image",
+  "templateSeeAllOptions": "See all options",
+  "templateAllOptionsTitle": "All options",
   "templateVideoHeader": "Video",
   "templateDocHeader": "Document",
   "templateMarketingUsWarning": "Marketing templates to US numbers may be blocked by Meta.",

@@ -24,10 +24,18 @@ abstract class Template with _$Template {
     String? headerFormat,
     String? headerText,
     String? headerS3Key,
+
+    /// Fresh presigned URL for the header media. Only present on
+    /// `GET /templates/:id` (the list endpoint doesn't presign).
+    String? headerMediaUrl,
     String? footerText,
     List<dynamic>? buttons,
     Object? bodyExample,
     Object? headerExample,
+
+    /// Carousel cards — non-null marks a marketing carousel template whose
+    /// [body] is the shared bubble message shown above the cards.
+    List<TemplateCarouselCard>? carouselCards,
   }) = _Template;
 
   const Template._();
@@ -41,4 +49,45 @@ abstract class Template with _$Template {
       headerFormat == 'IMAGE' ||
       headerFormat == 'VIDEO' ||
       headerFormat == 'DOCUMENT';
+
+  bool get isCarousel => carouselCards?.isNotEmpty ?? false;
+}
+
+/// One card of a carousel template. Card text and buttons are fixed at
+/// template level — variables inside a card body are filled from the stored
+/// example set (same contract as the API's send path), so [renderedBody]
+/// shows exactly what the recipient received.
+@freezed
+abstract class TemplateCarouselCard with _$TemplateCarouselCard {
+  const factory TemplateCarouselCard({
+    @Default('IMAGE') String headerFormat,
+    @Default('') String body,
+    Object? bodyExample,
+    List<dynamic>? buttons,
+
+    /// Fresh presigned URL for the card media (from `GET /templates/:id`).
+    String? mediaUrl,
+  }) = _TemplateCarouselCard;
+
+  const TemplateCarouselCard._();
+
+  factory TemplateCarouselCard.fromJson(Map<String, dynamic> json) =>
+      _$TemplateCarouselCardFromJson(json);
+
+  bool get isVideo => headerFormat == 'VIDEO';
+
+  /// Card body with `{{n}}` placeholders replaced by the stored positional
+  /// example values (`bodyExample` is `string[][]`; the first row maps
+  /// index-for-index onto `{{1}}`, `{{2}}`, …).
+  String get renderedBody {
+    var rendered = body;
+    final raw = bodyExample;
+    final row = (raw is List && raw.isNotEmpty && raw.first is List)
+        ? (raw.first as List)
+        : const [];
+    for (var i = 0; i < row.length; i++) {
+      rendered = rendered.replaceAll('{{${i + 1}}}', '${row[i]}');
+    }
+    return rendered;
+  }
 }

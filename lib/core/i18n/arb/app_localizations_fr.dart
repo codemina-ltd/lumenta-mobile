@@ -383,6 +383,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get templateImageHeader => 'Image';
 
   @override
+  String get templateSeeAllOptions => 'Voir toutes les options';
+
+  @override
+  String get templateAllOptionsTitle => 'Toutes les options';
+
+  @override
   String get templateVideoHeader => 'Vidéo';
 
   @override

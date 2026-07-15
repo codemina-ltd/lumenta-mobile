@@ -377,6 +377,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get templateImageHeader => 'صورة';
 
   @override
+  String get templateSeeAllOptions => 'عرض كل الخيارات';
+
+  @override
+  String get templateAllOptionsTitle => 'كل الخيارات';
+
+  @override
   String get templateVideoHeader => 'فيديو';
 
   @override

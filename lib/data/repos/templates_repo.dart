@@ -29,4 +29,12 @@ class TemplatesRepo {
     );
     return Paginated.fromJson(res.data!, Template.fromJson);
   }
+
+  /// `GET /templates/:id` — full template detail, enriched by the API with
+  /// fresh presigned media URLs (`headerMediaUrl`, `carouselCards[].mediaUrl`)
+  /// so chat bubbles can render header images and carousel card media.
+  Future<Template> byId(String id) async {
+    final res = await _dio.get<Map<String, dynamic>>('/templates/$id');
+    return Template.fromJson(res.data!);
+  }
 }

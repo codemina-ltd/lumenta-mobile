@@ -808,6 +808,18 @@ abstract class AppLocalizations {
   /// **'Image'**
   String get templateImageHeader;
 
+  /// No description provided for @templateSeeAllOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'See all options'**
+  String get templateSeeAllOptions;
+
+  /// No description provided for @templateAllOptionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All options'**
+  String get templateAllOptionsTitle;
+
   /// No description provided for @templateVideoHeader.
   ///
   /// In en, this message translates to:

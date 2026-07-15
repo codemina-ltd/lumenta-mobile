@@ -379,6 +379,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get templateImageHeader => 'Image';
 
   @override
+  String get templateSeeAllOptions => 'See all options';
+
+  @override
+  String get templateAllOptionsTitle => 'All options';
+
+  @override
   String get templateVideoHeader => 'Video';
 
   @override

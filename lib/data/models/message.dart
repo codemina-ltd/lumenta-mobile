@@ -134,6 +134,19 @@ abstract class Message with _$Message {
     return null;
   }
 
+  /// Internal template UUID behind an outbound template message, written by
+  /// the API into `providerRawPayload.templateInfo` at send time. Null for
+  /// external templates (sent by name only) and legacy rows — those keep the
+  /// plain-body rendering.
+  String? get templateId {
+    final info = providerRawPayload?['templateInfo'];
+    if (info is Map) {
+      final id = info['templateId'];
+      if (id is String && id.isNotEmpty) return id;
+    }
+    return null;
+  }
+
   /// The parsed key/value pairs the customer submitted in the flow form.
   /// Falls back to a single `rawBody` entry when [body] isn't valid JSON,
   /// matching the portal's modal behaviour.

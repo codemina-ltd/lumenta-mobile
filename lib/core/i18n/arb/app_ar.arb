@@ -139,6 +139,8 @@
   },
   "templateSendFailed": "تعذّر إرسال القالب. حاول مرة أخرى.",
   "templateImageHeader": "صورة",
+  "templateSeeAllOptions": "عرض كل الخيارات",
+  "templateAllOptionsTitle": "كل الخيارات",
   "templateVideoHeader": "فيديو",
   "templateDocHeader": "مستند",
   "templateMarketingUsWarning": "قد تحظر Meta القوالب التسويقية المرسلة إلى أرقام أمريكية.",
