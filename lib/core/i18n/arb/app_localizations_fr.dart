@@ -173,6 +173,12 @@ class AppLocalizationsFr extends AppLocalizations {
       'Échec de la mise à jour. Veuillez réessayer.';
 
   @override
+  String get clientDetailCallsTitle => 'Appels';
+
+  @override
+  String get clientDetailCallsEmpty => 'Aucun appel pour ce contact';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override
@@ -838,6 +844,18 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get orderStatusCancelled => 'Annulée';
+
+  @override
+  String get callDirectionIncoming => 'Entrant';
+
+  @override
+  String get callDirectionOutgoing => 'Sortant';
+
+  @override
+  String get callDirectionMissed => 'Manqué';
+
+  @override
+  String get callDirectionRejected => 'Rejeté';
 
   @override
   String get suppressionScopeMarketing => 'Marketing';

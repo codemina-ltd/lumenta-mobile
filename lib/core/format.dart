@@ -46,6 +46,17 @@ class Fmt {
     return DateFormat('h:mm a', locale).format(when);
   }
 
+  /// Compact duration from a second count — "45s", "21m 9s", "1h 2m 3s".
+  static String duration(int seconds) {
+    final total = seconds < 0 ? 0 : seconds;
+    final h = total ~/ 3600;
+    final m = (total % 3600) ~/ 60;
+    final s = total % 60;
+    if (h > 0) return '${h}h ${m}m ${s}s';
+    if (m > 0) return '${m}m ${s}s';
+    return '${s}s';
+  }
+
   /// Paint direction for message text, resolved from the content itself
   /// rather than the app locale: an Arabic body lays out RTL inside its
   /// bubble even in an English UI, and vice versa.

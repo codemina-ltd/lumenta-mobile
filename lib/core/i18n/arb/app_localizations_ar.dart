@@ -169,6 +169,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ordersActionFailed => 'تعذّر التحديث. حاول مرة أخرى.';
 
   @override
+  String get clientDetailCallsTitle => 'المكالمات';
+
+  @override
+  String get clientDetailCallsEmpty => 'لا توجد مكالمات لهذا العميل';
+
+  @override
   String get clientsTitle => 'العملاء';
 
   @override
@@ -821,6 +827,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get orderStatusCancelled => 'ملغى';
+
+  @override
+  String get callDirectionIncoming => 'واردة';
+
+  @override
+  String get callDirectionOutgoing => 'صادرة';
+
+  @override
+  String get callDirectionMissed => 'فائتة';
+
+  @override
+  String get callDirectionRejected => 'مرفوضة';
 
   @override
   String get suppressionScopeMarketing => 'تسويقي';

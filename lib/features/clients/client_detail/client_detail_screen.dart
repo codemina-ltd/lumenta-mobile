@@ -12,6 +12,7 @@ import '../../../data/models/client.dart';
 import '../../chats/chat_providers.dart';
 import '../../shared/skeletons.dart';
 import '../../shared/widgets.dart';
+import 'client_calls_card.dart';
 import 'client_campaigns_card.dart';
 import 'client_detail_providers.dart';
 import 'client_notes_card.dart';
@@ -65,6 +66,7 @@ class ClientDetailScreen extends ConsumerWidget {
             ClientNotesCard(clientId: clientId),
             ClientRecentMessagesCard(clientId: clientId),
             ClientOrdersCard(clientId: clientId),
+            ClientCallsCard(clientId: clientId),
             ClientCampaignsCard(clientId: clientId),
             ClientSegmentsCard(clientId: clientId),
             ClientSuppressionCard(clientId: clientId),

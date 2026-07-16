@@ -5,6 +5,7 @@ import '../../../data/models/contact_field.dart';
 import '../../../data/models/contact_profile.dart';
 import '../../../data/models/inbox_note.dart';
 import '../../../data/models/message.dart';
+import '../../../data/models/smp_call.dart';
 import '../../../data/repos/campaigns_repo.dart';
 import '../../../data/repos/commerce_repo.dart';
 import '../../../data/repos/contacts_repo.dart';
@@ -25,6 +26,12 @@ final clientRecentMessagesProvider = FutureProvider.autoDispose
 final clientOrdersProvider = FutureProvider.autoDispose
     .family<List<CommerceOrder>, String>((ref, clientId) async {
       return ref.read(commerceRepoProvider).ordersForClient(clientId);
+    });
+
+/// A client's SMP call log (newest first), for the "Calls" card.
+final clientCallsProvider = FutureProvider.autoDispose
+    .family<List<SmpCall>, String>((ref, clientId) async {
+      return ref.read(callsRepoProvider).listForClient(clientId);
     });
 
 /// Contact CRM profile bundled with the tenant's lifecycle stages and custom

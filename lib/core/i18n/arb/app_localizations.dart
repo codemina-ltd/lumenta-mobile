@@ -418,6 +418,18 @@ abstract class AppLocalizations {
   /// **'Couldn\'t update. Please try again.'**
   String get ordersActionFailed;
 
+  /// No description provided for @clientDetailCallsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls'**
+  String get clientDetailCallsTitle;
+
+  /// No description provided for @clientDetailCallsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No calls for this contact'**
+  String get clientDetailCallsEmpty;
+
   /// No description provided for @clientsTitle.
   ///
   /// In en, this message translates to:
@@ -1659,6 +1671,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancelled'**
   String get orderStatusCancelled;
+
+  /// No description provided for @callDirectionIncoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming'**
+  String get callDirectionIncoming;
+
+  /// No description provided for @callDirectionOutgoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Outgoing'**
+  String get callDirectionOutgoing;
+
+  /// No description provided for @callDirectionMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get callDirectionMissed;
+
+  /// No description provided for @callDirectionRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get callDirectionRejected;
 
   /// No description provided for @suppressionScopeMarketing.
   ///

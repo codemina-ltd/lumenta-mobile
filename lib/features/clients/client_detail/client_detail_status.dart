@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../data/models/smp_call.dart';
 
 /// Localised label + colour maps for the enum-ish string statuses shown across
 /// the client-detail cards (message delivery, order status, thread status,
@@ -42,6 +43,23 @@ Color orderStatusColor(String status) => switch (status) {
   'shipped' || 'confirmed' => AppColors.signalDeep,
   'cancelled' => AppColors.ember,
   _ => AppColors.amber,
+};
+
+String callDirectionLabel(AppLocalizations l10n, CallDirection direction) =>
+    switch (direction) {
+      CallDirection.incoming => l10n.callDirectionIncoming,
+      CallDirection.outgoing => l10n.callDirectionOutgoing,
+      CallDirection.missed => l10n.callDirectionMissed,
+      CallDirection.rejected => l10n.callDirectionRejected,
+      CallDirection.unknown => '—',
+    };
+
+Color callDirectionColor(CallDirection direction) => switch (direction) {
+  CallDirection.outgoing => AppColors.signal,
+  CallDirection.incoming => AppColors.lilac,
+  CallDirection.missed => AppColors.amber,
+  CallDirection.rejected => AppColors.ember,
+  CallDirection.unknown => AppColors.slate,
 };
 
 String threadStatusLabel(AppLocalizations l10n, String status) =>

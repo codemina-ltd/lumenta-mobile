@@ -169,6 +169,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ordersActionFailed => 'Couldn\'t update. Please try again.';
 
   @override
+  String get clientDetailCallsTitle => 'Calls';
+
+  @override
+  String get clientDetailCallsEmpty => 'No calls for this contact';
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override
@@ -826,6 +832,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orderStatusCancelled => 'Cancelled';
+
+  @override
+  String get callDirectionIncoming => 'Incoming';
+
+  @override
+  String get callDirectionOutgoing => 'Outgoing';
+
+  @override
+  String get callDirectionMissed => 'Missed';
+
+  @override
+  String get callDirectionRejected => 'Rejected';
 
   @override
   String get suppressionScopeMarketing => 'Marketing';
