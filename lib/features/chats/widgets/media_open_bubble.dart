@@ -11,14 +11,8 @@ import '../../../core/providers.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../data/models/message.dart';
 
-/// Tappable document bubble: downloads the proxied media through the
-/// authenticated Dio into a per-message temp cache, then hands the file to
-/// the OS viewer (Quick Look on iOS, ACTION_VIEW on Android).
-///
-/// The media proxy requires the Bearer header, which an external viewer can't
-/// send, so the file must be materialised locally first — same constraint as
-/// [AudioBubble].
-class DocumentBubble extends ConsumerStatefulWidget {
+/// Tappable document bubble: icon + filename, tap to download & open.
+class DocumentBubble extends StatelessWidget {
   const DocumentBubble({
     super.key,
     required this.message,
@@ -28,39 +22,102 @@ class DocumentBubble extends ConsumerStatefulWidget {
   final Message message;
   final Color textColor;
 
-  @override
-  ConsumerState<DocumentBubble> createState() => _DocumentBubbleState();
-}
-
-class _DocumentBubbleState extends ConsumerState<DocumentBubble> {
-  bool _busy = false;
-
   /// Filename embedded by the API in the body as `[Document: name.pdf]`
   /// (mirrors the portal's DocumentMessage parsing). Null for captions or
   /// legacy rows without one.
   String? get _embeddedFilename {
-    final match = RegExp(r'\[Document: (.+)\]').firstMatch(widget.message.body);
+    final match = RegExp(r'\[Document: (.+)\]').firstMatch(message.body);
     return match?.group(1)?.trim();
   }
 
-  /// Human label on the tile: embedded filename → caption → generic label.
-  String _label(AppLocalizations l10n) {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final name = _embeddedFilename;
-    if (name != null && name.isNotEmpty) return name;
-    if (widget.message.body.trim().isNotEmpty) return widget.message.body;
-    return l10n.previewDocument;
-  }
-
-  /// Name the cached file is saved under — the OS viewer shows it, and the
-  /// extension is what Android uses to pick an app.
-  String get _cacheFilename {
-    final name = _embeddedFilename;
-    if (name != null && name.isNotEmpty) {
+    final label = (name != null && name.isNotEmpty)
+        ? name
+        : (message.body.trim().isNotEmpty
+              ? message.body
+              : l10n.previewDocument);
+    return _MediaOpenBubble(
+      message: message,
+      textColor: textColor,
+      icon: _docIconFor(message.mediaMimeType),
+      label: label,
       // Strip path separators so the name can't escape the cache directory.
-      return name.replaceAll(RegExp(r'[/\\]'), '_');
-    }
-    return 'document.${_extensionFor(widget.message.mediaMimeType)}';
+      cacheFilename: (name != null && name.isNotEmpty)
+          ? name.replaceAll(RegExp(r'[/\\]'), '_')
+          : 'document.${_extensionFor(message.mediaMimeType, 'bin')}',
+      semanticLabel: l10n.openDocument,
+      openFailedText: l10n.documentOpenFailed,
+    );
   }
+}
+
+/// Tappable video bubble: tap to download & play in the OS viewer.
+class VideoBubble extends StatelessWidget {
+  const VideoBubble({
+    super.key,
+    required this.message,
+    required this.textColor,
+  });
+
+  final Message message;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final body = message.body.trim();
+    // The API stores a '[Video]' placeholder body when there is no caption
+    // (portal parity: it only shows the body as caption when != '[Video]').
+    final label = (body.isNotEmpty && body != '[Video]')
+        ? body
+        : l10n.previewVideo;
+    return _MediaOpenBubble(
+      message: message,
+      textColor: textColor,
+      icon: Icons.videocam_rounded,
+      label: label,
+      cacheFilename: 'video.${_extensionFor(message.mediaMimeType, 'mp4')}',
+      semanticLabel: l10n.openVideo,
+      openFailedText: l10n.videoOpenFailed,
+    );
+  }
+}
+
+/// Shared tap-to-open tile: downloads the proxied media through the
+/// authenticated Dio into a per-message temp cache, then hands the file to
+/// the OS viewer (Quick Look on iOS, ACTION_VIEW on Android).
+///
+/// The media proxy requires the Bearer header, which an external viewer can't
+/// send, so the file must be materialised locally first — same constraint as
+/// [AudioBubble].
+class _MediaOpenBubble extends ConsumerStatefulWidget {
+  const _MediaOpenBubble({
+    required this.message,
+    required this.textColor,
+    required this.icon,
+    required this.label,
+    required this.cacheFilename,
+    required this.semanticLabel,
+    required this.openFailedText,
+  });
+
+  final Message message;
+  final Color textColor;
+  final IconData icon;
+  final String label;
+  final String cacheFilename;
+  final String semanticLabel;
+  final String openFailedText;
+
+  @override
+  ConsumerState<_MediaOpenBubble> createState() => _MediaOpenBubbleState();
+}
+
+class _MediaOpenBubbleState extends ConsumerState<_MediaOpenBubble> {
+  bool _busy = false;
 
   Future<void> _open() async {
     if (_busy) return;
@@ -77,7 +134,7 @@ class _DocumentBubbleState extends ConsumerState<DocumentBubble> {
         messenger.showSnackBar(SnackBar(content: Text(l10n.documentNoApp)));
       } else if (result.type != ResultType.done) {
         messenger.showSnackBar(
-          SnackBar(content: Text(l10n.documentOpenFailed)),
+          SnackBar(content: Text(widget.openFailedText)),
         );
       }
     } on DioException catch (e) {
@@ -85,12 +142,12 @@ class _DocumentBubbleState extends ConsumerState<DocumentBubble> {
       final expired = e.response?.statusCode == 410;
       messenger.showSnackBar(
         SnackBar(
-          content: Text(expired ? l10n.mediaExpired : l10n.documentOpenFailed),
+          content: Text(expired ? l10n.mediaExpired : widget.openFailedText),
         ),
       );
     } catch (_) {
       messenger.showSnackBar(
-        SnackBar(content: Text(l10n.documentOpenFailed)),
+        SnackBar(content: Text(widget.openFailedText)),
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -104,7 +161,7 @@ class _DocumentBubbleState extends ConsumerState<DocumentBubble> {
     final dir = Directory(
       '${Directory.systemTemp.path}/lumenta_docs/${widget.message.id}',
     );
-    final file = File('${dir.path}/$_cacheFilename');
+    final file = File('${dir.path}/${widget.cacheFilename}');
     if (await file.exists() && await file.length() > 0) return file;
 
     final url = ref.read(messagesRepoProvider).mediaUrl(widget.message.id);
@@ -122,12 +179,10 @@ class _DocumentBubbleState extends ConsumerState<DocumentBubble> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final color = widget.textColor;
-    final label = _label(l10n);
     return Semantics(
       button: true,
-      label: l10n.openDocument,
+      label: widget.semanticLabel,
       child: InkWell(
         onTap: _open,
         borderRadius: BorderRadius.circular(Radii.sm),
@@ -140,17 +195,13 @@ class _DocumentBubbleState extends ConsumerState<DocumentBubble> {
                 color: color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(Radii.sm),
               ),
-              child: Icon(
-                _iconFor(widget.message.mediaMimeType),
-                color: color,
-                size: 24,
-              ),
+              child: Icon(widget.icon, color: color, size: 24),
             ),
             const SizedBox(width: Insets.md),
             Flexible(
               child: Text(
-                label,
-                textDirection: Fmt.textDirectionFor(label),
+                widget.label,
+                textDirection: Fmt.textDirectionFor(widget.label),
                 style: TextStyle(color: color),
               ),
             ),
@@ -176,7 +227,7 @@ class _DocumentBubbleState extends ConsumerState<DocumentBubble> {
   }
 }
 
-IconData _iconFor(String? mime) {
+IconData _docIconFor(String? mime) {
   final m = mime ?? '';
   if (m == 'application/pdf') return Icons.picture_as_pdf_rounded;
   if (m.contains('spreadsheet') || m.contains('excel') || m == 'text/csv') {
@@ -192,7 +243,7 @@ IconData _iconFor(String? mime) {
   return Icons.insert_drive_file_rounded;
 }
 
-String _extensionFor(String? mime) {
+String _extensionFor(String? mime, String fallback) {
   switch (mime) {
     case 'application/pdf':
       return 'pdf';
@@ -213,9 +264,10 @@ String _extensionFor(String? mime) {
     case 'text/csv':
       return 'csv';
     case null:
-      return 'bin';
+      return fallback;
     default:
+      // video/mp4 → mp4, video/3gpp → 3gpp, application/rtf → rtf, …
       final subtype = mime.split('/').last.split(';').first.trim();
-      return subtype.isEmpty ? 'bin' : subtype;
+      return subtype.isEmpty ? fallback : subtype;
   }
 }

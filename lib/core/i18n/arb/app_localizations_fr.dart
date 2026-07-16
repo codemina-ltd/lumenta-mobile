@@ -302,8 +302,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get openDocument => 'Ouvrir le document';
 
   @override
+  String get openVideo => 'Ouvrir la vidéo';
+
+  @override
   String get documentOpenFailed =>
       'Impossible d\'ouvrir le document. Veuillez réessayer.';
+
+  @override
+  String get videoOpenFailed =>
+      'Impossible d\'ouvrir la vidéo. Veuillez réessayer.';
 
   @override
   String get documentNoApp =>

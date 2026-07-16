@@ -670,11 +670,23 @@ abstract class AppLocalizations {
   /// **'Open document'**
   String get openDocument;
 
+  /// No description provided for @openVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Open video'**
+  String get openVideo;
+
   /// No description provided for @documentOpenFailed.
   ///
   /// In en, this message translates to:
   /// **'Couldn\'t open the document. Please try again.'**
   String get documentOpenFailed;
+
+  /// No description provided for @videoOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the video. Please try again.'**
+  String get videoOpenFailed;
 
   /// No description provided for @documentNoApp.
   ///

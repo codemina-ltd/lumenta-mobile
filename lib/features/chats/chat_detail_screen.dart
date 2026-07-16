@@ -22,7 +22,7 @@ import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
-import 'widgets/document_bubble.dart';
+import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
@@ -518,11 +518,7 @@ class _MessageBubble extends ConsumerWidget {
           ],
         );
       case MessageType.video:
-        return _IconTile(
-          icon: Icons.videocam_rounded,
-          label: AppLocalizations.of(context).previewVideo,
-          textColor: textColor,
-        );
+        return VideoBubble(message: message, textColor: textColor);
       case MessageType.document:
         return DocumentBubble(message: message, textColor: textColor);
       case MessageType.location:
@@ -694,42 +690,6 @@ class _ImageContent extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _IconTile extends StatelessWidget {
-  const _IconTile({
-    required this.icon,
-    required this.label,
-    required this.textColor,
-  });
-  final IconData icon;
-  final String label;
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(Insets.sm),
-          decoration: BoxDecoration(
-            color: textColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(Radii.sm),
-          ),
-          child: Icon(icon, color: textColor, size: 24),
-        ),
-        const SizedBox(width: Insets.md),
-        Flexible(
-          child: Text(
-            label,
-            textDirection: Fmt.textDirectionFor(label),
-            style: TextStyle(color: textColor),
-          ),
-        ),
-      ],
     );
   }
 }

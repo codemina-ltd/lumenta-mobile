@@ -298,7 +298,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get openDocument => 'فتح المستند';
 
   @override
+  String get openVideo => 'فتح الفيديو';
+
+  @override
   String get documentOpenFailed => 'تعذّر فتح المستند. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get videoOpenFailed => 'تعذّر فتح الفيديو. يرجى المحاولة مرة أخرى.';
 
   @override
   String get documentNoApp =>
