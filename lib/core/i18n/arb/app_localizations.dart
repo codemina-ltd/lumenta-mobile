@@ -670,6 +670,24 @@ abstract class AppLocalizations {
   /// **'Open document'**
   String get openDocument;
 
+  /// No description provided for @documentOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the document. Please try again.'**
+  String get documentOpenFailed;
+
+  /// No description provided for @documentNoApp.
+  ///
+  /// In en, this message translates to:
+  /// **'No app on this device can open this file type.'**
+  String get documentNoApp;
+
+  /// No description provided for @mediaExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This media has expired and is no longer available.'**
+  String get mediaExpired;
+
   /// No description provided for @loginNoRecaptcha.
   ///
   /// In en, this message translates to:

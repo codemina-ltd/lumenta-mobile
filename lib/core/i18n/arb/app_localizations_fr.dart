@@ -302,6 +302,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get openDocument => 'Ouvrir le document';
 
   @override
+  String get documentOpenFailed =>
+      'Impossible d\'ouvrir le document. Veuillez réessayer.';
+
+  @override
+  String get documentNoApp =>
+      'Aucune application sur cet appareil ne peut ouvrir ce type de fichier.';
+
+  @override
+  String get mediaExpired => 'Ce média a expiré et n\'est plus disponible.';
+
+  @override
   String get loginNoRecaptcha =>
       'La connexion n\'est pas configurée (clé reCAPTCHA manquante).';
 

@@ -2,7 +2,7 @@ name: mobile
 description: "Lumenta mobile companion app."
 publish_to: 'none'
 
-version: 1.0.0+36
+version: 1.0.0+37
 
 environment:
   sdk: ^3.11.0
@@ -54,6 +54,8 @@ dependencies:
   # Media
   cached_network_image: ^3.4.1
   audioplayers: ^6.8.1
+  # Native document preview/open (Quick Look on iOS, ACTION_VIEW on Android)
+  open_filex: ^4.7.0
 
   # Reply composer attachments (Phase 7)
   image_picker: ^1.2.3

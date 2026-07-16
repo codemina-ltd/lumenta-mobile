@@ -22,6 +22,7 @@ import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
+import 'widgets/document_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
@@ -523,13 +524,7 @@ class _MessageBubble extends ConsumerWidget {
           textColor: textColor,
         );
       case MessageType.document:
-        return _IconTile(
-          icon: Icons.insert_drive_file_rounded,
-          label: message.body.isNotEmpty
-              ? message.body
-              : AppLocalizations.of(context).previewDocument,
-          textColor: textColor,
-        );
+        return DocumentBubble(message: message, textColor: textColor);
       case MessageType.location:
         return _LocationContent(message: message, textColor: textColor);
       case MessageType.interactive:

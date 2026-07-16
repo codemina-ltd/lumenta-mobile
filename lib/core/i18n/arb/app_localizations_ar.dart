@@ -298,6 +298,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get openDocument => 'فتح المستند';
 
   @override
+  String get documentOpenFailed => 'تعذّر فتح المستند. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get documentNoApp =>
+      'لا يوجد تطبيق على هذا الجهاز يمكنه فتح هذا النوع من الملفات.';
+
+  @override
+  String get mediaExpired => 'انتهت صلاحية هذه الوسائط ولم تعد متاحة.';
+
+  @override
   String get loginNoRecaptcha =>
       'تسجيل الدخول غير مهيأ (مفتاح reCAPTCHA مفقود).';
 
