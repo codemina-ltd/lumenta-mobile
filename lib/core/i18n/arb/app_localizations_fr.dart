@@ -218,6 +218,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get chatAssign => 'Assigner à un membre de l\'équipe';
 
   @override
+  String chatSentBy(Object name) {
+    return 'Envoyé par $name';
+  }
+
+  @override
+  String get chatSentByHint =>
+      'Seule votre équipe peut voir qui a envoyé un message.';
+
+  @override
   String get chatNoteAdded => 'Note interne ajoutée';
 
   @override

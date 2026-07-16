@@ -214,6 +214,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatAssign => 'إسناد إلى عضو في الفريق';
 
   @override
+  String chatSentBy(Object name) {
+    return 'أُرسلت بواسطة $name';
+  }
+
+  @override
+  String get chatSentByHint => 'أعضاء فريقك فقط يمكنهم رؤية من أرسل الرسالة.';
+
+  @override
   String get chatNoteAdded => 'تمت إضافة الملاحظة الداخلية';
 
   @override

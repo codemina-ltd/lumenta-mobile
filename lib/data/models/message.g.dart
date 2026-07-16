@@ -39,6 +39,7 @@ _Message _$MessageFromJson(Map<String, dynamic> json) => _Message(
   reaction: json['reaction'] as String?,
   providerRawPayload: json['providerRawPayload'] as Map<String, dynamic>?,
   senderId: json['senderId'] as String?,
+  sentByUserName: json['sentByUserName'] as String?,
   deletedForEveryoneAt: json['deletedForEveryoneAt'] as String?,
   createdAt: json['createdAt'] as String,
 );
@@ -60,6 +61,7 @@ Map<String, dynamic> _$MessageToJson(_Message instance) => <String, dynamic>{
   'reaction': instance.reaction,
   'providerRawPayload': instance.providerRawPayload,
   'senderId': instance.senderId,
+  'sentByUserName': instance.sentByUserName,
   'deletedForEveryoneAt': instance.deletedForEveryoneAt,
   'createdAt': instance.createdAt,
 };

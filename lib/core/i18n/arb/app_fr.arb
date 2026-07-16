@@ -72,6 +72,13 @@
   "chatsTitle": "Discussions",
   "chatsEmpty": "Aucune conversation pour le moment",
   "chatAssign": "Assigner à un membre de l'équipe",
+  "chatSentBy": "Envoyé par {name}",
+  "@chatSentBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatSentByHint": "Seule votre équipe peut voir qui a envoyé un message.",
   "chatNoteAdded": "Note interne ajoutée",
   "notificationsTitle": "Notifications",
   "notificationsEmpty": "Vous êtes à jour",

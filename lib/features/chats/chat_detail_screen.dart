@@ -315,7 +315,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         final row = rows[i - (state.loadingOlder ? 1 : 0)];
         return row.isHeader
             ? _DayHeader(label: row.headerLabel!)
-            : _MessageBubble(message: row.message!, threadKey: threadKey);
+            : _MessageBubble(
+                message: row.message!,
+                threadKey: threadKey,
+                showSentBy: row.showSentBy,
+              );
       },
     );
   }
@@ -323,26 +327,43 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   List<_Row> _buildRows(BuildContext context, List<Message> messages) {
     final rows = <_Row>[];
     DateTime? lastDay;
-    for (final m in messages) {
+    for (var i = 0; i < messages.length; i++) {
+      final m = messages[i];
       final d = m.createdAtDate;
       final day = DateTime(d.year, d.month, d.day);
       if (lastDay == null || day != lastDay) {
         rows.add(_Row.header(Fmt.dayHeader(context, day)));
         lastDay = day;
       }
-      rows.add(_Row.message(m));
+      // "Sent by …" attribution shows once per consecutive outbound run from
+      // the same team member — under the run's last bubble (mirrors the
+      // portal's MessageThread).
+      final next = i + 1 < messages.length ? messages[i + 1] : null;
+      final showSentBy =
+          m.isOutbound &&
+          (m.sentByUserName?.isNotEmpty ?? false) &&
+          (next == null ||
+              !next.isOutbound ||
+              next.sentByUserName != m.sentByUserName);
+      rows.add(_Row.message(m, showSentBy: showSentBy));
     }
     return rows;
   }
 }
 
 class _Row {
-  _Row.header(this.headerLabel) : isHeader = true, message = null;
-  _Row.message(this.message) : isHeader = false, headerLabel = null;
+  _Row.header(this.headerLabel)
+    : isHeader = true,
+      message = null,
+      showSentBy = false;
+  _Row.message(this.message, {required this.showSentBy})
+    : isHeader = false,
+      headerLabel = null;
 
   final bool isHeader;
   final String? headerLabel;
   final Message? message;
+  final bool showSentBy;
 }
 
 class _DayHeader extends StatelessWidget {
@@ -372,9 +393,17 @@ class _DayHeader extends StatelessWidget {
 }
 
 class _MessageBubble extends ConsumerWidget {
-  const _MessageBubble({required this.message, required this.threadKey});
+  const _MessageBubble({
+    required this.message,
+    required this.threadKey,
+    this.showSentBy = false,
+  });
   final Message message;
   final ThreadKey threadKey;
+
+  /// Render the "Sent by `<team member>`" attribution under this bubble —
+  /// true only on the last bubble of a member's consecutive outbound run.
+  final bool showSentBy;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -422,7 +451,7 @@ class _MessageBubble extends ConsumerWidget {
       ),
     );
 
-    return Align(
+    final aligned = Align(
       alignment: outbound ? Alignment.centerRight : Alignment.centerLeft,
       child: GestureDetector(
         onLongPress: () => showMessageActions(
@@ -453,6 +482,26 @@ class _MessageBubble extends ConsumerWidget {
               )
             : bubble,
       ),
+    );
+
+    if (!showSentBy) return aligned;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        aligned,
+        Align(
+          // Physical right, same side as the outbound bubble.
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              right: Insets.md,
+              left: Insets.md,
+              bottom: 6,
+            ),
+            child: _SentByLabel(name: message.sentByUserName!),
+          ),
+        ),
+      ],
     );
   }
 
@@ -579,6 +628,54 @@ class _MessageBubble extends ConsumerWidget {
     if (message.status == MessageStatus.read) return AppColors.lilac;
     if (message.status == MessageStatus.failed) return AppColors.ember;
     return textColor.withValues(alpha: 0.6);
+  }
+}
+
+/// "Sent by `<team member>`" attribution under the last bubble of a member's
+/// consecutive outbound run — mirrors the portal's ChatBubble (Facebook
+/// Business Inbox style). Tapping the help icon explains it's team-only.
+class _SentByLabel extends StatelessWidget {
+  const _SentByLabel({required this.name});
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final muted = context.scheme.onSurfaceVariant;
+    final base = TextStyle(color: muted, fontSize: 11);
+
+    // The localized template embeds the name ("Sent by {name}" /
+    // "أُرسلت بواسطة {name}"); bold just the name span within it.
+    final full = l10n.chatSentBy(name);
+    final idx = full.indexOf(name);
+    final span = idx < 0
+        ? TextSpan(text: full, style: base)
+        : TextSpan(
+            style: base,
+            children: [
+              TextSpan(text: full.substring(0, idx)),
+              TextSpan(
+                text: name,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              TextSpan(text: full.substring(idx + name.length)),
+            ],
+          );
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: Text.rich(span, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
+        const SizedBox(width: 4),
+        Tooltip(
+          message: l10n.chatSentByHint,
+          triggerMode: TooltipTriggerMode.tap,
+          child: Icon(Icons.help_outline_rounded, size: 13, color: muted),
+        ),
+      ],
+    );
   }
 }
 

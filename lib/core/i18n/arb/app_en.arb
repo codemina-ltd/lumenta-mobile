@@ -72,6 +72,13 @@
   "chatsTitle": "Chats",
   "chatsEmpty": "No conversations yet",
   "chatAssign": "Assign to team member",
+  "chatSentBy": "Sent by {name}",
+  "@chatSentBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatSentByHint": "Only your team can see who sent a message.",
   "chatNoteAdded": "Internal note added",
   "notificationsTitle": "Notifications",
   "notificationsEmpty": "You're all caught up",

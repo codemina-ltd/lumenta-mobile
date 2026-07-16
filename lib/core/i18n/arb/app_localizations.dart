@@ -502,6 +502,18 @@ abstract class AppLocalizations {
   /// **'Assign to team member'**
   String get chatAssign;
 
+  /// No description provided for @chatSentBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent by {name}'**
+  String chatSentBy(Object name);
+
+  /// No description provided for @chatSentByHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only your team can see who sent a message.'**
+  String get chatSentByHint;
+
   /// No description provided for @chatNoteAdded.
   ///
   /// In en, this message translates to:

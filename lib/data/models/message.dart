@@ -87,6 +87,11 @@ abstract class Message with _$Message {
     /// rows written before sender attribution existed.
     String? senderId,
 
+    /// Team member who sent this outbound message ("Sent by …" attribution,
+    /// mirrors the portal). Response-only field; null on inbound rows and
+    /// rows whose user no longer exists.
+    String? sentByUserName,
+
     /// "Delete for everyone" tombstone. When set, the server has cleared
     /// body/media and the bubble renders a "message deleted" placeholder.
     String? deletedForEveryoneAt,

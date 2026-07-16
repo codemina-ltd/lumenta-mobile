@@ -72,6 +72,13 @@
   "chatsTitle": "المحادثات",
   "chatsEmpty": "لا توجد محادثات بعد",
   "chatAssign": "إسناد إلى عضو في الفريق",
+  "chatSentBy": "أُرسلت بواسطة {name}",
+  "@chatSentBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatSentByHint": "أعضاء فريقك فقط يمكنهم رؤية من أرسل الرسالة.",
   "chatNoteAdded": "تمت إضافة الملاحظة الداخلية",
   "notificationsTitle": "الإشعارات",
   "notificationsEmpty": "لقد اطّلعت على كل شيء",
