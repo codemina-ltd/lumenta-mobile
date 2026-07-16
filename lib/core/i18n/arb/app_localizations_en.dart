@@ -85,6 +85,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inboxNoteHint => 'Internal note — the customer never sees it';
 
   @override
+  String get inboxMentionHint => 'Type @ to mention a teammate';
+
+  @override
+  String get inboxMentionNotFound => 'No teammates match';
+
+  @override
   String get inboxActionFailed => 'Something went wrong. Please try again.';
 
   @override
@@ -643,4 +649,174 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderActions => 'Reminder actions';
+
+  @override
+  String get clientDetailTitle => 'Client details';
+
+  @override
+  String get clientDetailLoadError =>
+      'Couldn\'t load this contact. Please try again.';
+
+  @override
+  String get clientDetailOpenChat => 'Open chat';
+
+  @override
+  String get clientDetailJoined => 'Joined';
+
+  @override
+  String get clientDetailLastMessage => 'Last message';
+
+  @override
+  String get clientDetailNoMessages => 'No messages yet';
+
+  @override
+  String get clientDetailContactId => 'Contact ID';
+
+  @override
+  String get clientDetailCopiedId => 'Contact ID copied';
+
+  @override
+  String get clientDetailProfile => 'Profile';
+
+  @override
+  String get clientDetailTeam => 'Team';
+
+  @override
+  String get clientDetailAssignee => 'Assignee';
+
+  @override
+  String get clientDetailStatus => 'Status';
+
+  @override
+  String get clientDetailNoThread =>
+      'No conversation thread yet — nothing to assign.';
+
+  @override
+  String get clientDetailNotes => 'Internal notes';
+
+  @override
+  String get clientDetailNoNotes => 'No notes yet';
+
+  @override
+  String get clientDetailAddNote => 'Add note';
+
+  @override
+  String get clientDetailDeleteNote => 'Delete note';
+
+  @override
+  String get clientDetailSegments => 'Segments';
+
+  @override
+  String get clientDetailNoSegments => 'Not in any segment';
+
+  @override
+  String get clientDetailCampaigns => 'Campaigns';
+
+  @override
+  String get clientDetailNoCampaigns => 'No campaigns yet';
+
+  @override
+  String get clientDetailUntitledCampaign => 'Untitled campaign';
+
+  @override
+  String get clientDetailRecentMessages => 'Recent messages';
+
+  @override
+  String get clientDetailNoRecentMessages => 'No messages yet';
+
+  @override
+  String get clientDetailFromClient => 'From client';
+
+  @override
+  String get clientDetailFromTeam => 'From team';
+
+  @override
+  String get clientDetailViewConversation => 'View conversation';
+
+  @override
+  String get clientDetailSuppression => 'Suppression';
+
+  @override
+  String get clientDetailSuppressionNone => 'Targetable — no active blocks';
+
+  @override
+  String get clientDetailSuppressedAll => 'All messages blocked';
+
+  @override
+  String get clientDetailSuppressedMarketing => 'Marketing blocked';
+
+  @override
+  String get clientDetailRelease => 'Release';
+
+  @override
+  String get clientDetailReleased => 'Suppression released';
+
+  @override
+  String get clientDetailSuppress => 'Suppress…';
+
+  @override
+  String get clientDetailSuppressTitle => 'Suppress contact';
+
+  @override
+  String get clientDetailSuppressScope => 'Scope';
+
+  @override
+  String get clientDetailSuppressReason => 'Reason';
+
+  @override
+  String get clientDetailSuppressed => 'Contact suppressed';
+
+  @override
+  String get threadStatusOpen => 'Open';
+
+  @override
+  String get threadStatusPending => 'Pending';
+
+  @override
+  String get threadStatusResolved => 'Resolved';
+
+  @override
+  String get threadStatusSnoozed => 'Snoozed';
+
+  @override
+  String get statusReceived => 'Received';
+
+  @override
+  String get orderStatusPending => 'Pending';
+
+  @override
+  String get orderStatusConfirmed => 'Confirmed';
+
+  @override
+  String get orderStatusPaid => 'Paid';
+
+  @override
+  String get orderStatusShipped => 'Shipped';
+
+  @override
+  String get orderStatusCompleted => 'Completed';
+
+  @override
+  String get orderStatusCancelled => 'Cancelled';
+
+  @override
+  String get suppressionScopeMarketing => 'Marketing';
+
+  @override
+  String get suppressionScopeAll => 'All messages';
+
+  @override
+  String get suppressionReasonUserOptout => 'User opt-out';
+
+  @override
+  String get suppressionReasonManual => 'Manual';
+
+  @override
+  String get suppressionReasonHardBounce => 'Hard bounce';
+
+  @override
+  String get suppressionReasonBlockedByUser => 'Blocked by user';
+
+  @override
+  String get suppressionReasonCompliance => 'Compliance';
 }

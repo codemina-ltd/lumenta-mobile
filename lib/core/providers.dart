@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/http/dio_client.dart';
 import '../data/repos/auth_repo.dart';
+import '../data/repos/campaigns_repo.dart';
 import '../data/repos/clients_repo.dart';
 import '../data/repos/commerce_repo.dart';
 import '../data/repos/contacts_repo.dart';
@@ -12,7 +13,9 @@ import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
 import '../data/repos/reminders_repo.dart';
 import '../data/repos/search_repo.dart';
+import '../data/repos/segments_repo.dart';
 import '../data/repos/senders_repo.dart';
+import '../data/repos/suppression_repo.dart';
 import '../data/repos/templates_repo.dart';
 import '../data/repos/tenant_repo.dart';
 import '../data/session/auth_session.dart';
@@ -50,6 +53,15 @@ final contactsRepoProvider = Provider<ContactsRepo>(
 );
 final commerceRepoProvider = Provider<CommerceRepo>(
   (ref) => CommerceRepo(ref.watch(dioProvider)),
+);
+final segmentsRepoProvider = Provider<SegmentsRepo>(
+  (ref) => SegmentsRepo(ref.watch(dioProvider)),
+);
+final campaignsRepoProvider = Provider<CampaignsRepo>(
+  (ref) => CampaignsRepo(ref.watch(dioProvider)),
+);
+final suppressionRepoProvider = Provider<SuppressionRepo>(
+  (ref) => SuppressionRepo(ref.watch(dioProvider)),
 );
 final notificationsRepoProvider = Provider<NotificationsRepo>(
   (ref) => NotificationsRepo(ref.watch(dioProvider)),

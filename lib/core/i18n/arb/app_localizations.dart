@@ -250,6 +250,18 @@ abstract class AppLocalizations {
   /// **'Internal note — the customer never sees it'**
   String get inboxNoteHint;
 
+  /// No description provided for @inboxMentionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type @ to mention a teammate'**
+  String get inboxMentionHint;
+
+  /// No description provided for @inboxMentionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No teammates match'**
+  String get inboxMentionNotFound;
+
   /// No description provided for @inboxActionFailed.
   ///
   /// In en, this message translates to:
@@ -1305,6 +1317,342 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder actions'**
   String get reminderActions;
+
+  /// No description provided for @clientDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Client details'**
+  String get clientDetailTitle;
+
+  /// No description provided for @clientDetailLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this contact. Please try again.'**
+  String get clientDetailLoadError;
+
+  /// No description provided for @clientDetailOpenChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open chat'**
+  String get clientDetailOpenChat;
+
+  /// No description provided for @clientDetailJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined'**
+  String get clientDetailJoined;
+
+  /// No description provided for @clientDetailLastMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Last message'**
+  String get clientDetailLastMessage;
+
+  /// No description provided for @clientDetailNoMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get clientDetailNoMessages;
+
+  /// No description provided for @clientDetailContactId.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact ID'**
+  String get clientDetailContactId;
+
+  /// No description provided for @clientDetailCopiedId.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact ID copied'**
+  String get clientDetailCopiedId;
+
+  /// No description provided for @clientDetailProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get clientDetailProfile;
+
+  /// No description provided for @clientDetailTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get clientDetailTeam;
+
+  /// No description provided for @clientDetailAssignee.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignee'**
+  String get clientDetailAssignee;
+
+  /// No description provided for @clientDetailStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get clientDetailStatus;
+
+  /// No description provided for @clientDetailNoThread.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversation thread yet — nothing to assign.'**
+  String get clientDetailNoThread;
+
+  /// No description provided for @clientDetailNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal notes'**
+  String get clientDetailNotes;
+
+  /// No description provided for @clientDetailNoNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'No notes yet'**
+  String get clientDetailNoNotes;
+
+  /// No description provided for @clientDetailAddNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add note'**
+  String get clientDetailAddNote;
+
+  /// No description provided for @clientDetailDeleteNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete note'**
+  String get clientDetailDeleteNote;
+
+  /// No description provided for @clientDetailSegments.
+  ///
+  /// In en, this message translates to:
+  /// **'Segments'**
+  String get clientDetailSegments;
+
+  /// No description provided for @clientDetailNoSegments.
+  ///
+  /// In en, this message translates to:
+  /// **'Not in any segment'**
+  String get clientDetailNoSegments;
+
+  /// No description provided for @clientDetailCampaigns.
+  ///
+  /// In en, this message translates to:
+  /// **'Campaigns'**
+  String get clientDetailCampaigns;
+
+  /// No description provided for @clientDetailNoCampaigns.
+  ///
+  /// In en, this message translates to:
+  /// **'No campaigns yet'**
+  String get clientDetailNoCampaigns;
+
+  /// No description provided for @clientDetailUntitledCampaign.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled campaign'**
+  String get clientDetailUntitledCampaign;
+
+  /// No description provided for @clientDetailRecentMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent messages'**
+  String get clientDetailRecentMessages;
+
+  /// No description provided for @clientDetailNoRecentMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get clientDetailNoRecentMessages;
+
+  /// No description provided for @clientDetailFromClient.
+  ///
+  /// In en, this message translates to:
+  /// **'From client'**
+  String get clientDetailFromClient;
+
+  /// No description provided for @clientDetailFromTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'From team'**
+  String get clientDetailFromTeam;
+
+  /// No description provided for @clientDetailViewConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'View conversation'**
+  String get clientDetailViewConversation;
+
+  /// No description provided for @clientDetailSuppression.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppression'**
+  String get clientDetailSuppression;
+
+  /// No description provided for @clientDetailSuppressionNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Targetable — no active blocks'**
+  String get clientDetailSuppressionNone;
+
+  /// No description provided for @clientDetailSuppressedAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All messages blocked'**
+  String get clientDetailSuppressedAll;
+
+  /// No description provided for @clientDetailSuppressedMarketing.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing blocked'**
+  String get clientDetailSuppressedMarketing;
+
+  /// No description provided for @clientDetailRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'Release'**
+  String get clientDetailRelease;
+
+  /// No description provided for @clientDetailReleased.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppression released'**
+  String get clientDetailReleased;
+
+  /// No description provided for @clientDetailSuppress.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppress…'**
+  String get clientDetailSuppress;
+
+  /// No description provided for @clientDetailSuppressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppress contact'**
+  String get clientDetailSuppressTitle;
+
+  /// No description provided for @clientDetailSuppressScope.
+  ///
+  /// In en, this message translates to:
+  /// **'Scope'**
+  String get clientDetailSuppressScope;
+
+  /// No description provided for @clientDetailSuppressReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get clientDetailSuppressReason;
+
+  /// No description provided for @clientDetailSuppressed.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact suppressed'**
+  String get clientDetailSuppressed;
+
+  /// No description provided for @threadStatusOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get threadStatusOpen;
+
+  /// No description provided for @threadStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get threadStatusPending;
+
+  /// No description provided for @threadStatusResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get threadStatusResolved;
+
+  /// No description provided for @threadStatusSnoozed.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed'**
+  String get threadStatusSnoozed;
+
+  /// No description provided for @statusReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get statusReceived;
+
+  /// No description provided for @orderStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get orderStatusPending;
+
+  /// No description provided for @orderStatusConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get orderStatusConfirmed;
+
+  /// No description provided for @orderStatusPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get orderStatusPaid;
+
+  /// No description provided for @orderStatusShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get orderStatusShipped;
+
+  /// No description provided for @orderStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get orderStatusCompleted;
+
+  /// No description provided for @orderStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get orderStatusCancelled;
+
+  /// No description provided for @suppressionScopeMarketing.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing'**
+  String get suppressionScopeMarketing;
+
+  /// No description provided for @suppressionScopeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All messages'**
+  String get suppressionScopeAll;
+
+  /// No description provided for @suppressionReasonUserOptout.
+  ///
+  /// In en, this message translates to:
+  /// **'User opt-out'**
+  String get suppressionReasonUserOptout;
+
+  /// No description provided for @suppressionReasonManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get suppressionReasonManual;
+
+  /// No description provided for @suppressionReasonHardBounce.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard bounce'**
+  String get suppressionReasonHardBounce;
+
+  /// No description provided for @suppressionReasonBlockedByUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked by user'**
+  String get suppressionReasonBlockedByUser;
+
+  /// No description provided for @suppressionReasonCompliance.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliance'**
+  String get suppressionReasonCompliance;
 }
 
 class _AppLocalizationsDelegate

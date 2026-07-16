@@ -179,35 +179,39 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           onPressed: () =>
               context.canPop() ? context.pop() : context.go('/chats'),
         ),
-        title: Row(
-          children: [
-            if (initials.isNotEmpty)
-              InitialsAvatar(initials: initials, radius: 18),
-            const SizedBox(width: Insets.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title.isEmpty ? '…' : title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.text.titleMedium?.copyWith(fontSize: 17),
-                  ),
-                  if (phone != null)
+        // Tapping the header opens the full contact profile.
+        title: InkWell(
+          onTap: () => context.push('/clients/${widget.clientId}'),
+          child: Row(
+            children: [
+              if (initials.isNotEmpty)
+                InitialsAvatar(initials: initials, radius: 18),
+              const SizedBox(width: Insets.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Text(
-                      phone,
+                      title.isEmpty ? '…' : title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: context.text.labelSmall?.copyWith(
-                        color: context.scheme.onSurfaceVariant,
-                      ),
+                      style: context.text.titleMedium?.copyWith(fontSize: 17),
                     ),
-                ],
+                    if (phone != null)
+                      Text(
+                        phone,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.text.labelSmall?.copyWith(
+                          color: context.scheme.onSurfaceVariant,
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [if (threadKey != null) ..._threadActions(context, threadKey)],
       ),

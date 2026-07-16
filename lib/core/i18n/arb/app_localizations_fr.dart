@@ -85,6 +85,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get inboxNoteHint => 'Note interne — le client ne la voit jamais';
 
   @override
+  String get inboxMentionHint => 'Tapez @ pour mentionner un collègue';
+
+  @override
+  String get inboxMentionNotFound => 'Aucun collègue correspondant';
+
+  @override
   String get inboxActionFailed =>
       'Une erreur s\'est produite. Veuillez réessayer.';
 
@@ -653,4 +659,174 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reminderActions => 'Actions du rappel';
+
+  @override
+  String get clientDetailTitle => 'Détails du client';
+
+  @override
+  String get clientDetailLoadError =>
+      'Impossible de charger ce contact. Veuillez réessayer.';
+
+  @override
+  String get clientDetailOpenChat => 'Ouvrir la discussion';
+
+  @override
+  String get clientDetailJoined => 'Inscrit le';
+
+  @override
+  String get clientDetailLastMessage => 'Dernier message';
+
+  @override
+  String get clientDetailNoMessages => 'Aucun message pour l\'instant';
+
+  @override
+  String get clientDetailContactId => 'ID du contact';
+
+  @override
+  String get clientDetailCopiedId => 'ID du contact copié';
+
+  @override
+  String get clientDetailProfile => 'Profil';
+
+  @override
+  String get clientDetailTeam => 'Équipe';
+
+  @override
+  String get clientDetailAssignee => 'Responsable';
+
+  @override
+  String get clientDetailStatus => 'Statut';
+
+  @override
+  String get clientDetailNoThread =>
+      'Aucune conversation pour l\'instant — rien à attribuer.';
+
+  @override
+  String get clientDetailNotes => 'Notes internes';
+
+  @override
+  String get clientDetailNoNotes => 'Aucune note pour l\'instant';
+
+  @override
+  String get clientDetailAddNote => 'Ajouter une note';
+
+  @override
+  String get clientDetailDeleteNote => 'Supprimer la note';
+
+  @override
+  String get clientDetailSegments => 'Segments';
+
+  @override
+  String get clientDetailNoSegments => 'Dans aucun segment';
+
+  @override
+  String get clientDetailCampaigns => 'Campagnes';
+
+  @override
+  String get clientDetailNoCampaigns => 'Aucune campagne pour l\'instant';
+
+  @override
+  String get clientDetailUntitledCampaign => 'Campagne sans titre';
+
+  @override
+  String get clientDetailRecentMessages => 'Messages récents';
+
+  @override
+  String get clientDetailNoRecentMessages => 'Aucun message pour l\'instant';
+
+  @override
+  String get clientDetailFromClient => 'Du client';
+
+  @override
+  String get clientDetailFromTeam => 'De l\'équipe';
+
+  @override
+  String get clientDetailViewConversation => 'Voir la conversation';
+
+  @override
+  String get clientDetailSuppression => 'Suppression';
+
+  @override
+  String get clientDetailSuppressionNone => 'Ciblable — aucun blocage actif';
+
+  @override
+  String get clientDetailSuppressedAll => 'Tous les messages bloqués';
+
+  @override
+  String get clientDetailSuppressedMarketing => 'Marketing bloqué';
+
+  @override
+  String get clientDetailRelease => 'Débloquer';
+
+  @override
+  String get clientDetailReleased => 'Blocage levé';
+
+  @override
+  String get clientDetailSuppress => 'Bloquer…';
+
+  @override
+  String get clientDetailSuppressTitle => 'Bloquer le contact';
+
+  @override
+  String get clientDetailSuppressScope => 'Portée';
+
+  @override
+  String get clientDetailSuppressReason => 'Motif';
+
+  @override
+  String get clientDetailSuppressed => 'Contact bloqué';
+
+  @override
+  String get threadStatusOpen => 'Ouverte';
+
+  @override
+  String get threadStatusPending => 'En attente';
+
+  @override
+  String get threadStatusResolved => 'Résolue';
+
+  @override
+  String get threadStatusSnoozed => 'En veille';
+
+  @override
+  String get statusReceived => 'Reçu';
+
+  @override
+  String get orderStatusPending => 'En attente';
+
+  @override
+  String get orderStatusConfirmed => 'Confirmée';
+
+  @override
+  String get orderStatusPaid => 'Payée';
+
+  @override
+  String get orderStatusShipped => 'Expédiée';
+
+  @override
+  String get orderStatusCompleted => 'Terminée';
+
+  @override
+  String get orderStatusCancelled => 'Annulée';
+
+  @override
+  String get suppressionScopeMarketing => 'Marketing';
+
+  @override
+  String get suppressionScopeAll => 'Tous les messages';
+
+  @override
+  String get suppressionReasonUserOptout => 'Désinscription de l\'utilisateur';
+
+  @override
+  String get suppressionReasonManual => 'Manuel';
+
+  @override
+  String get suppressionReasonHardBounce => 'Rebond définitif';
+
+  @override
+  String get suppressionReasonBlockedByUser => 'Bloqué par l\'utilisateur';
+
+  @override
+  String get suppressionReasonCompliance => 'Conformité';
 }

@@ -8,6 +8,7 @@ import '../../data/models/inbox_thread.dart';
 import '../../data/repos/inbox_repo.dart';
 import '../../data/repos/tenant_repo.dart';
 import '../auth/auth_controller.dart';
+import '../chats/widgets/add_note_dialog.dart';
 import '../commerce/orders_sheet.dart';
 import '../contacts/contact_details_sheet.dart';
 import '../shared/skeletons.dart';
@@ -238,7 +239,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                 title: Text(l10n.inboxAddNote),
                 onTap: () {
                   Navigator.pop(sheetContext);
-                  _addNote(context, l10n, thread);
+                  showAddNoteDialog(context, ref, thread);
                 },
               ),
               ListTile(
@@ -455,40 +456,6 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
   }
 
   // ── Shared plumbing ───────────────────────────────────────────────────────
-
-  Future<void> _addNote(
-    BuildContext context,
-    AppLocalizations l10n,
-    InboxThread thread,
-  ) async {
-    final controller = TextEditingController();
-    final body = await showDialog<String>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.inboxAddNote),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          maxLines: 4,
-          decoration: InputDecoration(hintText: l10n.inboxNoteHint),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(l10n.inboxCancel),
-          ),
-          FilledButton(
-            onPressed: () =>
-                Navigator.pop(dialogContext, controller.text.trim()),
-            child: Text(l10n.inboxSave),
-          ),
-        ],
-      ),
-    );
-    if (body == null || body.isEmpty) return;
-    // Notes never appear in the thread list — nothing to fold or refetch.
-    await _run(() => ref.read(inboxRepoProvider).addNote(thread.id, body));
-  }
 
   /// Runs a mutation; the controller folds the server response into the
   /// list state, so no list refetch happens here (see InboxController).

@@ -85,6 +85,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get inboxNoteHint => 'ملاحظة داخلية — لن يراها العميل';
 
   @override
+  String get inboxMentionHint => 'اكتب @ لذكر زميل';
+
+  @override
+  String get inboxMentionNotFound => 'لا يوجد زملاء مطابقون';
+
+  @override
   String get inboxActionFailed => 'حدث خطأ ما. حاول مرة أخرى.';
 
   @override
@@ -640,4 +646,173 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reminderActions => 'إجراءات التذكير';
+
+  @override
+  String get clientDetailTitle => 'تفاصيل العميل';
+
+  @override
+  String get clientDetailLoadError => 'تعذّر تحميل جهة الاتصال. حاول مرة أخرى.';
+
+  @override
+  String get clientDetailOpenChat => 'فتح المحادثة';
+
+  @override
+  String get clientDetailJoined => 'انضمّ';
+
+  @override
+  String get clientDetailLastMessage => 'آخر رسالة';
+
+  @override
+  String get clientDetailNoMessages => 'لا توجد رسائل بعد';
+
+  @override
+  String get clientDetailContactId => 'معرّف جهة الاتصال';
+
+  @override
+  String get clientDetailCopiedId => 'تم نسخ معرّف جهة الاتصال';
+
+  @override
+  String get clientDetailProfile => 'الملف التعريفي';
+
+  @override
+  String get clientDetailTeam => 'الفريق';
+
+  @override
+  String get clientDetailAssignee => 'المسؤول';
+
+  @override
+  String get clientDetailStatus => 'الحالة';
+
+  @override
+  String get clientDetailNoThread => 'لا توجد محادثة بعد — لا شيء لإسناده.';
+
+  @override
+  String get clientDetailNotes => 'الملاحظات الداخلية';
+
+  @override
+  String get clientDetailNoNotes => 'لا توجد ملاحظات بعد';
+
+  @override
+  String get clientDetailAddNote => 'إضافة ملاحظة';
+
+  @override
+  String get clientDetailDeleteNote => 'حذف الملاحظة';
+
+  @override
+  String get clientDetailSegments => 'الشرائح';
+
+  @override
+  String get clientDetailNoSegments => 'ليس ضمن أي شريحة';
+
+  @override
+  String get clientDetailCampaigns => 'الحملات';
+
+  @override
+  String get clientDetailNoCampaigns => 'لا توجد حملات بعد';
+
+  @override
+  String get clientDetailUntitledCampaign => 'حملة بدون عنوان';
+
+  @override
+  String get clientDetailRecentMessages => 'أحدث الرسائل';
+
+  @override
+  String get clientDetailNoRecentMessages => 'لا توجد رسائل بعد';
+
+  @override
+  String get clientDetailFromClient => 'من العميل';
+
+  @override
+  String get clientDetailFromTeam => 'من الفريق';
+
+  @override
+  String get clientDetailViewConversation => 'عرض المحادثة';
+
+  @override
+  String get clientDetailSuppression => 'الحظر';
+
+  @override
+  String get clientDetailSuppressionNone =>
+      'قابل للاستهداف — لا توجد قيود نشطة';
+
+  @override
+  String get clientDetailSuppressedAll => 'جميع الرسائل محظورة';
+
+  @override
+  String get clientDetailSuppressedMarketing => 'الرسائل التسويقية محظورة';
+
+  @override
+  String get clientDetailRelease => 'إلغاء الحظر';
+
+  @override
+  String get clientDetailReleased => 'تم إلغاء الحظر';
+
+  @override
+  String get clientDetailSuppress => 'حظر…';
+
+  @override
+  String get clientDetailSuppressTitle => 'حظر جهة الاتصال';
+
+  @override
+  String get clientDetailSuppressScope => 'النطاق';
+
+  @override
+  String get clientDetailSuppressReason => 'السبب';
+
+  @override
+  String get clientDetailSuppressed => 'تم حظر جهة الاتصال';
+
+  @override
+  String get threadStatusOpen => 'مفتوحة';
+
+  @override
+  String get threadStatusPending => 'قيد الانتظار';
+
+  @override
+  String get threadStatusResolved => 'تم الحل';
+
+  @override
+  String get threadStatusSnoozed => 'مؤجلة';
+
+  @override
+  String get statusReceived => 'مستلمة';
+
+  @override
+  String get orderStatusPending => 'قيد الانتظار';
+
+  @override
+  String get orderStatusConfirmed => 'مؤكد';
+
+  @override
+  String get orderStatusPaid => 'مدفوع';
+
+  @override
+  String get orderStatusShipped => 'تم الشحن';
+
+  @override
+  String get orderStatusCompleted => 'مكتمل';
+
+  @override
+  String get orderStatusCancelled => 'ملغى';
+
+  @override
+  String get suppressionScopeMarketing => 'تسويقي';
+
+  @override
+  String get suppressionScopeAll => 'جميع الرسائل';
+
+  @override
+  String get suppressionReasonUserOptout => 'إلغاء اشتراك المستخدم';
+
+  @override
+  String get suppressionReasonManual => 'يدوي';
+
+  @override
+  String get suppressionReasonHardBounce => 'ارتداد دائم';
+
+  @override
+  String get suppressionReasonBlockedByUser => 'حظره المستخدم';
+
+  @override
+  String get suppressionReasonCompliance => 'الامتثال';
 }

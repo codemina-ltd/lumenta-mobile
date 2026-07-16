@@ -8,6 +8,7 @@ import '../../features/auth/splash_screen.dart';
 import '../../features/auth/tenant_picker_screen.dart';
 import '../../features/chats/chat_detail_screen.dart';
 import '../../features/chats/chats_screen.dart';
+import '../../features/clients/client_detail/client_detail_screen.dart';
 import '../../features/clients/clients_screen.dart';
 import '../../features/inbox/inbox_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
@@ -40,9 +41,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         case AuthStatus.needsTenant:
           return loc == '/select-tenant' ? null : '/select-tenant';
         case AuthStatus.authenticated:
-          if (loc == '/splash' ||
-              loc == '/login' ||
-              loc == '/select-tenant') {
+          if (loc == '/splash' || loc == '/login' || loc == '/select-tenant') {
             return '/chats';
           }
           return null;
@@ -68,6 +67,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             ChatDetailScreen(clientId: state.pathParameters['clientId']!),
       ),
+      // Full contact profile, opened from the chat header. Root-level so it
+      // stacks over the chat and `pop` returns there. Distinct from the
+      // `/clients` list route (a tab-shell branch).
+      GoRoute(
+        path: '/clients/:clientId',
+        parentNavigatorKey: _rootKey,
+        builder: (_, state) =>
+            ClientDetailScreen(clientId: state.pathParameters['clientId']!),
+      ),
       GoRoute(
         path: '/search',
         parentNavigatorKey: _rootKey,
@@ -80,7 +88,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             navigatorKey: _shellKey,
             routes: [
-              GoRoute(path: '/clients', builder: (_, _) => const ClientsScreen()),
+              GoRoute(
+                path: '/clients',
+                builder: (_, _) => const ClientsScreen(),
+              ),
             ],
           ),
           StatefulShellBranch(

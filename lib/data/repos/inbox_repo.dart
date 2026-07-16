@@ -114,13 +114,25 @@ class InboxRepo {
         .toList();
   }
 
-  /// `POST /inbox/threads/:id/notes` — internal-only note.
-  Future<InboxNote> addNote(String id, String body) async {
+  /// `POST /inbox/threads/:id/notes` — internal-only note. `mentions` carries
+  /// the tagged teammates as `[{ user_id }]` (mirrors the portal composer); the
+  /// server re-validates every id against tenant membership and notifies them.
+  Future<InboxNote> addNote(
+    String id,
+    String body, {
+    List<Map<String, dynamic>> mentions = const [],
+  }) async {
     final res = await _dio.post<Map<String, dynamic>>(
       '/inbox/threads/$id/notes',
-      data: {'body': body},
+      data: {'body': body, if (mentions.isNotEmpty) 'mentions': mentions},
     );
     return InboxNote.fromJson(res.data!);
+  }
+
+  /// `DELETE /inbox/threads/:id/notes/:noteId` — remove a note (the API only
+  /// lets an author delete their own).
+  Future<void> deleteNote(String id, String noteId) async {
+    await _dio.delete<void>('/inbox/threads/$id/notes/$noteId');
   }
 
   /// `GET /inbox/labels` — tenant label definitions.

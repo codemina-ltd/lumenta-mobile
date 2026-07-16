@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+
+import '../../../core/i18n/arb/app_localizations.dart';
+import '../../../core/theme/app_colors.dart';
+
+/// Localised label + colour maps for the enum-ish string statuses shown across
+/// the client-detail cards (message delivery, order status, thread status,
+/// suppression scope/reason). Falls back to the raw server value when an
+/// unexpected key arrives, so a new backend enum degrades gracefully.
+
+String messageStatusLabel(AppLocalizations l10n, String status) =>
+    switch (status) {
+      'sent' => l10n.statusSent,
+      'delivered' => l10n.statusDelivered,
+      'read' => l10n.statusRead,
+      'failed' => l10n.statusFailed,
+      'received' => l10n.statusReceived,
+      _ => status,
+    };
+
+Color messageStatusColor(String status) => switch (status) {
+  'read' => AppColors.lilac,
+  'delivered' => AppColors.signal,
+  'received' => AppColors.signalDeep,
+  'failed' => AppColors.ember,
+  _ => AppColors.slate,
+};
+
+String orderStatusLabel(AppLocalizations l10n, String status) =>
+    switch (status) {
+      'pending' => l10n.orderStatusPending,
+      'confirmed' => l10n.orderStatusConfirmed,
+      'paid' => l10n.orderStatusPaid,
+      'shipped' => l10n.orderStatusShipped,
+      'completed' => l10n.orderStatusCompleted,
+      'cancelled' => l10n.orderStatusCancelled,
+      _ => status,
+    };
+
+Color orderStatusColor(String status) => switch (status) {
+  'completed' || 'paid' => AppColors.signal,
+  'shipped' || 'confirmed' => AppColors.signalDeep,
+  'cancelled' => AppColors.ember,
+  _ => AppColors.amber,
+};
+
+String threadStatusLabel(AppLocalizations l10n, String status) =>
+    switch (status) {
+      'open' => l10n.threadStatusOpen,
+      'pending' => l10n.threadStatusPending,
+      'resolved' => l10n.threadStatusResolved,
+      'snoozed' => l10n.threadStatusSnoozed,
+      _ => status,
+    };
+
+String suppressionScopeLabel(AppLocalizations l10n, String scope) =>
+    switch (scope) {
+      'marketing' => l10n.suppressionScopeMarketing,
+      'all' => l10n.suppressionScopeAll,
+      _ => scope,
+    };
+
+String suppressionReasonLabel(AppLocalizations l10n, String reason) =>
+    switch (reason) {
+      'user_optout' => l10n.suppressionReasonUserOptout,
+      'manual' => l10n.suppressionReasonManual,
+      'hard_bounce' => l10n.suppressionReasonHardBounce,
+      'blocked_by_user' => l10n.suppressionReasonBlockedByUser,
+      'compliance' => l10n.suppressionReasonCompliance,
+      _ => reason,
+    };
