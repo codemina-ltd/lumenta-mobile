@@ -248,6 +248,7 @@
   "clientDetailContactId": "معرّف جهة الاتصال",
   "clientDetailCopiedId": "تم نسخ معرّف جهة الاتصال",
   "clientDetailProfile": "الملف التعريفي",
+  "clientDetailClear": "مسح",
   "clientDetailTeam": "الفريق",
   "clientDetailAssignee": "المسؤول",
   "clientDetailStatus": "الحالة",

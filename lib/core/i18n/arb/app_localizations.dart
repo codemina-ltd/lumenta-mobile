@@ -1372,6 +1372,12 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get clientDetailProfile;
 
+  /// No description provided for @clientDetailClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clientDetailClear;
+
   /// No description provided for @clientDetailTeam.
   ///
   /// In en, this message translates to:

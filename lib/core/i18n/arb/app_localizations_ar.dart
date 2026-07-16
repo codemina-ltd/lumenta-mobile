@@ -675,6 +675,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientDetailProfile => 'الملف التعريفي';
 
   @override
+  String get clientDetailClear => 'مسح';
+
+  @override
   String get clientDetailTeam => 'الفريق';
 
   @override

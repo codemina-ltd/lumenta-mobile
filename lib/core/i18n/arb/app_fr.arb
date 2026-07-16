@@ -248,6 +248,7 @@
   "clientDetailContactId": "ID du contact",
   "clientDetailCopiedId": "ID du contact copié",
   "clientDetailProfile": "Profil",
+  "clientDetailClear": "Effacer",
   "clientDetailTeam": "Équipe",
   "clientDetailAssignee": "Responsable",
   "clientDetailStatus": "Statut",

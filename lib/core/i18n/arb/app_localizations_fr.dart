@@ -689,6 +689,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clientDetailProfile => 'Profil';
 
   @override
+  String get clientDetailClear => 'Effacer';
+
+  @override
   String get clientDetailTeam => 'Équipe';
 
   @override
