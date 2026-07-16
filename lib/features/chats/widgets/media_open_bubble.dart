@@ -7,6 +7,7 @@ import 'package:open_filex/open_filex.dart';
 
 import '../../../core/format.dart';
 import '../../../core/i18n/arb/app_localizations.dart';
+import '../../../core/mime.dart';
 import '../../../core/providers.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../data/models/message.dart';
@@ -22,32 +23,20 @@ class DocumentBubble extends StatelessWidget {
   final Message message;
   final Color textColor;
 
-  /// Filename embedded by the API in the body as `[Document: name.pdf]`
-  /// (mirrors the portal's DocumentMessage parsing). Null for captions or
-  /// legacy rows without one.
-  String? get _embeddedFilename {
-    final match = RegExp(r'\[Document: (.+)\]').firstMatch(message.body);
-    return match?.group(1)?.trim();
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final name = _embeddedFilename;
-    final label = (name != null && name.isNotEmpty)
-        ? name
-        : (message.body.trim().isNotEmpty
-              ? message.body
-              : l10n.previewDocument);
+    final name = message.documentFilename;
+    final label = name ?? message.mediaCaption ?? l10n.previewDocument;
     return _MediaOpenBubble(
       message: message,
       textColor: textColor,
       icon: _docIconFor(message.mediaMimeType),
       label: label,
       // Strip path separators so the name can't escape the cache directory.
-      cacheFilename: (name != null && name.isNotEmpty)
+      cacheFilename: name != null
           ? name.replaceAll(RegExp(r'[/\\]'), '_')
-          : 'document.${_extensionFor(message.mediaMimeType, 'bin')}',
+          : 'document.${extensionForMime(message.mediaMimeType)}',
       semanticLabel: l10n.openDocument,
       openFailedText: l10n.documentOpenFailed,
     );
@@ -68,18 +57,15 @@ class VideoBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final body = message.body.trim();
-    // The API stores a '[Video]' placeholder body when there is no caption
-    // (portal parity: it only shows the body as caption when != '[Video]').
-    final label = (body.isNotEmpty && body != '[Video]')
-        ? body
-        : l10n.previewVideo;
     return _MediaOpenBubble(
       message: message,
       textColor: textColor,
       icon: Icons.videocam_rounded,
-      label: label,
-      cacheFilename: 'video.${_extensionFor(message.mediaMimeType, 'mp4')}',
+      // Authored caption only — the server stores a '[Video]' placeholder
+      // body when there is none.
+      label: message.mediaCaption ?? l10n.previewVideo,
+      cacheFilename:
+          'video.${extensionForMime(message.mediaMimeType, fallback: 'mp4')}',
       semanticLabel: l10n.openVideo,
       openFailedText: l10n.videoOpenFailed,
     );
@@ -243,31 +229,3 @@ IconData _docIconFor(String? mime) {
   return Icons.insert_drive_file_rounded;
 }
 
-String _extensionFor(String? mime, String fallback) {
-  switch (mime) {
-    case 'application/pdf':
-      return 'pdf';
-    case 'application/msword':
-      return 'doc';
-    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-      return 'docx';
-    case 'application/vnd.ms-excel':
-      return 'xls';
-    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-      return 'xlsx';
-    case 'application/vnd.ms-powerpoint':
-      return 'ppt';
-    case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-      return 'pptx';
-    case 'text/plain':
-      return 'txt';
-    case 'text/csv':
-      return 'csv';
-    case null:
-      return fallback;
-    default:
-      // video/mp4 → mp4, video/3gpp → 3gpp, application/rtf → rtf, …
-      final subtype = mime.split('/').last.split(';').first.trim();
-      return subtype.isEmpty ? fallback : subtype;
-  }
-}

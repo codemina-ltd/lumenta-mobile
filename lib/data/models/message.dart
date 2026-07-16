@@ -106,6 +106,28 @@ abstract class Message with _$Message {
       messageType == MessageType.document ||
       messageType == MessageType.sticker;
   bool get transcriptionReady => transcriptionStatus == 'ready';
+
+  /// Filename of a document message, when known. The API encodes it in the
+  /// body as `[Document: name.pdf]` (inbound rows and outbound rows without
+  /// a caption); rows whose body is a caption don't carry one.
+  String? get documentFilename {
+    if (messageType != MessageType.document) return null;
+    return RegExp(r'\[Document: (.+)\]').firstMatch(body)?.group(1)?.trim();
+  }
+
+  /// The user-authored caption on a media message, or null when the body is
+  /// just the server's type placeholder (`[Image]`, `[Video]`, `[Audio]`,
+  /// `[Sticker]`, `[Document…]`). Placeholders are UI markers, not text —
+  /// they must not be rendered, copied, shared, or forwarded as content.
+  String? get mediaCaption {
+    if (!hasMedia) return null;
+    final b = body.trim();
+    if (b.isEmpty) return null;
+    const placeholders = {'[Image]', '[Video]', '[Audio]', '[Sticker]'};
+    if (placeholders.contains(b)) return null;
+    if (RegExp(r'^\[Document(: .+)?\]$').hasMatch(b)) return null;
+    return b;
+  }
   bool get hasReaction => reaction != null && reaction!.isNotEmpty;
   bool get isDeleted => deletedForEveryoneAt != null;
 

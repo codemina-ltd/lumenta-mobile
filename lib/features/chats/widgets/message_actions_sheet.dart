@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/i18n/arb/app_localizations.dart';
+import '../../../core/mime.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
@@ -207,6 +208,10 @@ Future<void> showMessageActions(
 }
 
 /// Text worth copying/sharing/forwarding, or null when the message has none.
+///
+/// For media messages this is the user-authored caption (or the voice-note
+/// transcription) — never the server's `[Image]`/`[Document: …]` placeholder
+/// body, which is a UI marker rather than content.
 String? _extractText(Message m) {
   if (m.isDeleted || m.isFlowResponse) return null;
   if (m.messageType == MessageType.location) {
@@ -220,10 +225,16 @@ String? _extractText(Message m) {
     ].whereType<String>().where((p) => p.trim().isNotEmpty).toList();
     return parts.isEmpty ? null : parts.join('\n');
   }
-  if (m.body.trim().isNotEmpty) return m.body;
-  if (m.transcriptionReady && (m.transcription?.trim().isNotEmpty ?? false)) {
-    return m.transcription;
+  if (m.hasMedia) {
+    final caption = m.mediaCaption;
+    if (caption != null) return caption;
+    if (m.transcriptionReady &&
+        (m.transcription?.trim().isNotEmpty ?? false)) {
+      return m.transcription;
+    }
+    return null;
   }
+  if (m.body.trim().isNotEmpty) return m.body;
   return null;
 }
 
@@ -243,9 +254,10 @@ Future<void> _share(
             XFile.fromData(
               bytes,
               mimeType: message.mediaMimeType ?? 'application/octet-stream',
-              name: 'message.${_extensionFor(message.mediaMimeType)}',
+              name: _mediaFilename(message),
             ),
           ],
+          // Caption only — never the '[Document: …]' placeholder body.
           text: text,
         ),
       );
@@ -271,7 +283,10 @@ Future<void> _forward(
     if (message.hasMedia) {
       final bytes = await _downloadMedia(ref, message);
       final dir = await Directory.systemTemp.createTemp('forward');
-      final filename = 'forward.${_extensionFor(message.mediaMimeType)}';
+      // Keep the original document filename — the recipient sees it. The
+      // caption is the authored one only; forwarding the '[Video]' /
+      // '[Document: …]' placeholder body would send it as literal text.
+      final filename = _mediaFilename(message);
       final file = File('${dir.path}/$filename');
       try {
         await file.writeAsBytes(bytes);
@@ -279,7 +294,7 @@ Future<void> _forward(
           to: client.phoneNumber,
           mediaType: _mediaTypeOf(message.messageType),
           filePath: file.path,
-          caption: message.body.trim().isEmpty ? null : message.body,
+          caption: message.mediaCaption,
           filename: filename,
           senderId: threadKey.senderId,
         );
@@ -310,6 +325,18 @@ Future<Uint8List> _downloadMedia(WidgetRef ref, Message message) async {
   return bytes;
 }
 
+/// Filename to share/forward the media under. Documents keep their original
+/// name when the row carries one (`[Document: name.pdf]` body); everything
+/// else gets a type-named file with an extension derived from the MIME type.
+String _mediaFilename(Message m) {
+  final docName = m.documentFilename;
+  if (docName != null && docName.isNotEmpty) {
+    // Strip path separators so the name stays a plain filename.
+    return docName.replaceAll(RegExp(r'[/\\]'), '_');
+  }
+  return '${_mediaTypeOf(m.messageType)}.${extensionForMime(m.mediaMimeType)}';
+}
+
 /// `mediaType` accepted by `POST /messages/send-media`.
 String _mediaTypeOf(MessageType type) {
   switch (type) {
@@ -322,26 +349,6 @@ String _mediaTypeOf(MessageType type) {
       return 'video';
     default:
       return 'document';
-  }
-}
-
-String _extensionFor(String? mime) {
-  switch (mime) {
-    case 'image/jpeg':
-      return 'jpg';
-    case 'audio/mpeg':
-      return 'mp3';
-    case 'audio/ogg':
-    case 'audio/ogg; codecs=opus':
-      return 'ogg';
-    case 'application/pdf':
-      return 'pdf';
-    case null:
-      return 'bin';
-    default:
-      // image/png → png, video/mp4 → mp4, audio/aac → aac, …
-      final subtype = mime.split('/').last.split(';').first.trim();
-      return subtype.isEmpty ? 'bin' : subtype;
   }
 }
 

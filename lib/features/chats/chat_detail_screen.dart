@@ -489,7 +489,8 @@ class _MessageBubble extends ConsumerWidget {
         return _ImageContent(
           url: url,
           headers: headers,
-          caption: message.body,
+          // Authored caption only — never the '[Image]' placeholder body.
+          caption: message.mediaCaption ?? '',
           textColor: textColor,
         );
       case MessageType.audio:
