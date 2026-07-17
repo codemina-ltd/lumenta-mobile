@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,9 +31,18 @@ import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
-  const ChatDetailScreen({super.key, required this.clientId});
+  const ChatDetailScreen({
+    super.key,
+    required this.clientId,
+    this.highlightMessageId,
+  });
 
   final String clientId;
+
+  /// Deep-link target (`/chats/:clientId?messageId=…` from reminder/note
+  /// notifications): after the thread loads, scroll to this message and
+  /// briefly highlight it instead of jumping to the bottom.
+  final String? highlightMessageId;
 
   @override
   ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -40,6 +51,23 @@ class ChatDetailScreen extends ConsumerStatefulWidget {
 class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   final _scroll = ScrollController();
   bool _didInitialScroll = false;
+
+  // ── Deep-link scroll + highlight ────────────────────────────────────
+  /// The message the screen was deep-linked to; keys its row while set so
+  /// [Scrollable.ensureVisible] can find it. Cleared once the highlight fades
+  /// (or the message can't be reached).
+  String? _highlightAnchorId;
+
+  /// Whether the highlight tint is currently shown (fades in/out via the
+  /// row's AnimatedContainer).
+  bool _highlightOn = false;
+
+  /// The deep-link flow runs once, on the first loaded thread scope.
+  bool _highlightHandled = false;
+
+  final GlobalKey _highlightKey = GlobalKey();
+  Timer? _highlightFadeTimer;
+  Timer? _highlightClearTimer;
 
   /// The user's explicit tab choice; null until they pick one, in which case
   /// the most recent conversation sender (or the tenant default) wins.
@@ -52,6 +80,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   @override
   void initState() {
     super.initState();
+    _highlightAnchorId = widget.highlightMessageId;
     _scroll.addListener(() {
       final key = _threadKey;
       if (key != null && _scroll.position.pixels <= 80) {
@@ -62,6 +91,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 
   @override
   void dispose() {
+    _highlightFadeTimer?.cancel();
+    _highlightClearTimer?.cancel();
     _scroll.dispose();
     super.dispose();
   }
@@ -75,8 +106,113 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     }
     if (!_didInitialScroll) {
       _didInitialScroll = true;
+      // A deep-linked message replaces the usual jump-to-bottom with a
+      // scroll-to-message + highlight (once, on the first loaded scope).
+      if (_highlightAnchorId != null && !_highlightHandled) {
+        _highlightHandled = true;
+        _startHighlightFlow();
+      } else {
+        _scrollToBottom();
+      }
+    }
+  }
+
+  /// Locates the deep-linked message — paging older history in as needed —
+  /// then scrolls to it and pulses the highlight tint.
+  Future<void> _startHighlightFlow() async {
+    final key = _threadKey;
+    final id = _highlightAnchorId;
+    if (key == null || id == null) return;
+
+    void abandon({bool tooFar = false}) {
+      if (!mounted) return;
+      setState(() => _highlightAnchorId = null);
+      if (tooFar) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context).messageTooFarBack),
+          ),
+        );
+      }
       _scrollToBottom();
     }
+
+    // Ask the API which page holds the message so a very deep target is
+    // declined up front instead of paging 15 times for nothing.
+    try {
+      final page = await ref
+          .read(messagesRepoProvider)
+          .messagePage(key.clientId, id);
+      if (page > 15) {
+        abandon(tooFar: true);
+        return;
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        // Unknown message (deleted, or another client's) — nothing to jump to.
+        abandon();
+        return;
+      }
+      // Transient failure — fall through and let the paging loop try.
+    } catch (_) {}
+    if (!mounted) return;
+
+    final controller = ref.read(threadControllerProvider(key).notifier);
+    var state = ref.read(threadControllerProvider(key));
+    var iterations = 0;
+    while (!state.messages.any((m) => m.id == id) &&
+        state.hasOlder &&
+        iterations < 15) {
+      await controller.loadOlder();
+      if (!mounted) return;
+      state = ref.read(threadControllerProvider(key));
+      iterations++;
+    }
+
+    if (!state.messages.any((m) => m.id == id)) {
+      abandon(tooFar: state.hasOlder);
+      return;
+    }
+
+    setState(() => _highlightOn = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToMessage(id));
+    _highlightFadeTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (!mounted) return;
+      setState(() => _highlightOn = false);
+      _highlightClearTimer = Timer(const Duration(milliseconds: 600), () {
+        if (mounted) setState(() => _highlightAnchorId = null);
+      });
+    });
+  }
+
+  /// Brings the keyed row on screen. The ListView builds lazily, so when the
+  /// row isn't built yet, jump to an estimated offset and retry next frame
+  /// (up to ~20 frames) until [Scrollable.ensureVisible] can take over.
+  void _scrollToMessage(String id, [int attempt = 0]) {
+    if (!mounted) return;
+    final ctx = _highlightKey.currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        alignment: 0.4,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+      );
+      return;
+    }
+    final key = _threadKey;
+    if (attempt >= 20 || key == null || !_scroll.hasClients) return;
+    final messages = ref.read(threadControllerProvider(key)).messages;
+    final index = messages.indexWhere((m) => m.id == id);
+    if (index < 0) return;
+    final max = _scroll.position.maxScrollExtent;
+    final estimate = messages.length <= 1
+        ? 0.0
+        : (index / (messages.length - 1)) * max;
+    _scroll.jumpTo(estimate.clamp(0.0, max));
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _scrollToMessage(id, attempt + 1),
+    );
   }
 
   void _scrollToBottom() {
@@ -314,13 +450,30 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           );
         }
         final row = rows[i - (state.loadingOlder ? 1 : 0)];
-        return row.isHeader
-            ? _DayHeader(label: row.headerLabel!)
-            : _MessageBubble(
-                message: row.message!,
-                threadKey: threadKey,
-                showSentBy: row.showSentBy,
-              );
+        if (row.isHeader) return _DayHeader(label: row.headerLabel!);
+        final message = row.message!;
+        final bubble = _MessageBubble(
+          message: message,
+          threadKey: threadKey,
+          showSentBy: row.showSentBy,
+        );
+        if (message.id != _highlightAnchorId) return bubble;
+        // Deep-link target: keyed so ensureVisible can find it, wrapped in a
+        // tint that fades in for ~2.5s and back out.
+        return KeyedSubtree(
+          key: _highlightKey,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 450),
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
+              color: _highlightOn
+                  ? context.scheme.primary.withValues(alpha: 0.18)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(Radii.md),
+            ),
+            child: bubble,
+          ),
+        );
       },
     );
   }
@@ -1099,10 +1252,7 @@ class _ContactsContent extends StatelessWidget {
             ],
           ),
           const SizedBox(height: Insets.sm),
-          Container(
-            height: 1,
-            color: textColor.withValues(alpha: 0.12),
-          ),
+          Container(height: 1, color: textColor.withValues(alpha: 0.12)),
           const SizedBox(height: Insets.sm),
           Center(
             child: Text(

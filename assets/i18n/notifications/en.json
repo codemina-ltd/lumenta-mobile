@@ -264,6 +264,10 @@
     "sla_breach": {
       "title": "Conversation awaiting reply",
       "body": "{{clientName}} has been waiting more than {{waitedMinutes}} minutes without a reply."
+    },
+    "note_assigned": {
+      "title": "{{authorName}} assigned you a note",
+      "body": "{{authorName}} assigned you an internal note on the conversation with {{clientName}}."
     }
   },
   "reminder": {

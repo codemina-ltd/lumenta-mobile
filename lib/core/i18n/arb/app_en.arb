@@ -328,5 +328,20 @@
   "suppressionReasonManual": "Manual",
   "suppressionReasonHardBounce": "Hard bounce",
   "suppressionReasonBlockedByUser": "Blocked by user",
-  "suppressionReasonCompliance": "Compliance"
+  "suppressionReasonCompliance": "Compliance",
+  "messageActionCreateReminder": "Create reminder",
+  "reminderTitleLabel": "Title",
+  "reminderTitleRequired": "Please enter a title",
+  "createReminderDueLabel": "Due",
+  "reminderDueIn2h": "In 2 hours",
+  "reminderDueTomorrow9": "Tomorrow 9:00",
+  "reminderDueCustom": "Custom…",
+  "reminderDueMustBeFuture": "Pick a time in the future",
+  "reminderAssignToLabel": "Assign to",
+  "assigneeMe": "Me",
+  "reminderNotesLabel": "Notes (optional)",
+  "createAction": "Create",
+  "reminderCreated": "Reminder created",
+  "reminderCreateFailed": "Couldn't create the reminder. Please try again.",
+  "messageTooFarBack": "This message is too far back in the history to jump to."
 }

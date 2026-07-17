@@ -320,5 +320,20 @@
   "suppressionReasonManual": "يدوي",
   "suppressionReasonHardBounce": "ارتداد دائم",
   "suppressionReasonBlockedByUser": "حظره المستخدم",
-  "suppressionReasonCompliance": "الامتثال"
+  "suppressionReasonCompliance": "الامتثال",
+  "messageActionCreateReminder": "إنشاء تذكير",
+  "reminderTitleLabel": "العنوان",
+  "reminderTitleRequired": "يرجى إدخال عنوان",
+  "createReminderDueLabel": "موعد الاستحقاق",
+  "reminderDueIn2h": "خلال ساعتين",
+  "reminderDueTomorrow9": "غدًا 9:00",
+  "reminderDueCustom": "مخصص…",
+  "reminderDueMustBeFuture": "اختر وقتًا في المستقبل",
+  "reminderAssignToLabel": "إسناد إلى",
+  "assigneeMe": "أنا",
+  "reminderNotesLabel": "ملاحظات (اختياري)",
+  "createAction": "إنشاء",
+  "reminderCreated": "تم إنشاء التذكير",
+  "reminderCreateFailed": "تعذّر إنشاء التذكير. يرجى المحاولة مرة أخرى.",
+  "messageTooFarBack": "هذه الرسالة قديمة جدًا في المحادثة ولا يمكن الانتقال إليها."
 }

@@ -64,8 +64,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/chats/:clientId',
         parentNavigatorKey: _rootKey,
-        builder: (_, state) =>
-            ChatDetailScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ChatDetailScreen(
+          clientId: state.pathParameters['clientId']!,
+          highlightMessageId: state.uri.queryParameters['messageId'],
+        ),
       ),
       // Full contact profile, opened from the chat header. Root-level so it
       // stacks over the chat and `pop` returns there. Distinct from the

@@ -28,8 +28,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   void initState() {
     super.initState();
     _scroll.addListener(() {
-      if (_scroll.position.pixels >=
-          _scroll.position.maxScrollExtent - 320) {
+      if (_scroll.position.pixels >= _scroll.position.maxScrollExtent - 320) {
         ref.read(notificationsControllerProvider.notifier).loadMore();
       }
     });
@@ -48,8 +47,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     }
     final url = n.actionUrl;
     if (url != null) {
-      final m = RegExp(r'/(?:conversations|clients|chats)/([\w-]+)')
-          .firstMatch(url);
+      final m = RegExp(
+        r'/(?:conversations|clients|chats)/([\w-]+)',
+      ).firstMatch(url);
       if (m != null) return m.group(1);
     }
     if (n.eventKey.startsWith('conversation.') && n.resourceId != null) {
@@ -58,11 +58,24 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     return null;
   }
 
+  /// A `messageId` on the action URL (message-anchored reminders/notes) rides
+  /// along so the chat screen scrolls to and highlights that message.
+  String? _messageIdFor(AppNotification n) {
+    final url = n.actionUrl;
+    if (url == null) return null;
+    return RegExp(r'[?&]messageId=([\w-]+)').firstMatch(url)?.group(1);
+  }
+
   void _onTap(AppNotification n) {
     ref.read(notificationsControllerProvider.notifier).markRead(n.id);
     final clientId = _clientIdFor(n);
     if (clientId != null) {
-      context.go('/chats/$clientId');
+      final messageId = _messageIdFor(n);
+      context.go(
+        messageId == null
+            ? '/chats/$clientId'
+            : '/chats/$clientId?messageId=$messageId',
+      );
     }
   }
 
@@ -203,8 +216,9 @@ class _NotificationRow extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: context.text.titleSmall?.copyWith(
-                            fontWeight:
-                                unread ? FontWeight.w700 : FontWeight.w600,
+                            fontWeight: unread
+                                ? FontWeight.w700
+                                : FontWeight.w600,
                           ),
                         ),
                       ),

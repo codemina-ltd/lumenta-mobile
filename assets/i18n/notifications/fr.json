@@ -264,6 +264,10 @@
     "sla_breach": {
       "title": "Conversation en attente de réponse",
       "body": "{{clientName}} attend une réponse depuis plus de {{waitedMinutes}} minutes."
+    },
+    "note_assigned": {
+      "title": "{{authorName}} vous a assigné une note",
+      "body": "{{authorName}} vous a assigné une note interne sur la conversation avec {{clientName}}."
     }
   },
   "reminder": {

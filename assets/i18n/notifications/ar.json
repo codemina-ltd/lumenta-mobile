@@ -264,6 +264,10 @@
     "sla_breach": {
       "title": "محادثة بانتظار الرد",
       "body": "ينتظر {{clientName}} ردًا منذ أكثر من {{waitedMinutes}} دقيقة."
+    },
+    "note_assigned": {
+      "title": "أسند إليك {{authorName}} ملاحظة",
+      "body": "أسند إليك {{authorName}} ملاحظة داخلية على المحادثة مع {{clientName}}."
     }
   },
   "reminder": {

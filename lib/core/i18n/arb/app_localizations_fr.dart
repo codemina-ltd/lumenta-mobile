@@ -906,4 +906,51 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get suppressionReasonCompliance => 'Conformité';
+
+  @override
+  String get messageActionCreateReminder => 'Créer un rappel';
+
+  @override
+  String get reminderTitleLabel => 'Titre';
+
+  @override
+  String get reminderTitleRequired => 'Veuillez saisir un titre';
+
+  @override
+  String get createReminderDueLabel => 'Échéance';
+
+  @override
+  String get reminderDueIn2h => 'Dans 2 heures';
+
+  @override
+  String get reminderDueTomorrow9 => 'Demain 9:00';
+
+  @override
+  String get reminderDueCustom => 'Personnalisé…';
+
+  @override
+  String get reminderDueMustBeFuture => 'Choisissez une heure dans le futur';
+
+  @override
+  String get reminderAssignToLabel => 'Assigner à';
+
+  @override
+  String get assigneeMe => 'Moi';
+
+  @override
+  String get reminderNotesLabel => 'Notes (facultatif)';
+
+  @override
+  String get createAction => 'Créer';
+
+  @override
+  String get reminderCreated => 'Rappel créé';
+
+  @override
+  String get reminderCreateFailed =>
+      'Impossible de créer le rappel. Veuillez réessayer.';
+
+  @override
+  String get messageTooFarBack =>
+      'Ce message est trop ancien dans l\'historique pour y accéder.';
 }

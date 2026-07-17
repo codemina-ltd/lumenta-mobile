@@ -18,8 +18,18 @@ import '../../shared/widgets.dart';
 import '../chat_providers.dart';
 import '../chats_controller.dart';
 import '../thread_controller.dart';
+import 'create_reminder_sheet.dart';
+import 'message_note_sheet.dart';
 
-enum _MessageAction { copy, forward, share, deleteForMe, deleteForEveryone }
+enum _MessageAction {
+  copy,
+  forward,
+  share,
+  createReminder,
+  addNote,
+  deleteForMe,
+  deleteForEveryone,
+}
 
 /// Emoji picked from the quick-reaction row; [emoji] null means "remove the
 /// current reaction".
@@ -52,6 +62,9 @@ Future<void> showMessageActions(
   final canReact = !message.isOutbound && !message.isDeleted;
   // Optimistic bubbles carry a synthetic `temp_` id the API doesn't know.
   final isPersisted = !message.id.startsWith('temp_');
+  // Reminder/note creation anchors to the message id, so it needs a
+  // persisted, not-deleted row.
+  final canAnnotate = isPersisted && !message.isDeleted;
   final canDeleteForMe = isPersisted;
   final canDeleteForEveryone =
       isPersisted && message.isOutbound && !message.isDeleted;
@@ -59,6 +72,7 @@ Future<void> showMessageActions(
       !canForward &&
       !canShare &&
       !canReact &&
+      !canAnnotate &&
       !canDeleteForMe &&
       !canDeleteForEveryone) {
     return;
@@ -119,6 +133,21 @@ Future<void> showMessageActions(
                 label: l10n.messageActionShare,
                 onTap: () => Navigator.pop(sheetCtx, _MessageAction.share),
               ),
+            if (canAnnotate) ...[
+              _ActionTile(
+                icon: Icons.alarm_add_outlined,
+                color: AppColors.signalDeep,
+                label: l10n.messageActionCreateReminder,
+                onTap: () =>
+                    Navigator.pop(sheetCtx, _MessageAction.createReminder),
+              ),
+              _ActionTile(
+                icon: Icons.sticky_note_2_outlined,
+                color: AppColors.amber,
+                label: l10n.inboxAddNote,
+                onTap: () => Navigator.pop(sheetCtx, _MessageAction.addNote),
+              ),
+            ],
             if (canDeleteForMe)
               _ActionTile(
                 icon: Icons.delete_outline_rounded,
@@ -167,6 +196,15 @@ Future<void> showMessageActions(
       );
       if (client == null) return;
       await _forward(ref, messenger, l10n, message, text, threadKey, client);
+    case _MessageAction.createReminder:
+      await showCreateReminderSheet(
+        context,
+        ref,
+        message: message,
+        clientId: threadKey.clientId,
+      );
+    case _MessageAction.addNote:
+      await showMessageNoteSheet(context, ref, message: message);
     case _MessageAction.deleteForMe:
     case _MessageAction.deleteForEveryone:
       final forEveryone = action == _MessageAction.deleteForEveryone;
@@ -193,9 +231,7 @@ Future<void> showMessageActions(
         ),
       );
       if (confirmed != true) return;
-      final controller = ref.read(
-        threadControllerProvider(threadKey).notifier,
-      );
+      final controller = ref.read(threadControllerProvider(threadKey).notifier);
       final ok = forEveryone
           ? await controller.deleteForEveryone(message.id)
           : await controller.deleteForMe(message.id);
@@ -228,8 +264,7 @@ String? _extractText(Message m) {
   if (m.hasMedia) {
     final caption = m.mediaCaption;
     if (caption != null) return caption;
-    if (m.transcriptionReady &&
-        (m.transcription?.trim().isNotEmpty ?? false)) {
+    if (m.transcriptionReady && (m.transcription?.trim().isNotEmpty ?? false)) {
       return m.transcription;
     }
     return null;

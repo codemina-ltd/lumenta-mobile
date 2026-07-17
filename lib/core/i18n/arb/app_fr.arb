@@ -320,5 +320,20 @@
   "suppressionReasonManual": "Manuel",
   "suppressionReasonHardBounce": "Rebond définitif",
   "suppressionReasonBlockedByUser": "Bloqué par l'utilisateur",
-  "suppressionReasonCompliance": "Conformité"
+  "suppressionReasonCompliance": "Conformité",
+  "messageActionCreateReminder": "Créer un rappel",
+  "reminderTitleLabel": "Titre",
+  "reminderTitleRequired": "Veuillez saisir un titre",
+  "createReminderDueLabel": "Échéance",
+  "reminderDueIn2h": "Dans 2 heures",
+  "reminderDueTomorrow9": "Demain 9:00",
+  "reminderDueCustom": "Personnalisé…",
+  "reminderDueMustBeFuture": "Choisissez une heure dans le futur",
+  "reminderAssignToLabel": "Assigner à",
+  "assigneeMe": "Moi",
+  "reminderNotesLabel": "Notes (facultatif)",
+  "createAction": "Créer",
+  "reminderCreated": "Rappel créé",
+  "reminderCreateFailed": "Impossible de créer le rappel. Veuillez réessayer.",
+  "messageTooFarBack": "Ce message est trop ancien dans l'historique pour y accéder."
 }

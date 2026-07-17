@@ -83,15 +83,20 @@ class RemindersScreen extends ConsumerWidget {
                 accent: accent,
                 onOpen: reminder.clientId == null
                     ? null
-                    : () => context.go('/chats/${reminder.clientId}'),
-                onActions: () =>
-                    _showActions(context, ref, l10n, reminder),
+                    : () => context.go(_chatRoute(reminder)),
+                onActions: () => _showActions(context, ref, l10n, reminder),
               ),
           ],
         ],
       ),
     );
   }
+
+  /// Message-anchored reminders deep-link to the referenced message (the chat
+  /// screen scrolls to and highlights it); others just open the conversation.
+  String _chatRoute(Reminder reminder) => reminder.messageId == null
+      ? '/chats/${reminder.clientId}'
+      : '/chats/${reminder.clientId}?messageId=${reminder.messageId}';
 
   Future<void> _showActions(
     BuildContext context,
@@ -164,7 +169,7 @@ class RemindersScreen extends ConsumerWidget {
                   title: Text(l10n.reminderOpenConversation),
                   onTap: () {
                     Navigator.pop(sheetContext);
-                    context.go('/chats/${reminder.clientId}');
+                    context.go(_chatRoute(reminder));
                   },
                 ),
               ],
@@ -203,11 +208,7 @@ class _ReminderTile extends StatelessWidget {
             : Icons.alarm_rounded,
         color: accent ?? context.scheme.onSurfaceVariant,
       ),
-      title: Text(
-        reminder.title,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
+      title: Text(reminder.title, maxLines: 2, overflow: TextOverflow.ellipsis),
       subtitle: Text(
         reminder.isOverdue ? '$due · ${l10n.reminderOverdueLabel}' : due,
         style: context.text.bodySmall?.copyWith(

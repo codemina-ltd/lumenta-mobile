@@ -894,4 +894,51 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get suppressionReasonCompliance => 'الامتثال';
+
+  @override
+  String get messageActionCreateReminder => 'إنشاء تذكير';
+
+  @override
+  String get reminderTitleLabel => 'العنوان';
+
+  @override
+  String get reminderTitleRequired => 'يرجى إدخال عنوان';
+
+  @override
+  String get createReminderDueLabel => 'موعد الاستحقاق';
+
+  @override
+  String get reminderDueIn2h => 'خلال ساعتين';
+
+  @override
+  String get reminderDueTomorrow9 => 'غدًا 9:00';
+
+  @override
+  String get reminderDueCustom => 'مخصص…';
+
+  @override
+  String get reminderDueMustBeFuture => 'اختر وقتًا في المستقبل';
+
+  @override
+  String get reminderAssignToLabel => 'إسناد إلى';
+
+  @override
+  String get assigneeMe => 'أنا';
+
+  @override
+  String get reminderNotesLabel => 'ملاحظات (اختياري)';
+
+  @override
+  String get createAction => 'إنشاء';
+
+  @override
+  String get reminderCreated => 'تم إنشاء التذكير';
+
+  @override
+  String get reminderCreateFailed =>
+      'تعذّر إنشاء التذكير. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get messageTooFarBack =>
+      'هذه الرسالة قديمة جدًا في المحادثة ولا يمكن الانتقال إليها.';
 }

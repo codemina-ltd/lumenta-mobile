@@ -40,6 +40,32 @@ class RemindersRepo {
     );
   }
 
+  /// `POST /reminders` — create a follow-up reminder anchored to a chat
+  /// message. Non-admin members may only assign to themselves (omit
+  /// [assignedToUserId] or pass their own id); the server enforces this.
+  Future<Reminder> create({
+    required String title,
+    required DateTime dueAtUtc,
+    required String clientId,
+    required String messageId,
+    String? assignedToUserId,
+    String? notes,
+  }) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/reminders',
+      data: {
+        'title': title,
+        'dueAt': dueAtUtc.toUtc().toIso8601String(),
+        'clientId': clientId,
+        'messageId': messageId,
+        'assignedToUserId': ?assignedToUserId,
+        'notes': ?notes,
+      },
+    );
+    final map = res.data!;
+    return Reminder.fromJson((map['data'] as Map<String, dynamic>?) ?? map);
+  }
+
   /// `POST /reminders/:id/complete`.
   Future<void> complete(String id) =>
       _dio.post<void>('/reminders/$id/complete');

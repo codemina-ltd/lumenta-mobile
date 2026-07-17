@@ -41,6 +41,21 @@ class MessagesRepo {
     return Paginated.fromJson(res.data!, Message.fromJson);
   }
 
+  /// `GET /clients/:id/messages/:messageId/page` — the 1-based page (newest
+  /// first, same ordering and [limit] as [thread]) containing that message.
+  /// 404s when the message is unknown to this client.
+  Future<int> messagePage(
+    String clientId,
+    String messageId, {
+    int limit = 30,
+  }) async {
+    final res = await _dio.get<Map<String, dynamic>>(
+      '/clients/$clientId/messages/$messageId/page',
+      queryParameters: {'limit': limit},
+    );
+    return (res.data?['page'] as num?)?.toInt() ?? 1;
+  }
+
   /// `GET /clients/:id/conversation-senders` — which senders have message
   /// history with this client (one row each, most recent first). Backs the
   /// per-sender thread tabs.

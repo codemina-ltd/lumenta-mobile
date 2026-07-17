@@ -129,6 +129,25 @@ class InboxRepo {
     return InboxNote.fromJson(res.data!);
   }
 
+  /// `POST /inbox/message-notes` — internal note anchored to a specific chat
+  /// message; the server resolves the inbox thread from the message. Any
+  /// member may assign the note to any member via [assignedToUserId].
+  Future<InboxNote> addMessageNote(
+    String messageId,
+    String body, {
+    String? assignedToUserId,
+  }) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/inbox/message-notes',
+      data: {
+        'messageId': messageId,
+        'body': body,
+        'assignedToUserId': ?assignedToUserId,
+      },
+    );
+    return InboxNote.fromJson(res.data!);
+  }
+
   /// `DELETE /inbox/threads/:id/notes/:noteId` — remove a note (the API only
   /// lets an author delete their own).
   Future<void> deleteNote(String id, String noteId) async {

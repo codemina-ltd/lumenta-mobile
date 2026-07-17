@@ -1779,6 +1779,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compliance'**
   String get suppressionReasonCompliance;
+
+  /// No description provided for @messageActionCreateReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Create reminder'**
+  String get messageActionCreateReminder;
+
+  /// No description provided for @reminderTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get reminderTitleLabel;
+
+  /// No description provided for @reminderTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a title'**
+  String get reminderTitleRequired;
+
+  /// No description provided for @createReminderDueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get createReminderDueLabel;
+
+  /// No description provided for @reminderDueIn2h.
+  ///
+  /// In en, this message translates to:
+  /// **'In 2 hours'**
+  String get reminderDueIn2h;
+
+  /// No description provided for @reminderDueTomorrow9.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow 9:00'**
+  String get reminderDueTomorrow9;
+
+  /// No description provided for @reminderDueCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom…'**
+  String get reminderDueCustom;
+
+  /// No description provided for @reminderDueMustBeFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time in the future'**
+  String get reminderDueMustBeFuture;
+
+  /// No description provided for @reminderAssignToLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to'**
+  String get reminderAssignToLabel;
+
+  /// No description provided for @assigneeMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get assigneeMe;
+
+  /// No description provided for @reminderNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get reminderNotesLabel;
+
+  /// No description provided for @createAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get createAction;
+
+  /// No description provided for @reminderCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder created'**
+  String get reminderCreated;
+
+  /// No description provided for @reminderCreateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the reminder. Please try again.'**
+  String get reminderCreateFailed;
+
+  /// No description provided for @messageTooFarBack.
+  ///
+  /// In en, this message translates to:
+  /// **'This message is too far back in the history to jump to.'**
+  String get messageTooFarBack;
 }
 
 class _AppLocalizationsDelegate

@@ -271,13 +271,21 @@ class PushService {
 
   /// Map a portal-relative `action_url` to a mobile route: conversation
   /// deep-links (same regex as the notifications screen) or the reminders
-  /// tab; anything else is not routable on mobile.
+  /// tab; anything else is not routable on mobile. A `messageId` query param
+  /// (message-anchored reminder/note notifications) is preserved so the chat
+  /// screen can scroll to and highlight the referenced message.
   String? _routeFromActionUrl(String? url) {
     if (url == null || url.isEmpty) return null;
     final chat = RegExp(
       r'/(?:conversations|clients|chats)/([\w-]+)',
     ).firstMatch(url);
-    if (chat != null) return '/chats/${chat.group(1)}';
+    if (chat != null) {
+      final base = '/chats/${chat.group(1)}';
+      final messageId = RegExp(
+        r'[?&]messageId=([\w-]+)',
+      ).firstMatch(url)?.group(1);
+      return messageId == null ? base : '$base?messageId=$messageId';
+    }
     if (url.startsWith('/reminders')) return '/reminders';
     return null;
   }

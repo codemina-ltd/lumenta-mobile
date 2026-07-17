@@ -894,4 +894,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get suppressionReasonCompliance => 'Compliance';
+
+  @override
+  String get messageActionCreateReminder => 'Create reminder';
+
+  @override
+  String get reminderTitleLabel => 'Title';
+
+  @override
+  String get reminderTitleRequired => 'Please enter a title';
+
+  @override
+  String get createReminderDueLabel => 'Due';
+
+  @override
+  String get reminderDueIn2h => 'In 2 hours';
+
+  @override
+  String get reminderDueTomorrow9 => 'Tomorrow 9:00';
+
+  @override
+  String get reminderDueCustom => 'Custom…';
+
+  @override
+  String get reminderDueMustBeFuture => 'Pick a time in the future';
+
+  @override
+  String get reminderAssignToLabel => 'Assign to';
+
+  @override
+  String get assigneeMe => 'Me';
+
+  @override
+  String get reminderNotesLabel => 'Notes (optional)';
+
+  @override
+  String get createAction => 'Create';
+
+  @override
+  String get reminderCreated => 'Reminder created';
+
+  @override
+  String get reminderCreateFailed =>
+      'Couldn\'t create the reminder. Please try again.';
+
+  @override
+  String get messageTooFarBack =>
+      'This message is too far back in the history to jump to.';
 }
