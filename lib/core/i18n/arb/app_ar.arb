@@ -55,6 +55,13 @@
   "ordersActionFailed": "تعذّر التحديث. حاول مرة أخرى.",
   "clientDetailCallsTitle": "المكالمات",
   "clientDetailCallsEmpty": "لا توجد مكالمات لهذا العميل",
+  "liveCallInProgress": "في مكالمة الآن",
+  "liveCallWith": "في مكالمة مع {name}",
+  "@liveCallWith": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
   "clientsTitle": "العملاء",
   "searchClients": "ابحث عن العملاء",
   "searchGlobalTitle": "البحث",

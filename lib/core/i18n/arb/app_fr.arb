@@ -55,6 +55,13 @@
   "ordersActionFailed": "Échec de la mise à jour. Veuillez réessayer.",
   "clientDetailCallsTitle": "Appels",
   "clientDetailCallsEmpty": "Aucun appel pour ce contact",
+  "liveCallInProgress": "En appel",
+  "liveCallWith": "En appel avec {name}",
+  "@liveCallWith": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
   "clientsTitle": "Clients",
   "searchClients": "Rechercher des clients",
   "searchGlobalTitle": "Recherche",

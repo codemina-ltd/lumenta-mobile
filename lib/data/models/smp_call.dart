@@ -22,9 +22,15 @@ enum CallDirection {
 abstract class SmpCall with _$SmpCall {
   const factory SmpCall({
     required String id,
+
+    /// Resolved contact, when the number matched one (tenant-scoped).
+    String? clientId,
     required String startedAt,
     @JsonKey(unknownEnumValue: CallDirection.unknown)
     required CallDirection direction,
+
+    /// `in_progress` while the call is still live on the rep's phone.
+    @Default('completed') String status,
     @Default(0) int durationSeconds,
     String? deviceIdentifier,
     required String clientNumber,
@@ -47,4 +53,6 @@ abstract class SmpCall with _$SmpCall {
   /// Who handled the call: the linked portal user, falling back to the
   /// device-reported employee name. Null when neither is known.
   String? get handlerName => agentName ?? smpEmployeeName;
+
+  bool get inProgress => status == 'in_progress';
 }

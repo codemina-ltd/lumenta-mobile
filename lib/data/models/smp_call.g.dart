@@ -8,12 +8,14 @@ part of 'smp_call.dart';
 
 _SmpCall _$SmpCallFromJson(Map<String, dynamic> json) => _SmpCall(
   id: json['id'] as String,
+  clientId: json['clientId'] as String?,
   startedAt: json['startedAt'] as String,
   direction: $enumDecode(
     _$CallDirectionEnumMap,
     json['direction'],
     unknownValue: CallDirection.unknown,
   ),
+  status: json['status'] as String? ?? 'completed',
   durationSeconds: (json['durationSeconds'] as num?)?.toInt() ?? 0,
   deviceIdentifier: json['deviceIdentifier'] as String?,
   clientNumber: json['clientNumber'] as String,
@@ -24,8 +26,10 @@ _SmpCall _$SmpCallFromJson(Map<String, dynamic> json) => _SmpCall(
 
 Map<String, dynamic> _$SmpCallToJson(_SmpCall instance) => <String, dynamic>{
   'id': instance.id,
+  'clientId': instance.clientId,
   'startedAt': instance.startedAt,
   'direction': _$CallDirectionEnumMap[instance.direction]!,
+  'status': instance.status,
   'durationSeconds': instance.durationSeconds,
   'deviceIdentifier': instance.deviceIdentifier,
   'clientNumber': instance.clientNumber,

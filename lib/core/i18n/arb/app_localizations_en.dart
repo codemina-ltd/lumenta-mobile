@@ -175,6 +175,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientDetailCallsEmpty => 'No calls for this contact';
 
   @override
+  String get liveCallInProgress => 'On a call';
+
+  @override
+  String liveCallWith(String name) {
+    return 'On a call with $name';
+  }
+
+  @override
   String get clientsTitle => 'Clients';
 
   @override

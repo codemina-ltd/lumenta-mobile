@@ -430,6 +430,18 @@ abstract class AppLocalizations {
   /// **'No calls for this contact'**
   String get clientDetailCallsEmpty;
 
+  /// No description provided for @liveCallInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'On a call'**
+  String get liveCallInProgress;
+
+  /// No description provided for @liveCallWith.
+  ///
+  /// In en, this message translates to:
+  /// **'On a call with {name}'**
+  String liveCallWith(String name);
+
   /// No description provided for @clientsTitle.
   ///
   /// In en, this message translates to:

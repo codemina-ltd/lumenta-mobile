@@ -55,6 +55,13 @@
   "ordersActionFailed": "Couldn't update. Please try again.",
   "clientDetailCallsTitle": "Calls",
   "clientDetailCallsEmpty": "No calls for this contact",
+  "liveCallInProgress": "On a call",
+  "liveCallWith": "On a call with {name}",
+  "@liveCallWith": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
   "clientsTitle": "Clients",
   "searchClients": "Search clients",
   "searchGlobalTitle": "Search",

@@ -175,6 +175,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientDetailCallsEmpty => 'لا توجد مكالمات لهذا العميل';
 
   @override
+  String get liveCallInProgress => 'في مكالمة الآن';
+
+  @override
+  String liveCallWith(String name) {
+    return 'في مكالمة مع $name';
+  }
+
+  @override
   String get clientsTitle => 'العملاء';
 
   @override

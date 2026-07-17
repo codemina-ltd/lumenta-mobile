@@ -18,6 +18,7 @@ import '../../data/models/conversation_sender.dart';
 import '../../data/models/message.dart';
 import '../../data/models/sender.dart';
 import '../../data/storage/last_read_store.dart';
+import '../shared/live_call_badge.dart';
 import '../shared/widgets.dart';
 import 'chat_providers.dart';
 import 'thread_controller.dart';
@@ -355,6 +356,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       ),
       body: Column(
         children: [
+          LiveCallBanner(clientId: widget.clientId),
           if (showTabs)
             SenderThreadBar(
               conversationSenders: convSenders,

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
+import '../shared/live_call_badge.dart';
 import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'clients_controller.dart';
@@ -122,6 +123,7 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                     }
                     final c = state.items[i];
                     return _ClientRow(
+                      clientId: c.id,
                       initials: c.initials,
                       name: c.displayName,
                       phone: '+${c.phoneNumber}',
@@ -140,12 +142,14 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
 
 class _ClientRow extends StatelessWidget {
   const _ClientRow({
+    required this.clientId,
     required this.initials,
     required this.name,
     required this.phone,
     required this.onTap,
   });
 
+  final String clientId;
   final String initials;
   final String name;
   final String phone;
@@ -183,6 +187,7 @@ class _ClientRow extends StatelessWidget {
                       letterSpacing: 0.2,
                     ),
                   ),
+                  LiveCallBadge(clientId: clientId),
                 ],
               ),
             ),

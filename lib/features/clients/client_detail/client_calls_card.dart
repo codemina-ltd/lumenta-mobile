@@ -60,7 +60,10 @@ class ClientCallsCard extends ConsumerWidget {
                                 final parts = [
                                   if (started != null)
                                     Fmt.listTimestamp(context, started),
-                                  Fmt.duration(c.durationSeconds),
+                                  if (c.inProgress)
+                                    l10n.liveCallInProgress
+                                  else
+                                    Fmt.duration(c.durationSeconds),
                                 ];
                                 return Text(
                                   parts.join(' · '),

@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SmpCall {
 
- String get id; String get startedAt;@JsonKey(unknownEnumValue: CallDirection.unknown) CallDirection get direction; int get durationSeconds; String? get deviceIdentifier; String get clientNumber;/// Employee name as reported by the SMP device (legacy attribution).
+ String get id;/// Resolved contact, when the number matched one (tenant-scoped).
+ String? get clientId; String get startedAt;@JsonKey(unknownEnumValue: CallDirection.unknown) CallDirection get direction;/// `in_progress` while the call is still live on the rep's phone.
+ String get status; int get durationSeconds; String? get deviceIdentifier; String get clientNumber;/// Employee name as reported by the SMP device (legacy attribution).
  String? get smpEmployeeName;/// Portal user the call is attributed to, when the device is linked.
  String? get agentUserId; String? get agentName;
 /// Create a copy of SmpCall
@@ -30,16 +32,16 @@ $SmpCallCopyWith<SmpCall> get copyWith => _$SmpCallCopyWithImpl<SmpCall>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SmpCall&&(identical(other.id, id) || other.id == id)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.deviceIdentifier, deviceIdentifier) || other.deviceIdentifier == deviceIdentifier)&&(identical(other.clientNumber, clientNumber) || other.clientNumber == clientNumber)&&(identical(other.smpEmployeeName, smpEmployeeName) || other.smpEmployeeName == smpEmployeeName)&&(identical(other.agentUserId, agentUserId) || other.agentUserId == agentUserId)&&(identical(other.agentName, agentName) || other.agentName == agentName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SmpCall&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.status, status) || other.status == status)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.deviceIdentifier, deviceIdentifier) || other.deviceIdentifier == deviceIdentifier)&&(identical(other.clientNumber, clientNumber) || other.clientNumber == clientNumber)&&(identical(other.smpEmployeeName, smpEmployeeName) || other.smpEmployeeName == smpEmployeeName)&&(identical(other.agentUserId, agentUserId) || other.agentUserId == agentUserId)&&(identical(other.agentName, agentName) || other.agentName == agentName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,startedAt,direction,durationSeconds,deviceIdentifier,clientNumber,smpEmployeeName,agentUserId,agentName);
+int get hashCode => Object.hash(runtimeType,id,clientId,startedAt,direction,status,durationSeconds,deviceIdentifier,clientNumber,smpEmployeeName,agentUserId,agentName);
 
 @override
 String toString() {
-  return 'SmpCall(id: $id, startedAt: $startedAt, direction: $direction, durationSeconds: $durationSeconds, deviceIdentifier: $deviceIdentifier, clientNumber: $clientNumber, smpEmployeeName: $smpEmployeeName, agentUserId: $agentUserId, agentName: $agentName)';
+  return 'SmpCall(id: $id, clientId: $clientId, startedAt: $startedAt, direction: $direction, status: $status, durationSeconds: $durationSeconds, deviceIdentifier: $deviceIdentifier, clientNumber: $clientNumber, smpEmployeeName: $smpEmployeeName, agentUserId: $agentUserId, agentName: $agentName)';
 }
 
 
@@ -50,7 +52,7 @@ abstract mixin class $SmpCallCopyWith<$Res>  {
   factory $SmpCallCopyWith(SmpCall value, $Res Function(SmpCall) _then) = _$SmpCallCopyWithImpl;
 @useResult
 $Res call({
- String id, String startedAt,@JsonKey(unknownEnumValue: CallDirection.unknown) CallDirection direction, int durationSeconds, String? deviceIdentifier, String clientNumber, String? smpEmployeeName, String? agentUserId, String? agentName
+ String id, String? clientId, String startedAt,@JsonKey(unknownEnumValue: CallDirection.unknown) CallDirection direction, String status, int durationSeconds, String? deviceIdentifier, String clientNumber, String? smpEmployeeName, String? agentUserId, String? agentName
 });
 
 
@@ -67,12 +69,14 @@ class _$SmpCallCopyWithImpl<$Res>
 
 /// Create a copy of SmpCall
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? startedAt = null,Object? direction = null,Object? durationSeconds = null,Object? deviceIdentifier = freezed,Object? clientNumber = null,Object? smpEmployeeName = freezed,Object? agentUserId = freezed,Object? agentName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? clientId = freezed,Object? startedAt = null,Object? direction = null,Object? status = null,Object? durationSeconds = null,Object? deviceIdentifier = freezed,Object? clientNumber = null,Object? smpEmployeeName = freezed,Object? agentUserId = freezed,Object? agentName = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,startedAt: null == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
+as String,clientId: freezed == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
+as String?,startedAt: null == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
 as String,direction: null == direction ? _self.direction : direction // ignore: cast_nullable_to_non_nullable
-as CallDirection,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
+as CallDirection,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
 as int,deviceIdentifier: freezed == deviceIdentifier ? _self.deviceIdentifier : deviceIdentifier // ignore: cast_nullable_to_non_nullable
 as String?,clientNumber: null == clientNumber ? _self.clientNumber : clientNumber // ignore: cast_nullable_to_non_nullable
 as String,smpEmployeeName: freezed == smpEmployeeName ? _self.smpEmployeeName : smpEmployeeName // ignore: cast_nullable_to_non_nullable
@@ -163,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown)  CallDirection direction,  int durationSeconds,  String? deviceIdentifier,  String clientNumber,  String? smpEmployeeName,  String? agentUserId,  String? agentName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? clientId,  String startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown)  CallDirection direction,  String status,  int durationSeconds,  String? deviceIdentifier,  String clientNumber,  String? smpEmployeeName,  String? agentUserId,  String? agentName)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SmpCall() when $default != null:
-return $default(_that.id,_that.startedAt,_that.direction,_that.durationSeconds,_that.deviceIdentifier,_that.clientNumber,_that.smpEmployeeName,_that.agentUserId,_that.agentName);case _:
+return $default(_that.id,_that.clientId,_that.startedAt,_that.direction,_that.status,_that.durationSeconds,_that.deviceIdentifier,_that.clientNumber,_that.smpEmployeeName,_that.agentUserId,_that.agentName);case _:
   return orElse();
 
 }
@@ -184,10 +188,10 @@ return $default(_that.id,_that.startedAt,_that.direction,_that.durationSeconds,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown)  CallDirection direction,  int durationSeconds,  String? deviceIdentifier,  String clientNumber,  String? smpEmployeeName,  String? agentUserId,  String? agentName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? clientId,  String startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown)  CallDirection direction,  String status,  int durationSeconds,  String? deviceIdentifier,  String clientNumber,  String? smpEmployeeName,  String? agentUserId,  String? agentName)  $default,) {final _that = this;
 switch (_that) {
 case _SmpCall():
-return $default(_that.id,_that.startedAt,_that.direction,_that.durationSeconds,_that.deviceIdentifier,_that.clientNumber,_that.smpEmployeeName,_that.agentUserId,_that.agentName);case _:
+return $default(_that.id,_that.clientId,_that.startedAt,_that.direction,_that.status,_that.durationSeconds,_that.deviceIdentifier,_that.clientNumber,_that.smpEmployeeName,_that.agentUserId,_that.agentName);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +208,10 @@ return $default(_that.id,_that.startedAt,_that.direction,_that.durationSeconds,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown)  CallDirection direction,  int durationSeconds,  String? deviceIdentifier,  String clientNumber,  String? smpEmployeeName,  String? agentUserId,  String? agentName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? clientId,  String startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown)  CallDirection direction,  String status,  int durationSeconds,  String? deviceIdentifier,  String clientNumber,  String? smpEmployeeName,  String? agentUserId,  String? agentName)?  $default,) {final _that = this;
 switch (_that) {
 case _SmpCall() when $default != null:
-return $default(_that.id,_that.startedAt,_that.direction,_that.durationSeconds,_that.deviceIdentifier,_that.clientNumber,_that.smpEmployeeName,_that.agentUserId,_that.agentName);case _:
+return $default(_that.id,_that.clientId,_that.startedAt,_that.direction,_that.status,_that.durationSeconds,_that.deviceIdentifier,_that.clientNumber,_that.smpEmployeeName,_that.agentUserId,_that.agentName);case _:
   return null;
 
 }
@@ -219,12 +223,16 @@ return $default(_that.id,_that.startedAt,_that.direction,_that.durationSeconds,_
 @JsonSerializable()
 
 class _SmpCall extends SmpCall {
-  const _SmpCall({required this.id, required this.startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown) required this.direction, this.durationSeconds = 0, this.deviceIdentifier, required this.clientNumber, this.smpEmployeeName, this.agentUserId, this.agentName}): super._();
+  const _SmpCall({required this.id, this.clientId, required this.startedAt, @JsonKey(unknownEnumValue: CallDirection.unknown) required this.direction, this.status = 'completed', this.durationSeconds = 0, this.deviceIdentifier, required this.clientNumber, this.smpEmployeeName, this.agentUserId, this.agentName}): super._();
   factory _SmpCall.fromJson(Map<String, dynamic> json) => _$SmpCallFromJson(json);
 
 @override final  String id;
+/// Resolved contact, when the number matched one (tenant-scoped).
+@override final  String? clientId;
 @override final  String startedAt;
 @override@JsonKey(unknownEnumValue: CallDirection.unknown) final  CallDirection direction;
+/// `in_progress` while the call is still live on the rep's phone.
+@override@JsonKey() final  String status;
 @override@JsonKey() final  int durationSeconds;
 @override final  String? deviceIdentifier;
 @override final  String clientNumber;
@@ -247,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SmpCall&&(identical(other.id, id) || other.id == id)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.deviceIdentifier, deviceIdentifier) || other.deviceIdentifier == deviceIdentifier)&&(identical(other.clientNumber, clientNumber) || other.clientNumber == clientNumber)&&(identical(other.smpEmployeeName, smpEmployeeName) || other.smpEmployeeName == smpEmployeeName)&&(identical(other.agentUserId, agentUserId) || other.agentUserId == agentUserId)&&(identical(other.agentName, agentName) || other.agentName == agentName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SmpCall&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.status, status) || other.status == status)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.deviceIdentifier, deviceIdentifier) || other.deviceIdentifier == deviceIdentifier)&&(identical(other.clientNumber, clientNumber) || other.clientNumber == clientNumber)&&(identical(other.smpEmployeeName, smpEmployeeName) || other.smpEmployeeName == smpEmployeeName)&&(identical(other.agentUserId, agentUserId) || other.agentUserId == agentUserId)&&(identical(other.agentName, agentName) || other.agentName == agentName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,startedAt,direction,durationSeconds,deviceIdentifier,clientNumber,smpEmployeeName,agentUserId,agentName);
+int get hashCode => Object.hash(runtimeType,id,clientId,startedAt,direction,status,durationSeconds,deviceIdentifier,clientNumber,smpEmployeeName,agentUserId,agentName);
 
 @override
 String toString() {
-  return 'SmpCall(id: $id, startedAt: $startedAt, direction: $direction, durationSeconds: $durationSeconds, deviceIdentifier: $deviceIdentifier, clientNumber: $clientNumber, smpEmployeeName: $smpEmployeeName, agentUserId: $agentUserId, agentName: $agentName)';
+  return 'SmpCall(id: $id, clientId: $clientId, startedAt: $startedAt, direction: $direction, status: $status, durationSeconds: $durationSeconds, deviceIdentifier: $deviceIdentifier, clientNumber: $clientNumber, smpEmployeeName: $smpEmployeeName, agentUserId: $agentUserId, agentName: $agentName)';
 }
 
 
@@ -267,7 +275,7 @@ abstract mixin class _$SmpCallCopyWith<$Res> implements $SmpCallCopyWith<$Res> {
   factory _$SmpCallCopyWith(_SmpCall value, $Res Function(_SmpCall) _then) = __$SmpCallCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String startedAt,@JsonKey(unknownEnumValue: CallDirection.unknown) CallDirection direction, int durationSeconds, String? deviceIdentifier, String clientNumber, String? smpEmployeeName, String? agentUserId, String? agentName
+ String id, String? clientId, String startedAt,@JsonKey(unknownEnumValue: CallDirection.unknown) CallDirection direction, String status, int durationSeconds, String? deviceIdentifier, String clientNumber, String? smpEmployeeName, String? agentUserId, String? agentName
 });
 
 
@@ -284,12 +292,14 @@ class __$SmpCallCopyWithImpl<$Res>
 
 /// Create a copy of SmpCall
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? startedAt = null,Object? direction = null,Object? durationSeconds = null,Object? deviceIdentifier = freezed,Object? clientNumber = null,Object? smpEmployeeName = freezed,Object? agentUserId = freezed,Object? agentName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? clientId = freezed,Object? startedAt = null,Object? direction = null,Object? status = null,Object? durationSeconds = null,Object? deviceIdentifier = freezed,Object? clientNumber = null,Object? smpEmployeeName = freezed,Object? agentUserId = freezed,Object? agentName = freezed,}) {
   return _then(_SmpCall(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,startedAt: null == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
+as String,clientId: freezed == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
+as String?,startedAt: null == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
 as String,direction: null == direction ? _self.direction : direction // ignore: cast_nullable_to_non_nullable
-as CallDirection,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
+as CallDirection,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
 as int,deviceIdentifier: freezed == deviceIdentifier ? _self.deviceIdentifier : deviceIdentifier // ignore: cast_nullable_to_non_nullable
 as String?,clientNumber: null == clientNumber ? _self.clientNumber : clientNumber // ignore: cast_nullable_to_non_nullable
 as String,smpEmployeeName: freezed == smpEmployeeName ? _self.smpEmployeeName : smpEmployeeName // ignore: cast_nullable_to_non_nullable

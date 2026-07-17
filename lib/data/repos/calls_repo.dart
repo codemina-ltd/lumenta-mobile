@@ -17,4 +17,14 @@ class CallsRepo {
     );
     return Paginated.fromJson(res.data!, SmpCall.fromJson).data;
   }
+
+  /// `GET /smp/calls/live` — calls currently in progress on a rep's phone,
+  /// tenant-wide. Poll target for the "in call with …" indicators.
+  Future<List<SmpCall>> listLive() async {
+    final res = await _dio.get<Map<String, dynamic>>('/smp/calls/live');
+    final data = res.data!['data'] as List<dynamic>? ?? const [];
+    return data
+        .map((e) => SmpCall.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
 }
