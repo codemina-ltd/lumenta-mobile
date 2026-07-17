@@ -75,6 +75,11 @@ abstract class Message with _$Message {
     String? locationLongitude,
     String? locationName,
     String? locationAddress,
+
+    /// Shared-contact cards on an inbound `contacts` message — the API's
+    /// sanitized copy of Meta's `messages[0].contacts` array. Null for other
+    /// types and for legacy rows (see [sharedContacts] for the fallback).
+    List<dynamic>? contactsData,
     String? transcription,
     String? transcriptionStatus,
 
@@ -159,6 +164,30 @@ abstract class Message with _$Message {
       // Fall through to null on any unexpected payload shape.
     }
     return null;
+  }
+
+  /// Shared-contact cards for a `contacts` message, as maps shaped like
+  /// Meta's webhook `contacts` entries (name/phones/emails/org/…). Prefers
+  /// the structured [contactsData] column; legacy rows fall back to the raw
+  /// provider payload (`messages[0].contacts`) — same trick as [flowName].
+  /// Empty for every other message type.
+  List<Map<String, dynamic>> get sharedContacts {
+    List<Map<String, dynamic>> asMaps(dynamic list) => list is List
+        ? list.whereType<Map>().map(Map<String, dynamic>.from).toList()
+        : const [];
+
+    final structured = asMaps(contactsData);
+    if (structured.isNotEmpty) return structured;
+
+    try {
+      final messages = providerRawPayload?['messages'];
+      if (messages is List && messages.isNotEmpty) {
+        return asMaps(messages[0]?['contacts']);
+      }
+    } catch (_) {
+      // Fall through to empty on any unexpected payload shape.
+    }
+    return const [];
   }
 
   /// Internal template UUID behind an outbound template message, written by

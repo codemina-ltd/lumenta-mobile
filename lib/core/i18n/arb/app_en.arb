@@ -93,6 +93,19 @@
   "previewLocation": "Location",
   "previewSticker": "Sticker",
   "previewContact": "Contact",
+  "contactAndOthers": "{name} and {count, plural, one{# other} other{# others}}",
+  "@contactAndOthers": {
+    "placeholders": {
+      "name": {},
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "contactViewDetails": "View contact",
+  "contactsViewAll": "View all",
+  "contactDetailsTitle": "Shared contacts",
+  "contactNumberCopied": "Number copied",
   "flowResponseTitle": "Interactive Response",
   "flowResponseReceived": "Response received",
   "flowResponseDetailsTitle": "Customer Response",

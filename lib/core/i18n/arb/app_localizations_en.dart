@@ -264,6 +264,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get previewContact => 'Contact';
 
   @override
+  String contactAndOthers(Object name, num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# others',
+      one: '# other',
+    );
+    return '$name and $_temp0';
+  }
+
+  @override
+  String get contactViewDetails => 'View contact';
+
+  @override
+  String get contactsViewAll => 'View all';
+
+  @override
+  String get contactDetailsTitle => 'Shared contacts';
+
+  @override
+  String get contactNumberCopied => 'Number copied';
+
+  @override
   String get flowResponseTitle => 'Interactive Response';
 
   @override

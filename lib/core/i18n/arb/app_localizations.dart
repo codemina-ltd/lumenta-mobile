@@ -598,6 +598,36 @@ abstract class AppLocalizations {
   /// **'Contact'**
   String get previewContact;
 
+  /// No description provided for @contactAndOthers.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} and {count, plural, one{# other} other{# others}}'**
+  String contactAndOthers(Object name, num count);
+
+  /// No description provided for @contactViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View contact'**
+  String get contactViewDetails;
+
+  /// No description provided for @contactsViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get contactsViewAll;
+
+  /// No description provided for @contactDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared contacts'**
+  String get contactDetailsTitle;
+
+  /// No description provided for @contactNumberCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Number copied'**
+  String get contactNumberCopied;
+
   /// No description provided for @flowResponseTitle.
   ///
   /// In en, this message translates to:

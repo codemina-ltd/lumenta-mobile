@@ -264,6 +264,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String get previewContact => 'جهة اتصال';
 
   @override
+  String contactAndOthers(Object name, num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# جهة اتصال أخرى',
+      many: '# جهة اتصال أخرى',
+      few: '# جهات اتصال أخرى',
+      two: 'جهتا اتصال أخريان',
+      one: 'جهة اتصال أخرى',
+      zero: '# آخرين',
+    );
+    return '$name و$_temp0';
+  }
+
+  @override
+  String get contactViewDetails => 'عرض جهة الاتصال';
+
+  @override
+  String get contactsViewAll => 'عرض الكل';
+
+  @override
+  String get contactDetailsTitle => 'جهات اتصال مُشارَكة';
+
+  @override
+  String get contactNumberCopied => 'تم نسخ الرقم';
+
+  @override
   String get flowResponseTitle => 'رد تفاعلي';
 
   @override

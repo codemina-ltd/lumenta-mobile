@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -573,6 +574,8 @@ class _MessageBubble extends ConsumerWidget {
         return DocumentBubble(message: message, textColor: textColor);
       case MessageType.location:
         return _LocationContent(message: message, textColor: textColor);
+      case MessageType.contacts:
+        return _ContactsContent(message: message, textColor: textColor);
       case MessageType.interactive:
         if (message.isFlowResponse) {
           return _FlowResponseContent(message: message, textColor: textColor);
@@ -962,6 +965,275 @@ class _Cell extends StatelessWidget {
           fontWeight: bold ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
+    );
+  }
+}
+
+/// Shared-contact card(s) on an inbound `contacts` message — mirrors the
+/// portal's ContactsMessage: a WhatsApp-style card (avatar, name, first
+/// phone) with a "View contact" affordance opening the full details, where
+/// tapping a phone number copies it.
+class _ContactsContent extends StatelessWidget {
+  const _ContactsContent({required this.message, required this.textColor});
+  final Message message;
+  final Color textColor;
+
+  static List<Map<String, dynamic>> _phones(Map<String, dynamic> c) {
+    final phones = c['phones'];
+    if (phones is! List) return const [];
+    return phones
+        .whereType<Map>()
+        .map(Map<String, dynamic>.from)
+        .where((p) => p['phone'] is String && (p['phone'] as String).isNotEmpty)
+        .toList();
+  }
+
+  static List<String> _emails(Map<String, dynamic> c) {
+    final emails = c['emails'];
+    if (emails is! List) return const [];
+    return emails
+        .whereType<Map>()
+        .map((e) => e['email'])
+        .whereType<String>()
+        .where((e) => e.isNotEmpty)
+        .toList();
+  }
+
+  static String _displayName(Map<String, dynamic> c, String fallback) {
+    final name = c['name'];
+    if (name is Map) {
+      final formatted = name['formatted_name'];
+      if (formatted is String && formatted.trim().isNotEmpty) {
+        return formatted.trim();
+      }
+      final assembled = [name['first_name'], name['last_name']]
+          .whereType<String>()
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .join(' ');
+      if (assembled.isNotEmpty) return assembled;
+    }
+    final phones = _phones(c);
+    if (phones.isNotEmpty) return phones.first['phone'] as String;
+    return fallback;
+  }
+
+  static String? _orgLine(Map<String, dynamic> c) {
+    final org = c['org'];
+    if (org is! Map) return null;
+    final line = [org['title'], org['company']]
+        .whereType<String>()
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .join(' — ');
+    return line.isEmpty ? null : line;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final contacts = message.sharedContacts;
+
+    // No structured cards anywhere (odd legacy row) — plain placeholder body.
+    if (contacts.isEmpty) {
+      return Text(
+        message.body.isEmpty ? '👤 ${l10n.previewContact}' : message.body,
+        textDirection: Fmt.textDirectionFor(message.body),
+        style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
+      );
+    }
+
+    final firstName = _displayName(contacts.first, l10n.previewContact);
+    final title = contacts.length == 1
+        ? firstName
+        : l10n.contactAndOthers(firstName, contacts.length - 1);
+    final phones = _phones(contacts.first);
+    final subtitle = phones.isEmpty ? null : phones.first['phone'] as String;
+
+    return GestureDetector(
+      onTap: () => _showDetails(context),
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: textColor.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.person_rounded, color: textColor, size: 24),
+              ),
+              const SizedBox(width: Insets.md),
+              Flexible(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      textDirection: Fmt.textDirectionFor(title),
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle,
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(
+                          color: textColor.withValues(alpha: 0.7),
+                          fontSize: 12,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Insets.sm),
+          Container(
+            height: 1,
+            color: textColor.withValues(alpha: 0.12),
+          ),
+          const SizedBox(height: Insets.sm),
+          Center(
+            child: Text(
+              contacts.length == 1
+                  ? l10n.contactViewDetails
+                  : l10n.contactsViewAll,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDetails(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final contacts = message.sharedContacts;
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.contactDetailsTitle),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: contacts.length,
+            separatorBuilder: (_, _) => const Divider(),
+            itemBuilder: (_, i) => _ContactDetailsTile(contact: contacts[i]),
+          ),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(l10n.close),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One contact inside the shared-contacts dialog: name, org line, phones
+/// (tap to copy) and emails.
+class _ContactDetailsTile extends StatelessWidget {
+  const _ContactDetailsTile({required this.contact});
+  final Map<String, dynamic> contact;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final name = _ContactsContent._displayName(contact, l10n.previewContact);
+    final org = _ContactsContent._orgLine(contact);
+    final phones = _ContactsContent._phones(contact);
+    final emails = _ContactsContent._emails(contact);
+    final muted = context.scheme.onSurfaceVariant;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          name,
+          textDirection: Fmt.textDirectionFor(name),
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
+        if (org != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(org, style: TextStyle(color: muted, fontSize: 12)),
+          ),
+        for (final p in phones)
+          Padding(
+            padding: const EdgeInsets.only(top: Insets.sm),
+            child: InkWell(
+              onTap: () async {
+                await Clipboard.setData(
+                  ClipboardData(text: p['phone'] as String),
+                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.contactNumberCopied)),
+                  );
+                }
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.phone_rounded, size: 16, color: muted),
+                  const SizedBox(width: Insets.sm),
+                  Text(
+                    p['phone'] as String,
+                    textDirection: TextDirection.ltr,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  if (p['type'] is String &&
+                      (p['type'] as String).isNotEmpty) ...[
+                    const SizedBox(width: Insets.sm),
+                    Text(
+                      p['type'] as String,
+                      style: TextStyle(color: muted, fontSize: 11),
+                    ),
+                  ],
+                  const SizedBox(width: Insets.sm),
+                  Icon(Icons.copy_rounded, size: 14, color: muted),
+                ],
+              ),
+            ),
+          ),
+        for (final email in emails)
+          Padding(
+            padding: const EdgeInsets.only(top: Insets.sm),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.email_rounded, size: 16, color: muted),
+                const SizedBox(width: Insets.sm),
+                Flexible(
+                  child: Text(
+                    email,
+                    textDirection: TextDirection.ltr,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }
