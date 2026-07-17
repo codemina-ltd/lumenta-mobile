@@ -284,6 +284,8 @@
   "clientDetailNoNotes": "No notes yet",
   "clientDetailAddNote": "Add note",
   "clientDetailDeleteNote": "Delete note",
+  "clientDetailReminders": "Reminders",
+  "clientDetailNoReminders": "No open reminders for this contact.",
   "clientDetailSegments": "Segments",
   "clientDetailNoSegments": "Not in any segment",
   "clientDetailCampaigns": "Campaigns",

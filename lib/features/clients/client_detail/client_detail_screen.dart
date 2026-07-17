@@ -19,6 +19,7 @@ import 'client_notes_card.dart';
 import 'client_orders_card.dart';
 import 'client_profile_card.dart';
 import 'client_recent_messages_card.dart';
+import 'client_reminders_card.dart';
 import 'client_segments_card.dart';
 import 'client_suppression_card.dart';
 import 'client_team_card.dart';
@@ -63,6 +64,7 @@ class ClientDetailScreen extends ConsumerWidget {
             _CtwaBanner(clientId: clientId),
             ClientProfileCard(clientId: clientId),
             ClientTeamCard(clientId: clientId),
+            ClientRemindersCard(clientId: clientId),
             ClientNotesCard(clientId: clientId),
             ClientRecentMessagesCard(clientId: clientId),
             ClientOrdersCard(clientId: clientId),

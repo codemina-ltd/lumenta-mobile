@@ -1510,6 +1510,18 @@ abstract class AppLocalizations {
   /// **'Delete note'**
   String get clientDetailDeleteNote;
 
+  /// No description provided for @clientDetailReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get clientDetailReminders;
+
+  /// No description provided for @clientDetailNoReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'No open reminders for this contact.'**
+  String get clientDetailNoReminders;
+
   /// No description provided for @clientDetailSegments.
   ///
   /// In en, this message translates to:

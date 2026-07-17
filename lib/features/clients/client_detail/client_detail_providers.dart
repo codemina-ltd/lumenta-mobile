@@ -5,6 +5,7 @@ import '../../../data/models/contact_field.dart';
 import '../../../data/models/contact_profile.dart';
 import '../../../data/models/inbox_note.dart';
 import '../../../data/models/message.dart';
+import '../../../data/models/reminder.dart';
 import '../../../data/models/smp_call.dart';
 import '../../../data/repos/campaigns_repo.dart';
 import '../../../data/repos/commerce_repo.dart';
@@ -73,6 +74,16 @@ final clientCampaignsProvider = FutureProvider.autoDispose
 final clientSuppressionsProvider = FutureProvider.autoDispose
     .family<List<ClientSuppression>, String>((ref, clientId) async {
       return ref.read(suppressionRepoProvider).forClient(clientId);
+    });
+
+/// The client's open reminders (due-time ascending), for the "Reminders"
+/// card — unlike the Reminders tab this is tenant-wide, not mine-only.
+final clientRemindersProvider = FutureProvider.autoDispose
+    .family<List<Reminder>, String>((ref, clientId) async {
+      final page = await ref
+          .read(remindersRepoProvider)
+          .list(clientId: clientId, limit: 20);
+      return page.data;
     });
 
 /// Internal notes on a Team Inbox thread (keyed by thread id).

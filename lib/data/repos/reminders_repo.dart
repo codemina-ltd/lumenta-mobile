@@ -10,6 +10,7 @@ class RemindersRepo {
   /// `GET /reminders` — page-paginated, sorted by due time ascending.
   Future<Paginated<Reminder>> list({
     String? assignedToUserId,
+    String? clientId,
     String status = 'pending',
     int page = 1,
     int limit = 50,
@@ -19,6 +20,7 @@ class RemindersRepo {
       queryParameters: {
         'status': status,
         'assignedToUserId': ?assignedToUserId,
+        'clientId': ?clientId,
         'page': page,
         'limit': limit,
       },

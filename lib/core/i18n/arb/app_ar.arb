@@ -276,6 +276,8 @@
   "clientDetailNoNotes": "لا توجد ملاحظات بعد",
   "clientDetailAddNote": "إضافة ملاحظة",
   "clientDetailDeleteNote": "حذف الملاحظة",
+  "clientDetailReminders": "التذكيرات",
+  "clientDetailNoReminders": "لا توجد تذكيرات مفتوحة لجهة الاتصال هذه.",
   "clientDetailSegments": "الشرائح",
   "clientDetailNoSegments": "ليس ضمن أي شريحة",
   "clientDetailCampaigns": "الحملات",

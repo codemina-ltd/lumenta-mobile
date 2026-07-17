@@ -759,6 +759,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientDetailDeleteNote => 'حذف الملاحظة';
 
   @override
+  String get clientDetailReminders => 'التذكيرات';
+
+  @override
+  String get clientDetailNoReminders =>
+      'لا توجد تذكيرات مفتوحة لجهة الاتصال هذه.';
+
+  @override
   String get clientDetailSegments => 'الشرائح';
 
   @override

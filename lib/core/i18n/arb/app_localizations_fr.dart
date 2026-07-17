@@ -773,6 +773,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clientDetailDeleteNote => 'Supprimer la note';
 
   @override
+  String get clientDetailReminders => 'Rappels';
+
+  @override
+  String get clientDetailNoReminders => 'Aucun rappel ouvert pour ce contact.';
+
+  @override
   String get clientDetailSegments => 'Segments';
 
   @override

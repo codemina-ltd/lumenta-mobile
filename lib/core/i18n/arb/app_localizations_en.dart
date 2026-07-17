@@ -761,6 +761,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientDetailDeleteNote => 'Delete note';
 
   @override
+  String get clientDetailReminders => 'Reminders';
+
+  @override
+  String get clientDetailNoReminders => 'No open reminders for this contact.';
+
+  @override
   String get clientDetailSegments => 'Segments';
 
   @override

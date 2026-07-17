@@ -276,6 +276,8 @@
   "clientDetailNoNotes": "Aucune note pour l'instant",
   "clientDetailAddNote": "Ajouter une note",
   "clientDetailDeleteNote": "Supprimer la note",
+  "clientDetailReminders": "Rappels",
+  "clientDetailNoReminders": "Aucun rappel ouvert pour ce contact.",
   "clientDetailSegments": "Segments",
   "clientDetailNoSegments": "Dans aucun segment",
   "clientDetailCampaigns": "Campagnes",
