@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/format.dart';
 import '../../../core/i18n/arb/app_localizations.dart';
@@ -9,6 +10,49 @@ import '../../../core/theme/app_theme.dart';
 import '../../../data/models/message.dart';
 import '../../../data/models/template.dart';
 import '../chat_providers.dart';
+
+/// Resolves a URL/PHONE_NUMBER template button (a raw JSON map — see
+/// `Template.buttons`) to a launchable [Uri] — the same contract as the
+/// portal's `buttonHref`. An unresolved `{{1}}` in a URL button falls back to
+/// the stored sample value, since the actual sent value isn't persisted
+/// per-message (only body/header variables are). QUICK_REPLY/COPY_CODE
+/// buttons have no navigable target and return null.
+Uri? _buttonHref(dynamic button) {
+  if (button is! Map) return null;
+  final type = '${button['type']}';
+  if (type == 'URL') {
+    final url = button['url'];
+    if (url is! String || url.isEmpty) return null;
+    if (!url.contains('{{')) return Uri.tryParse(url);
+    final example = button['example'];
+    final sample = (example is List && example.isNotEmpty)
+        ? '${example.first}'
+        : '';
+    return Uri.tryParse(url.replaceFirst('{{1}}', sample));
+  }
+  if (type == 'PHONE_NUMBER') {
+    final phone = button['phone_number'];
+    if (phone is! String || phone.isEmpty) return null;
+    return Uri(scheme: 'tel', path: phone);
+  }
+  return null;
+}
+
+/// Opens a template button's resolved link (external browser tab for
+/// http(s), the OS dialer for tel:), surfacing a snackbar if nothing on the
+/// device can handle it.
+Future<void> _launchButton(BuildContext context, dynamic button) async {
+  final uri = _buttonHref(button);
+  if (uri == null) return;
+  final l10n = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!ok) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(l10n.templateButtonOpenFailed)),
+    );
+  }
+}
 
 /// WhatsApp's action-link blue for template buttons — light/dark variants
 /// tuned for contrast on the bubble surfaces.
@@ -328,6 +372,9 @@ class _TemplateButtons extends StatelessWidget {
             context,
             icon: _buttonIcon(button is Map ? '${button['type']}' : null),
             label: button is Map ? '${button['text'] ?? '…'}' : '…',
+            onTap: _buttonHref(button) != null
+                ? () => _launchButton(context, button)
+                : null,
           ),
         if (collapsed)
           _row(
@@ -412,6 +459,12 @@ class _TemplateButtons extends StatelessWidget {
                   size: 20,
                 ),
                 title: Text(button is Map ? '${button['text'] ?? '…'}' : '…'),
+                onTap: _buttonHref(button) != null
+                    ? () {
+                        Navigator.of(ctx).pop();
+                        _launchButton(context, button);
+                      }
+                    : null,
               ),
             const SizedBox(height: Insets.sm),
           ],
@@ -550,36 +603,44 @@ class _CarouselCard extends StatelessWidget {
             ),
           ),
           for (final button in buttons)
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: onSurface.withValues(alpha: 0.1)),
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    _buttonIcon(button is Map ? '${button['type']}' : null),
-                    size: 13,
-                    color: action,
+            InkWell(
+              onTap: _buttonHref(button) != null
+                  ? () => _launchButton(context, button)
+                  : null,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: onSurface.withValues(alpha: 0.1)),
                   ),
-                  const SizedBox(width: 5),
-                  Flexible(
-                    child: Text(
-                      button is Map ? '${button['text'] ?? '…'}' : '…',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: action,
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w600,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 6,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _buttonIcon(button is Map ? '${button['type']}' : null),
+                      size: 13,
+                      color: action,
+                    ),
+                    const SizedBox(width: 5),
+                    Flexible(
+                      child: Text(
+                        button is Map ? '${button['text'] ?? '…'}' : '…',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: action,
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
         ],

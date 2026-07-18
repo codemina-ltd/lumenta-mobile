@@ -453,6 +453,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get templateAllOptionsTitle => 'All options';
 
   @override
+  String get templateButtonOpenFailed =>
+      'Couldn\'t open that. Please try again.';
+
+  @override
   String get templateVideoHeader => 'Video';
 
   @override

@@ -169,6 +169,7 @@
   "templateImageHeader": "صورة",
   "templateSeeAllOptions": "عرض كل الخيارات",
   "templateAllOptionsTitle": "كل الخيارات",
+  "templateButtonOpenFailed": "تعذّر فتح هذا الرابط. يرجى المحاولة مرة أخرى.",
   "templateVideoHeader": "فيديو",
   "templateDocHeader": "مستند",
   "templateMarketingUsWarning": "قد تحظر Meta القوالب التسويقية المرسلة إلى أرقام أمريكية.",

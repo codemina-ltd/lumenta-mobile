@@ -454,6 +454,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get templateAllOptionsTitle => 'كل الخيارات';
 
   @override
+  String get templateButtonOpenFailed =>
+      'تعذّر فتح هذا الرابط. يرجى المحاولة مرة أخرى.';
+
+  @override
   String get templateVideoHeader => 'فيديو';
 
   @override

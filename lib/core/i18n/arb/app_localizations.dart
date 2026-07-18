@@ -928,6 +928,12 @@ abstract class AppLocalizations {
   /// **'All options'**
   String get templateAllOptionsTitle;
 
+  /// No description provided for @templateButtonOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open that. Please try again.'**
+  String get templateButtonOpenFailed;
+
   /// No description provided for @templateVideoHeader.
   ///
   /// In en, this message translates to:

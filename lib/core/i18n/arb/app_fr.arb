@@ -169,6 +169,7 @@
   "templateImageHeader": "Image",
   "templateSeeAllOptions": "Voir toutes les options",
   "templateAllOptionsTitle": "Toutes les options",
+  "templateButtonOpenFailed": "Impossible d'ouvrir ce lien. Veuillez réessayer.",
   "templateVideoHeader": "Vidéo",
   "templateDocHeader": "Document",
   "templateMarketingUsWarning": "Les modèles marketing vers des numéros américains peuvent être bloqués par Meta.",

@@ -459,6 +459,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get templateAllOptionsTitle => 'Toutes les options';
 
   @override
+  String get templateButtonOpenFailed =>
+      'Impossible d\'ouvrir ce lien. Veuillez réessayer.';
+
+  @override
   String get templateVideoHeader => 'Vidéo';
 
   @override

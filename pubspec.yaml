@@ -2,7 +2,7 @@ name: mobile
 description: "Lumenta mobile companion app."
 publish_to: 'none'
 
-version: 1.0.0+47
+version: 1.0.0+48
 
 environment:
   sdk: ^3.11.0
@@ -65,6 +65,10 @@ dependencies:
   # IANA time-zone database for the profile time-zone picker (the portal gets
   # this from the browser's Intl API; Flutter has no built-in tz list).
   timezone: ^0.10.0
+
+  # Opens template button URLs and dials PHONE_NUMBER buttons (tel:) from the
+  # chat thread.
+  url_launcher: ^6.3.2
 
   # NOTE: permission_handler intentionally NOT used — FirebaseMessaging and
   # image_picker request their own permissions. Its iOS pod compiles all
