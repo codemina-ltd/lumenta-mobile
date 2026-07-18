@@ -688,6 +688,17 @@ class _MessageBubble extends ConsumerWidget {
     final headers = ref.watch(mediaHeadersProvider);
     final url = repo.mediaUrl(message.id);
 
+    // Rich template rendering (header media, footer, buttons, carousel).
+    // Checked ahead of the type switch because backfilled legacy rows keep
+    // message_type 'text' while carrying the first-class templateId /
+    // templateData linkage (mirrors the portal's ChatBubble). Falls back
+    // internally to the plain body for legacy/external rows.
+    if (message.messageType == MessageType.template ||
+        message.templateId != null ||
+        message.templateData != null) {
+      return TemplateMessageContent(message: message, textColor: textColor);
+    }
+
     switch (message.messageType) {
       case MessageType.image:
       case MessageType.sticker:
@@ -736,10 +747,6 @@ class _MessageBubble extends ConsumerWidget {
           return _FlowResponseContent(message: message, textColor: textColor);
         }
         return _bodyText(textColor);
-      case MessageType.template:
-        // Rich template rendering (header media, footer, buttons, carousel);
-        // falls back internally to the plain body for legacy/external rows.
-        return TemplateMessageContent(message: message, textColor: textColor);
       default:
         return _bodyText(textColor);
     }
