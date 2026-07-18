@@ -88,6 +88,17 @@ abstract class Message with _$Message {
     String? reaction,
     Map<String, dynamic>? providerRawPayload,
 
+    /// First-class template linkage on outbound template sends (see
+    /// api/docs/MESSAGE_TEMPLATE_CONTRACT.md): the internal template UUID.
+    /// Null after the template is deleted (SET NULL FK), on inbound rows,
+    /// and on legacy pre-backfill rows — see [templateId] for the fallback.
+    @JsonKey(name: 'templateId') String? templateIdRaw,
+
+    /// The ACTUAL values sent with the template — never the template's
+    /// example values: `{variables, buttonVariables, language, name,
+    /// category}`. Null on non-template rows.
+    Map<String, dynamic>? templateData,
+
     /// Sender (WABA phone number) that carried this message. Null on legacy
     /// rows written before sender attribution existed.
     String? senderId,
@@ -190,11 +201,16 @@ abstract class Message with _$Message {
     return const [];
   }
 
-  /// Internal template UUID behind an outbound template message, written by
-  /// the API into `providerRawPayload.templateInfo` at send time. Null for
-  /// external templates (sent by name only) and legacy rows — those keep the
+  /// Internal template UUID behind an outbound template message. Prefers the
+  /// first-class [templateIdRaw] field the API now stamps; rows written
+  /// before the backfill fall back to the legacy
+  /// `providerRawPayload.templateInfo` stuffing. Null for external templates
+  /// (sent by name only) and unrecoverable legacy rows — those keep the
   /// plain-body rendering.
   String? get templateId {
+    if (templateIdRaw != null && templateIdRaw!.isNotEmpty) {
+      return templateIdRaw;
+    }
     final info = providerRawPayload?['templateInfo'];
     if (info is Map) {
       final id = info['templateId'];

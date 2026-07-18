@@ -20,7 +20,14 @@ mixin _$Message {
 /// types and for legacy rows (see [sharedContacts] for the fallback).
  List<dynamic>? get contactsData; String? get transcription; String? get transcriptionStatus;/// Emoji the customer reacted with (webhook writes it onto the reacted-to
 /// message row); null / empty when there is no active reaction.
- String? get reaction; Map<String, dynamic>? get providerRawPayload;/// Sender (WABA phone number) that carried this message. Null on legacy
+ String? get reaction; Map<String, dynamic>? get providerRawPayload;/// First-class template linkage on outbound template sends (see
+/// api/docs/MESSAGE_TEMPLATE_CONTRACT.md): the internal template UUID.
+/// Null after the template is deleted (SET NULL FK), on inbound rows,
+/// and on legacy pre-backfill rows — see [templateId] for the fallback.
+@JsonKey(name: 'templateId') String? get templateIdRaw;/// The ACTUAL values sent with the template — never the template's
+/// example values: `{variables, buttonVariables, language, name,
+/// category}`. Null on non-template rows.
+ Map<String, dynamic>? get templateData;/// Sender (WABA phone number) that carried this message. Null on legacy
 /// rows written before sender attribution existed.
  String? get senderId;/// Team member who sent this outbound message ("Sent by …" attribution,
 /// mirrors the portal). Response-only field; null on inbound rows and
@@ -40,16 +47,16 @@ $MessageCopyWith<Message> get copyWith => _$MessageCopyWithImpl<Message>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Message&&(identical(other.id, id) || other.id == id)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.body, body) || other.body == body)&&(identical(other.status, status) || other.status == status)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl)&&(identical(other.mediaMimeType, mediaMimeType) || other.mediaMimeType == mediaMimeType)&&(identical(other.locationLatitude, locationLatitude) || other.locationLatitude == locationLatitude)&&(identical(other.locationLongitude, locationLongitude) || other.locationLongitude == locationLongitude)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationAddress, locationAddress) || other.locationAddress == locationAddress)&&const DeepCollectionEquality().equals(other.contactsData, contactsData)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.transcriptionStatus, transcriptionStatus) || other.transcriptionStatus == transcriptionStatus)&&(identical(other.reaction, reaction) || other.reaction == reaction)&&const DeepCollectionEquality().equals(other.providerRawPayload, providerRawPayload)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.sentByUserName, sentByUserName) || other.sentByUserName == sentByUserName)&&(identical(other.deletedForEveryoneAt, deletedForEveryoneAt) || other.deletedForEveryoneAt == deletedForEveryoneAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Message&&(identical(other.id, id) || other.id == id)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.body, body) || other.body == body)&&(identical(other.status, status) || other.status == status)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl)&&(identical(other.mediaMimeType, mediaMimeType) || other.mediaMimeType == mediaMimeType)&&(identical(other.locationLatitude, locationLatitude) || other.locationLatitude == locationLatitude)&&(identical(other.locationLongitude, locationLongitude) || other.locationLongitude == locationLongitude)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationAddress, locationAddress) || other.locationAddress == locationAddress)&&const DeepCollectionEquality().equals(other.contactsData, contactsData)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.transcriptionStatus, transcriptionStatus) || other.transcriptionStatus == transcriptionStatus)&&(identical(other.reaction, reaction) || other.reaction == reaction)&&const DeepCollectionEquality().equals(other.providerRawPayload, providerRawPayload)&&(identical(other.templateIdRaw, templateIdRaw) || other.templateIdRaw == templateIdRaw)&&const DeepCollectionEquality().equals(other.templateData, templateData)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.sentByUserName, sentByUserName) || other.sentByUserName == sentByUserName)&&(identical(other.deletedForEveryoneAt, deletedForEveryoneAt) || other.deletedForEveryoneAt == deletedForEveryoneAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,direction,body,status,messageType,mediaUrl,mediaMimeType,locationLatitude,locationLongitude,locationName,locationAddress,const DeepCollectionEquality().hash(contactsData),transcription,transcriptionStatus,reaction,const DeepCollectionEquality().hash(providerRawPayload),senderId,sentByUserName,deletedForEveryoneAt,createdAt]);
+int get hashCode => Object.hashAll([runtimeType,id,direction,body,status,messageType,mediaUrl,mediaMimeType,locationLatitude,locationLongitude,locationName,locationAddress,const DeepCollectionEquality().hash(contactsData),transcription,transcriptionStatus,reaction,const DeepCollectionEquality().hash(providerRawPayload),templateIdRaw,const DeepCollectionEquality().hash(templateData),senderId,sentByUserName,deletedForEveryoneAt,createdAt]);
 
 @override
 String toString() {
-  return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, contactsData: $contactsData, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, senderId: $senderId, sentByUserName: $sentByUserName, deletedForEveryoneAt: $deletedForEveryoneAt, createdAt: $createdAt)';
+  return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, contactsData: $contactsData, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, templateIdRaw: $templateIdRaw, templateData: $templateData, senderId: $senderId, sentByUserName: $sentByUserName, deletedForEveryoneAt: $deletedForEveryoneAt, createdAt: $createdAt)';
 }
 
 
@@ -60,7 +67,7 @@ abstract mixin class $MessageCopyWith<$Res>  {
   factory $MessageCopyWith(Message value, $Res Function(Message) _then) = _$MessageCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection direction, String body,@JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,@JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType, String? mediaUrl, String? mediaMimeType, String? locationLatitude, String? locationLongitude, String? locationName, String? locationAddress, List<dynamic>? contactsData, String? transcription, String? transcriptionStatus, String? reaction, Map<String, dynamic>? providerRawPayload, String? senderId, String? sentByUserName, String? deletedForEveryoneAt, String createdAt
+ String id,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection direction, String body,@JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,@JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType, String? mediaUrl, String? mediaMimeType, String? locationLatitude, String? locationLongitude, String? locationName, String? locationAddress, List<dynamic>? contactsData, String? transcription, String? transcriptionStatus, String? reaction, Map<String, dynamic>? providerRawPayload,@JsonKey(name: 'templateId') String? templateIdRaw, Map<String, dynamic>? templateData, String? senderId, String? sentByUserName, String? deletedForEveryoneAt, String createdAt
 });
 
 
@@ -77,7 +84,7 @@ class _$MessageCopyWithImpl<$Res>
 
 /// Create a copy of Message
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? direction = null,Object? body = null,Object? status = null,Object? messageType = null,Object? mediaUrl = freezed,Object? mediaMimeType = freezed,Object? locationLatitude = freezed,Object? locationLongitude = freezed,Object? locationName = freezed,Object? locationAddress = freezed,Object? contactsData = freezed,Object? transcription = freezed,Object? transcriptionStatus = freezed,Object? reaction = freezed,Object? providerRawPayload = freezed,Object? senderId = freezed,Object? sentByUserName = freezed,Object? deletedForEveryoneAt = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? direction = null,Object? body = null,Object? status = null,Object? messageType = null,Object? mediaUrl = freezed,Object? mediaMimeType = freezed,Object? locationLatitude = freezed,Object? locationLongitude = freezed,Object? locationName = freezed,Object? locationAddress = freezed,Object? contactsData = freezed,Object? transcription = freezed,Object? transcriptionStatus = freezed,Object? reaction = freezed,Object? providerRawPayload = freezed,Object? templateIdRaw = freezed,Object? templateData = freezed,Object? senderId = freezed,Object? sentByUserName = freezed,Object? deletedForEveryoneAt = freezed,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,direction: null == direction ? _self.direction : direction // ignore: cast_nullable_to_non_nullable
@@ -95,6 +102,8 @@ as List<dynamic>?,transcription: freezed == transcription ? _self.transcription 
 as String?,transcriptionStatus: freezed == transcriptionStatus ? _self.transcriptionStatus : transcriptionStatus // ignore: cast_nullable_to_non_nullable
 as String?,reaction: freezed == reaction ? _self.reaction : reaction // ignore: cast_nullable_to_non_nullable
 as String?,providerRawPayload: freezed == providerRawPayload ? _self.providerRawPayload : providerRawPayload // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,templateIdRaw: freezed == templateIdRaw ? _self.templateIdRaw : templateIdRaw // ignore: cast_nullable_to_non_nullable
+as String?,templateData: freezed == templateData ? _self.templateData : templateData // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,senderId: freezed == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
 as String?,sentByUserName: freezed == sentByUserName ? _self.sentByUserName : sentByUserName // ignore: cast_nullable_to_non_nullable
 as String?,deletedForEveryoneAt: freezed == deletedForEveryoneAt ? _self.deletedForEveryoneAt : deletedForEveryoneAt // ignore: cast_nullable_to_non_nullable
@@ -184,10 +193,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  List<dynamic>? contactsData,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload,  String? senderId,  String? sentByUserName,  String? deletedForEveryoneAt,  String createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  List<dynamic>? contactsData,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload, @JsonKey(name: 'templateId')  String? templateIdRaw,  Map<String, dynamic>? templateData,  String? senderId,  String? sentByUserName,  String? deletedForEveryoneAt,  String createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Message() when $default != null:
-return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.contactsData,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.senderId,_that.sentByUserName,_that.deletedForEveryoneAt,_that.createdAt);case _:
+return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.contactsData,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.templateIdRaw,_that.templateData,_that.senderId,_that.sentByUserName,_that.deletedForEveryoneAt,_that.createdAt);case _:
   return orElse();
 
 }
@@ -205,10 +214,10 @@ return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageTy
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  List<dynamic>? contactsData,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload,  String? senderId,  String? sentByUserName,  String? deletedForEveryoneAt,  String createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  List<dynamic>? contactsData,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload, @JsonKey(name: 'templateId')  String? templateIdRaw,  Map<String, dynamic>? templateData,  String? senderId,  String? sentByUserName,  String? deletedForEveryoneAt,  String createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Message():
-return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.contactsData,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.senderId,_that.sentByUserName,_that.deletedForEveryoneAt,_that.createdAt);case _:
+return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.contactsData,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.templateIdRaw,_that.templateData,_that.senderId,_that.sentByUserName,_that.deletedForEveryoneAt,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -225,10 +234,10 @@ return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageTy
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  List<dynamic>? contactsData,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload,  String? senderId,  String? sentByUserName,  String? deletedForEveryoneAt,  String createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection direction,  String body, @JsonKey(unknownEnumValue: MessageStatus.sent)  MessageStatus status, @JsonKey(unknownEnumValue: MessageType.unknown)  MessageType messageType,  String? mediaUrl,  String? mediaMimeType,  String? locationLatitude,  String? locationLongitude,  String? locationName,  String? locationAddress,  List<dynamic>? contactsData,  String? transcription,  String? transcriptionStatus,  String? reaction,  Map<String, dynamic>? providerRawPayload, @JsonKey(name: 'templateId')  String? templateIdRaw,  Map<String, dynamic>? templateData,  String? senderId,  String? sentByUserName,  String? deletedForEveryoneAt,  String createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Message() when $default != null:
-return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.contactsData,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.senderId,_that.sentByUserName,_that.deletedForEveryoneAt,_that.createdAt);case _:
+return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageType,_that.mediaUrl,_that.mediaMimeType,_that.locationLatitude,_that.locationLongitude,_that.locationName,_that.locationAddress,_that.contactsData,_that.transcription,_that.transcriptionStatus,_that.reaction,_that.providerRawPayload,_that.templateIdRaw,_that.templateData,_that.senderId,_that.sentByUserName,_that.deletedForEveryoneAt,_that.createdAt);case _:
   return null;
 
 }
@@ -240,7 +249,7 @@ return $default(_that.id,_that.direction,_that.body,_that.status,_that.messageTy
 @JsonSerializable()
 
 class _Message extends Message {
-  const _Message({required this.id, @JsonKey(unknownEnumValue: MessageDirection.inbound) required this.direction, this.body = '', @JsonKey(unknownEnumValue: MessageStatus.sent) this.status = MessageStatus.sent, @JsonKey(unknownEnumValue: MessageType.unknown) this.messageType = MessageType.text, this.mediaUrl, this.mediaMimeType, this.locationLatitude, this.locationLongitude, this.locationName, this.locationAddress, final  List<dynamic>? contactsData, this.transcription, this.transcriptionStatus, this.reaction, final  Map<String, dynamic>? providerRawPayload, this.senderId, this.sentByUserName, this.deletedForEveryoneAt, required this.createdAt}): _contactsData = contactsData,_providerRawPayload = providerRawPayload,super._();
+  const _Message({required this.id, @JsonKey(unknownEnumValue: MessageDirection.inbound) required this.direction, this.body = '', @JsonKey(unknownEnumValue: MessageStatus.sent) this.status = MessageStatus.sent, @JsonKey(unknownEnumValue: MessageType.unknown) this.messageType = MessageType.text, this.mediaUrl, this.mediaMimeType, this.locationLatitude, this.locationLongitude, this.locationName, this.locationAddress, final  List<dynamic>? contactsData, this.transcription, this.transcriptionStatus, this.reaction, final  Map<String, dynamic>? providerRawPayload, @JsonKey(name: 'templateId') this.templateIdRaw, final  Map<String, dynamic>? templateData, this.senderId, this.sentByUserName, this.deletedForEveryoneAt, required this.createdAt}): _contactsData = contactsData,_providerRawPayload = providerRawPayload,_templateData = templateData,super._();
   factory _Message.fromJson(Map<String, dynamic> json) => _$MessageFromJson(json);
 
 @override final  String id;
@@ -283,6 +292,26 @@ class _Message extends Message {
   return EqualUnmodifiableMapView(value);
 }
 
+/// First-class template linkage on outbound template sends (see
+/// api/docs/MESSAGE_TEMPLATE_CONTRACT.md): the internal template UUID.
+/// Null after the template is deleted (SET NULL FK), on inbound rows,
+/// and on legacy pre-backfill rows — see [templateId] for the fallback.
+@override@JsonKey(name: 'templateId') final  String? templateIdRaw;
+/// The ACTUAL values sent with the template — never the template's
+/// example values: `{variables, buttonVariables, language, name,
+/// category}`. Null on non-template rows.
+ final  Map<String, dynamic>? _templateData;
+/// The ACTUAL values sent with the template — never the template's
+/// example values: `{variables, buttonVariables, language, name,
+/// category}`. Null on non-template rows.
+@override Map<String, dynamic>? get templateData {
+  final value = _templateData;
+  if (value == null) return null;
+  if (_templateData is EqualUnmodifiableMapView) return _templateData;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(value);
+}
+
 /// Sender (WABA phone number) that carried this message. Null on legacy
 /// rows written before sender attribution existed.
 @override final  String? senderId;
@@ -308,16 +337,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Message&&(identical(other.id, id) || other.id == id)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.body, body) || other.body == body)&&(identical(other.status, status) || other.status == status)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl)&&(identical(other.mediaMimeType, mediaMimeType) || other.mediaMimeType == mediaMimeType)&&(identical(other.locationLatitude, locationLatitude) || other.locationLatitude == locationLatitude)&&(identical(other.locationLongitude, locationLongitude) || other.locationLongitude == locationLongitude)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationAddress, locationAddress) || other.locationAddress == locationAddress)&&const DeepCollectionEquality().equals(other._contactsData, _contactsData)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.transcriptionStatus, transcriptionStatus) || other.transcriptionStatus == transcriptionStatus)&&(identical(other.reaction, reaction) || other.reaction == reaction)&&const DeepCollectionEquality().equals(other._providerRawPayload, _providerRawPayload)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.sentByUserName, sentByUserName) || other.sentByUserName == sentByUserName)&&(identical(other.deletedForEveryoneAt, deletedForEveryoneAt) || other.deletedForEveryoneAt == deletedForEveryoneAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Message&&(identical(other.id, id) || other.id == id)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.body, body) || other.body == body)&&(identical(other.status, status) || other.status == status)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl)&&(identical(other.mediaMimeType, mediaMimeType) || other.mediaMimeType == mediaMimeType)&&(identical(other.locationLatitude, locationLatitude) || other.locationLatitude == locationLatitude)&&(identical(other.locationLongitude, locationLongitude) || other.locationLongitude == locationLongitude)&&(identical(other.locationName, locationName) || other.locationName == locationName)&&(identical(other.locationAddress, locationAddress) || other.locationAddress == locationAddress)&&const DeepCollectionEquality().equals(other._contactsData, _contactsData)&&(identical(other.transcription, transcription) || other.transcription == transcription)&&(identical(other.transcriptionStatus, transcriptionStatus) || other.transcriptionStatus == transcriptionStatus)&&(identical(other.reaction, reaction) || other.reaction == reaction)&&const DeepCollectionEquality().equals(other._providerRawPayload, _providerRawPayload)&&(identical(other.templateIdRaw, templateIdRaw) || other.templateIdRaw == templateIdRaw)&&const DeepCollectionEquality().equals(other._templateData, _templateData)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.sentByUserName, sentByUserName) || other.sentByUserName == sentByUserName)&&(identical(other.deletedForEveryoneAt, deletedForEveryoneAt) || other.deletedForEveryoneAt == deletedForEveryoneAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,direction,body,status,messageType,mediaUrl,mediaMimeType,locationLatitude,locationLongitude,locationName,locationAddress,const DeepCollectionEquality().hash(_contactsData),transcription,transcriptionStatus,reaction,const DeepCollectionEquality().hash(_providerRawPayload),senderId,sentByUserName,deletedForEveryoneAt,createdAt]);
+int get hashCode => Object.hashAll([runtimeType,id,direction,body,status,messageType,mediaUrl,mediaMimeType,locationLatitude,locationLongitude,locationName,locationAddress,const DeepCollectionEquality().hash(_contactsData),transcription,transcriptionStatus,reaction,const DeepCollectionEquality().hash(_providerRawPayload),templateIdRaw,const DeepCollectionEquality().hash(_templateData),senderId,sentByUserName,deletedForEveryoneAt,createdAt]);
 
 @override
 String toString() {
-  return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, contactsData: $contactsData, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, senderId: $senderId, sentByUserName: $sentByUserName, deletedForEveryoneAt: $deletedForEveryoneAt, createdAt: $createdAt)';
+  return 'Message(id: $id, direction: $direction, body: $body, status: $status, messageType: $messageType, mediaUrl: $mediaUrl, mediaMimeType: $mediaMimeType, locationLatitude: $locationLatitude, locationLongitude: $locationLongitude, locationName: $locationName, locationAddress: $locationAddress, contactsData: $contactsData, transcription: $transcription, transcriptionStatus: $transcriptionStatus, reaction: $reaction, providerRawPayload: $providerRawPayload, templateIdRaw: $templateIdRaw, templateData: $templateData, senderId: $senderId, sentByUserName: $sentByUserName, deletedForEveryoneAt: $deletedForEveryoneAt, createdAt: $createdAt)';
 }
 
 
@@ -328,7 +357,7 @@ abstract mixin class _$MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
   factory _$MessageCopyWith(_Message value, $Res Function(_Message) _then) = __$MessageCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection direction, String body,@JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,@JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType, String? mediaUrl, String? mediaMimeType, String? locationLatitude, String? locationLongitude, String? locationName, String? locationAddress, List<dynamic>? contactsData, String? transcription, String? transcriptionStatus, String? reaction, Map<String, dynamic>? providerRawPayload, String? senderId, String? sentByUserName, String? deletedForEveryoneAt, String createdAt
+ String id,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection direction, String body,@JsonKey(unknownEnumValue: MessageStatus.sent) MessageStatus status,@JsonKey(unknownEnumValue: MessageType.unknown) MessageType messageType, String? mediaUrl, String? mediaMimeType, String? locationLatitude, String? locationLongitude, String? locationName, String? locationAddress, List<dynamic>? contactsData, String? transcription, String? transcriptionStatus, String? reaction, Map<String, dynamic>? providerRawPayload,@JsonKey(name: 'templateId') String? templateIdRaw, Map<String, dynamic>? templateData, String? senderId, String? sentByUserName, String? deletedForEveryoneAt, String createdAt
 });
 
 
@@ -345,7 +374,7 @@ class __$MessageCopyWithImpl<$Res>
 
 /// Create a copy of Message
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? direction = null,Object? body = null,Object? status = null,Object? messageType = null,Object? mediaUrl = freezed,Object? mediaMimeType = freezed,Object? locationLatitude = freezed,Object? locationLongitude = freezed,Object? locationName = freezed,Object? locationAddress = freezed,Object? contactsData = freezed,Object? transcription = freezed,Object? transcriptionStatus = freezed,Object? reaction = freezed,Object? providerRawPayload = freezed,Object? senderId = freezed,Object? sentByUserName = freezed,Object? deletedForEveryoneAt = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? direction = null,Object? body = null,Object? status = null,Object? messageType = null,Object? mediaUrl = freezed,Object? mediaMimeType = freezed,Object? locationLatitude = freezed,Object? locationLongitude = freezed,Object? locationName = freezed,Object? locationAddress = freezed,Object? contactsData = freezed,Object? transcription = freezed,Object? transcriptionStatus = freezed,Object? reaction = freezed,Object? providerRawPayload = freezed,Object? templateIdRaw = freezed,Object? templateData = freezed,Object? senderId = freezed,Object? sentByUserName = freezed,Object? deletedForEveryoneAt = freezed,Object? createdAt = null,}) {
   return _then(_Message(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,direction: null == direction ? _self.direction : direction // ignore: cast_nullable_to_non_nullable
@@ -363,6 +392,8 @@ as List<dynamic>?,transcription: freezed == transcription ? _self.transcription 
 as String?,transcriptionStatus: freezed == transcriptionStatus ? _self.transcriptionStatus : transcriptionStatus // ignore: cast_nullable_to_non_nullable
 as String?,reaction: freezed == reaction ? _self.reaction : reaction // ignore: cast_nullable_to_non_nullable
 as String?,providerRawPayload: freezed == providerRawPayload ? _self._providerRawPayload : providerRawPayload // ignore: cast_nullable_to_non_nullable
+as Map<String, dynamic>?,templateIdRaw: freezed == templateIdRaw ? _self.templateIdRaw : templateIdRaw // ignore: cast_nullable_to_non_nullable
+as String?,templateData: freezed == templateData ? _self._templateData : templateData // ignore: cast_nullable_to_non_nullable
 as Map<String, dynamic>?,senderId: freezed == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
 as String?,sentByUserName: freezed == sentByUserName ? _self.sentByUserName : sentByUserName // ignore: cast_nullable_to_non_nullable
 as String?,deletedForEveryoneAt: freezed == deletedForEveryoneAt ? _self.deletedForEveryoneAt : deletedForEveryoneAt // ignore: cast_nullable_to_non_nullable
