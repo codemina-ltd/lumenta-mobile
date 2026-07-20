@@ -75,8 +75,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/clients/:clientId',
         parentNavigatorKey: _rootKey,
-        builder: (_, state) =>
-            ClientDetailScreen(clientId: state.pathParameters['clientId']!),
+        builder: (_, state) => ClientDetailScreen(
+          clientId: state.pathParameters['clientId']!,
+          highlightNoteId: state.uri.queryParameters['noteId'],
+        ),
       ),
       GoRoute(
         path: '/search',

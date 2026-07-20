@@ -66,17 +66,30 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     return RegExp(r'[?&]messageId=([\w-]+)').firstMatch(url)?.group(1);
   }
 
+  /// A `noteId` on the action URL (mention/assignment notifications) sends
+  /// the tap to the client's Notes card instead of the chat, scrolled to and
+  /// highlighting that note.
+  String? _noteIdFor(AppNotification n) {
+    final url = n.actionUrl;
+    if (url == null) return null;
+    return RegExp(r'[?&]noteId=([\w-]+)').firstMatch(url)?.group(1);
+  }
+
   void _onTap(AppNotification n) {
     ref.read(notificationsControllerProvider.notifier).markRead(n.id);
     final clientId = _clientIdFor(n);
-    if (clientId != null) {
-      final messageId = _messageIdFor(n);
-      context.go(
-        messageId == null
-            ? '/chats/$clientId'
-            : '/chats/$clientId?messageId=$messageId',
-      );
+    if (clientId == null) return;
+    final noteId = _noteIdFor(n);
+    if (noteId != null) {
+      context.go('/clients/$clientId?noteId=$noteId');
+      return;
     }
+    final messageId = _messageIdFor(n);
+    context.go(
+      messageId == null
+          ? '/chats/$clientId'
+          : '/chats/$clientId?messageId=$messageId',
+    );
   }
 
   @override

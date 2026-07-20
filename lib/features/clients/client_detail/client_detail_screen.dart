@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -30,8 +31,17 @@ import 'client_team_card.dart';
 /// team ownership, internal notes, segments, campaigns, orders, recent messages
 /// and suppression. Each section owns its own query so they load independently.
 class ClientDetailScreen extends ConsumerWidget {
-  const ClientDetailScreen({super.key, required this.clientId});
+  const ClientDetailScreen({
+    super.key,
+    required this.clientId,
+    this.highlightNoteId,
+  });
   final String clientId;
+
+  /// Deep-link target (`/clients/:clientId?noteId=…` from mention/assignment
+  /// notifications): once the notes card loads, scroll to and briefly
+  /// highlight this note.
+  final String? highlightNoteId;
 
   Future<void> _copy(BuildContext context, String text, String message) async {
     await Clipboard.setData(ClipboardData(text: text));
@@ -66,7 +76,10 @@ class ClientDetailScreen extends ConsumerWidget {
             ClientProfileCard(clientId: clientId),
             ClientTeamCard(clientId: clientId),
             ClientRemindersCard(clientId: clientId),
-            ClientNotesCard(clientId: clientId),
+            ClientNotesCard(
+              clientId: clientId,
+              highlightNoteId: highlightNoteId,
+            ),
             ClientRecentMessagesCard(clientId: clientId),
             ClientOrdersCard(clientId: clientId),
             ClientCallsCard(clientId: clientId),
@@ -76,6 +89,12 @@ class ClientDetailScreen extends ConsumerWidget {
           ];
           return ListView.separated(
             padding: const EdgeInsets.all(Insets.lg),
+            // A deep-linked note may live many cards below the fold; force
+            // every section to build up front so it exists to scroll/highlight
+            // instead of staying unbuilt beyond the default cache extent.
+            scrollCacheExtent: highlightNoteId != null
+                ? const ScrollCacheExtent.pixels(10000)
+                : null,
             itemCount: sections.length,
             separatorBuilder: (_, _) => const SizedBox(height: Insets.lg),
             itemBuilder: (_, i) => sections[i],

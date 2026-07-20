@@ -273,14 +273,19 @@ class PushService {
   /// deep-links (same regex as the notifications screen) or the reminders
   /// tab; anything else is not routable on mobile. A `messageId` query param
   /// (message-anchored reminder/note notifications) is preserved so the chat
-  /// screen can scroll to and highlight the referenced message.
+  /// screen can scroll to and highlight the referenced message; a `noteId`
+  /// (mention/assignment notifications) instead sends the tap to the
+  /// client's Notes card, scrolled to and highlighting that note.
   String? _routeFromActionUrl(String? url) {
     if (url == null || url.isEmpty) return null;
     final chat = RegExp(
       r'/(?:conversations|clients|chats)/([\w-]+)',
     ).firstMatch(url);
     if (chat != null) {
-      final base = '/chats/${chat.group(1)}';
+      final clientId = chat.group(1);
+      final noteId = RegExp(r'[?&]noteId=([\w-]+)').firstMatch(url)?.group(1);
+      if (noteId != null) return '/clients/$clientId?noteId=$noteId';
+      final base = '/chats/$clientId';
       final messageId = RegExp(
         r'[?&]messageId=([\w-]+)',
       ).firstMatch(url)?.group(1);

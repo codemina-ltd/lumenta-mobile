@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/format.dart';
 import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/providers.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../data/models/inbox_note.dart';
@@ -20,8 +23,16 @@ import 'client_detail_providers.dart';
 /// composer to add one. Mirrors the portal's `ClientNotesCard`; renders an
 /// empty state when the contact has no thread yet.
 class ClientNotesCard extends ConsumerWidget {
-  const ClientNotesCard({super.key, required this.clientId});
+  const ClientNotesCard({
+    super.key,
+    required this.clientId,
+    this.highlightNoteId,
+  });
   final String clientId;
+
+  /// Deep-link target from a mention/assignment notification — scrolled to
+  /// and briefly highlighted once the notes list loads.
+  final String? highlightNoteId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,26 +67,86 @@ class ClientNotesCard extends ConsumerWidget {
         ),
         data: (t) => t == null
             ? ClientDetailEmpty(l10n.clientDetailNoThread)
-            : _NotesList(threadId: t.id),
+            : _NotesList(threadId: t.id, highlightNoteId: highlightNoteId),
       ),
     );
   }
 }
 
-class _NotesList extends ConsumerWidget {
-  const _NotesList({required this.threadId});
+class _NotesList extends ConsumerStatefulWidget {
+  const _NotesList({required this.threadId, this.highlightNoteId});
   final String threadId;
+  final String? highlightNoteId;
 
-  Future<void> _delete(
-    BuildContext context,
-    WidgetRef ref,
-    String noteId,
-  ) async {
+  @override
+  ConsumerState<_NotesList> createState() => _NotesListState();
+}
+
+class _NotesListState extends ConsumerState<_NotesList> {
+  /// Keys the deep-linked note's row while set so [Scrollable.ensureVisible]
+  /// can find it. Mirrors the chat screen's `?messageId=` highlight flow.
+  final GlobalKey _highlightKey = GlobalKey();
+  String? _highlightId;
+  bool _highlightOn = false;
+  bool _handled = false;
+  Timer? _fadeTimer;
+  Timer? _clearTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _highlightId = widget.highlightNoteId;
+  }
+
+  @override
+  void dispose() {
+    _fadeTimer?.cancel();
+    _clearTimer?.cancel();
+    super.dispose();
+  }
+
+  void _maybeStartHighlight(List<InboxNote> notes) {
+    final id = _highlightId;
+    if (id == null || _handled || !notes.any((n) => n.id == id)) return;
+    _handled = true;
+    setState(() => _highlightOn = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToNote());
+    _fadeTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (!mounted) return;
+      setState(() => _highlightOn = false);
+      _clearTimer = Timer(const Duration(milliseconds: 600), () {
+        if (mounted) setState(() => _highlightId = null);
+      });
+    });
+  }
+
+  /// The card is force-built via `ClientDetailScreen`'s large cacheExtent
+  /// when a highlight target is present, so a couple of retries are enough
+  /// to cover the first-frame layout race.
+  void _scrollToNote([int attempt = 0]) {
+    if (!mounted) return;
+    final ctx = _highlightKey.currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        alignment: 0.3,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+      );
+      return;
+    }
+    if (attempt >= 10) return;
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _scrollToNote(attempt + 1),
+    );
+  }
+
+  Future<void> _delete(String noteId) async {
     try {
-      await ref.read(inboxRepoProvider).deleteNote(threadId, noteId);
-      ref.invalidate(threadNotesProvider(threadId));
+      await ref.read(inboxRepoProvider).deleteNote(widget.threadId, noteId);
+      ref.invalidate(threadNotesProvider(widget.threadId));
     } catch (_) {
-      if (!context.mounted) return;
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).inboxActionFailed)),
       );
@@ -83,9 +154,9 @@ class _NotesList extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final notesAsync = ref.watch(threadNotesProvider(threadId));
+    final notesAsync = ref.watch(threadNotesProvider(widget.threadId));
     final members =
         ref.watch(tenantMembersProvider).asData?.value ??
         const <TenantMemberLite>[];
@@ -97,18 +168,23 @@ class _NotesList extends ConsumerWidget {
         child: Center(child: CircularProgressIndicator()),
       ),
       error: (_, _) => ClientDetailCardError(
-        onRetry: () => ref.invalidate(threadNotesProvider(threadId)),
+        onRetry: () => ref.invalidate(threadNotesProvider(widget.threadId)),
       ),
       data: (notes) {
         if (notes.isEmpty) return ClientDetailEmpty(l10n.clientDetailNoNotes);
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => _maybeStartHighlight(notes),
+        );
         return Column(
           children: [
             for (final n in notes)
               _NoteTile(
+                key: n.id == _highlightId ? _highlightKey : null,
                 note: n,
                 members: members,
                 canDelete: n.authorUserId == myId,
-                onDelete: () => _delete(context, ref, n.id),
+                onDelete: () => _delete(n.id),
+                highlighted: _highlightOn && n.id == _highlightId,
               ),
           ],
         );
@@ -119,16 +195,22 @@ class _NotesList extends ConsumerWidget {
 
 class _NoteTile extends StatelessWidget {
   const _NoteTile({
+    super.key,
     required this.note,
     required this.members,
     required this.canDelete,
     required this.onDelete,
+    this.highlighted = false,
   });
 
   final InboxNote note;
   final List<TenantMemberLite> members;
   final bool canDelete;
   final VoidCallback onDelete;
+
+  /// Briefly tinted amber when this is the note a mention/assignment
+  /// notification deep-linked to.
+  final bool highlighted;
 
   String _authorName() {
     for (final m in members) {
@@ -147,8 +229,17 @@ class _NoteTile extends StatelessWidget {
         ? _authorName()
         : '${_authorName()} · ${Fmt.listTimestamp(context, created)}';
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: -6),
+      decoration: BoxDecoration(
+        color: highlighted
+            ? AppColors.amber.withValues(alpha: 0.28)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(Radii.sm),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
