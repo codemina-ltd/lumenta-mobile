@@ -266,7 +266,18 @@ class PushService {
       _ref.read(authControllerProvider.notifier).selectTenant(targetTenant);
     }
 
-    _ref.read(routerProvider).go(target);
+    // Chat/client detail are root-level routes stacked over the tab shell —
+    // push so back/pop returns to whatever tab was showing. The bare tab
+    // routes (`/inbox`, `/reminders`) are shell branches: `go` switches tabs
+    // in place instead of stacking a duplicate branch on the root navigator.
+    final isDetailRoute =
+        target.startsWith('/chats/') || target.startsWith('/clients/');
+    final router = _ref.read(routerProvider);
+    if (isDetailRoute) {
+      router.push(target);
+    } else {
+      router.go(target);
+    }
   }
 
   /// Map a portal-relative `action_url` to a mobile route: conversation

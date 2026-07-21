@@ -113,7 +113,7 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
             when: when,
             unread: unread,
             outbound: !inbound,
-            onTap: () => context.go('/chats/${conv.clientId}'),
+            onTap: () => context.push('/chats/${conv.clientId}'),
           );
         },
       ),

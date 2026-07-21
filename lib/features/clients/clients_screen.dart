@@ -127,7 +127,7 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                       initials: c.initials,
                       name: c.displayName,
                       phone: '+${c.phoneNumber}',
-                      onTap: () => context.go('/chats/${c.id}'),
+                      onTap: () => context.push('/chats/${c.id}'),
                     );
                   },
                 ),

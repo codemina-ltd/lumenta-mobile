@@ -83,7 +83,7 @@ class RemindersScreen extends ConsumerWidget {
                 accent: accent,
                 onOpen: reminder.clientId == null
                     ? null
-                    : () => context.go(_chatRoute(reminder)),
+                    : () => context.push(_chatRoute(reminder)),
                 onActions: () => _showActions(context, ref, l10n, reminder),
               ),
           ],
@@ -169,7 +169,7 @@ class RemindersScreen extends ConsumerWidget {
                   title: Text(l10n.reminderOpenConversation),
                   onTap: () {
                     Navigator.pop(sheetContext);
-                    context.go(_chatRoute(reminder));
+                    context.push(_chatRoute(reminder));
                   },
                 ),
               ],

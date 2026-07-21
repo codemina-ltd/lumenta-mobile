@@ -121,7 +121,7 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
             assigneeName: _assigneeName(l10n, memberNames, t.assignedUserId),
             onOpen: () {
               controller.markReadOnOpen(t);
-              context.go('/chats/${t.clientId}');
+              context.push('/chats/${t.clientId}');
             },
             onActions: () => _showActions(context, l10n, t),
           );
