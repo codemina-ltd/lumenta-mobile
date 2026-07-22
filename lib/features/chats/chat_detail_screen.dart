@@ -28,6 +28,8 @@ import 'widgets/audio_bubble.dart';
 import 'widgets/chat_composer.dart';
 import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
+import 'widgets/order_bubble.dart';
+import 'widgets/product_bubble.dart';
 import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
 
@@ -746,7 +748,12 @@ class _MessageBubble extends ConsumerWidget {
         if (message.isFlowResponse) {
           return _FlowResponseContent(message: message, textColor: textColor);
         }
+        if (message.isProductSend) {
+          return ProductMessageContent(message: message, textColor: textColor);
+        }
         return _bodyText(textColor);
+      case MessageType.order:
+        return OrderMessageContent(message: message, textColor: textColor);
       default:
         return _bodyText(textColor);
     }

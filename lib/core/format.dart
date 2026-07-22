@@ -64,4 +64,11 @@ class Fmt {
       Bidi.detectRtlDirectionality(text)
       ? TextDirection.rtl
       : TextDirection.ltr;
+
+  /// `EGP 1,300.00` — matches the portal's product-card price formatting
+  /// (currency code first, thousands-grouped, 2 decimals).
+  static String money(int priceMinor, String currency) {
+    final amount = NumberFormat('#,##0.00').format(priceMinor / 100);
+    return '$currency $amount';
+  }
 }

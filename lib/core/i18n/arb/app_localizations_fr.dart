@@ -318,6 +318,40 @@ class AppLocalizationsFr extends AppLocalizations {
   String get close => 'Fermer';
 
   @override
+  String get chatProductView => 'Voir';
+
+  @override
+  String chatOrderItems(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count articles',
+      one: '$count article',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String chatOrderEstimatedTotal(Object total) {
+    return '$total (total estimé)';
+  }
+
+  @override
+  String get chatOrderViewCart => 'Voir le panier envoyé';
+
+  @override
+  String get chatOrderDetailsTitle => 'Détails de la commande';
+
+  @override
+  String get chatOrderProductColumn => 'Produit';
+
+  @override
+  String get chatOrderQuantityColumn => 'Qté';
+
+  @override
+  String get chatOrderPriceColumn => 'Prix';
+
+  @override
   String get statusSent => 'Envoyé';
 
   @override

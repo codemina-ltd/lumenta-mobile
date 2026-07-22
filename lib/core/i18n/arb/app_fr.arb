@@ -111,6 +111,26 @@
   "flowFieldColumn": "Champ",
   "flowValueColumn": "Valeur",
   "close": "Fermer",
+  "chatProductView": "Voir",
+  "chatOrderItems": "{count, plural, one{{count} article} other{{count} articles}}",
+  "@chatOrderItems": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "chatOrderEstimatedTotal": "{total} (total estimé)",
+  "@chatOrderEstimatedTotal": {
+    "placeholders": {
+      "total": {}
+    }
+  },
+  "chatOrderViewCart": "Voir le panier envoyé",
+  "chatOrderDetailsTitle": "Détails de la commande",
+  "chatOrderProductColumn": "Produit",
+  "chatOrderQuantityColumn": "Qté",
+  "chatOrderPriceColumn": "Prix",
   "statusSent": "Envoyé",
   "statusDelivered": "Distribué",
   "statusRead": "Lu",

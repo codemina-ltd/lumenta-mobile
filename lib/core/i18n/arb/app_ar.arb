@@ -111,6 +111,26 @@
   "flowFieldColumn": "الحقل",
   "flowValueColumn": "القيمة",
   "close": "إغلاق",
+  "chatProductView": "عرض",
+  "chatOrderItems": "{count, plural, zero{{count} عنصر} one{عنصر واحد} two{عنصران} few{{count} عناصر} many{{count} عنصرًا} other{{count} عنصر}}",
+  "@chatOrderItems": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "chatOrderEstimatedTotal": "{total} (الإجمالي التقديري)",
+  "@chatOrderEstimatedTotal": {
+    "placeholders": {
+      "total": {}
+    }
+  },
+  "chatOrderViewCart": "عرض السلة المُرسَلة",
+  "chatOrderDetailsTitle": "تفاصيل الطلب",
+  "chatOrderProductColumn": "المنتج",
+  "chatOrderQuantityColumn": "الكمية",
+  "chatOrderPriceColumn": "السعر",
   "statusSent": "تم الإرسال",
   "statusDelivered": "تم التسليم",
   "statusRead": "تمت القراءة",

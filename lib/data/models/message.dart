@@ -51,6 +51,8 @@ enum MessageType {
   template,
   @JsonValue('reaction')
   reaction,
+  @JsonValue('order')
+  order,
   @JsonValue('unknown')
   unknown,
 }
@@ -111,6 +113,14 @@ abstract class Message with _$Message {
     /// "Delete for everyone" tombstone. When set, the server has cleared
     /// body/media and the bubble renders a "message deleted" placeholder.
     String? deletedForEveryoneAt,
+
+    /// Structured display metadata for interactive messages — mirrors the
+    /// portal's `Message.interactiveMetadata`. Outbound product/catalog
+    /// sends carry `catalogId` + `productRetailerId`/`sections`/`bodyText`;
+    /// inbound `order` (cart) rows carry the snapshot OrderCaptureService
+    /// writes back after parsing the cart (`orderId`/`itemCount`/
+    /// `subtotalMinor`/`currency`). Null on every other message type.
+    Map<String, dynamic>? interactiveMetadata,
     required String createdAt,
   }) = _Message;
 
@@ -158,6 +168,32 @@ abstract class Message with _$Message {
   bool get isFlowResponse =>
       direction == MessageDirection.inbound &&
       messageType == MessageType.interactive;
+
+  /// An outbound single-product send — mirrors the portal's `ChatBubble`
+  /// check (`interactiveMetadata.type === 'product' &&
+  /// interactiveMetadata.productRetailerId`). Drives the rich product card
+  /// (image/name/price) instead of the plain-body fallback.
+  bool get isProductSend =>
+      isOutbound &&
+      messageType == MessageType.interactive &&
+      interactiveMetadata?['type'] == 'product' &&
+      interactiveMetadata?['productRetailerId'] != null;
+
+  String? get productCatalogId => interactiveMetadata?['catalogId'] as String?;
+  String? get productRetailerId =>
+      interactiveMetadata?['productRetailerId'] as String?;
+  String? get interactiveCtaText =>
+      interactiveMetadata?['flowCta'] as String?;
+
+  /// Inbound cart/order snapshot `OrderCaptureService` writes onto the
+  /// message row once it parses the customer's cart — null until capture
+  /// runs, or if capture found no items.
+  String? get orderId => interactiveMetadata?['orderId'] as String?;
+  int? get orderItemCount =>
+      (interactiveMetadata?['itemCount'] as num?)?.toInt();
+  int? get orderSubtotalMinor =>
+      (interactiveMetadata?['subtotalMinor'] as num?)?.toInt();
+  String? get orderCurrency => interactiveMetadata?['currency'] as String?;
 
   /// Flow name taken from the provider payload
   /// (`messages[0].interactive.nfm_reply.name`), capitalised. Null when the

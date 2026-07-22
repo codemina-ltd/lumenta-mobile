@@ -50,6 +50,7 @@ const _$MessageTypeEnumMap = {
   MessageType.interactive: 'interactive',
   MessageType.template: 'template',
   MessageType.reaction: 'reaction',
+  MessageType.order: 'order',
   MessageType.unknown: 'unknown',
 };
 

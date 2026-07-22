@@ -317,6 +317,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get close => 'إغلاق';
 
   @override
+  String get chatProductView => 'عرض';
+
+  @override
+  String chatOrderItems(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عنصر',
+      many: '$count عنصرًا',
+      few: '$count عناصر',
+      two: 'عنصران',
+      one: 'عنصر واحد',
+      zero: '$count عنصر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String chatOrderEstimatedTotal(Object total) {
+    return '$total (الإجمالي التقديري)';
+  }
+
+  @override
+  String get chatOrderViewCart => 'عرض السلة المُرسَلة';
+
+  @override
+  String get chatOrderDetailsTitle => 'تفاصيل الطلب';
+
+  @override
+  String get chatOrderProductColumn => 'المنتج';
+
+  @override
+  String get chatOrderQuantityColumn => 'الكمية';
+
+  @override
+  String get chatOrderPriceColumn => 'السعر';
+
+  @override
   String get statusSent => 'تم الإرسال';
 
   @override

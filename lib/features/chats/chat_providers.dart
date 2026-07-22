@@ -9,6 +9,7 @@ import '../../data/models/conversation_sender.dart';
 import '../../data/models/inbox_thread.dart';
 import '../../data/models/sender.dart';
 import '../../data/models/template.dart';
+import '../../data/repos/commerce_repo.dart';
 import '../auth/auth_controller.dart';
 
 /// Single client for the chat header (cached per client id).
@@ -59,6 +60,30 @@ final chatTemplateProvider = FutureProvider.family<Template, String>((
 ) async {
   ref.watch(authControllerProvider.select((s) => s.activeTenantId));
   return ref.read(templatesRepoProvider).byId(templateId);
+});
+
+/// A catalog's products behind an outbound product-card bubble (image/name/
+/// price). Cached for the session (NOT autoDispose), same rationale as
+/// [chatTemplateProvider] — scrolling a thread shouldn't refetch the same
+/// catalog per recycled bubble; re-scoped when the active tenant changes.
+final chatProductsProvider =
+    FutureProvider.family<List<CommerceProduct>, String>((
+      ref,
+      catalogId,
+    ) async {
+      ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+      return ref.read(commerceRepoProvider).productsForCatalog(catalogId);
+    });
+
+/// Full order + line items behind an inbound cart bubble's "View sent cart"
+/// detail sheet. Same session-cached, tenant-rescoped rationale as
+/// [chatTemplateProvider].
+final chatOrderProvider = FutureProvider.family<CommerceOrderDetail, String>((
+  ref,
+  orderId,
+) async {
+  ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+  return ref.read(commerceRepoProvider).orderById(orderId);
 });
 
 /// Auth headers for loading proxied media (`/messages/:id/media`).

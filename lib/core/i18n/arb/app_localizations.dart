@@ -676,6 +676,54 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
+  /// No description provided for @chatProductView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get chatProductView;
+
+  /// No description provided for @chatOrderItems.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} item} other{{count} items}}'**
+  String chatOrderItems(num count);
+
+  /// No description provided for @chatOrderEstimatedTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{total} (estimated total)'**
+  String chatOrderEstimatedTotal(Object total);
+
+  /// No description provided for @chatOrderViewCart.
+  ///
+  /// In en, this message translates to:
+  /// **'View sent cart'**
+  String get chatOrderViewCart;
+
+  /// No description provided for @chatOrderDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order details'**
+  String get chatOrderDetailsTitle;
+
+  /// No description provided for @chatOrderProductColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Product'**
+  String get chatOrderProductColumn;
+
+  /// No description provided for @chatOrderQuantityColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Qty'**
+  String get chatOrderQuantityColumn;
+
+  /// No description provided for @chatOrderPriceColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get chatOrderPriceColumn;
+
   /// No description provided for @statusSent.
   ///
   /// In en, this message translates to:

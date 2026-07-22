@@ -44,6 +44,7 @@ _Message _$MessageFromJson(Map<String, dynamic> json) => _Message(
   senderId: json['senderId'] as String?,
   sentByUserName: json['sentByUserName'] as String?,
   deletedForEveryoneAt: json['deletedForEveryoneAt'] as String?,
+  interactiveMetadata: json['interactiveMetadata'] as Map<String, dynamic>?,
   createdAt: json['createdAt'] as String,
 );
 
@@ -69,6 +70,7 @@ Map<String, dynamic> _$MessageToJson(_Message instance) => <String, dynamic>{
   'senderId': instance.senderId,
   'sentByUserName': instance.sentByUserName,
   'deletedForEveryoneAt': instance.deletedForEveryoneAt,
+  'interactiveMetadata': instance.interactiveMetadata,
   'createdAt': instance.createdAt,
 };
 
@@ -98,5 +100,6 @@ const _$MessageTypeEnumMap = {
   MessageType.interactive: 'interactive',
   MessageType.template: 'template',
   MessageType.reaction: 'reaction',
+  MessageType.order: 'order',
   MessageType.unknown: 'unknown',
 };

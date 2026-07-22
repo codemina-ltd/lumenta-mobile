@@ -59,7 +59,9 @@
   "liveCallWith": "On a call with {name}",
   "@liveCallWith": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "clientsTitle": "Clients",
@@ -119,6 +121,26 @@
   "flowFieldColumn": "Field",
   "flowValueColumn": "Value",
   "close": "Close",
+  "chatProductView": "View",
+  "chatOrderItems": "{count, plural, one{{count} item} other{{count} items}}",
+  "@chatOrderItems": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "chatOrderEstimatedTotal": "{total} (estimated total)",
+  "@chatOrderEstimatedTotal": {
+    "placeholders": {
+      "total": {}
+    }
+  },
+  "chatOrderViewCart": "View sent cart",
+  "chatOrderDetailsTitle": "Order details",
+  "chatOrderProductColumn": "Product",
+  "chatOrderQuantityColumn": "Qty",
+  "chatOrderPriceColumn": "Price",
   "statusSent": "Sent",
   "statusDelivered": "Delivered",
   "statusRead": "Read",
