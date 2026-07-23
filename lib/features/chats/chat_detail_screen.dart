@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../core/format.dart';
 import '../../core/i18n/arb/app_localizations.dart';
@@ -16,6 +17,7 @@ import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/message.dart';
+import '../../data/models/scheduled_message.dart';
 import '../../data/models/sender.dart';
 import '../../data/storage/last_read_store.dart';
 import '../shared/live_call_badge.dart';
@@ -30,6 +32,7 @@ import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
 import 'widgets/order_bubble.dart';
 import 'widgets/product_bubble.dart';
+import 'widgets/scheduled_message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
 
@@ -288,6 +291,13 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     final state = threadKey == null
         ? const ThreadState()
         : ref.watch(threadControllerProvider(threadKey));
+    // Pending/failed scheduled sends, merged into the thread rows below. No
+    // polling: this fetches once per thread scope and is refreshed by
+    // pull-to-refresh and after schedule/edit/cancel/retry actions.
+    final scheduled = threadKey == null
+        ? const <ScheduledMessage>[]
+        : ref.watch(chatScheduledMessagesProvider(threadKey.clientId)).value ??
+              const <ScheduledMessage>[];
     final title = clientAsync.maybeWhen(
       data: (c) => c.displayName,
       orElse: () => '',
@@ -369,14 +379,22 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           Expanded(
             child: threadKey == null
                 ? const Center(child: CircularProgressIndicator())
-                : _body(context, state, threadKey),
+                : _body(context, state, threadKey, scheduled),
           ),
           if (clientAsync.hasValue && threadKey != null && !state.loading)
             ChatComposer(
               threadKey: threadKey,
               to: clientAsync.value!.phoneNumber,
               windowOpen: _windowOpen(state),
-              onSent: _scrollToBottom,
+              onSent: () {
+                _scrollToBottom();
+                // A template send from the composer may have scheduled a
+                // message instead of sending immediately; refresh the inline
+                // feed either way (cheap no-op when it didn't).
+                ref.invalidate(
+                  chatScheduledMessagesProvider(threadKey.clientId),
+                );
+              },
               senderLabel: showTabs
                   ? (activeSender?.label ?? activeConv?.label)
                   : null,
@@ -412,7 +430,12 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     ];
   }
 
-  Widget _body(BuildContext context, ThreadState state, ThreadKey threadKey) {
+  Widget _body(
+    BuildContext context,
+    ThreadState state,
+    ThreadKey threadKey,
+    List<ScheduledMessage> scheduled,
+  ) {
     final controller = ref.read(threadControllerProvider(threadKey).notifier);
     if (state.loading) {
       return const Center(child: CircularProgressIndicator());
@@ -420,7 +443,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     if (state.error != null && state.messages.isEmpty) {
       return ErrorRetry(onRetry: controller.refresh);
     }
-    if (state.messages.isEmpty) {
+    if (state.messages.isEmpty && scheduled.isEmpty) {
       final l10n = AppLocalizations.of(context);
       // A sender-scoped empty thread is a "start the conversation via this
       // number" state, not a generic no-chats state.
@@ -432,70 +455,86 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       );
     }
 
-    final rows = _buildRows(context, state.messages);
-    return ListView.builder(
-      controller: _scroll,
-      padding: const EdgeInsets.symmetric(
-        vertical: Insets.md,
-        horizontal: Insets.xs,
-      ),
-      itemCount: rows.length + (state.loadingOlder ? 1 : 0),
-      itemBuilder: (context, i) {
-        if (state.loadingOlder && i == 0) {
-          return const Padding(
-            padding: EdgeInsets.all(Insets.sm),
-            child: Center(
-              child: SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
+    final rows = _buildRows(context, state.messages, scheduled);
+    Future<void> onRefresh() => Future.wait([
+      controller.refresh(),
+      ref.refresh(chatScheduledMessagesProvider(threadKey.clientId).future),
+    ]);
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.builder(
+        controller: _scroll,
+        padding: const EdgeInsets.symmetric(
+          vertical: Insets.md,
+          horizontal: Insets.xs,
+        ),
+        itemCount: rows.length + (state.loadingOlder ? 1 : 0),
+        itemBuilder: (context, i) {
+          if (state.loadingOlder && i == 0) {
+            return const Padding(
+              padding: EdgeInsets.all(Insets.sm),
+              child: Center(
+                child: SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
               ),
+            );
+          }
+          final row = rows[i - (state.loadingOlder ? 1 : 0)];
+          if (row.isHeader) return _DayHeader(label: row.headerLabel!);
+          if (row.scheduled != null) {
+            return _ScheduledMessageBubble(
+              scheduledMessage: row.scheduled!,
+              clientId: threadKey.clientId,
+            );
+          }
+          final message = row.message!;
+          final bubble = _MessageBubble(
+            message: message,
+            threadKey: threadKey,
+            showSentBy: row.showSentBy,
+          );
+          if (message.id != _highlightAnchorId) return bubble;
+          // Deep-link target: keyed so ensureVisible can find it, wrapped in a
+          // tint that fades in for ~2.5s and back out.
+          return KeyedSubtree(
+            key: _highlightKey,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 450),
+              curve: Curves.easeOut,
+              decoration: BoxDecoration(
+                color: _highlightOn
+                    ? context.scheme.primary.withValues(alpha: 0.18)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(Radii.md),
+              ),
+              child: bubble,
             ),
           );
-        }
-        final row = rows[i - (state.loadingOlder ? 1 : 0)];
-        if (row.isHeader) return _DayHeader(label: row.headerLabel!);
-        final message = row.message!;
-        final bubble = _MessageBubble(
-          message: message,
-          threadKey: threadKey,
-          showSentBy: row.showSentBy,
-        );
-        if (message.id != _highlightAnchorId) return bubble;
-        // Deep-link target: keyed so ensureVisible can find it, wrapped in a
-        // tint that fades in for ~2.5s and back out.
-        return KeyedSubtree(
-          key: _highlightKey,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 450),
-            curve: Curves.easeOut,
-            decoration: BoxDecoration(
-              color: _highlightOn
-                  ? context.scheme.primary.withValues(alpha: 0.18)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(Radii.md),
-            ),
-            child: bubble,
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 
-  List<_Row> _buildRows(BuildContext context, List<Message> messages) {
-    final rows = <_Row>[];
-    DateTime? lastDay;
+  /// Merges real messages (`createdAt` ascending) with pending/failed
+  /// scheduled sends (`scheduledFor` ascending) into one chronological row
+  /// list with day-header separators, so a scheduled bubble sits in its
+  /// correct position relative to real messages (including a "future day"
+  /// header when it's scheduled beyond today).
+  List<_Row> _buildRows(
+    BuildContext context,
+    List<Message> messages,
+    List<ScheduledMessage> scheduled,
+  ) {
+    final content = <(DateTime, _Row)>[];
     for (var i = 0; i < messages.length; i++) {
       final m = messages[i];
-      final d = m.createdAtDate;
-      final day = DateTime(d.year, d.month, d.day);
-      if (lastDay == null || day != lastDay) {
-        rows.add(_Row.header(Fmt.dayHeader(context, day)));
-        lastDay = day;
-      }
       // "Sent by …" attribution shows once per consecutive outbound run from
       // the same team member — under the run's last bubble (mirrors the
-      // portal's MessageThread).
+      // portal's MessageThread). Based on adjacency within `messages` only,
+      // unaffected by any scheduled bubble interleaved in the merged view.
       final next = i + 1 < messages.length ? messages[i + 1] : null;
       final showSentBy =
           m.isOutbound &&
@@ -503,7 +542,22 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           (next == null ||
               !next.isOutbound ||
               next.sentByUserName != m.sentByUserName);
-      rows.add(_Row.message(m, showSentBy: showSentBy));
+      content.add((m.createdAtDate, _Row.message(m, showSentBy: showSentBy)));
+    }
+    for (final sm in scheduled) {
+      content.add((sm.scheduledFor.toLocal(), _Row.scheduled(sm)));
+    }
+    content.sort((a, b) => a.$1.compareTo(b.$1));
+
+    final rows = <_Row>[];
+    DateTime? lastDay;
+    for (final (at, row) in content) {
+      final day = DateTime(at.year, at.month, at.day);
+      if (lastDay == null || day != lastDay) {
+        rows.add(_Row.header(Fmt.dayHeader(context, day)));
+        lastDay = day;
+      }
+      rows.add(row);
     }
     return rows;
   }
@@ -513,14 +567,22 @@ class _Row {
   _Row.header(this.headerLabel)
     : isHeader = true,
       message = null,
+      scheduled = null,
       showSentBy = false;
   _Row.message(this.message, {required this.showSentBy})
     : isHeader = false,
-      headerLabel = null;
+      headerLabel = null,
+      scheduled = null;
+  _Row.scheduled(this.scheduled)
+    : isHeader = false,
+      headerLabel = null,
+      message = null,
+      showSentBy = false;
 
   final bool isHeader;
   final String? headerLabel;
   final Message? message;
+  final ScheduledMessage? scheduled;
   final bool showSentBy;
 }
 
@@ -801,6 +863,182 @@ class _MessageBubble extends ConsumerWidget {
     if (message.status == MessageStatus.failed) return AppColors.ember;
     return textColor.withValues(alpha: 0.6);
   }
+}
+
+/// A pending/failed scheduled template send, rendered inline in the thread
+/// at its `scheduledFor` position: faded, dashed-bordered, with a status
+/// chip and the formatted send time. Tapping it opens the shared
+/// [showScheduledMessageActions] sheet (View always; Edit/Cancel while
+/// pending, Retry/Reschedule while failed).
+class _ScheduledMessageBubble extends ConsumerWidget {
+  const _ScheduledMessageBubble({
+    required this.scheduledMessage,
+    required this.clientId,
+  });
+
+  final ScheduledMessage scheduledMessage;
+  final String clientId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final chat = context.chat;
+    final textColor = chat.outboundText;
+    final failed = scheduledMessage.isFailed;
+    final locale = Localizations.localeOf(context).toString();
+    final when = DateFormat.MMMd(
+      locale,
+    ).add_jm().format(scheduledMessage.scheduledFor.toLocal());
+
+    final templateId = scheduledMessage.templateId;
+    final template = templateId == null
+        ? null
+        : ref.watch(chatTemplateProvider(templateId)).asData?.value;
+    final body = scheduledMessage.renderedBody ?? '';
+
+    return Align(
+      alignment: Alignment.centerRight,
+      child: GestureDetector(
+        onTap: () => showScheduledMessageActions(
+          context,
+          ref,
+          scheduledMessage: scheduledMessage,
+          clientId: clientId,
+          onChanged: () =>
+              ref.invalidate(chatScheduledMessagesProvider(clientId)),
+        ),
+        child: Opacity(
+          opacity: 0.6,
+          child: _DashedBorder(
+            color: failed ? AppColors.ember : context.scheme.onSurfaceVariant,
+            radius: Radii.md,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.78,
+              ),
+              margin: const EdgeInsets.symmetric(
+                horizontal: Insets.md,
+                vertical: 3,
+              ),
+              padding: const EdgeInsets.fromLTRB(
+                Insets.md,
+                Insets.sm,
+                Insets.md,
+                6,
+              ),
+              decoration: BoxDecoration(
+                color: chat.outboundBubble,
+                borderRadius: BorderRadius.circular(Radii.md),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  StatusPill(
+                    label: failed
+                        ? l10n.scheduledMessageStatusFailed
+                        : l10n.scheduledMessageChip,
+                    color: failed ? AppColors.ember : AppColors.amber,
+                    icon: failed
+                        ? Icons.error_outline_rounded
+                        : Icons.schedule_rounded,
+                  ),
+                  const SizedBox(height: 6),
+                  if (template != null)
+                    TemplateContentView(
+                      template: template,
+                      body: body,
+                      textColor: textColor,
+                    )
+                  else
+                    Text(
+                      body.isEmpty ? '…' : body,
+                      textDirection: Fmt.textDirectionFor(body),
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 15,
+                        height: 1.35,
+                      ),
+                    ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.scheduledMessageFor(when),
+                    style: TextStyle(
+                      color: textColor.withValues(alpha: 0.65),
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Thin dashed rounded-rect border, hand-rolled with a [CustomPainter] — the
+/// codebase has no dashed-border package (checked `pubspec.yaml`).
+class _DashedBorder extends StatelessWidget {
+  const _DashedBorder({
+    required this.child,
+    required this.color,
+    this.radius = Radii.md,
+  });
+
+  final Widget child;
+  final Color color;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _DashedBorderPainter(color: color, radius: radius),
+      child: child,
+    );
+  }
+}
+
+class _DashedBorderPainter extends CustomPainter {
+  _DashedBorderPainter({required this.color, required this.radius});
+
+  final Color color;
+  final double radius;
+
+  static const _strokeWidth = 1.4;
+  static const _dashWidth = 5.0;
+  static const _gapWidth = 3.0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const inset = _strokeWidth / 2;
+    final rrect = RRect.fromRectAndRadius(
+      const Offset(inset, inset) &
+          Size(size.width - _strokeWidth, size.height - _strokeWidth),
+      Radius.circular(radius),
+    );
+    final path = Path()..addRRect(rrect);
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = _strokeWidth;
+    for (final metric in path.computeMetrics()) {
+      var distance = 0.0;
+      while (distance < metric.length) {
+        final next = distance + _dashWidth;
+        canvas.drawPath(
+          metric.extractPath(distance, next.clamp(0.0, metric.length)),
+          paint,
+        );
+        distance = next + _gapWidth;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedBorderPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.radius != radius;
 }
 
 /// "Sent by `<team member>`" attribution under the last bubble of a member's

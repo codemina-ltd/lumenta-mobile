@@ -999,4 +999,148 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get messageTooFarBack =>
       'Ce message est trop ancien dans l\'historique pour y accéder.';
+
+  @override
+  String get clientDetailScheduledMessages => 'Messages programmés';
+
+  @override
+  String get clientDetailNoScheduledMessages =>
+      'Aucun message programmé pour ce contact.';
+
+  @override
+  String get scheduledMessageChip => 'Programmé';
+
+  @override
+  String scheduledMessageFor(Object when) {
+    return 'Programmé pour $when';
+  }
+
+  @override
+  String get scheduledMessageSendNow => 'Envoyer maintenant';
+
+  @override
+  String get scheduledMessageScheduleToggle => 'Programmer';
+
+  @override
+  String get scheduledMessagePickDateTime => 'Choisir la date et l\'heure';
+
+  @override
+  String get scheduledMessageMustBeFuture =>
+      'Choisissez une heure dans le futur';
+
+  @override
+  String get scheduledMessageSendButton => 'Envoyer';
+
+  @override
+  String get scheduledMessageScheduleButton => 'Programmer le message';
+
+  @override
+  String get scheduledMessageSaveButton => 'Enregistrer les modifications';
+
+  @override
+  String get scheduledMessageCreated => 'Message programmé';
+
+  @override
+  String get scheduledMessageCreateFailed =>
+      'Impossible de programmer le message. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageUpdated => 'Message programmé mis à jour';
+
+  @override
+  String get scheduledMessageUpdateFailed =>
+      'Impossible de mettre à jour le message programmé. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageActionsTitle => 'Message programmé';
+
+  @override
+  String get scheduledMessageView => 'Voir les détails';
+
+  @override
+  String get scheduledMessageEdit => 'Modifier';
+
+  @override
+  String get scheduledMessageCancelAction => 'Annuler le message';
+
+  @override
+  String get scheduledMessageRetryAction => 'Réessayer maintenant';
+
+  @override
+  String get scheduledMessageRescheduleAction => 'Reprogrammer';
+
+  @override
+  String get scheduledMessageCancelTitle => 'Annuler le message programmé ?';
+
+  @override
+  String get scheduledMessageCancelConfirm =>
+      'Ce message programmé ne sera pas envoyé. Cette action est irréversible.';
+
+  @override
+  String get scheduledMessageCancelReasonLabel => 'Motif (facultatif)';
+
+  @override
+  String get scheduledMessageCancelledSnack => 'Message programmé annulé';
+
+  @override
+  String get scheduledMessageCancelFailed =>
+      'Impossible d\'annuler. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageRetriedSnack => 'Message renvoyé';
+
+  @override
+  String get scheduledMessageRetryFailed =>
+      'Impossible de réessayer. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageRescheduledSnack => 'Message reprogrammé';
+
+  @override
+  String get scheduledMessageRescheduleFailed =>
+      'Impossible de reprogrammer. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageDetailsTitle => 'Message programmé';
+
+  @override
+  String get scheduledMessageErrorLabel => 'Erreur';
+
+  @override
+  String get scheduledMessageActivityTitle => 'Activité';
+
+  @override
+  String get scheduledMessageStatusPending => 'En attente';
+
+  @override
+  String get scheduledMessageStatusSent => 'Envoyé';
+
+  @override
+  String get scheduledMessageStatusCancelled => 'Annulé';
+
+  @override
+  String get scheduledMessageStatusFailed => 'Échoué';
+
+  @override
+  String get scheduledMessageEventScheduled => 'Programmé';
+
+  @override
+  String get scheduledMessageEventEdited => 'Modifié';
+
+  @override
+  String get scheduledMessageEventCancelled => 'Annulé';
+
+  @override
+  String get scheduledMessageEventSent => 'Envoyé';
+
+  @override
+  String get scheduledMessageEventFailed => 'Échoué';
+
+  @override
+  String get scheduledMessageTemplateUnavailable =>
+      'Ce modèle n\'est plus disponible, son contenu ne peut donc pas être modifié ici — vous pouvez toujours le reprogrammer.';
+
+  @override
+  String get scheduledMessageLoadFailed =>
+      'Impossible de charger ce message programmé.';
 }

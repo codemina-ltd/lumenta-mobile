@@ -1935,6 +1935,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This message is too far back in the history to jump to.'**
   String get messageTooFarBack;
+
+  /// No description provided for @clientDetailScheduledMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled Messages'**
+  String get clientDetailScheduledMessages;
+
+  /// No description provided for @clientDetailNoScheduledMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'No scheduled messages for this contact.'**
+  String get clientDetailNoScheduledMessages;
+
+  /// No description provided for @scheduledMessageChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get scheduledMessageChip;
+
+  /// No description provided for @scheduledMessageFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled for {when}'**
+  String scheduledMessageFor(Object when);
+
+  /// No description provided for @scheduledMessageSendNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Send now'**
+  String get scheduledMessageSendNow;
+
+  /// No description provided for @scheduledMessageScheduleToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get scheduledMessageScheduleToggle;
+
+  /// No description provided for @scheduledMessagePickDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick date & time'**
+  String get scheduledMessagePickDateTime;
+
+  /// No description provided for @scheduledMessageMustBeFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time in the future'**
+  String get scheduledMessageMustBeFuture;
+
+  /// No description provided for @scheduledMessageSendButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get scheduledMessageSendButton;
+
+  /// No description provided for @scheduledMessageScheduleButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule message'**
+  String get scheduledMessageScheduleButton;
+
+  /// No description provided for @scheduledMessageSaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get scheduledMessageSaveButton;
+
+  /// No description provided for @scheduledMessageCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Message scheduled'**
+  String get scheduledMessageCreated;
+
+  /// No description provided for @scheduledMessageCreateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t schedule the message. Please try again.'**
+  String get scheduledMessageCreateFailed;
+
+  /// No description provided for @scheduledMessageUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled message updated'**
+  String get scheduledMessageUpdated;
+
+  /// No description provided for @scheduledMessageUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update the scheduled message. Please try again.'**
+  String get scheduledMessageUpdateFailed;
+
+  /// No description provided for @scheduledMessageActionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled message'**
+  String get scheduledMessageActionsTitle;
+
+  /// No description provided for @scheduledMessageView.
+  ///
+  /// In en, this message translates to:
+  /// **'View details'**
+  String get scheduledMessageView;
+
+  /// No description provided for @scheduledMessageEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get scheduledMessageEdit;
+
+  /// No description provided for @scheduledMessageCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel message'**
+  String get scheduledMessageCancelAction;
+
+  /// No description provided for @scheduledMessageRetryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry now'**
+  String get scheduledMessageRetryAction;
+
+  /// No description provided for @scheduledMessageRescheduleAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule'**
+  String get scheduledMessageRescheduleAction;
+
+  /// No description provided for @scheduledMessageCancelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel scheduled message?'**
+  String get scheduledMessageCancelTitle;
+
+  /// No description provided for @scheduledMessageCancelConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This scheduled message won\'t be sent. This can\'t be undone.'**
+  String get scheduledMessageCancelConfirm;
+
+  /// No description provided for @scheduledMessageCancelReasonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason (optional)'**
+  String get scheduledMessageCancelReasonLabel;
+
+  /// No description provided for @scheduledMessageCancelledSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled message cancelled'**
+  String get scheduledMessageCancelledSnack;
+
+  /// No description provided for @scheduledMessageCancelFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t cancel. Please try again.'**
+  String get scheduledMessageCancelFailed;
+
+  /// No description provided for @scheduledMessageRetriedSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Message re-sent'**
+  String get scheduledMessageRetriedSnack;
+
+  /// No description provided for @scheduledMessageRetryFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t retry. Please try again.'**
+  String get scheduledMessageRetryFailed;
+
+  /// No description provided for @scheduledMessageRescheduledSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Message rescheduled'**
+  String get scheduledMessageRescheduledSnack;
+
+  /// No description provided for @scheduledMessageRescheduleFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reschedule. Please try again.'**
+  String get scheduledMessageRescheduleFailed;
+
+  /// No description provided for @scheduledMessageDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled message'**
+  String get scheduledMessageDetailsTitle;
+
+  /// No description provided for @scheduledMessageErrorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get scheduledMessageErrorLabel;
+
+  /// No description provided for @scheduledMessageActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get scheduledMessageActivityTitle;
+
+  /// No description provided for @scheduledMessageStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get scheduledMessageStatusPending;
+
+  /// No description provided for @scheduledMessageStatusSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get scheduledMessageStatusSent;
+
+  /// No description provided for @scheduledMessageStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get scheduledMessageStatusCancelled;
+
+  /// No description provided for @scheduledMessageStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get scheduledMessageStatusFailed;
+
+  /// No description provided for @scheduledMessageEventScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get scheduledMessageEventScheduled;
+
+  /// No description provided for @scheduledMessageEventEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'Edited'**
+  String get scheduledMessageEventEdited;
+
+  /// No description provided for @scheduledMessageEventCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get scheduledMessageEventCancelled;
+
+  /// No description provided for @scheduledMessageEventSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get scheduledMessageEventSent;
+
+  /// No description provided for @scheduledMessageEventFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get scheduledMessageEventFailed;
+
+  /// No description provided for @scheduledMessageTemplateUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This template is no longer available, so its content can\'t be edited — you can still reschedule it.'**
+  String get scheduledMessageTemplateUnavailable;
+
+  /// No description provided for @scheduledMessageLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this scheduled message.'**
+  String get scheduledMessageLoadFailed;
 }
 
 class _AppLocalizationsDelegate

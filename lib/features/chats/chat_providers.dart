@@ -7,14 +7,17 @@ import '../../core/providers.dart';
 import '../../data/models/client.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/inbox_thread.dart';
+import '../../data/models/scheduled_message.dart';
 import '../../data/models/sender.dart';
 import '../../data/models/template.dart';
 import '../../data/repos/commerce_repo.dart';
 import '../auth/auth_controller.dart';
 
 /// Single client for the chat header (cached per client id).
-final clientProvider =
-    FutureProvider.autoDispose.family<Client, String>((ref, id) async {
+final clientProvider = FutureProvider.autoDispose.family<Client, String>((
+  ref,
+  id,
+) async {
   return ref.read(clientsRepoProvider).getById(id);
 });
 
@@ -23,13 +26,14 @@ final clientProvider =
 /// message via a new sender materialises its tab.
 final conversationSendersProvider = FutureProvider.autoDispose
     .family<List<ConversationSender>, String>((ref, clientId) async {
-  return ref.read(messagesRepoProvider).conversationSenders(clientId);
-});
+      return ref.read(messagesRepoProvider).conversationSenders(clientId);
+    });
 
 /// All tenant senders (composer binding + "Start conversation via…").
 /// Re-created whenever the active tenant changes, so the list re-scopes.
-final tenantSendersProvider =
-    FutureProvider.autoDispose<List<Sender>>((ref) async {
+final tenantSendersProvider = FutureProvider.autoDispose<List<Sender>>((
+  ref,
+) async {
   ref.watch(authControllerProvider.select((s) => s.activeTenantId));
   return ref.read(sendersRepoProvider).findAll();
 });
@@ -86,31 +90,42 @@ final chatOrderProvider = FutureProvider.family<CommerceOrderDetail, String>((
   return ref.read(commerceRepoProvider).orderById(orderId);
 });
 
+/// Pending/failed scheduled messages for a client — the thread's inline
+/// feed (merged into `_buildRows` alongside real messages, sorted by
+/// `scheduledFor`). No polling: refetched on screen entry (first watch) and
+/// pull-to-refresh (`ref.invalidate`), same as every other list in the app.
+final chatScheduledMessagesProvider = FutureProvider.autoDispose
+    .family<List<ScheduledMessage>, String>((ref, clientId) async {
+      final page = await ref
+          .read(scheduledMessagesRepoProvider)
+          .list(clientId, status: 'pending,failed', limit: 50);
+      return page.data;
+    });
+
 /// Auth headers for loading proxied media (`/messages/:id/media`).
 final mediaHeadersProvider = Provider<Map<String, String>>((ref) {
   final session = ref.watch(authSessionProvider);
   return {
     if (session.accessToken != null)
       'Authorization': 'Bearer ${session.accessToken}',
-    if (session.activeTenantId != null)
-      'X-Tenant-Id': session.activeTenantId!,
+    if (session.activeTenantId != null) 'X-Tenant-Id': session.activeTenantId!,
   };
 });
 
 /// Downloads proxied media bytes through the authenticated Dio (for audio).
 final mediaBytesLoaderProvider =
     Provider<Future<Uint8List?> Function(String url)>((ref) {
-  final dio = ref.watch(dioProvider);
-  return (url) async {
-    try {
-      final res = await dio.get<List<int>>(
-        url,
-        options: Options(responseType: ResponseType.bytes),
-      );
-      final data = res.data;
-      return data == null ? null : Uint8List.fromList(data);
-    } on DioException {
-      return null;
-    }
-  };
-});
+      final dio = ref.watch(dioProvider);
+      return (url) async {
+        try {
+          final res = await dio.get<List<int>>(
+            url,
+            options: Options(responseType: ResponseType.bytes),
+          );
+          final data = res.data;
+          return data == null ? null : Uint8List.fromList(data);
+        } on DioException {
+          return null;
+        }
+      };
+    });

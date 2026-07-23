@@ -987,4 +987,147 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get messageTooFarBack =>
       'This message is too far back in the history to jump to.';
+
+  @override
+  String get clientDetailScheduledMessages => 'Scheduled Messages';
+
+  @override
+  String get clientDetailNoScheduledMessages =>
+      'No scheduled messages for this contact.';
+
+  @override
+  String get scheduledMessageChip => 'Scheduled';
+
+  @override
+  String scheduledMessageFor(Object when) {
+    return 'Scheduled for $when';
+  }
+
+  @override
+  String get scheduledMessageSendNow => 'Send now';
+
+  @override
+  String get scheduledMessageScheduleToggle => 'Schedule';
+
+  @override
+  String get scheduledMessagePickDateTime => 'Pick date & time';
+
+  @override
+  String get scheduledMessageMustBeFuture => 'Pick a time in the future';
+
+  @override
+  String get scheduledMessageSendButton => 'Send';
+
+  @override
+  String get scheduledMessageScheduleButton => 'Schedule message';
+
+  @override
+  String get scheduledMessageSaveButton => 'Save changes';
+
+  @override
+  String get scheduledMessageCreated => 'Message scheduled';
+
+  @override
+  String get scheduledMessageCreateFailed =>
+      'Couldn\'t schedule the message. Please try again.';
+
+  @override
+  String get scheduledMessageUpdated => 'Scheduled message updated';
+
+  @override
+  String get scheduledMessageUpdateFailed =>
+      'Couldn\'t update the scheduled message. Please try again.';
+
+  @override
+  String get scheduledMessageActionsTitle => 'Scheduled message';
+
+  @override
+  String get scheduledMessageView => 'View details';
+
+  @override
+  String get scheduledMessageEdit => 'Edit';
+
+  @override
+  String get scheduledMessageCancelAction => 'Cancel message';
+
+  @override
+  String get scheduledMessageRetryAction => 'Retry now';
+
+  @override
+  String get scheduledMessageRescheduleAction => 'Reschedule';
+
+  @override
+  String get scheduledMessageCancelTitle => 'Cancel scheduled message?';
+
+  @override
+  String get scheduledMessageCancelConfirm =>
+      'This scheduled message won\'t be sent. This can\'t be undone.';
+
+  @override
+  String get scheduledMessageCancelReasonLabel => 'Reason (optional)';
+
+  @override
+  String get scheduledMessageCancelledSnack => 'Scheduled message cancelled';
+
+  @override
+  String get scheduledMessageCancelFailed =>
+      'Couldn\'t cancel. Please try again.';
+
+  @override
+  String get scheduledMessageRetriedSnack => 'Message re-sent';
+
+  @override
+  String get scheduledMessageRetryFailed =>
+      'Couldn\'t retry. Please try again.';
+
+  @override
+  String get scheduledMessageRescheduledSnack => 'Message rescheduled';
+
+  @override
+  String get scheduledMessageRescheduleFailed =>
+      'Couldn\'t reschedule. Please try again.';
+
+  @override
+  String get scheduledMessageDetailsTitle => 'Scheduled message';
+
+  @override
+  String get scheduledMessageErrorLabel => 'Error';
+
+  @override
+  String get scheduledMessageActivityTitle => 'Activity';
+
+  @override
+  String get scheduledMessageStatusPending => 'Pending';
+
+  @override
+  String get scheduledMessageStatusSent => 'Sent';
+
+  @override
+  String get scheduledMessageStatusCancelled => 'Cancelled';
+
+  @override
+  String get scheduledMessageStatusFailed => 'Failed';
+
+  @override
+  String get scheduledMessageEventScheduled => 'Scheduled';
+
+  @override
+  String get scheduledMessageEventEdited => 'Edited';
+
+  @override
+  String get scheduledMessageEventCancelled => 'Cancelled';
+
+  @override
+  String get scheduledMessageEventSent => 'Sent';
+
+  @override
+  String get scheduledMessageEventFailed => 'Failed';
+
+  @override
+  String get scheduledMessageTemplateUnavailable =>
+      'This template is no longer available, so its content can\'t be edited — you can still reschedule it.';
+
+  @override
+  String get scheduledMessageLoadFailed =>
+      'Couldn\'t load this scheduled message.';
 }

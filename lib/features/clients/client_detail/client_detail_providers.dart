@@ -6,6 +6,7 @@ import '../../../data/models/contact_profile.dart';
 import '../../../data/models/inbox_note.dart';
 import '../../../data/models/message.dart';
 import '../../../data/models/reminder.dart';
+import '../../../data/models/scheduled_message.dart';
 import '../../../data/models/smp_call.dart';
 import '../../../data/repos/campaigns_repo.dart';
 import '../../../data/repos/commerce_repo.dart';
@@ -83,6 +84,17 @@ final clientRemindersProvider = FutureProvider.autoDispose
       final page = await ref
           .read(remindersRepoProvider)
           .list(clientId: clientId, limit: 20);
+      return page.data;
+    });
+
+/// The client's scheduled messages, every status, newest-scheduled-first —
+/// for the "Scheduled Messages" card (unlike the thread's inline feed, which
+/// only shows pending/failed).
+final clientScheduledMessagesProvider = FutureProvider.autoDispose
+    .family<List<ScheduledMessage>, String>((ref, clientId) async {
+      final page = await ref
+          .read(scheduledMessagesRepoProvider)
+          .list(clientId, sortBy: 'scheduledFor', sortDir: 'desc', limit: 20);
       return page.data;
     });
 

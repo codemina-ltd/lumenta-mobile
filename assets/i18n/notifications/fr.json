@@ -383,5 +383,15 @@
       "title": "Envoi bloqué",
       "body": "Un message n'a pas pu être envoyé car votre compte est suspendu pour violation des règles de conformité."
     }
+  },
+  "scheduled_message": {
+    "sent": {
+      "title": "Message programmé envoyé",
+      "body": "« {{templateName}} » a été envoyé comme prévu."
+    },
+    "failed": {
+      "title": "Échec du message programmé",
+      "body": "Échec de l'envoi de « {{templateName}} » : {{reason}}"
+    }
   }
 }

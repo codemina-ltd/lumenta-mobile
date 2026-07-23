@@ -1,31 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../core/i18n/arb/app_localizations.dart';
+import '../../core/providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
+import '../../data/models/scheduled_message.dart';
 import '../../data/models/template.dart';
 import '../chats/chat_providers.dart';
 import '../chats/thread_controller.dart';
 import '../chats/widgets/template_bubble.dart';
 import 'template_vars.dart';
 
+/// Whether this screen sends the template immediately or schedules it for
+/// later via `ScheduledMessagesRepo`.
+enum _SendMode { now, schedule }
+
 /// Full-screen form for filling a template's body + button variables, with a
 /// live preview. Sends via [ThreadController.sendTemplate] and pops `true` on
 /// success so the caller can scroll the thread to the new bubble. The send is
 /// bound to [threadKey]'s sender (per-sender thread tabs).
+///
+/// A "Send now / Schedule" toggle switches to scheduling a one-off template
+/// send for a future time (`POST .../scheduled-messages`) instead. Passing
+/// [editing] repurposes the same form to edit a still-`pending` scheduled
+/// message (`PATCH .../scheduled-messages/:id`) — the toggle is hidden and
+/// the screen always reschedules/re-saves in place.
 class TemplateFillScreen extends ConsumerStatefulWidget {
   const TemplateFillScreen({
     super.key,
     required this.template,
     required this.threadKey,
     required this.to,
+    this.editing,
   });
 
   final Template template;
   final ThreadKey threadKey;
   final String to;
+
+  /// When set, the form pre-fills from this scheduled message and submits an
+  /// update instead of a new send/schedule.
+  final ScheduledMessage? editing;
 
   @override
   ConsumerState<TemplateFillScreen> createState() => _TemplateFillScreenState();
@@ -37,6 +55,12 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
   final Map<String, TextEditingController> _controllers = {};
   bool _sending = false;
 
+  bool get _isEditing => widget.editing != null;
+
+  _SendMode _mode = _SendMode.now;
+  DateTime? _scheduledFor;
+  String? _scheduleError;
+
   Template get _t => widget.template;
 
   @override
@@ -44,13 +68,24 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
     super.initState();
     _varFields = templateVarFields(_t);
     _buttonFields = templateButtonFields(_t);
+    final editing = widget.editing;
+    final presetVars = editing?.variablesAsStrings ?? const {};
+    final presetButtons = editing?.buttonVariables ?? const {};
     for (final f in _varFields) {
-      _controllers['v:${f.key}'] = TextEditingController()
-        ..addListener(_onChanged);
+      _controllers['v:${f.key}'] = TextEditingController(
+        text: presetVars[f.key] ?? '',
+      )..addListener(_onChanged);
     }
     for (final f in _buttonFields) {
-      _controllers['b:${f.key}'] = TextEditingController()
-        ..addListener(_onChanged);
+      _controllers['b:${f.key}'] = TextEditingController(
+        text: presetButtons[f.key] ?? '',
+      )..addListener(_onChanged);
+    }
+    if (editing != null) {
+      _mode = _SendMode.schedule;
+      // The API sends a UTC instant; the date/time pickers work in local
+      // wall-clock, so this must be converted before it seeds them.
+      _scheduledFor = editing.scheduledFor.toLocal();
     }
   }
 
@@ -65,22 +100,54 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
   void _onChanged() => setState(() {});
 
   Map<String, String> get _variables => {
-        for (final f in _varFields)
-          f.key: _controllers['v:${f.key}']!.text.trim(),
-      };
+    for (final f in _varFields) f.key: _controllers['v:${f.key}']!.text.trim(),
+  };
 
   Map<String, String> get _buttonVariables => {
-        for (final f in _buttonFields)
-          f.key: _controllers['b:${f.key}']!.text.trim(),
-      };
+    for (final f in _buttonFields)
+      f.key: _controllers['b:${f.key}']!.text.trim(),
+  };
 
   List<String> get _missing => [
-        ...missingVarLabels(_t, _variables),
-        ...missingButtonLabels(_t, _buttonVariables),
-      ];
+    ...missingVarLabels(_t, _variables),
+    ...missingButtonLabels(_t, _buttonVariables),
+  ];
+
+  /// Opens the date + time picker pair (mirrors
+  /// `widgets/create_reminder_sheet.dart`'s `_pickCustom`) and stores the
+  /// combined result as the schedule/reschedule target.
+  Future<void> _pickScheduledFor() async {
+    final now = DateTime.now();
+    final initial = _scheduledFor ?? now.add(const Duration(hours: 1));
+    final date = await showDatePicker(
+      context: context,
+      initialDate: initial.isBefore(now) ? now : initial,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365)),
+    );
+    if (date == null || !mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initial),
+    );
+    if (time == null || !mounted) return;
+    setState(() {
+      _scheduledFor = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+      _scheduleError = null;
+    });
+  }
 
   Future<void> _send() async {
     if (_missing.isNotEmpty || _sending) return;
+    if (_isEditing) return _saveEdit();
+    if (_mode == _SendMode.schedule) return _schedule();
+
     setState(() => _sending = true);
     final btn = _buttonVariables;
     final error = await ref
@@ -97,16 +164,101 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
     } else {
       setState(() => _sending = false);
       final l10n = AppLocalizations.of(context);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(_errorText(error, l10n))));
+    }
+  }
+
+  /// The sender to schedule/reschedule as: the thread's bound sender when
+  /// there is one (per-sender thread tabs), otherwise the tenant default —
+  /// `POST .../scheduled-messages` requires a concrete `senderId` even where
+  /// a live send would let the server pick a default.
+  String? get _effectiveSenderId {
+    final bound = widget.threadKey.senderId;
+    if (bound != null) return bound;
+    final senders = ref.read(tenantSendersProvider).asData?.value;
+    if (senders == null || senders.isEmpty) return null;
+    return senders.where((s) => s.isDefault).firstOrNull?.id ??
+        senders.first.id;
+  }
+
+  Future<void> _schedule() async {
+    final l10n = AppLocalizations.of(context);
+    final when = _scheduledFor;
+    if (when == null || !when.isAfter(DateTime.now())) {
+      setState(() => _scheduleError = l10n.scheduledMessageMustBeFuture);
+      return;
+    }
+    final senderId = _effectiveSenderId;
+    if (senderId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_errorText(error, l10n))),
+        SnackBar(content: Text(l10n.scheduledMessageCreateFailed)),
+      );
+      return;
+    }
+    setState(() => _sending = true);
+    final btn = _buttonVariables;
+    try {
+      await ref
+          .read(scheduledMessagesRepoProvider)
+          .create(
+            widget.threadKey.clientId,
+            senderId: senderId,
+            templateId: _t.id,
+            templateVariables: _variables,
+            buttonVariables: btn.isEmpty ? null : btn,
+            scheduledFor: when,
+          );
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _sending = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_errorText(e, l10n, l10n.scheduledMessageCreateFailed)),
+        ),
+      );
+    }
+  }
+
+  Future<void> _saveEdit() async {
+    final l10n = AppLocalizations.of(context);
+    final when = _scheduledFor;
+    if (when == null || !when.isAfter(DateTime.now())) {
+      setState(() => _scheduleError = l10n.scheduledMessageMustBeFuture);
+      return;
+    }
+    setState(() => _sending = true);
+    final btn = _buttonVariables;
+    try {
+      await ref
+          .read(scheduledMessagesRepoProvider)
+          .update(
+            widget.threadKey.clientId,
+            widget.editing!.id,
+            templateVariables: _variables,
+            buttonVariables: btn.isEmpty ? null : btn,
+            scheduledFor: when,
+          );
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _sending = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_errorText(e, l10n, l10n.scheduledMessageUpdateFailed)),
+        ),
       );
     }
   }
 
   /// Surface the provider error detail (e.g. Meta code 131049) when present.
-  String _errorText(Object error, AppLocalizations l10n) {
+  String _errorText(Object error, AppLocalizations l10n, [String? fallback]) {
     final detail = _extractDetail(error);
-    return detail ?? l10n.templateSendFailed;
+    return detail ?? fallback ?? l10n.templateSendFailed;
   }
 
   String? _extractDetail(Object error) {
@@ -130,10 +282,19 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
     final l10n = AppLocalizations.of(context);
     final isMarketingUs =
         _t.category == 'marketing' && widget.to.startsWith('1');
+    final scheduling = _isEditing || _mode == _SendMode.schedule;
     final canSend = _missing.isEmpty && !_sending;
+    final locale = Localizations.localeOf(context).toString();
+    final scheduledLabel = _scheduledFor == null
+        ? l10n.scheduledMessagePickDateTime
+        : DateFormat.MMMd(locale).add_jm().format(_scheduledFor!);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.templateFillTitle)),
+      appBar: AppBar(
+        title: Text(
+          _isEditing ? l10n.scheduledMessageEdit : l10n.templateFillTitle,
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
           Insets.lg,
@@ -148,6 +309,41 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
             _WarningBanner(message: l10n.templateMarketingUsWarning),
           ],
           const SizedBox(height: Insets.xl),
+          if (!_isEditing) ...[
+            SegmentedButton<_SendMode>(
+              segments: [
+                ButtonSegment(
+                  value: _SendMode.now,
+                  label: Text(l10n.scheduledMessageSendNow),
+                  icon: const Icon(Icons.send_rounded, size: 16),
+                ),
+                ButtonSegment(
+                  value: _SendMode.schedule,
+                  label: Text(l10n.scheduledMessageScheduleToggle),
+                  icon: const Icon(Icons.schedule_rounded, size: 16),
+                ),
+              ],
+              selected: {_mode},
+              onSelectionChanged: (s) => setState(() => _mode = s.first),
+            ),
+            const SizedBox(height: Insets.lg),
+          ],
+          if (scheduling) ...[
+            InkWell(
+              borderRadius: Radii.field,
+              onTap: _pickScheduledFor,
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: l10n.scheduledMessagePickDateTime,
+                  errorText: _scheduleError,
+                  prefixIcon: const Icon(Icons.event_rounded),
+                  border: const OutlineInputBorder(borderRadius: Radii.field),
+                ),
+                child: Text(scheduledLabel),
+              ),
+            ),
+            const SizedBox(height: Insets.lg),
+          ],
           for (final f in _varFields) ...[
             _Field(
               controller: _controllers['v:${f.key}']!,
@@ -173,8 +369,19 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Icon(Icons.send_rounded, size: 20),
-            label: Text(l10n.sendTemplate),
+                : Icon(
+                    scheduling
+                        ? Icons.schedule_send_rounded
+                        : Icons.send_rounded,
+                    size: 20,
+                  ),
+            label: Text(
+              _isEditing
+                  ? l10n.scheduledMessageSaveButton
+                  : (scheduling
+                        ? l10n.scheduledMessageScheduleButton
+                        : l10n.sendTemplate),
+            ),
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(50),
               backgroundColor: AppColors.signal,
@@ -311,12 +518,13 @@ class _WarningBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.warning_amber_rounded,
-              size: 20, color: AppColors.amber),
-          const SizedBox(width: Insets.md),
-          Expanded(
-            child: Text(message, style: context.text.bodySmall),
+          const Icon(
+            Icons.warning_amber_rounded,
+            size: 20,
+            color: AppColors.amber,
           ),
+          const SizedBox(width: Insets.md),
+          Expanded(child: Text(message, style: context.text.bodySmall)),
         ],
       ),
     );
