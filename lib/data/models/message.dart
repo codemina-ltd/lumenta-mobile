@@ -109,6 +109,12 @@ abstract class Message with _$Message {
     /// 'email'); null on legacy rows written before channel attribution.
     String? channelType,
 
+    /// Channel-specific metadata the IG/Messenger webhook handler stores on
+    /// inbound rows: `story_context` (`{kind: 'reply'|'mention', story_id,
+    /// story_url}`), raw `attachments`, `postback`, `quick_reply`. Null on
+    /// WhatsApp rows and non-human-agent outbound channel sends.
+    Map<String, dynamic>? channelPayload,
+
     /// Team member who sent this outbound message ("Sent by …" attribution,
     /// mirrors the portal). Response-only field; null on inbound rows and
     /// rows whose user no longer exists.
@@ -163,6 +169,14 @@ abstract class Message with _$Message {
     if (RegExp(r'^\[Document(: .+)?\]$').hasMatch(b)) return null;
     return b;
   }
+  /// Story context on an inbound Instagram message — the customer replied to
+  /// (kind 'reply') or mentioned the business in (kind 'mention') a story.
+  /// `{kind, story_id, story_url}`; null for every other message.
+  Map<String, dynamic>? get storyContext {
+    final ctx = channelPayload?['story_context'];
+    return ctx is Map ? Map<String, dynamic>.from(ctx) : null;
+  }
+
   bool get hasReaction => reaction != null && reaction!.isNotEmpty;
   bool get isDeleted => deletedForEveryoneAt != null;
 

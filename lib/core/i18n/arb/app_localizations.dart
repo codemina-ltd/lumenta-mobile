@@ -2253,6 +2253,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sending failed. Please try again.'**
   String get channelSendFailed;
+
+  /// No description provided for @storyReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Replied to your story'**
+  String get storyReply;
+
+  /// No description provided for @storyMention.
+  ///
+  /// In en, this message translates to:
+  /// **'Mentioned you in a story'**
+  String get storyMention;
+
+  /// No description provided for @unsupportedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported message'**
+  String get unsupportedMessage;
 }
 
 class _AppLocalizationsDelegate

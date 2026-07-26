@@ -431,5 +431,8 @@
   "channelEmail": "Email",
   "channelHumanAgentLabel": "Send as human agent (7-day window)",
   "channelWindowClosed": "The messaging window has closed. You can reply after the customer messages you again.",
-  "channelSendFailed": "Sending failed. Please try again."
+  "channelSendFailed": "Sending failed. Please try again.",
+  "storyReply": "Replied to your story",
+  "storyMention": "Mentioned you in a story",
+  "unsupportedMessage": "Unsupported message"
 }

@@ -22,6 +22,7 @@ _Conversation _$ConversationFromJson(Map<String, dynamic> json) =>
         json['lastMessageDirection'],
         unknownValue: MessageDirection.inbound,
       ),
+      lastMessageChannelType: json['lastMessageChannelType'] as String?,
       lastMessageAt: json['lastMessageAt'] as String?,
     );
 
@@ -34,6 +35,7 @@ Map<String, dynamic> _$ConversationToJson(_Conversation instance) =>
       'lastMessageType': _$MessageTypeEnumMap[instance.lastMessageType],
       'lastMessageDirection':
           _$MessageDirectionEnumMap[instance.lastMessageDirection],
+      'lastMessageChannelType': instance.lastMessageChannelType,
       'lastMessageAt': instance.lastMessageAt,
     };
 

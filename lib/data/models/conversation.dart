@@ -23,6 +23,11 @@ abstract class Conversation with _$Conversation {
     @JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,
     @JsonKey(unknownEnumValue: MessageDirection.inbound)
     MessageDirection? lastMessageDirection,
+
+    /// Channel the last message travelled on ('whatsapp' | 'instagram' |
+    /// 'messenger'). The API defaults it to 'whatsapp', so only non-WhatsApp
+    /// values are worth surfacing; null on servers predating the field.
+    String? lastMessageChannelType,
     String? lastMessageAt,
   }) = _Conversation;
 

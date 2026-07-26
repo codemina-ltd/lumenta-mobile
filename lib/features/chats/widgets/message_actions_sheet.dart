@@ -59,7 +59,12 @@ Future<void> showMessageActions(
   final canCopy = text != null;
   final canForward = message.hasMedia || text != null;
   final canShare = message.hasMedia || text != null;
-  final canReact = !message.isOutbound && !message.isDeleted;
+  // Reactions are WhatsApp-only — the API rejects them on IG/Messenger rows
+  // (audit D7); null channelType = legacy WhatsApp row.
+  final canReact =
+      !message.isOutbound &&
+      !message.isDeleted &&
+      (message.channelType == null || message.channelType == 'whatsapp');
   // Optimistic bubbles carry a synthetic `temp_` id the API doesn't know.
   final isPersisted = !message.id.startsWith('temp_');
   // Reminder/note creation anchors to the message id, so it needs a

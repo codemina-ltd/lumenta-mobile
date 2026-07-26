@@ -421,5 +421,8 @@
   "channelEmail": "Email",
   "channelHumanAgentLabel": "إرسال كوكيل بشري (نافذة 7 أيام)",
   "channelWindowClosed": "أُغلقت نافذة المراسلة. يمكنك الرد بعد أن يراسلك العميل مرة أخرى.",
-  "channelSendFailed": "فشل الإرسال. يرجى المحاولة مرة أخرى."
+  "channelSendFailed": "فشل الإرسال. يرجى المحاولة مرة أخرى.",
+  "storyReply": "ردّ على قصتك",
+  "storyMention": "أشار إليك في قصة",
+  "unsupportedMessage": "رسالة غير مدعومة"
 }

@@ -1159,4 +1159,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get channelSendFailed => 'Sending failed. Please try again.';
+
+  @override
+  String get storyReply => 'Replied to your story';
+
+  @override
+  String get storyMention => 'Mentioned you in a story';
+
+  @override
+  String get unsupportedMessage => 'Unsupported message';
 }

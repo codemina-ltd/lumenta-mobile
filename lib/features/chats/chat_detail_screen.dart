@@ -28,6 +28,7 @@ import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/audio_bubble.dart';
 import 'widgets/channel_composer.dart';
+import 'widgets/channel_indicator.dart';
 import 'widgets/chat_composer.dart';
 import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
@@ -230,12 +231,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     });
   }
 
-  /// WhatsApp free-form replies are only allowed within 24h of the last inbound.
+  /// WhatsApp free-form replies are only allowed within 24h of the last
+  /// inbound **WhatsApp** message. The merged thread interleaves IG/Messenger
+  /// rows, and a channel inbound must not open the WhatsApp composer — Meta
+  /// enforces the window per channel and rejects the send with no error text.
   bool _windowOpen(ThreadState state) {
     for (final m in state.messages.reversed) {
-      if (m.direction == MessageDirection.inbound) {
-        return DateTime.now().difference(m.createdAtDate).inHours < 24;
-      }
+      if (m.direction != MessageDirection.inbound) continue;
+      // null = legacy row from before channel attribution, always WhatsApp.
+      if (m.channelType != null && m.channelType != 'whatsapp') continue;
+      return DateTime.now().difference(m.createdAtDate).inHours < 24;
     }
     return false;
   }
@@ -258,7 +263,12 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     final convSenders = convAsync.value ?? const <ConversationSender>[];
     final senders = sendersAsync.value ?? const <Sender>[];
     final showTabs =
-        sendersReady && (convSenders.length > 1 || senders.length > 1);
+        sendersReady &&
+        (convSenders.length > 1 || senders.length > 1) &&
+        // A phone-less (channel-only) contact can't receive WhatsApp sends,
+        // so the sender bar's "start via …" affordances would all dead-end —
+        // hide it and keep the merged thread (audit item 12).
+        !(clientAsync.hasValue && clientAsync.value!.phoneNumber == null);
 
     String? activeSenderId;
     if (showTabs) {
@@ -787,6 +797,23 @@ class _MessageBubble extends ConsumerWidget {
       );
     }
 
+    // Story context (D2): an inbound IG story reply/mention gets a small
+    // quoted header above the body, mirroring how the customer saw it.
+    final story = message.storyContext;
+    final inner = _typedContent(context, ref, textColor);
+    if (story == null) return inner;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _StoryContextHeader(story: story, textColor: textColor),
+        const SizedBox(height: 6),
+        inner,
+      ],
+    );
+  }
+
+  Widget _typedContent(BuildContext context, WidgetRef ref, Color textColor) {
     final repo = ref.read(messagesRepoProvider);
     final headers = ref.watch(mediaHeadersProvider);
     final url = repo.mediaUrl(message.id);
@@ -852,19 +879,33 @@ class _MessageBubble extends ConsumerWidget {
         if (message.isProductSend) {
           return ProductMessageContent(message: message, textColor: textColor);
         }
-        return _bodyText(textColor);
+        return _bodyText(context, textColor);
       case MessageType.order:
         return OrderMessageContent(message: message, textColor: textColor);
       default:
-        return _bodyText(textColor);
+        return _bodyText(context, textColor);
     }
   }
 
-  Widget _bodyText(Color textColor) => Text(
-    message.body.isEmpty ? '…' : message.body,
-    textDirection: Fmt.textDirectionFor(message.body),
-    style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
-  );
+  Widget _bodyText(BuildContext context, Color textColor) {
+    // Unknown type with no text (D4): IG 'share' attachments and other
+    // unmapped channel payloads — say so instead of an empty "…" bubble.
+    if (message.body.isEmpty && message.messageType == MessageType.unknown) {
+      return Text(
+        AppLocalizations.of(context).unsupportedMessage,
+        style: TextStyle(
+          color: textColor.withValues(alpha: 0.7),
+          fontStyle: FontStyle.italic,
+          fontSize: 14,
+        ),
+      );
+    }
+    return Text(
+      message.body.isEmpty ? '…' : message.body,
+      textDirection: Fmt.textDirectionFor(message.body),
+      style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
+    );
+  }
 
   Widget _meta(BuildContext context, Color textColor, bool outbound) {
     final channel = message.channelType;
@@ -875,7 +916,7 @@ class _MessageBubble extends ConsumerWidget {
         // channel_type to 'whatsapp' on every message, so gating on non-null
         // alone would paint a glyph on every bubble for every tenant.
         if (channel != null && channel != 'whatsapp') ...[
-          Icon(_channelIcon(channel), size: 11, color: _channelColor(channel)),
+          Icon(channelIcon(channel), size: 11, color: channelColor(channel)),
           const SizedBox(width: 3),
         ],
         Text(
@@ -891,38 +932,6 @@ class _MessageBubble extends ConsumerWidget {
         ],
       ],
     );
-  }
-
-  /// Icon identifying the message's originating channel in the meta row.
-  static IconData _channelIcon(String channel) {
-    switch (channel) {
-      case 'instagram':
-        return Icons.camera_alt_outlined;
-      case 'messenger':
-        return Icons.messenger_outline;
-      case 'sms':
-        return Icons.sms_outlined;
-      case 'email':
-        return Icons.mail_outline;
-      default: // 'whatsapp' and anything unknown
-        return Icons.chat_bubble;
-    }
-  }
-
-  /// Brand-ish color matching [_channelIcon].
-  static Color _channelColor(String channel) {
-    switch (channel) {
-      case 'instagram':
-        return const Color(0xFFE1306C);
-      case 'messenger':
-        return const Color(0xFF0084FF);
-      case 'sms':
-        return const Color(0xFFD4A017);
-      case 'email':
-        return const Color(0xFF722ED1);
-      default: // 'whatsapp' and anything unknown
-        return const Color(0xFF25D366);
-    }
   }
 
   IconData _statusIcon() {
@@ -1164,6 +1173,73 @@ class _SentByLabel extends StatelessWidget {
           child: Icon(Icons.help_outline_rounded, size: 13, color: muted),
         ),
       ],
+    );
+  }
+}
+
+/// Quoted "Replied to your story" / "Mentioned you in a story" header above
+/// an inbound IG story reply/mention (D2) — a small left-accented strip with
+/// the story thumbnail when the payload carries a URL. Mirrors the quoted
+/// look of WhatsApp reply headers, styled from the bubble's [textColor].
+class _StoryContextHeader extends StatelessWidget {
+  const _StoryContextHeader({required this.story, required this.textColor});
+
+  final Map<String, dynamic> story;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final label = story['kind'] == 'mention'
+        ? l10n.storyMention
+        : l10n.storyReply;
+    // The API stores the CDN link as `story_url`; accept `url` too for
+    // safety. Meta CDN URLs are public (short-lived), so no auth headers.
+    final rawUrl = story['story_url'] ?? story['url'];
+    final url = rawUrl is String && rawUrl.isNotEmpty ? rawUrl : null;
+
+    final muted = textColor.withValues(alpha: 0.75);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(Insets.sm, 4, Insets.sm, 4),
+      decoration: BoxDecoration(
+        color: textColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(Radii.sm),
+        border: Border(
+          left: BorderSide(color: textColor.withValues(alpha: 0.4), width: 3),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: muted,
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+          if (url != null) ...[
+            const SizedBox(width: Insets.sm),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(Radii.sm),
+              child: Image.network(
+                url,
+                width: 32,
+                height: 44,
+                fit: BoxFit.cover,
+                // Expired/unreachable story CDN link — drop the thumbnail
+                // silently and keep the label.
+                errorBuilder: (_, _, _) => const SizedBox.shrink(),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

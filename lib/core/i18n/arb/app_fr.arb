@@ -421,5 +421,8 @@
   "channelEmail": "Email",
   "channelHumanAgentLabel": "Envoyer en tant qu'agent humain (fenêtre de 7 jours)",
   "channelWindowClosed": "La fenêtre de messagerie est fermée. Vous pourrez répondre lorsque le client vous écrira à nouveau.",
-  "channelSendFailed": "Échec de l'envoi. Veuillez réessayer."
+  "channelSendFailed": "Échec de l'envoi. Veuillez réessayer.",
+  "storyReply": "A répondu à votre story",
+  "storyMention": "Vous a mentionné dans une story",
+  "unsupportedMessage": "Message non pris en charge"
 }

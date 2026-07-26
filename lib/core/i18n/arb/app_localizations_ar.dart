@@ -1162,4 +1162,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get channelSendFailed => 'فشل الإرسال. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get storyReply => 'ردّ على قصتك';
+
+  @override
+  String get storyMention => 'أشار إليك في قصة';
+
+  @override
+  String get unsupportedMessage => 'رسالة غير مدعومة';
 }
