@@ -2199,6 +2199,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load this scheduled message.'**
   String get scheduledMessageLoadFailed;
+
+  /// No description provided for @noPhoneChannelContact.
+  ///
+  /// In en, this message translates to:
+  /// **'This contact has no phone number — reply from their channel conversation in the web portal.'**
+  String get noPhoneChannelContact;
+
+  /// No description provided for @channelWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get channelWhatsapp;
+
+  /// No description provided for @channelInstagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Instagram'**
+  String get channelInstagram;
+
+  /// No description provided for @channelMessenger.
+  ///
+  /// In en, this message translates to:
+  /// **'Messenger'**
+  String get channelMessenger;
+
+  /// No description provided for @channelSms.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS'**
+  String get channelSms;
+
+  /// No description provided for @channelEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get channelEmail;
 }
 
 class _AppLocalizationsDelegate

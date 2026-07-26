@@ -412,5 +412,11 @@
   "scheduledMessageEventSent": "تم الإرسال",
   "scheduledMessageEventFailed": "فشلت",
   "scheduledMessageTemplateUnavailable": "لم يعد هذا القالب متاحًا، لذا لا يمكن تعديل محتواه — لا يزال بإمكانك إعادة جدولته.",
-  "scheduledMessageLoadFailed": "تعذّر تحميل هذه الرسالة المجدولة."
+  "scheduledMessageLoadFailed": "تعذّر تحميل هذه الرسالة المجدولة.",
+  "noPhoneChannelContact": "لا يوجد رقم هاتف لجهة الاتصال هذه — قم بالرد من محادثة قناتها في البوابة الإلكترونية.",
+  "channelWhatsapp": "WhatsApp",
+  "channelInstagram": "Instagram",
+  "channelMessenger": "Messenger",
+  "channelSms": "SMS",
+  "channelEmail": "Email"
 }

@@ -1130,4 +1130,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get scheduledMessageLoadFailed =>
       'Couldn\'t load this scheduled message.';
+
+  @override
+  String get noPhoneChannelContact =>
+      'This contact has no phone number — reply from their channel conversation in the web portal.';
+
+  @override
+  String get channelWhatsapp => 'WhatsApp';
+
+  @override
+  String get channelInstagram => 'Instagram';
+
+  @override
+  String get channelMessenger => 'Messenger';
+
+  @override
+  String get channelSms => 'SMS';
+
+  @override
+  String get channelEmail => 'Email';
 }

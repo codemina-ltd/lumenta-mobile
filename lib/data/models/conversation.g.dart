@@ -9,7 +9,7 @@ part of 'conversation.dart';
 _Conversation _$ConversationFromJson(Map<String, dynamic> json) =>
     _Conversation(
       clientId: _clientId(json, 'clientId') as String,
-      phoneNumber: json['phoneNumber'] as String,
+      phoneNumber: json['phoneNumber'] as String?,
       profileName: json['profileName'] as String?,
       lastMessageBody: json['lastMessageBody'] as String?,
       lastMessageType: $enumDecodeNullable(

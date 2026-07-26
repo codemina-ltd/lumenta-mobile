@@ -8,7 +8,10 @@ part 'client.g.dart';
 abstract class Client with _$Client {
   const factory Client({
     required String id,
-    required String phoneNumber,
+
+    /// Null for channel-only contacts (Instagram/Messenger) that have no
+    /// WhatsApp phone number.
+    String? phoneNumber,
     String? profileName,
     String? createdAt,
   }) = _Client;
@@ -17,16 +20,20 @@ abstract class Client with _$Client {
 
   factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
 
-  /// Best display name: profile name when set, otherwise the phone number.
-  String get displayName =>
-      (profileName != null && profileName!.trim().isNotEmpty)
-      ? profileName!
-      : '+$phoneNumber';
+  /// Best display name: profile name when set, otherwise the phone number,
+  /// otherwise a neutral fallback (mirrors InboxThread.displayName).
+  String get displayName {
+    if (profileName != null && profileName!.trim().isNotEmpty) {
+      return profileName!;
+    }
+    final phone = phoneNumber;
+    return phone != null ? '+$phone' : 'Unknown contact';
+  }
 
   String get initials {
     final source = (profileName?.trim().isNotEmpty ?? false)
         ? profileName!.trim()
-        : phoneNumber;
+        : (phoneNumber ?? '');
     final parts = source.split(RegExp(r'\s+')).where((p) => p.isNotEmpty);
     if (parts.isEmpty) return '?';
     if (parts.length == 1) {

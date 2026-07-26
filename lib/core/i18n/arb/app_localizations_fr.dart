@@ -1143,4 +1143,23 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get scheduledMessageLoadFailed =>
       'Impossible de charger ce message programmé.';
+
+  @override
+  String get noPhoneChannelContact =>
+      'Ce contact n\'a pas de numéro de téléphone — répondez depuis sa conversation de canal dans le portail web.';
+
+  @override
+  String get channelWhatsapp => 'WhatsApp';
+
+  @override
+  String get channelInstagram => 'Instagram';
+
+  @override
+  String get channelMessenger => 'Messenger';
+
+  @override
+  String get channelSms => 'SMS';
+
+  @override
+  String get channelEmail => 'Email';
 }

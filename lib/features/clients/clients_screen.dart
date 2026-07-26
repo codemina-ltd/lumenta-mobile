@@ -126,7 +126,9 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                       clientId: c.id,
                       initials: c.initials,
                       name: c.displayName,
-                      phone: '+${c.phoneNumber}',
+                      phone: c.phoneNumber == null
+                          ? null
+                          : '+${c.phoneNumber}',
                       onTap: () => context.push('/chats/${c.id}'),
                     );
                   },
@@ -152,7 +154,7 @@ class _ClientRow extends StatelessWidget {
   final String clientId;
   final String initials;
   final String name;
-  final String phone;
+  final String? phone;
   final VoidCallback onTap;
 
   @override
@@ -178,15 +180,17 @@ class _ClientRow extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: context.text.titleMedium,
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    phone,
-                    style: context.text.bodySmall?.copyWith(
-                      color: context.scheme.onSurfaceVariant,
-                      fontFeatures: const [],
-                      letterSpacing: 0.2,
+                  if (phone != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      phone!,
+                      style: context.text.bodySmall?.copyWith(
+                        color: context.scheme.onSurfaceVariant,
+                        fontFeatures: const [],
+                        letterSpacing: 0.2,
+                      ),
                     ),
-                  ),
+                  ],
                   LiveCallBadge(clientId: clientId),
                 ],
               ),

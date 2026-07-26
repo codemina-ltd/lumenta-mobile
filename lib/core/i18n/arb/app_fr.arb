@@ -412,5 +412,11 @@
   "scheduledMessageEventSent": "Envoyé",
   "scheduledMessageEventFailed": "Échoué",
   "scheduledMessageTemplateUnavailable": "Ce modèle n'est plus disponible, son contenu ne peut donc pas être modifié ici — vous pouvez toujours le reprogrammer.",
-  "scheduledMessageLoadFailed": "Impossible de charger ce message programmé."
+  "scheduledMessageLoadFailed": "Impossible de charger ce message programmé.",
+  "noPhoneChannelContact": "Ce contact n'a pas de numéro de téléphone — répondez depuis sa conversation de canal dans le portail web.",
+  "channelWhatsapp": "WhatsApp",
+  "channelInstagram": "Instagram",
+  "channelMessenger": "Messenger",
+  "channelSms": "SMS",
+  "channelEmail": "Email"
 }

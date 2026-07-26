@@ -197,13 +197,20 @@ Future<void> _edit(
     if (!context.mounted) return;
     final client = await ref.read(clientProvider(clientId).future);
     if (!context.mounted) return;
+    // Scheduled sends are WhatsApp-only, so a phone-less (channel-only)
+    // contact can't be edited into a new send — bail out defensively.
+    final to = client.phoneNumber;
+    if (to == null) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.inboxActionFailed)));
+      return;
+    }
     final threadKey = (clientId: clientId, senderId: scheduledMessage.senderId);
     final saved = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         builder: (_) => TemplateFillScreen(
           template: template,
           threadKey: threadKey,
-          to: client.phoneNumber,
+          to: to,
           editing: scheduledMessage,
         ),
       ),

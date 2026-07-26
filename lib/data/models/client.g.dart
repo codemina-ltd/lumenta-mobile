@@ -8,7 +8,7 @@ part of 'client.dart';
 
 _Client _$ClientFromJson(Map<String, dynamic> json) => _Client(
   id: json['id'] as String,
-  phoneNumber: json['phoneNumber'] as String,
+  phoneNumber: json['phoneNumber'] as String?,
   profileName: json['profileName'] as String?,
   createdAt: json['createdAt'] as String?,
 );

@@ -422,5 +422,11 @@
   "scheduledMessageEventSent": "Sent",
   "scheduledMessageEventFailed": "Failed",
   "scheduledMessageTemplateUnavailable": "This template is no longer available, so its content can't be edited — you can still reschedule it.",
-  "scheduledMessageLoadFailed": "Couldn't load this scheduled message."
+  "scheduledMessageLoadFailed": "Couldn't load this scheduled message.",
+  "noPhoneChannelContact": "This contact has no phone number — reply from their channel conversation in the web portal.",
+  "channelWhatsapp": "WhatsApp",
+  "channelInstagram": "Instagram",
+  "channelMessenger": "Messenger",
+  "channelSms": "SMS",
+  "channelEmail": "Email"
 }

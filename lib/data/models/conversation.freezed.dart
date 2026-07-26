@@ -16,7 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$Conversation {
 
 /// Client id (the chat is keyed by client).
-@JsonKey(readValue: _clientId) String get clientId; String get phoneNumber; String? get profileName; String? get lastMessageBody;@JsonKey(unknownEnumValue: MessageType.text) MessageType? get lastMessageType;@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? get lastMessageDirection; String? get lastMessageAt;
+@JsonKey(readValue: _clientId) String get clientId;/// Null for channel-only contacts (Instagram/Messenger) that have no
+/// WhatsApp phone number.
+ String? get phoneNumber; String? get profileName; String? get lastMessageBody;@JsonKey(unknownEnumValue: MessageType.text) MessageType? get lastMessageType;@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? get lastMessageDirection; String? get lastMessageAt;
 /// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +51,7 @@ abstract mixin class $ConversationCopyWith<$Res>  {
   factory $ConversationCopyWith(Conversation value, $Res Function(Conversation) _then) = _$ConversationCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(readValue: _clientId) String clientId, String phoneNumber, String? profileName, String? lastMessageBody,@JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? lastMessageDirection, String? lastMessageAt
+@JsonKey(readValue: _clientId) String clientId, String? phoneNumber, String? profileName, String? lastMessageBody,@JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? lastMessageDirection, String? lastMessageAt
 });
 
 
@@ -66,11 +68,11 @@ class _$ConversationCopyWithImpl<$Res>
 
 /// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? phoneNumber = null,Object? profileName = freezed,Object? lastMessageBody = freezed,Object? lastMessageType = freezed,Object? lastMessageDirection = freezed,Object? lastMessageAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? lastMessageBody = freezed,Object? lastMessageType = freezed,Object? lastMessageDirection = freezed,Object? lastMessageAt = freezed,}) {
   return _then(_self.copyWith(
 clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
 as String?,lastMessageBody: freezed == lastMessageBody ? _self.lastMessageBody : lastMessageBody // ignore: cast_nullable_to_non_nullable
 as String?,lastMessageType: freezed == lastMessageType ? _self.lastMessageType : lastMessageType // ignore: cast_nullable_to_non_nullable
 as MessageType?,lastMessageDirection: freezed == lastMessageDirection ? _self.lastMessageDirection : lastMessageDirection // ignore: cast_nullable_to_non_nullable
@@ -160,7 +162,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _clientId)  String clientId,  String phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _clientId)  String clientId,  String? phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Conversation() when $default != null:
 return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMessageBody,_that.lastMessageType,_that.lastMessageDirection,_that.lastMessageAt);case _:
@@ -181,7 +183,7 @@ return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMes
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _clientId)  String clientId,  String phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _clientId)  String clientId,  String? phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)  $default,) {final _that = this;
 switch (_that) {
 case _Conversation():
 return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMessageBody,_that.lastMessageType,_that.lastMessageDirection,_that.lastMessageAt);case _:
@@ -201,7 +203,7 @@ return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMes
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _clientId)  String clientId,  String phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _clientId)  String clientId,  String? phoneNumber,  String? profileName,  String? lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text)  MessageType? lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound)  MessageDirection? lastMessageDirection,  String? lastMessageAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Conversation() when $default != null:
 return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMessageBody,_that.lastMessageType,_that.lastMessageDirection,_that.lastMessageAt);case _:
@@ -216,12 +218,14 @@ return $default(_that.clientId,_that.phoneNumber,_that.profileName,_that.lastMes
 @JsonSerializable()
 
 class _Conversation extends Conversation {
-  const _Conversation({@JsonKey(readValue: _clientId) required this.clientId, required this.phoneNumber, this.profileName, this.lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text) this.lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound) this.lastMessageDirection, this.lastMessageAt}): super._();
+  const _Conversation({@JsonKey(readValue: _clientId) required this.clientId, this.phoneNumber, this.profileName, this.lastMessageBody, @JsonKey(unknownEnumValue: MessageType.text) this.lastMessageType, @JsonKey(unknownEnumValue: MessageDirection.inbound) this.lastMessageDirection, this.lastMessageAt}): super._();
   factory _Conversation.fromJson(Map<String, dynamic> json) => _$ConversationFromJson(json);
 
 /// Client id (the chat is keyed by client).
 @override@JsonKey(readValue: _clientId) final  String clientId;
-@override final  String phoneNumber;
+/// Null for channel-only contacts (Instagram/Messenger) that have no
+/// WhatsApp phone number.
+@override final  String? phoneNumber;
 @override final  String? profileName;
 @override final  String? lastMessageBody;
 @override@JsonKey(unknownEnumValue: MessageType.text) final  MessageType? lastMessageType;
@@ -261,7 +265,7 @@ abstract mixin class _$ConversationCopyWith<$Res> implements $ConversationCopyWi
   factory _$ConversationCopyWith(_Conversation value, $Res Function(_Conversation) _then) = __$ConversationCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(readValue: _clientId) String clientId, String phoneNumber, String? profileName, String? lastMessageBody,@JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? lastMessageDirection, String? lastMessageAt
+@JsonKey(readValue: _clientId) String clientId, String? phoneNumber, String? profileName, String? lastMessageBody,@JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,@JsonKey(unknownEnumValue: MessageDirection.inbound) MessageDirection? lastMessageDirection, String? lastMessageAt
 });
 
 
@@ -278,11 +282,11 @@ class __$ConversationCopyWithImpl<$Res>
 
 /// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? clientId = null,Object? phoneNumber = null,Object? profileName = freezed,Object? lastMessageBody = freezed,Object? lastMessageType = freezed,Object? lastMessageDirection = freezed,Object? lastMessageAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? clientId = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? lastMessageBody = freezed,Object? lastMessageType = freezed,Object? lastMessageDirection = freezed,Object? lastMessageAt = freezed,}) {
   return _then(_Conversation(
 clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
 as String?,lastMessageBody: freezed == lastMessageBody ? _self.lastMessageBody : lastMessageBody // ignore: cast_nullable_to_non_nullable
 as String?,lastMessageType: freezed == lastMessageType ? _self.lastMessageType : lastMessageType // ignore: cast_nullable_to_non_nullable
 as MessageType?,lastMessageDirection: freezed == lastMessageDirection ? _self.lastMessageDirection : lastMessageDirection // ignore: cast_nullable_to_non_nullable

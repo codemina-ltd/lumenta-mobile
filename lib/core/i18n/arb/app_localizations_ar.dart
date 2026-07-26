@@ -1133,4 +1133,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get scheduledMessageLoadFailed => 'تعذّر تحميل هذه الرسالة المجدولة.';
+
+  @override
+  String get noPhoneChannelContact =>
+      'لا يوجد رقم هاتف لجهة الاتصال هذه — قم بالرد من محادثة قناتها في البوابة الإلكترونية.';
+
+  @override
+  String get channelWhatsapp => 'WhatsApp';
+
+  @override
+  String get channelInstagram => 'Instagram';
+
+  @override
+  String get channelMessenger => 'Messenger';
+
+  @override
+  String get channelSms => 'SMS';
+
+  @override
+  String get channelEmail => 'Email';
 }

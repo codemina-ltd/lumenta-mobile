@@ -307,7 +307,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       orElse: () => '',
     );
     final phone = clientAsync.maybeWhen(
-      data: (c) => '+${c.phoneNumber}',
+      data: (c) => c.phoneNumber == null ? null : '+${c.phoneNumber}',
       orElse: () => null,
     );
 
@@ -382,29 +382,46 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 : _body(context, state, threadKey, scheduled),
           ),
           if (clientAsync.hasValue && threadKey != null && !state.loading)
-            ChatComposer(
-              threadKey: threadKey,
-              to: clientAsync.value!.phoneNumber,
-              windowOpen: _windowOpen(state),
-              onSent: () {
-                _scrollToBottom();
-                // A template send from the composer may have scheduled a
-                // message instead of sending immediately; refresh the inline
-                // feed either way (cheap no-op when it didn't).
-                ref.invalidate(
-                  chatScheduledMessagesProvider(threadKey.clientId),
-                );
-              },
-              senderLabel: showTabs
-                  ? (activeSender?.label ?? activeConv?.label)
-                  : null,
-              senderNumber: showTabs
-                  ? (activeSender?.number ?? activeConv?.displayPhoneNumber)
-                  : null,
-              senderActive:
-                  !showTabs ||
-                  (activeSender?.isActive ?? activeConv?.isActive ?? true),
-            ),
+            // Channel-only contacts (Instagram/Messenger) have no phone
+            // number, so WhatsApp sends are impossible — replace the composer
+            // with a "reply from the portal" hint.
+            if (clientAsync.value!.phoneNumber == null)
+              Padding(
+                padding: const EdgeInsets.all(Insets.lg),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context).noPhoneChannelContact,
+                    textAlign: TextAlign.center,
+                    style: context.text.bodySmall?.copyWith(
+                      color: context.scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              )
+            else
+              ChatComposer(
+                threadKey: threadKey,
+                to: clientAsync.value!.phoneNumber!,
+                windowOpen: _windowOpen(state),
+                onSent: () {
+                  _scrollToBottom();
+                  // A template send from the composer may have scheduled a
+                  // message instead of sending immediately; refresh the inline
+                  // feed either way (cheap no-op when it didn't).
+                  ref.invalidate(
+                    chatScheduledMessagesProvider(threadKey.clientId),
+                  );
+                },
+                senderLabel: showTabs
+                    ? (activeSender?.label ?? activeConv?.label)
+                    : null,
+                senderNumber: showTabs
+                    ? (activeSender?.number ?? activeConv?.displayPhoneNumber)
+                    : null,
+                senderActive:
+                    !showTabs ||
+                    (activeSender?.isActive ?? activeConv?.isActive ?? true),
+              ),
         ],
       ),
     );
@@ -828,9 +845,14 @@ class _MessageBubble extends ConsumerWidget {
   );
 
   Widget _meta(BuildContext context, Color textColor, bool outbound) {
+    final channel = message.channelType;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (channel != null) ...[
+          Icon(_channelIcon(channel), size: 11, color: _channelColor(channel)),
+          const SizedBox(width: 3),
+        ],
         Text(
           Fmt.timeOfDay(context, message.createdAtDate),
           style: TextStyle(
@@ -844,6 +866,38 @@ class _MessageBubble extends ConsumerWidget {
         ],
       ],
     );
+  }
+
+  /// Icon identifying the message's originating channel in the meta row.
+  static IconData _channelIcon(String channel) {
+    switch (channel) {
+      case 'instagram':
+        return Icons.camera_alt_outlined;
+      case 'messenger':
+        return Icons.messenger_outline;
+      case 'sms':
+        return Icons.sms_outlined;
+      case 'email':
+        return Icons.mail_outline;
+      default: // 'whatsapp' and anything unknown
+        return Icons.chat_bubble;
+    }
+  }
+
+  /// Brand-ish color matching [_channelIcon].
+  static Color _channelColor(String channel) {
+    switch (channel) {
+      case 'instagram':
+        return const Color(0xFFE1306C);
+      case 'messenger':
+        return const Color(0xFF0084FF);
+      case 'sms':
+        return const Color(0xFFD4A017);
+      case 'email':
+        return const Color(0xFF722ED1);
+      default: // 'whatsapp' and anything unknown
+        return const Color(0xFF25D366);
+    }
   }
 
   IconData _statusIcon() {

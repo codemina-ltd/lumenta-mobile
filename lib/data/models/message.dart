@@ -105,6 +105,10 @@ abstract class Message with _$Message {
     /// rows written before sender attribution existed.
     String? senderId,
 
+    /// Originating channel ('whatsapp' | 'instagram' | 'messenger' | 'sms' |
+    /// 'email'); null on legacy rows written before channel attribution.
+    String? channelType,
+
     /// Team member who sent this outbound message ("Sent by …" attribution,
     /// mirrors the portal). Response-only field; null on inbound rows and
     /// rows whose user no longer exists.

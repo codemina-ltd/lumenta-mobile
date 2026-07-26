@@ -9,7 +9,7 @@ part of 'inbox_thread.dart';
 _InboxThreadContact _$InboxThreadContactFromJson(Map<String, dynamic> json) =>
     _InboxThreadContact(
       id: json['id'] as String,
-      phoneNumber: json['phoneNumber'] as String,
+      phoneNumber: json['phoneNumber'] as String?,
       profileName: json['profileName'] as String?,
     );
 
@@ -22,8 +22,9 @@ Map<String, dynamic> _$InboxThreadContactToJson(_InboxThreadContact instance) =>
 
 _InboxThread _$InboxThreadFromJson(Map<String, dynamic> json) => _InboxThread(
   id: json['id'] as String,
-  senderId: json['senderId'] as String,
+  senderId: json['senderId'] as String?,
   clientId: json['clientId'] as String,
+  channelType: json['channelType'] as String?,
   status: json['status'] as String? ?? 'open',
   assignedUserId: json['assignedUserId'] as String?,
   priority: json['priority'] as String? ?? 'normal',
@@ -48,6 +49,7 @@ Map<String, dynamic> _$InboxThreadToJson(_InboxThread instance) =>
       'id': instance.id,
       'senderId': instance.senderId,
       'clientId': instance.clientId,
+      'channelType': instance.channelType,
       'status': instance.status,
       'assignedUserId': instance.assignedUserId,
       'priority': instance.priority,
