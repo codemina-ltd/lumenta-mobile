@@ -1152,4 +1152,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get channelEmail => 'Email';
+
+  @override
+  String get channelHumanAgentLabel => 'إرسال كوكيل بشري (نافذة 7 أيام)';
+
+  @override
+  String get channelWindowClosed =>
+      'أُغلقت نافذة المراسلة. يمكنك الرد بعد أن يراسلك العميل مرة أخرى.';
+
+  @override
+  String get channelSendFailed => 'فشل الإرسال. يرجى المحاولة مرة أخرى.';
 }

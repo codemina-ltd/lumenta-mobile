@@ -2235,6 +2235,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email'**
   String get channelEmail;
+
+  /// No description provided for @channelHumanAgentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Send as human agent (7-day window)'**
+  String get channelHumanAgentLabel;
+
+  /// No description provided for @channelWindowClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'The messaging window has closed. You can reply after the customer messages you again.'**
+  String get channelWindowClosed;
+
+  /// No description provided for @channelSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending failed. Please try again.'**
+  String get channelSendFailed;
 }
 
 class _AppLocalizationsDelegate

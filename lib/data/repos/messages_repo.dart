@@ -88,6 +88,27 @@ class MessagesRepo {
     return Message.fromJson(res.data!);
   }
 
+  /// `POST /messages/channel-send` — free-form text reply on a non-WhatsApp
+  /// (Instagram DM / Messenger) inbox thread. The messaging window is
+  /// enforced server-side: 422 `MESSAGING_WINDOW_EXPIRED` once closed.
+  /// [humanAgent] sends with the HUMAN_AGENT tag, allowed up to 7 days after
+  /// the customer's last message.
+  Future<Message> sendChannelText({
+    required String threadId,
+    required String body,
+    bool humanAgent = false,
+  }) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/messages/channel-send',
+      data: {
+        'threadId': threadId,
+        'body': body,
+        if (humanAgent) 'humanAgent': true,
+      },
+    );
+    return Message.fromJson(res.data!);
+  }
+
   /// `POST /messages/templates` — send an approved template by internal id.
   ///
   /// Mirrors the portal's `sendTemplateMessage`: `templateVariables` keys are

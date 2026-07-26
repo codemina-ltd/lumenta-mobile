@@ -418,5 +418,8 @@
   "channelInstagram": "Instagram",
   "channelMessenger": "Messenger",
   "channelSms": "SMS",
-  "channelEmail": "Email"
+  "channelEmail": "Email",
+  "channelHumanAgentLabel": "إرسال كوكيل بشري (نافذة 7 أيام)",
+  "channelWindowClosed": "أُغلقت نافذة المراسلة. يمكنك الرد بعد أن يراسلك العميل مرة أخرى.",
+  "channelSendFailed": "فشل الإرسال. يرجى المحاولة مرة أخرى."
 }

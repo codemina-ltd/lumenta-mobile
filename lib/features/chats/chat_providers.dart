@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers.dart';
+import '../../data/models/channel_thread.dart';
 import '../../data/models/client.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/inbox_thread.dart';
@@ -27,6 +28,15 @@ final clientProvider = FutureProvider.autoDispose.family<Client, String>((
 final conversationSendersProvider = FutureProvider.autoDispose
     .family<List<ConversationSender>, String>((ref, clientId) async {
       return ref.read(messagesRepoProvider).conversationSenders(clientId);
+    });
+
+/// The client's non-WhatsApp (Instagram/Messenger) threads — most recently
+/// active first. Non-empty for channel-only (phone-less) contacts, where it
+/// powers the channel reply composer. Invalidated by [ThreadController] after
+/// a channel send so the window state stays fresh.
+final clientChannelThreadsProvider = FutureProvider.autoDispose
+    .family<List<ChannelThread>, String>((ref, clientId) async {
+      return ref.read(inboxRepoProvider).channelThreads(clientId);
     });
 
 /// All tenant senders (composer binding + "Start conversation via…").

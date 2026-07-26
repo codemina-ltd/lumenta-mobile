@@ -27,6 +27,7 @@ import 'thread_controller.dart';
 import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/audio_bubble.dart';
+import 'widgets/channel_composer.dart';
 import 'widgets/chat_composer.dart';
 import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
@@ -383,21 +384,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           ),
           if (clientAsync.hasValue && threadKey != null && !state.loading)
             // Channel-only contacts (Instagram/Messenger) have no phone
-            // number, so WhatsApp sends are impossible — replace the composer
-            // with a "reply from the portal" hint.
+            // number, so WhatsApp sends are impossible — reply on their most
+            // recent channel thread instead (text only; falls back to the
+            // "reply from the portal" hint when no channel thread exists).
             if (clientAsync.value!.phoneNumber == null)
-              Padding(
-                padding: const EdgeInsets.all(Insets.lg),
-                child: Center(
-                  child: Text(
-                    AppLocalizations.of(context).noPhoneChannelContact,
-                    textAlign: TextAlign.center,
-                    style: context.text.bodySmall?.copyWith(
-                      color: context.scheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              )
+              _channelReplyArea(context, threadKey)
             else
               ChatComposer(
                 threadKey: threadKey,
@@ -424,6 +415,37 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               ),
         ],
       ),
+    );
+  }
+
+  /// Composer area for a phone-less (channel-only) contact: a text-only
+  /// channel composer bound to the client's most recent IG/Messenger thread.
+  /// While the threads load — or when there are none — the static "reply
+  /// from the portal" hint keeps the previous behavior.
+  Widget _channelReplyArea(BuildContext context, ThreadKey threadKey) {
+    final threads = ref
+        .watch(clientChannelThreadsProvider(widget.clientId))
+        .asData
+        ?.value;
+    if (threads == null || threads.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(Insets.lg),
+        child: Center(
+          child: Text(
+            AppLocalizations.of(context).noPhoneChannelContact,
+            textAlign: TextAlign.center,
+            style: context.text.bodySmall?.copyWith(
+              color: context.scheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      );
+    }
+    // Most recently active thread first (API orders by updatedAt DESC).
+    return ChannelComposer(
+      threadKey: threadKey,
+      thread: threads.first,
+      onSent: _scrollToBottom,
     );
   }
 
@@ -849,7 +871,10 @@ class _MessageBubble extends ConsumerWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (channel != null) ...[
+        // Only non-WhatsApp channels get an icon — the API defaults
+        // channel_type to 'whatsapp' on every message, so gating on non-null
+        // alone would paint a glyph on every bubble for every tenant.
+        if (channel != null && channel != 'whatsapp') ...[
           Icon(_channelIcon(channel), size: 11, color: _channelColor(channel)),
           const SizedBox(width: 3),
         ],

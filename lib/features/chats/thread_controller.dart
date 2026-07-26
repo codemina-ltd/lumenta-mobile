@@ -124,6 +124,35 @@ class ThreadController extends Notifier<ThreadState> {
     }
   }
 
+  /// Free-form text reply on a non-WhatsApp channel thread (IG/Messenger),
+  /// with an optimistic bubble. Returns the failure (if any) so the UI can
+  /// distinguish a closed window (422 `MESSAGING_WINDOW_EXPIRED`) from other
+  /// errors.
+  Future<Object?> sendChannelText({
+    required String threadId,
+    required String body,
+    bool humanAgent = false,
+  }) async {
+    final temp = _optimistic(body: body, type: MessageType.text);
+    _insert(temp);
+    try {
+      final sent = await ref
+          .read(messagesRepoProvider)
+          .sendChannelText(
+            threadId: threadId,
+            body: body,
+            humanAgent: humanAgent,
+          );
+      _replace(temp.id, sent);
+      // Refresh the window state (lastOutboundAt moved) for the composer.
+      ref.invalidate(clientChannelThreadsProvider(clientId));
+      return null;
+    } catch (e) {
+      _markFailed(temp.id);
+      return e;
+    }
+  }
+
   /// Send an approved template with an optimistic bubble. Unlike free-text,
   /// this works regardless of the 24h service window. Returns the failure (if
   /// any) so the UI can surface the provider error (e.g. Meta code 131049).

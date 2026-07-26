@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../models/channel_thread.dart';
 import '../models/inbox_note.dart';
 import '../models/inbox_thread.dart';
 import '../models/paginated.dart';
@@ -37,6 +38,19 @@ class InboxRepo {
       },
     );
     return Paginated.fromJson(res.data!, InboxThread.fromJson);
+  }
+
+  /// `GET /inbox/clients/:clientId/channel-threads` — the client's
+  /// non-WhatsApp (Instagram/Messenger) threads, one per connected channel
+  /// account, most recently active first. Backs the channel reply composer
+  /// for phone-less contacts.
+  Future<List<ChannelThread>> channelThreads(String clientId) async {
+    final res = await _dio.get<List<dynamic>>(
+      '/inbox/clients/$clientId/channel-threads',
+    );
+    return (res.data ?? const [])
+        .map((e) => ChannelThread.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// `GET /inbox/threads/:id` — a single thread with labels + contact.

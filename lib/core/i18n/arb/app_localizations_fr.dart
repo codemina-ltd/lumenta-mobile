@@ -1162,4 +1162,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get channelEmail => 'Email';
+
+  @override
+  String get channelHumanAgentLabel =>
+      'Envoyer en tant qu\'agent humain (fenêtre de 7 jours)';
+
+  @override
+  String get channelWindowClosed =>
+      'La fenêtre de messagerie est fermée. Vous pourrez répondre lorsque le client vous écrira à nouveau.';
+
+  @override
+  String get channelSendFailed => 'Échec de l\'envoi. Veuillez réessayer.';
 }

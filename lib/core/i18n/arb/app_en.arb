@@ -428,5 +428,8 @@
   "channelInstagram": "Instagram",
   "channelMessenger": "Messenger",
   "channelSms": "SMS",
-  "channelEmail": "Email"
+  "channelEmail": "Email",
+  "channelHumanAgentLabel": "Send as human agent (7-day window)",
+  "channelWindowClosed": "The messaging window has closed. You can reply after the customer messages you again.",
+  "channelSendFailed": "Sending failed. Please try again."
 }
