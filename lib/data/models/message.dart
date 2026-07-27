@@ -195,6 +195,25 @@ abstract class Message with _$Message {
     return trimmed.isEmpty ? null : trimmed;
   }
 
+  /// Titles of the native quick replies a chatbot MENU step offered on an
+  /// outbound IG/Messenger message (`channel_payload.quick_replies`, an
+  /// array of `{title, payload}`). Only the titles matter for display — the
+  /// bubble shows them as non-interactive chips so the agent can see the
+  /// options presented to the customer. Malformed entries are skipped; null
+  /// when the payload has no (usable) quick replies.
+  List<String>? get quickReplies {
+    final raw = channelPayload?['quick_replies'];
+    if (raw is! List) return null;
+    final titles = raw
+        .whereType<Map>()
+        .map((e) => e['title'])
+        .whereType<String>()
+        .map((t) => t.trim())
+        .where((t) => t.isNotEmpty)
+        .toList();
+    return titles.isEmpty ? null : titles;
+  }
+
   bool get hasReaction => reaction != null && reaction!.isNotEmpty;
   bool get isDeleted => deletedForEveryoneAt != null;
 

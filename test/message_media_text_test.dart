@@ -87,4 +87,57 @@ void main() {
       expect(email(channelType: null, subject: 'Hello').emailSubject, isNull);
     });
   });
+
+  group('Message.quickReplies', () {
+    Message withPayload(Map<String, dynamic>? payload) => Message(
+      id: 'm1',
+      direction: MessageDirection.outbound,
+      body: 'Pick an option',
+      channelType: 'instagram',
+      channelPayload: payload,
+      createdAt: '2026-07-27T10:00:00Z',
+    );
+
+    test('reads the offered titles, trimmed', () {
+      expect(
+        withPayload({
+          'quick_replies': [
+            {'title': ' Pricing ', 'payload': 'MENU_1'},
+            {'title': 'Support', 'payload': 'MENU_2'},
+          ],
+        }).quickReplies,
+        ['Pricing', 'Support'],
+      );
+    });
+
+    test('null when the payload carries no usable quick replies', () {
+      expect(withPayload(null).quickReplies, isNull);
+      expect(withPayload({'quick_replies': []}).quickReplies, isNull);
+      expect(withPayload({'quick_replies': 'nope'}).quickReplies, isNull);
+      expect(
+        withPayload({
+          'quick_replies': [
+            {'payload': 'MENU_1'},
+            {'title': '   '},
+            {'title': 7},
+            'garbage',
+          ],
+        }).quickReplies,
+        isNull,
+      );
+    });
+
+    test('malformed entries are skipped, not fatal', () {
+      expect(
+        withPayload({
+          'quick_replies': [
+            {'payload': 'MENU_1'},
+            {'title': 'Talk to a human', 'payload': 'MENU_2'},
+            'garbage',
+          ],
+        }).quickReplies,
+        ['Talk to a human'],
+      );
+    });
+  });
 }

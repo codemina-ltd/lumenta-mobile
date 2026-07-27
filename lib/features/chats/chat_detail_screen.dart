@@ -35,6 +35,7 @@ import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
 import 'widgets/order_bubble.dart';
 import 'widgets/product_bubble.dart';
+import 'widgets/quick_reply_chips.dart';
 import 'widgets/scheduled_message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
@@ -896,9 +897,14 @@ class _MessageBubble extends ConsumerWidget {
     // the portal's email bubble. Direction resolved per string so an Arabic
     // subject lays out RTL above a Latin body (and vice versa).
     final subject = message.emailSubject;
+    // Story context (D2): an inbound IG story reply/mention gets a small
+    // quoted header above the body, mirroring how the customer saw it.
+    final story = message.storyContext;
     final inner = _typedContent(context, ref, textColor);
+
+    Widget content;
     if (subject != null) {
-      return Column(
+      content = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -916,19 +922,32 @@ class _MessageBubble extends ConsumerWidget {
           inner,
         ],
       );
+    } else if (story != null) {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _StoryContextHeader(story: story, textColor: textColor),
+          const SizedBox(height: 6),
+          inner,
+        ],
+      );
+    } else {
+      content = inner;
     }
 
-    // Story context (D2): an inbound IG story reply/mention gets a small
-    // quoted header above the body, mirroring how the customer saw it.
-    final story = message.storyContext;
-    if (story == null) return inner;
+    // Native quick replies a chatbot MENU step offered on IG/Messenger —
+    // display-only chips under the prompt so the agent sees the options
+    // shown to the customer (mirrors the portal's ChatBubble chips).
+    final quickReplies = message.isOutbound ? message.quickReplies : null;
+    if (quickReplies == null) return content;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _StoryContextHeader(story: story, textColor: textColor),
-        const SizedBox(height: 6),
-        inner,
+        content,
+        const SizedBox(height: 8),
+        QuickReplyChips(titles: quickReplies, textColor: textColor),
       ],
     );
   }
