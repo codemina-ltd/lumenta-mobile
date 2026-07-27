@@ -4,13 +4,17 @@ import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../data/models/channel_thread.dart';
 import '../../../data/models/conversation_sender.dart';
 import '../../../data/models/sender.dart';
+import 'channel_indicator.dart';
 
 /// Per-sender thread bar under the chat header: one pill per sender that has
 /// history with this client (plus the active sender when it has none yet),
-/// and a trailing "+" that starts a conversation via a sender without
-/// history. Mobile counterpart of the portal's `SenderThreadTabs`.
+/// one pill per non-WhatsApp channel thread (channel icon + account name,
+/// after the WhatsApp senders), and a trailing "+" that starts a conversation
+/// via a sender without history. Mobile counterpart of the portal's
+/// `SenderThreadTabs`.
 class SenderThreadBar extends StatelessWidget {
   const SenderThreadBar({
     super.key,
@@ -18,12 +22,23 @@ class SenderThreadBar extends StatelessWidget {
     required this.senders,
     required this.activeSenderId,
     required this.onSelect,
+    this.channelThreads = const [],
+    this.activeChannelThreadId,
+    this.onSelectChannel,
   });
 
   final List<ConversationSender> conversationSenders;
   final List<Sender> senders;
   final String? activeSenderId;
   final ValueChanged<String> onSelect;
+
+  /// The client's non-WhatsApp channel threads — one pill each, rendered
+  /// after the WhatsApp sender pills.
+  final List<ChannelThread> channelThreads;
+
+  /// The selected channel thread; non-null overrides [activeSenderId].
+  final String? activeChannelThreadId;
+  final ValueChanged<String>? onSelectChannel;
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +92,17 @@ class SenderThreadBar extends StatelessWidget {
                   for (final tab in tabs) ...[
                     _SenderPill(
                       tab: tab,
-                      selected: tab.senderId == activeSenderId,
+                      selected: activeChannelThreadId == null &&
+                          tab.senderId == activeSenderId,
                       onTap: () => onSelect(tab.senderId),
+                    ),
+                    const SizedBox(width: Insets.sm),
+                  ],
+                  for (final ct in channelThreads) ...[
+                    _ChannelPill(
+                      thread: ct,
+                      selected: ct.id == activeChannelThreadId,
+                      onTap: () => onSelectChannel?.call(ct.id),
                     ),
                     const SizedBox(width: Insets.sm),
                   ],
@@ -228,6 +252,84 @@ class _SenderPill extends StatelessWidget {
                 if (tab.isDefault) ...[
                   const SizedBox(width: Insets.sm),
                   const _DefaultTag(),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A non-WhatsApp channel thread pill: channel icon + account display name
+/// (falling back to the localized channel name). An inactive channel account
+/// stays tappable — the thread is readable; only the composer disables
+/// itself (handled by ChannelComposer's window/account state).
+class _ChannelPill extends StatelessWidget {
+  const _ChannelPill({
+    required this.thread,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final ChannelThread thread;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final label = (thread.accountDisplayName?.trim().isNotEmpty ?? false)
+        ? thread.accountDisplayName!
+        : channelLabel(l10n, thread.channelType);
+    final active = thread.accountStatus == 'active';
+
+    return Opacity(
+      opacity: active ? 1 : 0.55,
+      child: Material(
+        color: selected
+            ? AppColors.signalTint
+            : context.scheme.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Radii.pill),
+          side: selected
+              ? const BorderSide(color: AppColors.signal)
+              : BorderSide.none,
+        ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.pill),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Insets.md,
+              vertical: 6,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  channelIcon(thread.channelType),
+                  size: 14,
+                  color: channelColor(thread.channelType),
+                ),
+                const SizedBox(width: Insets.xs),
+                Text(
+                  label,
+                  style: context.text.labelLarge?.copyWith(
+                    color: selected
+                        ? AppColors.signalDeep
+                        : context.scheme.onSurface,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                ),
+                if (!active) ...[
+                  const SizedBox(width: Insets.xs),
+                  Icon(
+                    Icons.do_not_disturb_on_outlined,
+                    size: 14,
+                    color: context.scheme.onSurfaceVariant,
+                  ),
                 ],
               ],
             ),

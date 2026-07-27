@@ -204,7 +204,11 @@ Future<void> _edit(
       messenger.showSnackBar(SnackBar(content: Text(l10n.inboxActionFailed)));
       return;
     }
-    final threadKey = (clientId: clientId, senderId: scheduledMessage.senderId);
+    final threadKey = (
+      clientId: clientId,
+      senderId: scheduledMessage.senderId,
+      channelAccountId: null,
+    );
     final saved = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         builder: (_) => TemplateFillScreen(

@@ -9,6 +9,7 @@ import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../data/models/channel_thread.dart';
 import '../thread_controller.dart';
+import 'channel_indicator.dart';
 
 /// Reply composer for a non-WhatsApp channel thread (Instagram DM /
 /// Messenger) — the send path for channel-only (phone-less) contacts.
@@ -65,22 +66,6 @@ class _ChannelComposerState extends ConsumerState<ChannelComposer> {
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  /// Localized channel name for the "Sending as …" caption fallback.
-  static String _channelLabel(AppLocalizations l10n, String channel) {
-    switch (channel) {
-      case 'instagram':
-        return l10n.channelInstagram;
-      case 'messenger':
-        return l10n.channelMessenger;
-      case 'sms':
-        return l10n.channelSms;
-      case 'email':
-        return l10n.channelEmail;
-      default:
-        return l10n.channelWhatsapp;
-    }
   }
 
   /// The server rejects out-of-window sends with 422 MESSAGING_WINDOW_EXPIRED
@@ -173,7 +158,7 @@ class _ChannelComposerState extends ConsumerState<ChannelComposer> {
 
     final accountLabel = (thread.accountDisplayName?.trim().isNotEmpty ?? false)
         ? thread.accountDisplayName!
-        : _channelLabel(l10n, thread.channelType);
+        : channelLabel(l10n, thread.channelType);
     final canSend = windowOpen || _humanAgent;
 
     return DecoratedBox(

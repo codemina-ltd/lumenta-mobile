@@ -109,6 +109,12 @@ abstract class Message with _$Message {
     /// 'email'); null on legacy rows written before channel attribution.
     String? channelType,
 
+    /// Channel account that carried a non-WhatsApp message (the channel
+    /// counterpart of [senderId]) — matches [ChannelThread.channelAccountId],
+    /// which is how the chat channel tabs map a message to its thread. Null
+    /// on legacy rows written before channel attribution.
+    String? channelAccountId,
+
     /// Channel-specific metadata the IG/Messenger webhook handler stores on
     /// inbound rows: `story_context` (`{kind: 'reply'|'mention', story_id,
     /// story_url}`), raw `attachments`, `postback`, `quick_reply`. Null on

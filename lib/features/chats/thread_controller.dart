@@ -9,8 +9,13 @@ import 'chat_providers.dart';
 import 'chats_controller.dart';
 
 /// Identifies one thread scope: a client, optionally narrowed to one sender
-/// (per-sender thread tabs). `senderId == null` is the full merged thread.
-typedef ThreadKey = ({String clientId, String? senderId});
+/// (per-sender thread tabs) or to one non-WhatsApp channel account (channel
+/// tabs) — never both. Both null is the full merged thread.
+typedef ThreadKey = ({
+  String clientId,
+  String? senderId,
+  String? channelAccountId,
+});
 
 @immutable
 class ThreadState {
@@ -68,6 +73,12 @@ class ThreadController extends Notifier<ThreadState> {
   /// in the merged single-sender thread, where the default fallback is right.
   String? get senderId => key.senderId;
 
+  /// Channel account scoping this thread to one non-WhatsApp channel tab;
+  /// null on WhatsApp/merged scopes. Sends on this scope go through
+  /// [sendChannelText] (bound to the channel thread id), never the WhatsApp
+  /// send paths.
+  String? get channelAccountId => key.channelAccountId;
+
   final Map<String, Message> _byId = {};
 
   Future<void> refresh() async {
@@ -86,7 +97,12 @@ class ThreadController extends Notifier<ThreadState> {
     try {
       final result = await ref
           .read(messagesRepoProvider)
-          .thread(clientId, page: page, senderId: senderId);
+          .thread(
+            clientId,
+            page: page,
+            senderId: senderId,
+            channelAccountId: channelAccountId,
+          );
       for (final m in result.data) {
         _byId[m.id] = m;
       }

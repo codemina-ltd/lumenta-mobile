@@ -50,6 +50,7 @@ class _FakeMessages extends MessagesRepo {
     int page = 1,
     int limit = 30,
     String? senderId,
+    String? channelAccountId,
   }) async => const Paginated<Message>(
     data: [],
     total: 0,

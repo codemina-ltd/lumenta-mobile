@@ -15,6 +15,7 @@ import '../../core/providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
+import '../../data/models/channel_thread.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/message.dart';
 import '../../data/models/scheduled_message.dart';
@@ -81,6 +82,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   /// the most recent conversation sender (or the tenant default) wins.
   String? _selectedSenderId;
 
+  /// The user's explicit channel-tab choice; non-null overrides the sender
+  /// scope entirely (mirrors the portal's `?channel=` param).
+  String? _selectedChannelThreadId;
+
+  /// Whether the user tapped any tab yet. Until they do — and unless the
+  /// navigation deep-linked to a message — the auto-select peek
+  /// ([autoSelectChannelThreadProvider]) may land the chat on the channel tab
+  /// carrying the client's most recent inbound message.
+  bool _tabPicked = false;
+
   /// Resolved thread scope the scroll listener reads; null until the sender
   /// lookups settle so the first thread fetch is already correctly scoped.
   ThreadKey? _threadKey;
@@ -146,11 +157,17 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     }
 
     // Ask the API which page holds the message so a very deep target is
-    // declined up front instead of paging 15 times for nothing.
+    // declined up front instead of paging 15 times for nothing. Scoped like
+    // the thread fetches so the page number matches the pages we'll load.
     try {
       final page = await ref
           .read(messagesRepoProvider)
-          .messagePage(key.clientId, id);
+          .messagePage(
+            key.clientId,
+            id,
+            senderId: key.senderId,
+            channelAccountId: key.channelAccountId,
+          );
       if (page > 15) {
         abandon(tooFar: true);
         return;
@@ -262,16 +279,47 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         (sendersAsync.hasValue || sendersAsync.hasError);
     final convSenders = convAsync.value ?? const <ConversationSender>[];
     final senders = sendersAsync.value ?? const <Sender>[];
-    final showTabs =
+
+    // ── Channel tabs (omnichannel) ──────────────────────────────────────
+    // The client's non-WhatsApp threads (already feature-flag filtered) plus
+    // the auto-select peek: unless the navigation deep-linked to a message
+    // or the user picked a tab, land on the channel tab carrying the
+    // client's most recent inbound message (portal parity). Both must
+    // settle before the first thread fetch so it's already correctly
+    // scoped; failures degrade to the sender scope.
+    final channelAsync = ref.watch(
+      clientChannelThreadsProvider(widget.clientId),
+    );
+    final channelThreads = channelAsync.value ?? const <ChannelThread>[];
+    final autoAsync = widget.highlightMessageId == null
+        ? ref.watch(autoSelectChannelThreadProvider(widget.clientId))
+        : const AsyncValue<String?>.data(null);
+    final channelsReady =
+        (channelAsync.hasValue || channelAsync.hasError) &&
+        (autoAsync.hasValue || autoAsync.hasError);
+
+    ChannelThread? activeChannelThread;
+    if (channelThreads.isNotEmpty) {
+      final selectedId = _tabPicked
+          ? _selectedChannelThreadId
+          : autoAsync.value;
+      activeChannelThread = channelThreads
+          .where((t) => t.id == selectedId)
+          .firstOrNull;
+    }
+
+    // A phone-less (channel-only) contact can't receive WhatsApp sends, so
+    // the sender pills' "start via …" affordances would all dead-end — hide
+    // them (audit item 12); its channel pills still render.
+    final showSenderTabs =
         sendersReady &&
         (convSenders.length > 1 || senders.length > 1) &&
-        // A phone-less (channel-only) contact can't receive WhatsApp sends,
-        // so the sender bar's "start via …" affordances would all dead-end —
-        // hide it and keep the merged thread (audit item 12).
         !(clientAsync.hasValue && clientAsync.value!.phoneNumber == null);
+    final showTabs =
+        (showSenderTabs && channelsReady) || channelThreads.isNotEmpty;
 
     String? activeSenderId;
-    if (showTabs) {
+    if (showSenderTabs) {
       final selected = _selectedSenderId;
       activeSenderId =
           (selected != null &&
@@ -289,8 +337,18 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         .where((c) => c.senderId == activeSenderId)
         .firstOrNull;
 
-    final threadKey = sendersReady
-        ? (clientId: widget.clientId, senderId: activeSenderId)
+    final ThreadKey? threadKey = (sendersReady && channelsReady)
+        ? (activeChannelThread != null
+              ? (
+                  clientId: widget.clientId,
+                  senderId: null,
+                  channelAccountId: activeChannelThread.channelAccountId,
+                )
+              : (
+                  clientId: widget.clientId,
+                  senderId: activeSenderId,
+                  channelAccountId: null,
+                ))
         : null;
     if (threadKey != _threadKey) {
       // Scope changed (tab click or initial resolution): re-run the
@@ -375,17 +433,30 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             ],
           ),
         ),
-        actions: [if (threadKey != null) ..._threadActions(context, threadKey)],
+        actions: [
+          if (threadKey != null)
+            ..._threadActions(context, threadKey, activeChannelThread?.id),
+        ],
       ),
       body: Column(
         children: [
           LiveCallBanner(clientId: widget.clientId),
           if (showTabs)
             SenderThreadBar(
-              conversationSenders: convSenders,
-              senders: senders,
+              conversationSenders: showSenderTabs ? convSenders : const [],
+              senders: showSenderTabs ? senders : const [],
               activeSenderId: activeSenderId,
-              onSelect: (id) => setState(() => _selectedSenderId = id),
+              onSelect: (id) => setState(() {
+                _tabPicked = true;
+                _selectedSenderId = id;
+                _selectedChannelThreadId = null;
+              }),
+              channelThreads: channelThreads,
+              activeChannelThreadId: activeChannelThread?.id,
+              onSelectChannel: (id) => setState(() {
+                _tabPicked = true;
+                _selectedChannelThreadId = id;
+              }),
             ),
           Expanded(
             child: threadKey == null
@@ -393,11 +464,19 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 : _body(context, state, threadKey, scheduled),
           ),
           if (clientAsync.hasValue && threadKey != null && !state.loading)
-            // Channel-only contacts (Instagram/Messenger) have no phone
-            // number, so WhatsApp sends are impossible — reply on their most
-            // recent channel thread instead (text only; falls back to the
-            // "reply from the portal" hint when no channel thread exists).
-            if (clientAsync.value!.phoneNumber == null)
+            // An active channel tab binds the (text-only) channel composer
+            // to that thread. Otherwise: channel-only contacts have no
+            // phone number, so WhatsApp sends are impossible — reply on
+            // their most recent channel thread instead (falls back to the
+            // "reply from the portal" hint when no channel thread exists);
+            // contacts with a phone get the WhatsApp composer.
+            if (activeChannelThread != null)
+              ChannelComposer(
+                threadKey: threadKey,
+                thread: activeChannelThread,
+                onSent: _scrollToBottom,
+              )
+            else if (clientAsync.value!.phoneNumber == null)
               _channelReplyArea(context, threadKey)
             else
               ChatComposer(
@@ -413,14 +492,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     chatScheduledMessagesProvider(threadKey.clientId),
                   );
                 },
-                senderLabel: showTabs
+                senderLabel: showSenderTabs
                     ? (activeSender?.label ?? activeConv?.label)
                     : null,
-                senderNumber: showTabs
+                senderNumber: showSenderTabs
                     ? (activeSender?.number ?? activeConv?.displayPhoneNumber)
                     : null,
                 senderActive:
-                    !showTabs ||
+                    !showSenderTabs ||
                     (activeSender?.isActive ?? activeConv?.isActive ?? true),
               ),
         ],
@@ -462,8 +541,24 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   /// App-bar actions that operate on the Team Inbox thread behind this chat
   /// (internal note + assign to team member). They only appear once that
   /// thread resolves (a chat with no messages has no thread to act on).
-  List<Widget> _threadActions(BuildContext context, ThreadKey threadKey) {
-    final thread = ref.watch(chatInboxThreadProvider(threadKey)).asData?.value;
+  /// An active channel tab IS an inbox thread — act on it directly instead
+  /// of guessing via the client's most recent thread.
+  List<Widget> _threadActions(
+    BuildContext context,
+    ThreadKey threadKey,
+    String? channelThreadId,
+  ) {
+    final thread = channelThreadId != null
+        ? ref.watch(inboxThreadByIdProvider(channelThreadId)).asData?.value
+        : ref
+              .watch(
+                chatInboxThreadProvider((
+                  clientId: threadKey.clientId,
+                  senderId: threadKey.senderId,
+                )),
+              )
+              .asData
+              ?.value;
     if (thread == null) return const [];
     return [
       IconButton(

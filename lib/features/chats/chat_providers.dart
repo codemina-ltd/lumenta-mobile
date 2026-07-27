@@ -8,6 +8,7 @@ import '../../data/models/channel_thread.dart';
 import '../../data/models/client.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/inbox_thread.dart';
+import '../../data/models/message.dart';
 import '../../data/models/scheduled_message.dart';
 import '../../data/models/sender.dart';
 import '../../data/models/template.dart';
@@ -55,6 +56,42 @@ final clientChannelThreadsProvider = FutureProvider.autoDispose
           .toList();
     });
 
+/// The channel thread tab to auto-select when the chat opens — mirrors the
+/// portal's ChatDetail auto-select: peek at the merged thread's first page
+/// and, when the client's most recent inbound message arrived on a
+/// non-WhatsApp channel, land on that channel's tab instead of the default
+/// WhatsApp sender. Null (no extra fetch) when the client has no channel
+/// threads; null on any failure so the chat falls back to the sender scope.
+final autoSelectChannelThreadProvider = FutureProvider.autoDispose
+    .family<String?, String>((ref, clientId) async {
+      try {
+        final threads = await ref.watch(
+          clientChannelThreadsProvider(clientId).future,
+        );
+        if (threads.isEmpty) return null;
+        final page = await ref
+            .read(messagesRepoProvider)
+            .thread(clientId, limit: 20);
+        final latest = page.data.isEmpty
+            ? null
+            : page.data.firstWhere(
+                (m) => m.direction == MessageDirection.inbound,
+                orElse: () => page.data.first,
+              );
+        if (latest == null ||
+            latest.channelType == null ||
+            latest.channelType == 'whatsapp') {
+          return null;
+        }
+        return threads
+            .where((t) => t.channelAccountId == latest.channelAccountId)
+            .firstOrNull
+            ?.id;
+      } catch (_) {
+        return null;
+      }
+    });
+
 /// All tenant senders (composer binding + "Start conversation via…").
 /// Re-created whenever the active tenant changes, so the list re-scopes.
 final tenantSendersProvider = FutureProvider.autoDispose<List<Sender>>((
@@ -78,6 +115,15 @@ final chatInboxThreadProvider = FutureProvider.autoDispose
           .read(inboxRepoProvider)
           .threads(clientId: key.clientId, senderId: key.senderId, limit: 1);
       return page.data.isEmpty ? null : page.data.first;
+    });
+
+/// A single Team Inbox thread by id — the channel-tab counterpart of
+/// [chatInboxThreadProvider]: a channel thread IS an inbox thread, so the
+/// app-bar note/assign actions act on it directly instead of guessing via
+/// the client's most recent thread.
+final inboxThreadByIdProvider = FutureProvider.autoDispose
+    .family<InboxThread, String>((ref, threadId) async {
+      return ref.read(inboxRepoProvider).thread(threadId);
     });
 
 /// Template detail behind an outbound template message — drives the rich
