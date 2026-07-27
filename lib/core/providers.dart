@@ -9,6 +9,7 @@ import '../data/repos/clients_repo.dart';
 import '../data/repos/commerce_repo.dart';
 import '../data/repos/contacts_repo.dart';
 import '../data/repos/device_repo.dart';
+import '../data/repos/features_repo.dart';
 import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
@@ -88,4 +89,7 @@ final sendersRepoProvider = Provider<SendersRepo>(
 );
 final deviceRepoProvider = Provider<DeviceRepo>(
   (ref) => DeviceRepo(ref.watch(dioProvider)),
+);
+final featuresRepoProvider = Provider<FeaturesRepo>(
+  (ref) => FeaturesRepo(ref.watch(dioProvider)),
 );

@@ -13,6 +13,7 @@ import '../../data/models/sender.dart';
 import '../../data/models/template.dart';
 import '../../data/repos/commerce_repo.dart';
 import '../auth/auth_controller.dart';
+import '../shared/tenant_features.dart';
 
 /// Single client for the chat header (cached per client id).
 final clientProvider = FutureProvider.autoDispose.family<Client, String>((
@@ -30,13 +31,28 @@ final conversationSendersProvider = FutureProvider.autoDispose
       return ref.read(messagesRepoProvider).conversationSenders(clientId);
     });
 
-/// The client's non-WhatsApp (Instagram/Messenger) threads — most recently
-/// active first. Non-empty for channel-only (phone-less) contacts, where it
-/// powers the channel reply composer. Invalidated by [ThreadController] after
-/// a channel send so the window state stays fresh.
+/// The client's non-WhatsApp (Instagram/Messenger/SMS/email) threads — most
+/// recently active first. Powers the chat channel tabs and the channel reply
+/// composer. Invalidated by [ThreadController] after a channel send so the
+/// window state stays fresh.
+///
+/// Feature flags (audit item D6) refine the data-gating: threads on a channel
+/// the tenant's plan/operator disabled are dropped, so no tab or composer
+/// affordance surfaces for them. When the flags fetch fails, the data-gating
+/// stands alone (fail-open — see [channelFeatureEnabled]).
 final clientChannelThreadsProvider = FutureProvider.autoDispose
     .family<List<ChannelThread>, String>((ref, clientId) async {
-      return ref.read(inboxRepoProvider).channelThreads(clientId);
+      Map<String, bool>? flags;
+      try {
+        flags = await ref.watch(tenantFeaturesProvider.future);
+      } catch (_) {
+        flags = null; // Flags unavailable — fall back to data-gating.
+      }
+      if (allChannelFeaturesDisabled(flags)) return const [];
+      final threads = await ref.read(inboxRepoProvider).channelThreads(clientId);
+      return threads
+          .where((t) => channelFeatureEnabled(flags, t.channelType))
+          .toList();
     });
 
 /// All tenant senders (composer binding + "Start conversation via…").

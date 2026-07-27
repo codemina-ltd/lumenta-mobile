@@ -10,6 +10,7 @@ import '../auth/auth_controller.dart';
 import '../notifications/notifications_controller.dart';
 import '../push/push_service.dart';
 import '../reminders/reminders_controller.dart';
+import '../shared/tenant_features.dart';
 import 'app_nav_bar.dart';
 
 /// App chrome for the three primary tabs: app bar (workspace switch + logout)
@@ -23,6 +24,9 @@ class HomeShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final auth = ref.watch(authControllerProvider);
+    // Kick off (and keep warm) the tenant feature flags as soon as the shell
+    // mounts — chat/inbox screens read them synchronously via .value.
+    ref.watch(tenantFeaturesProvider);
     final unread = ref.watch(
       notificationsControllerProvider.select((s) => s.unreadCount),
     );
