@@ -183,6 +183,18 @@ abstract class Message with _$Message {
     return ctx is Map ? Map<String, dynamic>.from(ctx) : null;
   }
 
+  /// Subject line of an email message (`channel_payload.subject`), trimmed —
+  /// rendered in bold above the quote-stripped reply [body], mirroring the
+  /// portal's email bubble. Null on non-email rows and when the payload has
+  /// no (non-empty) subject.
+  String? get emailSubject {
+    if (channelType != 'email') return null;
+    final subject = channelPayload?['subject'];
+    if (subject is! String) return null;
+    final trimmed = subject.trim();
+    return trimmed.isEmpty ? null : trimmed;
+  }
+
   bool get hasReaction => reaction != null && reaction!.isNotEmpty;
   bool get isDeleted => deletedForEveryoneAt != null;
 

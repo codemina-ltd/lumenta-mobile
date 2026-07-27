@@ -892,10 +892,35 @@ class _MessageBubble extends ConsumerWidget {
       );
     }
 
+    // Email: subject in bold above the quote-stripped reply body — mirrors
+    // the portal's email bubble. Direction resolved per string so an Arabic
+    // subject lays out RTL above a Latin body (and vice versa).
+    final subject = message.emailSubject;
+    final inner = _typedContent(context, ref, textColor);
+    if (subject != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            subject,
+            textDirection: Fmt.textDirectionFor(subject),
+            style: TextStyle(
+              color: textColor,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              height: 1.35,
+            ),
+          ),
+          const SizedBox(height: 4),
+          inner,
+        ],
+      );
+    }
+
     // Story context (D2): an inbound IG story reply/mention gets a small
     // quoted header above the body, mirroring how the customer saw it.
     final story = message.storyContext;
-    final inner = _typedContent(context, ref, textColor);
     if (story == null) return inner;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
