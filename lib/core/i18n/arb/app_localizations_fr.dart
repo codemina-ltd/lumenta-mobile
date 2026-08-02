@@ -766,6 +766,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clientDetailTitle => 'Détails du client';
 
   @override
+  String get clientDetailGroupProfile => 'Profil & équipe';
+
+  @override
+  String get clientDetailGroupActivity => 'Activité';
+
+  @override
+  String get clientDetailGroupCommerce => 'Marketing & commerce';
+
+  @override
   String get clientDetailLoadError =>
       'Impossible de charger ce contact. Veuillez réessayer.';
 

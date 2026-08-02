@@ -758,6 +758,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientDetailTitle => 'تفاصيل العميل';
 
   @override
+  String get clientDetailGroupProfile => 'الملف والفريق';
+
+  @override
+  String get clientDetailGroupActivity => 'النشاط';
+
+  @override
+  String get clientDetailGroupCommerce => 'التسويق والمبيعات';
+
+  @override
   String get clientDetailLoadError => 'تعذّر تحميل جهة الاتصال. حاول مرة أخرى.';
 
   @override

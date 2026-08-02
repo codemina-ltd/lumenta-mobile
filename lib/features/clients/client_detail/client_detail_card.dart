@@ -4,9 +4,10 @@ import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 
-/// Shared shell for every client-detail section — a titled card with an
-/// optional leading icon and trailing action, mirroring the portal's Ant
-/// `Card` sections. Keeps all sections visually consistent.
+/// Shared shell for every client-detail section — a titled card with a leading
+/// icon "chip", an optional count pill and a trailing action, mirroring the
+/// portal's Ant `Card` sections. Keeps all sections visually consistent so the
+/// long profile scroll reads as one system.
 class ClientDetailCard extends StatelessWidget {
   const ClientDetailCard({
     super.key,
@@ -37,8 +38,21 @@ class ClientDetailCard extends StatelessWidget {
             Row(
               children: [
                 if (icon != null) ...[
-                  Icon(icon, size: 18, color: context.scheme.onSurfaceVariant),
-                  const SizedBox(width: Insets.sm),
+                  Container(
+                    width: 34,
+                    height: 34,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: context.scheme.surfaceContainerHigh,
+                      borderRadius: BorderRadius.circular(Radii.sm),
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 18,
+                      color: context.scheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(width: Insets.md),
                 ],
                 Flexible(
                   child: Text(
@@ -48,14 +62,9 @@ class ClientDetailCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (count != null) ...[
+                if (count != null && count! > 0) ...[
                   const SizedBox(width: Insets.sm),
-                  Text(
-                    '$count',
-                    style: context.text.labelMedium?.copyWith(
-                      color: context.scheme.onSurfaceVariant,
-                    ),
-                  ),
+                  _CountPill(count!),
                 ],
                 const Spacer(),
                 ?trailing,
@@ -64,6 +73,30 @@ class ClientDetailCard extends StatelessWidget {
             const SizedBox(height: Insets.md),
             child,
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Small neutral pill showing a section's item count next to its title.
+class _CountPill extends StatelessWidget {
+  const _CountPill(this.count);
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 1),
+      decoration: BoxDecoration(
+        color: context.scheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(Radii.pill),
+      ),
+      child: Text(
+        '$count',
+        style: context.text.labelSmall?.copyWith(
+          color: context.scheme.onSurfaceVariant,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );

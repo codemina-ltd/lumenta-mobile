@@ -1474,6 +1474,24 @@ abstract class AppLocalizations {
   /// **'Client details'**
   String get clientDetailTitle;
 
+  /// No description provided for @clientDetailGroupProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile & team'**
+  String get clientDetailGroupProfile;
+
+  /// No description provided for @clientDetailGroupActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get clientDetailGroupActivity;
+
+  /// No description provided for @clientDetailGroupCommerce.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketing & commerce'**
+  String get clientDetailGroupCommerce;
+
   /// No description provided for @clientDetailLoadError.
   ///
   /// In en, this message translates to:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/format.dart';
@@ -28,9 +29,11 @@ import 'client_suppression_card.dart';
 import 'client_team_card.dart';
 
 /// Full contact profile, reached by tapping the client name in the chat header.
-/// Mirrors the web portal's ClientDetail: a hero with key metrics, CRM profile,
-/// team ownership, internal notes, segments, campaigns, orders, recent messages
-/// and suppression. Each section owns its own query so they load independently.
+/// A collapsing brand hero carries the contact's identity and a primary
+/// "open chat" action; a unified stat strip sits beneath it, and the CRM
+/// sections are grouped (profile & team · activity · marketing & commerce) so
+/// the long scroll reads as one system. Each section owns its own query and
+/// loads independently.
 class ClientDetailScreen extends ConsumerWidget {
   const ClientDetailScreen({
     super.key,
@@ -58,52 +61,89 @@ class ClientDetailScreen extends ConsumerWidget {
     final clientAsync = ref.watch(clientProvider(clientId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.clientDetailTitle)),
       body: clientAsync.when(
-        loading: () => const SkeletonList(count: 4),
-        error: (_, _) => ErrorRetry(
+        loading: () => _LoadingScaffold(title: l10n.clientDetailTitle),
+        error: (_, _) => _ErrorScaffold(
+          title: l10n.clientDetailTitle,
           message: l10n.clientDetailLoadError,
           onRetry: () => ref.invalidate(clientProvider(clientId)),
         ),
         data: (client) {
-          final sections = <Widget>[
-            _Hero(
-              client: client,
-              onCopyPhone: () {
-                final phone = client.phoneNumber;
-                if (phone != null) {
-                  _copy(context, phone, l10n.messageCopied);
-                }
-              },
+          final groups = <({String title, List<Widget> cards})>[
+            (
+              title: l10n.clientDetailGroupProfile,
+              cards: [
+                ClientProfileCard(clientId: clientId),
+                ClientTeamCard(clientId: clientId),
+              ],
             ),
-            _MetricsGrid(clientId: clientId, client: client),
-            _CtwaBanner(clientId: clientId),
-            ClientProfileCard(clientId: clientId),
-            ClientTeamCard(clientId: clientId),
-            ClientRemindersCard(clientId: clientId),
-            ClientScheduledMessagesCard(clientId: clientId),
-            ClientNotesCard(
-              clientId: clientId,
-              highlightNoteId: highlightNoteId,
+            (
+              title: l10n.clientDetailGroupActivity,
+              cards: [
+                ClientRemindersCard(clientId: clientId),
+                ClientScheduledMessagesCard(clientId: clientId),
+                ClientNotesCard(
+                  clientId: clientId,
+                  highlightNoteId: highlightNoteId,
+                ),
+                ClientRecentMessagesCard(clientId: clientId),
+                ClientCallsCard(clientId: clientId),
+              ],
             ),
-            ClientRecentMessagesCard(clientId: clientId),
-            ClientOrdersCard(clientId: clientId),
-            ClientCallsCard(clientId: clientId),
-            ClientCampaignsCard(clientId: clientId),
-            ClientSegmentsCard(clientId: clientId),
-            ClientSuppressionCard(clientId: clientId),
+            (
+              title: l10n.clientDetailGroupCommerce,
+              cards: [
+                ClientOrdersCard(clientId: clientId),
+                ClientCampaignsCard(clientId: clientId),
+                ClientSegmentsCard(clientId: clientId),
+                ClientSuppressionCard(clientId: clientId),
+              ],
+            ),
           ];
-          return ListView.separated(
-            padding: const EdgeInsets.all(Insets.lg),
+
+          final children = <Widget>[
+            _PrimaryAction(clientId: clientId),
+            const SizedBox(height: Insets.lg),
+            _StatCard(clientId: clientId, client: client),
+          ];
+          for (final g in groups) {
+            children
+              ..add(const SizedBox(height: Insets.xl))
+              ..add(_SectionHeader(g.title))
+              ..add(const SizedBox(height: Insets.md));
+            for (var i = 0; i < g.cards.length; i++) {
+              if (i > 0) children.add(const SizedBox(height: Insets.lg));
+              children.add(g.cards[i]);
+            }
+          }
+
+          return CustomScrollView(
             // A deep-linked note may live many cards below the fold; force
             // every section to build up front so it exists to scroll/highlight
             // instead of staying unbuilt beyond the default cache extent.
             scrollCacheExtent: highlightNoteId != null
                 ? const ScrollCacheExtent.pixels(10000)
                 : null,
-            itemCount: sections.length,
-            separatorBuilder: (_, _) => const SizedBox(height: Insets.lg),
-            itemBuilder: (_, i) => sections[i],
+            slivers: [
+              _HeroAppBar(
+                client: client,
+                onCopyPhone: () {
+                  final phone = client.phoneNumber;
+                  if (phone != null) {
+                    _copy(context, phone, l10n.messageCopied);
+                  }
+                },
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(
+                  Insets.lg,
+                  Insets.lg,
+                  Insets.lg,
+                  Insets.xxxl,
+                ),
+                sliver: SliverList.list(children: children),
+              ),
+            ],
           );
         },
       ),
@@ -111,66 +151,213 @@ class ClientDetailScreen extends ConsumerWidget {
   }
 }
 
-/// Hero card — brand banner with the avatar, name and copyable phone.
-class _Hero extends StatelessWidget {
-  const _Hero({required this.client, required this.onCopyPhone});
+// ── Hero ─────────────────────────────────────────────────────────────────────
+
+/// Collapsing brand header. Expanded: avatar, name, copyable phone, lifecycle
+/// stage and acquisition source. As it collapses the identity fades out and the
+/// contact name condenses into the pinned toolbar.
+class _HeroAppBar extends ConsumerWidget {
+  const _HeroAppBar({required this.client, required this.onCopyPhone});
 
   final Client client;
   final VoidCallback onCopyPhone;
 
+  static const double _expandedHeight = 236;
+
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(gradient: context.brand.brand),
-        padding: const EdgeInsets.all(Insets.lg),
-        child: Row(
-          children: [
-            InitialsAvatar(initials: client.initials, radius: 30),
-            const SizedBox(width: Insets.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    client.displayName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.text.titleLarge?.copyWith(
-                      color: AppColors.onDarkHigh,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  if (client.phoneNumber != null)
-                    InkWell(
-                      onTap: onCopyPhone,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '+${client.phoneNumber}',
-                            style: context.text.bodyMedium?.copyWith(
-                              color: AppColors.onDarkMed,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final topPad = MediaQuery.paddingOf(context).top;
+
+    // Lifecycle stage label (if the contact has one) for a hero pill.
+    final bundle = ref
+        .watch(contactProfileBundleProvider(client.id))
+        .asData
+        ?.value;
+    String? stageLabel;
+    final stageId = bundle?.response.profile?.lifecycleStageId;
+    if (stageId != null) {
+      stageLabel = bundle!.stages
+          .where((s) => s.id == stageId)
+          .firstOrNull
+          ?.label;
+    }
+
+    // Click-to-WhatsApp acquisition source ("Came from …").
+    final ctwa = ref.watch(clientCtwaProvider(client.id)).asData?.value;
+    final source = (ctwa != null && ctwa.isNotEmpty) ? ctwa.first.label : null;
+
+    return SliverAppBar(
+      pinned: true,
+      expandedHeight: _expandedHeight,
+      backgroundColor: AppColors.deepForest,
+      foregroundColor: AppColors.onDarkHigh,
+      surfaceTintColor: Colors.transparent,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+      elevation: 0,
+      flexibleSpace: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxExtent = _expandedHeight + topPad;
+          final minExtent = kToolbarHeight + topPad;
+          final t =
+              ((maxExtent - constraints.maxHeight) / (maxExtent - minExtent))
+                  .clamp(0.0, 1.0);
+          final expandedOpacity = (1 - t * 1.5).clamp(0.0, 1.0);
+          final collapsedOpacity = ((t - 0.55) / 0.45).clamp(0.0, 1.0);
+
+          return Container(
+            decoration: BoxDecoration(gradient: context.brand.brand),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // Collapsed toolbar title — the contact name beside the back
+                // button once the hero has scrolled away.
+                Positioned(
+                  top: topPad,
+                  height: kToolbarHeight,
+                  left: 0,
+                  right: 0,
+                  child: IgnorePointer(
+                    child: Opacity(
+                      opacity: collapsedOpacity,
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 56,
+                          end: Insets.lg,
+                        ),
+                        child: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            client.displayName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.text.titleLarge?.copyWith(
+                              color: AppColors.onDarkHigh,
                             ),
                           ),
-                          const SizedBox(width: 6),
-                          const Icon(
-                            Icons.copy_rounded,
-                            size: 14,
-                            color: AppColors.onDarkMed,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  LiveCallBadge(clientId: client.id, onDark: true),
-                ],
+                  ),
+                ),
+                // Expanded identity block, anchored to the bottom.
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: IgnorePointer(
+                    ignoring: expandedOpacity < 0.05,
+                    child: Opacity(
+                      opacity: expandedOpacity,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: topPad + kToolbarHeight * 0.4,
+                          left: Insets.lg,
+                          right: Insets.lg,
+                          bottom: Insets.lg,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                InitialsAvatar(
+                                  initials: client.initials,
+                                  radius: 30,
+                                ),
+                                const SizedBox(width: Insets.md),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        client.displayName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: context.text.headlineSmall
+                                            ?.copyWith(
+                                              color: AppColors.onDarkHigh,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                      ),
+                                      if (client.phoneNumber != null) ...[
+                                        const SizedBox(height: 2),
+                                        _PhoneChip(
+                                          phone: client.phoneNumber!,
+                                          onCopy: onCopyPhone,
+                                        ),
+                                      ],
+                                      LiveCallBadge(
+                                        clientId: client.id,
+                                        onDark: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (stageLabel != null || source != null) ...[
+                              const SizedBox(height: Insets.md),
+                              Wrap(
+                                spacing: Insets.sm,
+                                runSpacing: Insets.xs,
+                                children: [
+                                  if (stageLabel != null)
+                                    _HeroPill(
+                                      icon: Icons.timeline_rounded,
+                                      label: stageLabel,
+                                    ),
+                                  if (source != null)
+                                    _HeroPill(
+                                      icon: Icons.campaign_rounded,
+                                      label: '${l10n.contactCameFrom} $source',
+                                    ),
+                                ],
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Copyable phone line shown on the dark hero gradient.
+class _PhoneChip extends StatelessWidget {
+  const _PhoneChip({required this.phone, required this.onCopy});
+  final String phone;
+  final VoidCallback onCopy;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onCopy,
+      borderRadius: BorderRadius.circular(Radii.pill),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '+$phone',
+              style: context.text.bodyMedium?.copyWith(
+                color: AppColors.onDarkMed,
               ),
             ),
+            const SizedBox(width: 6),
+            const Icon(Icons.copy_rounded, size: 14, color: AppColors.onDarkMed),
           ],
         ),
       ),
@@ -178,9 +365,77 @@ class _Hero extends StatelessWidget {
   }
 }
 
-/// The four hero metrics: joined, last message, orders count and contact id.
-class _MetricsGrid extends ConsumerWidget {
-  const _MetricsGrid({required this.clientId, required this.client});
+/// Translucent light pill used for hero metadata (lifecycle, acquisition).
+class _HeroPill extends StatelessWidget {
+  const _HeroPill({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.onDarkHigh.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(Radii.pill),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 13, color: AppColors.onDarkHigh),
+          const SizedBox(width: 6),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 220),
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.text.labelSmall?.copyWith(
+                color: AppColors.onDarkHigh,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Primary action ───────────────────────────────────────────────────────────
+
+/// The one clear primary action for a contact: jump into their conversation.
+class _PrimaryAction extends StatelessWidget {
+  const _PrimaryAction({required this.clientId});
+  final String clientId;
+
+  void _openConversation(BuildContext context) {
+    // We usually arrive here from the chat, so returning there is a pop; from
+    // any other entry point, navigate to the conversation instead.
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/chats/$clientId');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return FilledButton.icon(
+      onPressed: () => _openConversation(context),
+      icon: const Icon(Icons.chat_bubble_rounded, size: 20),
+      label: Text(l10n.clientDetailOpenChat),
+    );
+  }
+}
+
+// ── Stat card ────────────────────────────────────────────────────────────────
+
+/// Unified stat strip: joined date, last-message time, order count and the
+/// (copyable) contact id, in one cohesive card rather than four loose tiles.
+class _StatCard extends ConsumerWidget {
+  const _StatCard({required this.clientId, required this.client});
   final String clientId;
   final Client client;
 
@@ -207,53 +462,66 @@ class _MetricsGrid extends ConsumerWidget {
         ? messages.asData!.value.last.createdAtDate
         : null;
 
-    final tiles = [
-      _Metric(
-        icon: Icons.event_available_outlined,
-        label: l10n.clientDetailJoined,
-        value: _joined(context),
-      ),
-      _Metric(
-        icon: Icons.chat_bubble_outline_rounded,
-        label: l10n.clientDetailLastMessage,
-        value: newest != null
-            ? Fmt.listTimestamp(context, newest)
-            : l10n.clientDetailNoMessages,
-      ),
-      _Metric(
-        icon: Icons.shopping_bag_outlined,
-        label: l10n.ordersTitle,
-        value: '${orders.asData?.value.length ?? 0}',
-      ),
-      _Metric(
-        icon: Icons.badge_outlined,
-        label: l10n.clientDetailContactId,
-        value: _shortId(client.id),
-        onTap: () async {
-          await Clipboard.setData(ClipboardData(text: client.id));
-          if (context.mounted) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(l10n.clientDetailCopiedId)));
-          }
-        },
-      ),
-    ];
+    final lineColor = context.scheme.outlineVariant;
 
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: Insets.md,
-      crossAxisSpacing: Insets.md,
-      childAspectRatio: 2.4,
-      children: tiles,
+    Widget statRow(List<Widget> cells) => IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(child: cells[0]),
+          VerticalDivider(width: 1, thickness: 1, color: lineColor),
+          Expanded(child: cells[1]),
+        ],
+      ),
+    );
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Column(
+        children: [
+          statRow([
+            _StatCell(
+              icon: Icons.event_available_outlined,
+              label: l10n.clientDetailJoined,
+              value: _joined(context),
+            ),
+            _StatCell(
+              icon: Icons.chat_bubble_outline_rounded,
+              label: l10n.clientDetailLastMessage,
+              value: newest != null
+                  ? Fmt.listTimestamp(context, newest)
+                  : l10n.clientDetailNoMessages,
+            ),
+          ]),
+          Divider(height: 1, thickness: 1, color: lineColor),
+          statRow([
+            _StatCell(
+              icon: Icons.shopping_bag_outlined,
+              label: l10n.ordersTitle,
+              value: '${orders.asData?.value.length ?? 0}',
+            ),
+            _StatCell(
+              icon: Icons.badge_outlined,
+              label: l10n.clientDetailContactId,
+              value: _shortId(client.id),
+              onTap: () async {
+                await Clipboard.setData(ClipboardData(text: client.id));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.clientDetailCopiedId)),
+                  );
+                }
+              },
+            ),
+          ]),
+        ],
+      ),
     );
   }
 }
 
-class _Metric extends StatelessWidget {
-  const _Metric({
+class _StatCell extends StatelessWidget {
+  const _StatCell({
     required this.icon,
     required this.label,
     required this.value,
@@ -267,89 +535,108 @@ class _Metric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: context.scheme.surfaceContainerHigh,
-      borderRadius: BorderRadius.circular(Radii.sm),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Insets.md,
-            vertical: Insets.sm,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Icon(icon, size: 14, color: context.scheme.onSurfaceVariant),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.text.labelSmall?.copyWith(
-                        color: context.scheme.onSurfaceVariant,
-                      ),
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Insets.md,
+          vertical: Insets.md,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 14, color: context.scheme.onSurfaceVariant),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.text.labelSmall?.copyWith(
+                      color: context.scheme.onSurfaceVariant,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.text.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
                 ),
+                if (onTap != null)
+                  Icon(
+                    Icons.copy_rounded,
+                    size: 13,
+                    color: context.scheme.onSurfaceVariant,
+                  ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.text.titleSmall?.copyWith(
+                fontWeight: FontWeight.w700,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-/// Click-to-WhatsApp acquisition banner ("Came from …"). Renders nothing when
-/// the contact has no referral.
-class _CtwaBanner extends ConsumerWidget {
-  const _CtwaBanner({required this.clientId});
-  final String clientId;
+// ── Section header ───────────────────────────────────────────────────────────
+
+/// Small uppercase label that groups the CRM sections beneath it.
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader(this.title);
+  final String title;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final ctwa = ref.watch(clientCtwaProvider(clientId)).asData?.value;
-    if (ctwa == null || ctwa.isEmpty) return const SizedBox.shrink();
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(start: Insets.xs),
+      child: Text(
+        title.toUpperCase(),
+        style: context.text.labelSmall?.copyWith(
+          color: context.scheme.onSurfaceVariant,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.8,
+        ),
+      ),
+    );
+  }
+}
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(Insets.md),
-      decoration: BoxDecoration(
-        color: AppColors.signalTint,
-        borderRadius: BorderRadius.circular(Radii.sm),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.campaign_outlined,
-            size: 18,
-            color: AppColors.signalDeep,
-          ),
-          const SizedBox(width: Insets.sm),
-          Expanded(
-            child: Text(
-              '${l10n.contactCameFrom} ${ctwa.first.label}',
-              style: context.text.bodySmall,
-            ),
-          ),
-        ],
-      ),
+// ── Loading / error scaffolds ────────────────────────────────────────────────
+
+class _LoadingScaffold extends StatelessWidget {
+  const _LoadingScaffold({required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: const SkeletonList(count: 4),
+    );
+  }
+}
+
+class _ErrorScaffold extends StatelessWidget {
+  const _ErrorScaffold({
+    required this.title,
+    required this.message,
+    required this.onRetry,
+  });
+  final String title;
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: ErrorRetry(message: message, onRetry: onRetry),
     );
   }
 }
