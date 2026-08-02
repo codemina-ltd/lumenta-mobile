@@ -22,6 +22,7 @@ import 'client_orders_card.dart';
 import 'client_profile_card.dart';
 import 'client_recent_messages_card.dart';
 import 'client_reminders_card.dart';
+import 'client_scheduled_messages_card.dart';
 import 'client_segments_card.dart';
 import 'client_suppression_card.dart';
 import 'client_team_card.dart';
@@ -68,14 +69,19 @@ class ClientDetailScreen extends ConsumerWidget {
           final sections = <Widget>[
             _Hero(
               client: client,
-              onCopyPhone: () =>
-                  _copy(context, client.phoneNumber, l10n.messageCopied),
+              onCopyPhone: () {
+                final phone = client.phoneNumber;
+                if (phone != null) {
+                  _copy(context, phone, l10n.messageCopied);
+                }
+              },
             ),
             _MetricsGrid(clientId: clientId, client: client),
             _CtwaBanner(clientId: clientId),
             ClientProfileCard(clientId: clientId),
             ClientTeamCard(clientId: clientId),
             ClientRemindersCard(clientId: clientId),
+            ClientScheduledMessagesCard(clientId: clientId),
             ClientNotesCard(
               clientId: clientId,
               highlightNoteId: highlightNoteId,
@@ -140,26 +146,27 @@ class _Hero extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 2),
-                  InkWell(
-                    onTap: onCopyPhone,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '+${client.phoneNumber}',
-                          style: context.text.bodyMedium?.copyWith(
+                  if (client.phoneNumber != null)
+                    InkWell(
+                      onTap: onCopyPhone,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '+${client.phoneNumber}',
+                            style: context.text.bodyMedium?.copyWith(
+                              color: AppColors.onDarkMed,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Icon(
+                            Icons.copy_rounded,
+                            size: 14,
                             color: AppColors.onDarkMed,
                           ),
-                        ),
-                        const SizedBox(width: 6),
-                        const Icon(
-                          Icons.copy_rounded,
-                          size: 14,
-                          color: AppColors.onDarkMed,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                   LiveCallBadge(clientId: client.id, onDark: true),
                 ],
               ),

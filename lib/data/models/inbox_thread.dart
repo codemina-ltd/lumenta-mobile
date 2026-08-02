@@ -11,7 +11,10 @@ part 'inbox_thread.g.dart';
 abstract class InboxThreadContact with _$InboxThreadContact {
   const factory InboxThreadContact({
     required String id,
-    required String phoneNumber,
+
+    /// Null for channel-only contacts (Instagram/Messenger) that have no
+    /// WhatsApp phone number.
+    String? phoneNumber,
     String? profileName,
   }) = _InboxThreadContact;
 
@@ -26,8 +29,15 @@ abstract class InboxThreadContact with _$InboxThreadContact {
 abstract class InboxThread with _$InboxThread {
   const factory InboxThread({
     required String id,
-    required String senderId,
+
+    /// Null on threads for channels without a WABA sender (Instagram,
+    /// Messenger, SMS, email).
+    String? senderId,
     required String clientId,
+
+    /// Originating channel ('whatsapp' | 'instagram' | 'messenger' | 'sms' |
+    /// 'email'); null on legacy rows written before channel attribution.
+    String? channelType,
     @Default('open') String status,
     String? assignedUserId,
     @Default('normal') String priority,

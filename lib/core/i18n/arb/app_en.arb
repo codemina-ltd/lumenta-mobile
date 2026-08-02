@@ -59,7 +59,9 @@
   "liveCallWith": "On a call with {name}",
   "@liveCallWith": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "clientsTitle": "Clients",
@@ -119,6 +121,26 @@
   "flowFieldColumn": "Field",
   "flowValueColumn": "Value",
   "close": "Close",
+  "chatProductView": "View",
+  "chatOrderItems": "{count, plural, one{{count} item} other{{count} items}}",
+  "@chatOrderItems": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "chatOrderEstimatedTotal": "{total} (estimated total)",
+  "@chatOrderEstimatedTotal": {
+    "placeholders": {
+      "total": {}
+    }
+  },
+  "chatOrderViewCart": "View sent cart",
+  "chatOrderDetailsTitle": "Order details",
+  "chatOrderProductColumn": "Product",
+  "chatOrderQuantityColumn": "Qty",
+  "chatOrderPriceColumn": "Price",
   "statusSent": "Sent",
   "statusDelivered": "Delivered",
   "statusRead": "Read",
@@ -351,5 +373,66 @@
   "createAction": "Create",
   "reminderCreated": "Reminder created",
   "reminderCreateFailed": "Couldn't create the reminder. Please try again.",
-  "messageTooFarBack": "This message is too far back in the history to jump to."
+  "messageTooFarBack": "This message is too far back in the history to jump to.",
+  "clientDetailScheduledMessages": "Scheduled Messages",
+  "clientDetailNoScheduledMessages": "No scheduled messages for this contact.",
+  "scheduledMessageChip": "Scheduled",
+  "scheduledMessageFor": "Scheduled for {when}",
+  "@scheduledMessageFor": {
+    "placeholders": {
+      "when": {}
+    }
+  },
+  "scheduledMessageSendNow": "Send now",
+  "scheduledMessageScheduleToggle": "Schedule",
+  "scheduledMessagePickDateTime": "Pick date & time",
+  "scheduledMessageMustBeFuture": "Pick a time in the future",
+  "scheduledMessageSendButton": "Send",
+  "scheduledMessageScheduleButton": "Schedule message",
+  "scheduledMessageSaveButton": "Save changes",
+  "scheduledMessageCreated": "Message scheduled",
+  "scheduledMessageCreateFailed": "Couldn't schedule the message. Please try again.",
+  "scheduledMessageUpdated": "Scheduled message updated",
+  "scheduledMessageUpdateFailed": "Couldn't update the scheduled message. Please try again.",
+  "scheduledMessageActionsTitle": "Scheduled message",
+  "scheduledMessageView": "View details",
+  "scheduledMessageEdit": "Edit",
+  "scheduledMessageCancelAction": "Cancel message",
+  "scheduledMessageRetryAction": "Retry now",
+  "scheduledMessageRescheduleAction": "Reschedule",
+  "scheduledMessageCancelTitle": "Cancel scheduled message?",
+  "scheduledMessageCancelConfirm": "This scheduled message won't be sent. This can't be undone.",
+  "scheduledMessageCancelReasonLabel": "Reason (optional)",
+  "scheduledMessageCancelledSnack": "Scheduled message cancelled",
+  "scheduledMessageCancelFailed": "Couldn't cancel. Please try again.",
+  "scheduledMessageRetriedSnack": "Message re-sent",
+  "scheduledMessageRetryFailed": "Couldn't retry. Please try again.",
+  "scheduledMessageRescheduledSnack": "Message rescheduled",
+  "scheduledMessageRescheduleFailed": "Couldn't reschedule. Please try again.",
+  "scheduledMessageDetailsTitle": "Scheduled message",
+  "scheduledMessageErrorLabel": "Error",
+  "scheduledMessageActivityTitle": "Activity",
+  "scheduledMessageStatusPending": "Pending",
+  "scheduledMessageStatusSent": "Sent",
+  "scheduledMessageStatusCancelled": "Cancelled",
+  "scheduledMessageStatusFailed": "Failed",
+  "scheduledMessageEventScheduled": "Scheduled",
+  "scheduledMessageEventEdited": "Edited",
+  "scheduledMessageEventCancelled": "Cancelled",
+  "scheduledMessageEventSent": "Sent",
+  "scheduledMessageEventFailed": "Failed",
+  "scheduledMessageTemplateUnavailable": "This template is no longer available, so its content can't be edited — you can still reschedule it.",
+  "scheduledMessageLoadFailed": "Couldn't load this scheduled message.",
+  "noPhoneChannelContact": "This contact has no phone number — reply from their channel conversation in the web portal.",
+  "channelWhatsapp": "WhatsApp",
+  "channelInstagram": "Instagram",
+  "channelMessenger": "Messenger",
+  "channelSms": "SMS",
+  "channelEmail": "Email",
+  "channelHumanAgentLabel": "Send as human agent (7-day window)",
+  "channelWindowClosed": "The messaging window has closed. You can reply after the customer messages you again.",
+  "channelSendFailed": "Sending failed. Please try again.",
+  "storyReply": "Replied to your story",
+  "storyMention": "Mentioned you in a story",
+  "unsupportedMessage": "Unsupported message"
 }

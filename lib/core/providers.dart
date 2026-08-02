@@ -9,10 +9,12 @@ import '../data/repos/clients_repo.dart';
 import '../data/repos/commerce_repo.dart';
 import '../data/repos/contacts_repo.dart';
 import '../data/repos/device_repo.dart';
+import '../data/repos/features_repo.dart';
 import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
 import '../data/repos/reminders_repo.dart';
+import '../data/repos/scheduled_messages_repo.dart';
 import '../data/repos/search_repo.dart';
 import '../data/repos/segments_repo.dart';
 import '../data/repos/senders_repo.dart';
@@ -73,6 +75,9 @@ final notificationsRepoProvider = Provider<NotificationsRepo>(
 final remindersRepoProvider = Provider<RemindersRepo>(
   (ref) => RemindersRepo(ref.watch(dioProvider)),
 );
+final scheduledMessagesRepoProvider = Provider<ScheduledMessagesRepo>(
+  (ref) => ScheduledMessagesRepo(ref.watch(dioProvider)),
+);
 final searchRepoProvider = Provider<SearchRepo>(
   (ref) => SearchRepo(ref.watch(dioProvider)),
 );
@@ -84,4 +89,7 @@ final sendersRepoProvider = Provider<SendersRepo>(
 );
 final deviceRepoProvider = Provider<DeviceRepo>(
   (ref) => DeviceRepo(ref.watch(dioProvider)),
+);
+final featuresRepoProvider = Provider<FeaturesRepo>(
+  (ref) => FeaturesRepo(ref.watch(dioProvider)),
 );

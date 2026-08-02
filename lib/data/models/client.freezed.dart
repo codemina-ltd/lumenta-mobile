@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Client {
 
- String get id; String get phoneNumber; String? get profileName; String? get createdAt;
+ String get id;/// Null for channel-only contacts (Instagram/Messenger) that have no
+/// WhatsApp phone number.
+ String? get phoneNumber; String? get profileName; String? get createdAt;
 /// Create a copy of Client
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +50,7 @@ abstract mixin class $ClientCopyWith<$Res>  {
   factory $ClientCopyWith(Client value, $Res Function(Client) _then) = _$ClientCopyWithImpl;
 @useResult
 $Res call({
- String id, String phoneNumber, String? profileName, String? createdAt
+ String id, String? phoneNumber, String? profileName, String? createdAt
 });
 
 
@@ -65,11 +67,11 @@ class _$ClientCopyWithImpl<$Res>
 
 /// Create a copy of Client
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phoneNumber = null,Object? profileName = freezed,Object? createdAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? createdAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
@@ -156,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String phoneNumber,  String? profileName,  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName,  String? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Client() when $default != null:
 return $default(_that.id,_that.phoneNumber,_that.profileName,_that.createdAt);case _:
@@ -177,7 +179,7 @@ return $default(_that.id,_that.phoneNumber,_that.profileName,_that.createdAt);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String phoneNumber,  String? profileName,  String? createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName,  String? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Client():
 return $default(_that.id,_that.phoneNumber,_that.profileName,_that.createdAt);case _:
@@ -197,7 +199,7 @@ return $default(_that.id,_that.phoneNumber,_that.profileName,_that.createdAt);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String phoneNumber,  String? profileName,  String? createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? phoneNumber,  String? profileName,  String? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Client() when $default != null:
 return $default(_that.id,_that.phoneNumber,_that.profileName,_that.createdAt);case _:
@@ -212,11 +214,13 @@ return $default(_that.id,_that.phoneNumber,_that.profileName,_that.createdAt);ca
 @JsonSerializable()
 
 class _Client extends Client {
-  const _Client({required this.id, required this.phoneNumber, this.profileName, this.createdAt}): super._();
+  const _Client({required this.id, this.phoneNumber, this.profileName, this.createdAt}): super._();
   factory _Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
 
 @override final  String id;
-@override final  String phoneNumber;
+/// Null for channel-only contacts (Instagram/Messenger) that have no
+/// WhatsApp phone number.
+@override final  String? phoneNumber;
 @override final  String? profileName;
 @override final  String? createdAt;
 
@@ -253,7 +257,7 @@ abstract mixin class _$ClientCopyWith<$Res> implements $ClientCopyWith<$Res> {
   factory _$ClientCopyWith(_Client value, $Res Function(_Client) _then) = __$ClientCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String phoneNumber, String? profileName, String? createdAt
+ String id, String? phoneNumber, String? profileName, String? createdAt
 });
 
 
@@ -270,11 +274,11 @@ class __$ClientCopyWithImpl<$Res>
 
 /// Create a copy of Client
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phoneNumber = null,Object? profileName = freezed,Object? createdAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? createdAt = freezed,}) {
   return _then(_Client(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as String?,
   ));

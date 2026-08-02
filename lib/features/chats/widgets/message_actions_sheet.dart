@@ -59,7 +59,12 @@ Future<void> showMessageActions(
   final canCopy = text != null;
   final canForward = message.hasMedia || text != null;
   final canShare = message.hasMedia || text != null;
-  final canReact = !message.isOutbound && !message.isDeleted;
+  // Reactions are WhatsApp-only — the API rejects them on IG/Messenger rows
+  // (audit D7); null channelType = legacy WhatsApp row.
+  final canReact =
+      !message.isOutbound &&
+      !message.isDeleted &&
+      (message.channelType == null || message.channelType == 'whatsapp');
   // Optimistic bubbles carry a synthetic `temp_` id the API doesn't know.
   final isPersisted = !message.id.startsWith('temp_');
   // Reminder/note creation anchors to the message id, so it needs a
@@ -314,6 +319,13 @@ Future<void> _forward(
   Client client,
 ) async {
   final repo = ref.read(messagesRepoProvider);
+  // Channel-only contacts (no phone number) can't receive WhatsApp sends;
+  // the picker filters them out, but keep the guard for safety.
+  final to = client.phoneNumber;
+  if (to == null) {
+    messenger.showSnackBar(SnackBar(content: Text(l10n.forwardFailed)));
+    return;
+  }
   try {
     if (message.hasMedia) {
       final bytes = await _downloadMedia(ref, message);
@@ -326,7 +338,7 @@ Future<void> _forward(
       try {
         await file.writeAsBytes(bytes);
         await repo.sendMedia(
-          to: client.phoneNumber,
+          to: to,
           mediaType: _mediaTypeOf(message.messageType),
           filePath: file.path,
           caption: message.mediaCaption,
@@ -338,7 +350,7 @@ Future<void> _forward(
       }
     } else {
       await repo.sendText(
-        to: client.phoneNumber,
+        to: to,
         body: text!,
         senderId: threadKey.senderId,
       );
@@ -491,8 +503,12 @@ class _ForwardClientSheetState extends ConsumerState<_ForwardClientSheet> {
           .list(search: query, limit: 50);
       if (!mounted) return;
       setState(() {
+        // Channel-only contacts (no phone number) can't receive WhatsApp
+        // forwards — leave them out of the picker.
         _clients = page.data
-            .where((c) => c.id != widget.excludeClientId)
+            .where(
+              (c) => c.id != widget.excludeClientId && c.phoneNumber != null,
+            )
             .toList();
         _loading = false;
       });
@@ -559,7 +575,9 @@ class _ForwardClientSheetState extends ConsumerState<_ForwardClientSheet> {
                               radius: 20,
                             ),
                             title: Text(c.displayName),
-                            subtitle: Text('+${c.phoneNumber}'),
+                            subtitle: c.phoneNumber == null
+                                ? null
+                                : Text('+${c.phoneNumber}'),
                           );
                         },
                       ),

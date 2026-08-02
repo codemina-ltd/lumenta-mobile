@@ -489,9 +489,34 @@ class _ThreadTile extends StatelessWidget {
   final VoidCallback onOpen;
   final VoidCallback onActions;
 
+  /// Localized display name for a non-WhatsApp channel; null hides the chip.
+  static String? _channelLabel(AppLocalizations l10n, String? channel) {
+    switch (channel) {
+      case 'instagram':
+        return l10n.channelInstagram;
+      case 'messenger':
+        return l10n.channelMessenger;
+      case 'sms':
+        return l10n.channelSms;
+      case 'email':
+        return l10n.channelEmail;
+      case null:
+      case '':
+      case 'whatsapp':
+        return null;
+      default:
+        // Unknown channel — capitalized raw value beats hiding it.
+        return channel[0].toUpperCase() + channel.substring(1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final channelLabel = _channelLabel(
+      AppLocalizations.of(context),
+      thread.channelType,
+    );
     return ListTile(
       onTap: onOpen,
       leading: CircleAvatar(child: Text(thread.displayName.characters.first)),
@@ -505,6 +530,12 @@ class _ThreadTile extends StatelessWidget {
         runSpacing: 2,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
+          if (channelLabel != null)
+            Chip(
+              label: Text(channelLabel),
+              visualDensity: VisualDensity.compact,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
           Chip(
             label: Text(thread.status),
             visualDensity: VisualDensity.compact,

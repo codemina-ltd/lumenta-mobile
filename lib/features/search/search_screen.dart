@@ -186,14 +186,16 @@ class _ResultRow extends StatelessWidget {
                     // ellipsis side, independent of the app locale.
                     textDirection: contentDirection(client.displayName),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '+${client.phoneNumber}',
-                    style: context.text.bodySmall?.copyWith(
-                      color: context.scheme.onSurfaceVariant,
-                      letterSpacing: 0.2,
+                  if (client.phoneNumber != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      '+${client.phoneNumber}',
+                      style: context.text.bodySmall?.copyWith(
+                        color: context.scheme.onSurfaceVariant,
+                        letterSpacing: 0.2,
+                      ),
                     ),
-                  ),
+                  ],
                   if (contextMatch != null) ...[
                     const SizedBox(height: Insets.xs),
                     Row(

@@ -13,6 +13,7 @@ import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'chats_controller.dart';
 import 'message_preview.dart';
+import 'widgets/channel_indicator.dart';
 
 class ChatsScreen extends ConsumerStatefulWidget {
   const ChatsScreen({super.key});
@@ -106,6 +107,10 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
               conv.lastMessageDirection == MessageDirection.inbound;
           final unread = inbound && lastRead.isUnread(conv.clientId, when);
 
+          // Only non-WhatsApp channels get a badge — the API defaults the
+          // field to 'whatsapp', so gating on non-null alone would paint a
+          // glyph on every row (same rule as the bubble meta icon).
+          final channel = conv.lastMessageChannelType;
           return _ChatRow(
             initials: conv.initials,
             name: conv.displayName,
@@ -113,6 +118,9 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
             when: when,
             unread: unread,
             outbound: !inbound,
+            channelType: (channel != null && channel != 'whatsapp')
+                ? channel
+                : null,
             onTap: () => context.push('/chats/${conv.clientId}'),
           );
         },
@@ -130,6 +138,7 @@ class _ChatRow extends StatelessWidget {
     required this.unread,
     required this.outbound,
     required this.onTap,
+    this.channelType,
   });
 
   final String initials;
@@ -139,6 +148,10 @@ class _ChatRow extends StatelessWidget {
   final bool unread;
   final bool outbound;
   final VoidCallback onTap;
+
+  /// Non-WhatsApp channel of the last message ('instagram' | 'messenger');
+  /// null hides the badge (WhatsApp rows stay unadorned).
+  final String? channelType;
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +186,14 @@ class _ChatRow extends StatelessWidget {
                   const SizedBox(height: 3),
                   Row(
                     children: [
+                      if (channelType != null) ...[
+                        Icon(
+                          channelIcon(channelType!),
+                          size: 14,
+                          color: channelColor(channelType!),
+                        ),
+                        const SizedBox(width: 3),
+                      ],
                       if (outbound) ...[
                         Icon(
                           Icons.subdirectory_arrow_right_rounded,

@@ -27,31 +27,46 @@ class MessagesRepo {
 
   /// `GET /clients/:id/messages` — the message thread for one client.
   /// [senderId] filters to messages carried by that sender (per-sender thread
-  /// tabs); omit it for the full merged thread.
+  /// tabs); [channelAccountId] scopes to one non-WhatsApp channel thread
+  /// (channel tabs) — the two scopes are mutually exclusive. Omit both for
+  /// the full merged thread.
   Future<Paginated<Message>> thread(
     String clientId, {
     int page = 1,
     int limit = 30,
     String? senderId,
+    String? channelAccountId,
   }) async {
     final res = await _dio.get<Map<String, dynamic>>(
       '/clients/$clientId/messages',
-      queryParameters: {'page': page, 'limit': limit, 'senderId': ?senderId},
+      queryParameters: {
+        'page': page,
+        'limit': limit,
+        'senderId': ?senderId,
+        'channelAccountId': ?channelAccountId,
+      },
     );
     return Paginated.fromJson(res.data!, Message.fromJson);
   }
 
   /// `GET /clients/:id/messages/:messageId/page` — the 1-based page (newest
-  /// first, same ordering and [limit] as [thread]) containing that message.
-  /// 404s when the message is unknown to this client.
+  /// first, same ordering, [limit] and scoping filters as [thread])
+  /// containing that message. 404s when the message is unknown to this
+  /// client (or falls outside the scope).
   Future<int> messagePage(
     String clientId,
     String messageId, {
     int limit = 30,
+    String? senderId,
+    String? channelAccountId,
   }) async {
     final res = await _dio.get<Map<String, dynamic>>(
       '/clients/$clientId/messages/$messageId/page',
-      queryParameters: {'limit': limit},
+      queryParameters: {
+        'limit': limit,
+        'senderId': ?senderId,
+        'channelAccountId': ?channelAccountId,
+      },
     );
     return (res.data?['page'] as num?)?.toInt() ?? 1;
   }
@@ -84,6 +99,27 @@ class MessagesRepo {
     final res = await _dio.post<Map<String, dynamic>>(
       '/messages/send',
       data: {'to': to, 'body': body, 'senderId': ?senderId},
+    );
+    return Message.fromJson(res.data!);
+  }
+
+  /// `POST /messages/channel-send` — free-form text reply on a non-WhatsApp
+  /// (Instagram DM / Messenger) inbox thread. The messaging window is
+  /// enforced server-side: 422 `MESSAGING_WINDOW_EXPIRED` once closed.
+  /// [humanAgent] sends with the HUMAN_AGENT tag, allowed up to 7 days after
+  /// the customer's last message.
+  Future<Message> sendChannelText({
+    required String threadId,
+    required String body,
+    bool humanAgent = false,
+  }) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/messages/channel-send',
+      data: {
+        'threadId': threadId,
+        'body': body,
+        if (humanAgent) 'humanAgent': true,
+      },
     );
     return Message.fromJson(res.data!);
   }

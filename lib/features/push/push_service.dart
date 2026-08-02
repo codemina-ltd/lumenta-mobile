@@ -128,7 +128,7 @@ class PushService {
       const AndroidNotificationChannel(
         kMessagesChannelId,
         'Messages',
-        description: 'New WhatsApp messages from your clients',
+        description: 'New messages from your clients',
         importance: Importance.high,
       ),
     );
@@ -210,7 +210,7 @@ class PushService {
           android: AndroidNotificationDetails(
             kMessagesChannelId,
             'Messages',
-            channelDescription: 'New WhatsApp messages from your clients',
+            channelDescription: 'New messages from your clients',
             importance: Importance.high,
             priority: Priority.high,
             icon: '@mipmap/ic_launcher',

@@ -14,12 +14,20 @@ abstract class Conversation with _$Conversation {
   const factory Conversation({
     /// Client id (the chat is keyed by client).
     @JsonKey(readValue: _clientId) required String clientId,
-    required String phoneNumber,
+
+    /// Null for channel-only contacts (Instagram/Messenger) that have no
+    /// WhatsApp phone number.
+    String? phoneNumber,
     String? profileName,
     String? lastMessageBody,
     @JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,
     @JsonKey(unknownEnumValue: MessageDirection.inbound)
     MessageDirection? lastMessageDirection,
+
+    /// Channel the last message travelled on ('whatsapp' | 'instagram' |
+    /// 'messenger'). The API defaults it to 'whatsapp', so only non-WhatsApp
+    /// values are worth surfacing; null on servers predating the field.
+    String? lastMessageChannelType,
     String? lastMessageAt,
   }) = _Conversation;
 
@@ -28,10 +36,13 @@ abstract class Conversation with _$Conversation {
   factory Conversation.fromJson(Map<String, dynamic> json) =>
       _$ConversationFromJson(json);
 
-  String get displayName =>
-      (profileName != null && profileName!.trim().isNotEmpty)
-      ? profileName!
-      : '+$phoneNumber';
+  String get displayName {
+    if (profileName != null && profileName!.trim().isNotEmpty) {
+      return profileName!;
+    }
+    final phone = phoneNumber;
+    return phone != null ? '+$phone' : 'Unknown contact';
+  }
 
   DateTime? get lastMessageAtDate =>
       lastMessageAt == null ? null : DateTime.tryParse(lastMessageAt!)?.toLocal();
@@ -39,7 +50,7 @@ abstract class Conversation with _$Conversation {
   String get initials {
     final source = (profileName?.trim().isNotEmpty ?? false)
         ? profileName!.trim()
-        : phoneNumber;
+        : (phoneNumber ?? '');
     final parts = source.split(RegExp(r'\s+')).where((p) => p.isNotEmpty);
     if (parts.isEmpty) return '?';
     if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();

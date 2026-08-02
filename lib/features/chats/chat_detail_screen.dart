@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 
 import '../../core/format.dart';
 import '../../core/i18n/arb/app_localizations.dart';
@@ -14,8 +15,10 @@ import '../../core/providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
+import '../../data/models/channel_thread.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/message.dart';
+import '../../data/models/scheduled_message.dart';
 import '../../data/models/sender.dart';
 import '../../data/storage/last_read_store.dart';
 import '../shared/live_call_badge.dart';
@@ -25,9 +28,15 @@ import 'thread_controller.dart';
 import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/audio_bubble.dart';
+import 'widgets/channel_composer.dart';
+import 'widgets/channel_indicator.dart';
 import 'widgets/chat_composer.dart';
 import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
+import 'widgets/order_bubble.dart';
+import 'widgets/product_bubble.dart';
+import 'widgets/quick_reply_chips.dart';
+import 'widgets/scheduled_message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
 
@@ -73,6 +82,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   /// The user's explicit tab choice; null until they pick one, in which case
   /// the most recent conversation sender (or the tenant default) wins.
   String? _selectedSenderId;
+
+  /// The user's explicit channel-tab choice; non-null overrides the sender
+  /// scope entirely (mirrors the portal's `?channel=` param).
+  String? _selectedChannelThreadId;
+
+  /// Whether the user tapped any tab yet. Until they do — and unless the
+  /// navigation deep-linked to a message — the auto-select peek
+  /// ([autoSelectChannelThreadProvider]) may land the chat on the channel tab
+  /// carrying the client's most recent inbound message.
+  bool _tabPicked = false;
 
   /// Resolved thread scope the scroll listener reads; null until the sender
   /// lookups settle so the first thread fetch is already correctly scoped.
@@ -139,11 +158,17 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     }
 
     // Ask the API which page holds the message so a very deep target is
-    // declined up front instead of paging 15 times for nothing.
+    // declined up front instead of paging 15 times for nothing. Scoped like
+    // the thread fetches so the page number matches the pages we'll load.
     try {
       final page = await ref
           .read(messagesRepoProvider)
-          .messagePage(key.clientId, id);
+          .messagePage(
+            key.clientId,
+            id,
+            senderId: key.senderId,
+            channelAccountId: key.channelAccountId,
+          );
       if (page > 15) {
         abandon(tooFar: true);
         return;
@@ -224,12 +249,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     });
   }
 
-  /// WhatsApp free-form replies are only allowed within 24h of the last inbound.
+  /// WhatsApp free-form replies are only allowed within 24h of the last
+  /// inbound **WhatsApp** message. The merged thread interleaves IG/Messenger
+  /// rows, and a channel inbound must not open the WhatsApp composer — Meta
+  /// enforces the window per channel and rejects the send with no error text.
   bool _windowOpen(ThreadState state) {
     for (final m in state.messages.reversed) {
-      if (m.direction == MessageDirection.inbound) {
-        return DateTime.now().difference(m.createdAtDate).inHours < 24;
-      }
+      if (m.direction != MessageDirection.inbound) continue;
+      // null = legacy row from before channel attribution, always WhatsApp.
+      if (m.channelType != null && m.channelType != 'whatsapp') continue;
+      return DateTime.now().difference(m.createdAtDate).inHours < 24;
     }
     return false;
   }
@@ -251,11 +280,47 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         (sendersAsync.hasValue || sendersAsync.hasError);
     final convSenders = convAsync.value ?? const <ConversationSender>[];
     final senders = sendersAsync.value ?? const <Sender>[];
+
+    // ── Channel tabs (omnichannel) ──────────────────────────────────────
+    // The client's non-WhatsApp threads (already feature-flag filtered) plus
+    // the auto-select peek: unless the navigation deep-linked to a message
+    // or the user picked a tab, land on the channel tab carrying the
+    // client's most recent inbound message (portal parity). Both must
+    // settle before the first thread fetch so it's already correctly
+    // scoped; failures degrade to the sender scope.
+    final channelAsync = ref.watch(
+      clientChannelThreadsProvider(widget.clientId),
+    );
+    final channelThreads = channelAsync.value ?? const <ChannelThread>[];
+    final autoAsync = widget.highlightMessageId == null
+        ? ref.watch(autoSelectChannelThreadProvider(widget.clientId))
+        : const AsyncValue<String?>.data(null);
+    final channelsReady =
+        (channelAsync.hasValue || channelAsync.hasError) &&
+        (autoAsync.hasValue || autoAsync.hasError);
+
+    ChannelThread? activeChannelThread;
+    if (channelThreads.isNotEmpty) {
+      final selectedId = _tabPicked
+          ? _selectedChannelThreadId
+          : autoAsync.value;
+      activeChannelThread = channelThreads
+          .where((t) => t.id == selectedId)
+          .firstOrNull;
+    }
+
+    // A phone-less (channel-only) contact can't receive WhatsApp sends, so
+    // the sender pills' "start via …" affordances would all dead-end — hide
+    // them (audit item 12); its channel pills still render.
+    final showSenderTabs =
+        sendersReady &&
+        (convSenders.length > 1 || senders.length > 1) &&
+        !(clientAsync.hasValue && clientAsync.value!.phoneNumber == null);
     final showTabs =
-        sendersReady && (convSenders.length > 1 || senders.length > 1);
+        (showSenderTabs && channelsReady) || channelThreads.isNotEmpty;
 
     String? activeSenderId;
-    if (showTabs) {
+    if (showSenderTabs) {
       final selected = _selectedSenderId;
       activeSenderId =
           (selected != null &&
@@ -273,8 +338,18 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         .where((c) => c.senderId == activeSenderId)
         .firstOrNull;
 
-    final threadKey = sendersReady
-        ? (clientId: widget.clientId, senderId: activeSenderId)
+    final ThreadKey? threadKey = (sendersReady && channelsReady)
+        ? (activeChannelThread != null
+              ? (
+                  clientId: widget.clientId,
+                  senderId: null,
+                  channelAccountId: activeChannelThread.channelAccountId,
+                )
+              : (
+                  clientId: widget.clientId,
+                  senderId: activeSenderId,
+                  channelAccountId: null,
+                ))
         : null;
     if (threadKey != _threadKey) {
       // Scope changed (tab click or initial resolution): re-run the
@@ -286,6 +361,13 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     final state = threadKey == null
         ? const ThreadState()
         : ref.watch(threadControllerProvider(threadKey));
+    // Pending/failed scheduled sends, merged into the thread rows below. No
+    // polling: this fetches once per thread scope and is refreshed by
+    // pull-to-refresh and after schedule/edit/cancel/retry actions.
+    final scheduled = threadKey == null
+        ? const <ScheduledMessage>[]
+        : ref.watch(chatScheduledMessagesProvider(threadKey.clientId)).value ??
+              const <ScheduledMessage>[];
     final title = clientAsync.maybeWhen(
       data: (c) => c.displayName,
       orElse: () => '',
@@ -295,7 +377,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       orElse: () => '',
     );
     final phone = clientAsync.maybeWhen(
-      data: (c) => '+${c.phoneNumber}',
+      data: (c) => c.phoneNumber == null ? null : '+${c.phoneNumber}',
       orElse: () => null,
     );
 
@@ -352,49 +434,132 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             ],
           ),
         ),
-        actions: [if (threadKey != null) ..._threadActions(context, threadKey)],
+        actions: [
+          if (threadKey != null)
+            ..._threadActions(context, threadKey, activeChannelThread?.id),
+        ],
       ),
       body: Column(
         children: [
           LiveCallBanner(clientId: widget.clientId),
           if (showTabs)
             SenderThreadBar(
-              conversationSenders: convSenders,
-              senders: senders,
+              conversationSenders: showSenderTabs ? convSenders : const [],
+              senders: showSenderTabs ? senders : const [],
               activeSenderId: activeSenderId,
-              onSelect: (id) => setState(() => _selectedSenderId = id),
+              onSelect: (id) => setState(() {
+                _tabPicked = true;
+                _selectedSenderId = id;
+                _selectedChannelThreadId = null;
+              }),
+              channelThreads: channelThreads,
+              activeChannelThreadId: activeChannelThread?.id,
+              onSelectChannel: (id) => setState(() {
+                _tabPicked = true;
+                _selectedChannelThreadId = id;
+              }),
             ),
           Expanded(
             child: threadKey == null
                 ? const Center(child: CircularProgressIndicator())
-                : _body(context, state, threadKey),
+                : _body(context, state, threadKey, scheduled),
           ),
           if (clientAsync.hasValue && threadKey != null && !state.loading)
-            ChatComposer(
-              threadKey: threadKey,
-              to: clientAsync.value!.phoneNumber,
-              windowOpen: _windowOpen(state),
-              onSent: _scrollToBottom,
-              senderLabel: showTabs
-                  ? (activeSender?.label ?? activeConv?.label)
-                  : null,
-              senderNumber: showTabs
-                  ? (activeSender?.number ?? activeConv?.displayPhoneNumber)
-                  : null,
-              senderActive:
-                  !showTabs ||
-                  (activeSender?.isActive ?? activeConv?.isActive ?? true),
-            ),
+            // An active channel tab binds the (text-only) channel composer
+            // to that thread. Otherwise: channel-only contacts have no
+            // phone number, so WhatsApp sends are impossible — reply on
+            // their most recent channel thread instead (falls back to the
+            // "reply from the portal" hint when no channel thread exists);
+            // contacts with a phone get the WhatsApp composer.
+            if (activeChannelThread != null)
+              ChannelComposer(
+                threadKey: threadKey,
+                thread: activeChannelThread,
+                onSent: _scrollToBottom,
+              )
+            else if (clientAsync.value!.phoneNumber == null)
+              _channelReplyArea(context, threadKey)
+            else
+              ChatComposer(
+                threadKey: threadKey,
+                to: clientAsync.value!.phoneNumber!,
+                windowOpen: _windowOpen(state),
+                onSent: () {
+                  _scrollToBottom();
+                  // A template send from the composer may have scheduled a
+                  // message instead of sending immediately; refresh the inline
+                  // feed either way (cheap no-op when it didn't).
+                  ref.invalidate(
+                    chatScheduledMessagesProvider(threadKey.clientId),
+                  );
+                },
+                senderLabel: showSenderTabs
+                    ? (activeSender?.label ?? activeConv?.label)
+                    : null,
+                senderNumber: showSenderTabs
+                    ? (activeSender?.number ?? activeConv?.displayPhoneNumber)
+                    : null,
+                senderActive:
+                    !showSenderTabs ||
+                    (activeSender?.isActive ?? activeConv?.isActive ?? true),
+              ),
         ],
       ),
+    );
+  }
+
+  /// Composer area for a phone-less (channel-only) contact: a text-only
+  /// channel composer bound to the client's most recent IG/Messenger thread.
+  /// While the threads load — or when there are none — the static "reply
+  /// from the portal" hint keeps the previous behavior.
+  Widget _channelReplyArea(BuildContext context, ThreadKey threadKey) {
+    final threads = ref
+        .watch(clientChannelThreadsProvider(widget.clientId))
+        .asData
+        ?.value;
+    if (threads == null || threads.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(Insets.lg),
+        child: Center(
+          child: Text(
+            AppLocalizations.of(context).noPhoneChannelContact,
+            textAlign: TextAlign.center,
+            style: context.text.bodySmall?.copyWith(
+              color: context.scheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      );
+    }
+    // Most recently active thread first (API orders by updatedAt DESC).
+    return ChannelComposer(
+      threadKey: threadKey,
+      thread: threads.first,
+      onSent: _scrollToBottom,
     );
   }
 
   /// App-bar actions that operate on the Team Inbox thread behind this chat
   /// (internal note + assign to team member). They only appear once that
   /// thread resolves (a chat with no messages has no thread to act on).
-  List<Widget> _threadActions(BuildContext context, ThreadKey threadKey) {
-    final thread = ref.watch(chatInboxThreadProvider(threadKey)).asData?.value;
+  /// An active channel tab IS an inbox thread — act on it directly instead
+  /// of guessing via the client's most recent thread.
+  List<Widget> _threadActions(
+    BuildContext context,
+    ThreadKey threadKey,
+    String? channelThreadId,
+  ) {
+    final thread = channelThreadId != null
+        ? ref.watch(inboxThreadByIdProvider(channelThreadId)).asData?.value
+        : ref
+              .watch(
+                chatInboxThreadProvider((
+                  clientId: threadKey.clientId,
+                  senderId: threadKey.senderId,
+                )),
+              )
+              .asData
+              ?.value;
     if (thread == null) return const [];
     return [
       IconButton(
@@ -410,7 +575,12 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     ];
   }
 
-  Widget _body(BuildContext context, ThreadState state, ThreadKey threadKey) {
+  Widget _body(
+    BuildContext context,
+    ThreadState state,
+    ThreadKey threadKey,
+    List<ScheduledMessage> scheduled,
+  ) {
     final controller = ref.read(threadControllerProvider(threadKey).notifier);
     if (state.loading) {
       return const Center(child: CircularProgressIndicator());
@@ -418,7 +588,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     if (state.error != null && state.messages.isEmpty) {
       return ErrorRetry(onRetry: controller.refresh);
     }
-    if (state.messages.isEmpty) {
+    if (state.messages.isEmpty && scheduled.isEmpty) {
       final l10n = AppLocalizations.of(context);
       // A sender-scoped empty thread is a "start the conversation via this
       // number" state, not a generic no-chats state.
@@ -430,70 +600,86 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       );
     }
 
-    final rows = _buildRows(context, state.messages);
-    return ListView.builder(
-      controller: _scroll,
-      padding: const EdgeInsets.symmetric(
-        vertical: Insets.md,
-        horizontal: Insets.xs,
-      ),
-      itemCount: rows.length + (state.loadingOlder ? 1 : 0),
-      itemBuilder: (context, i) {
-        if (state.loadingOlder && i == 0) {
-          return const Padding(
-            padding: EdgeInsets.all(Insets.sm),
-            child: Center(
-              child: SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
+    final rows = _buildRows(context, state.messages, scheduled);
+    Future<void> onRefresh() => Future.wait([
+      controller.refresh(),
+      ref.refresh(chatScheduledMessagesProvider(threadKey.clientId).future),
+    ]);
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.builder(
+        controller: _scroll,
+        padding: const EdgeInsets.symmetric(
+          vertical: Insets.md,
+          horizontal: Insets.xs,
+        ),
+        itemCount: rows.length + (state.loadingOlder ? 1 : 0),
+        itemBuilder: (context, i) {
+          if (state.loadingOlder && i == 0) {
+            return const Padding(
+              padding: EdgeInsets.all(Insets.sm),
+              child: Center(
+                child: SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
               ),
+            );
+          }
+          final row = rows[i - (state.loadingOlder ? 1 : 0)];
+          if (row.isHeader) return _DayHeader(label: row.headerLabel!);
+          if (row.scheduled != null) {
+            return _ScheduledMessageBubble(
+              scheduledMessage: row.scheduled!,
+              clientId: threadKey.clientId,
+            );
+          }
+          final message = row.message!;
+          final bubble = _MessageBubble(
+            message: message,
+            threadKey: threadKey,
+            showSentBy: row.showSentBy,
+          );
+          if (message.id != _highlightAnchorId) return bubble;
+          // Deep-link target: keyed so ensureVisible can find it, wrapped in a
+          // tint that fades in for ~2.5s and back out.
+          return KeyedSubtree(
+            key: _highlightKey,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 450),
+              curve: Curves.easeOut,
+              decoration: BoxDecoration(
+                color: _highlightOn
+                    ? context.scheme.primary.withValues(alpha: 0.18)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(Radii.md),
+              ),
+              child: bubble,
             ),
           );
-        }
-        final row = rows[i - (state.loadingOlder ? 1 : 0)];
-        if (row.isHeader) return _DayHeader(label: row.headerLabel!);
-        final message = row.message!;
-        final bubble = _MessageBubble(
-          message: message,
-          threadKey: threadKey,
-          showSentBy: row.showSentBy,
-        );
-        if (message.id != _highlightAnchorId) return bubble;
-        // Deep-link target: keyed so ensureVisible can find it, wrapped in a
-        // tint that fades in for ~2.5s and back out.
-        return KeyedSubtree(
-          key: _highlightKey,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 450),
-            curve: Curves.easeOut,
-            decoration: BoxDecoration(
-              color: _highlightOn
-                  ? context.scheme.primary.withValues(alpha: 0.18)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(Radii.md),
-            ),
-            child: bubble,
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 
-  List<_Row> _buildRows(BuildContext context, List<Message> messages) {
-    final rows = <_Row>[];
-    DateTime? lastDay;
+  /// Merges real messages (`createdAt` ascending) with pending/failed
+  /// scheduled sends (`scheduledFor` ascending) into one chronological row
+  /// list with day-header separators, so a scheduled bubble sits in its
+  /// correct position relative to real messages (including a "future day"
+  /// header when it's scheduled beyond today).
+  List<_Row> _buildRows(
+    BuildContext context,
+    List<Message> messages,
+    List<ScheduledMessage> scheduled,
+  ) {
+    final content = <(DateTime, _Row)>[];
     for (var i = 0; i < messages.length; i++) {
       final m = messages[i];
-      final d = m.createdAtDate;
-      final day = DateTime(d.year, d.month, d.day);
-      if (lastDay == null || day != lastDay) {
-        rows.add(_Row.header(Fmt.dayHeader(context, day)));
-        lastDay = day;
-      }
       // "Sent by …" attribution shows once per consecutive outbound run from
       // the same team member — under the run's last bubble (mirrors the
-      // portal's MessageThread).
+      // portal's MessageThread). Based on adjacency within `messages` only,
+      // unaffected by any scheduled bubble interleaved in the merged view.
       final next = i + 1 < messages.length ? messages[i + 1] : null;
       final showSentBy =
           m.isOutbound &&
@@ -501,7 +687,22 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           (next == null ||
               !next.isOutbound ||
               next.sentByUserName != m.sentByUserName);
-      rows.add(_Row.message(m, showSentBy: showSentBy));
+      content.add((m.createdAtDate, _Row.message(m, showSentBy: showSentBy)));
+    }
+    for (final sm in scheduled) {
+      content.add((sm.scheduledFor.toLocal(), _Row.scheduled(sm)));
+    }
+    content.sort((a, b) => a.$1.compareTo(b.$1));
+
+    final rows = <_Row>[];
+    DateTime? lastDay;
+    for (final (at, row) in content) {
+      final day = DateTime(at.year, at.month, at.day);
+      if (lastDay == null || day != lastDay) {
+        rows.add(_Row.header(Fmt.dayHeader(context, day)));
+        lastDay = day;
+      }
+      rows.add(row);
     }
     return rows;
   }
@@ -511,14 +712,22 @@ class _Row {
   _Row.header(this.headerLabel)
     : isHeader = true,
       message = null,
+      scheduled = null,
       showSentBy = false;
   _Row.message(this.message, {required this.showSentBy})
     : isHeader = false,
-      headerLabel = null;
+      headerLabel = null,
+      scheduled = null;
+  _Row.scheduled(this.scheduled)
+    : isHeader = false,
+      headerLabel = null,
+      message = null,
+      showSentBy = false;
 
   final bool isHeader;
   final String? headerLabel;
   final Message? message;
+  final ScheduledMessage? scheduled;
   final bool showSentBy;
 }
 
@@ -684,6 +893,66 @@ class _MessageBubble extends ConsumerWidget {
       );
     }
 
+    // Email: subject in bold above the quote-stripped reply body — mirrors
+    // the portal's email bubble. Direction resolved per string so an Arabic
+    // subject lays out RTL above a Latin body (and vice versa).
+    final subject = message.emailSubject;
+    // Story context (D2): an inbound IG story reply/mention gets a small
+    // quoted header above the body, mirroring how the customer saw it.
+    final story = message.storyContext;
+    final inner = _typedContent(context, ref, textColor);
+
+    Widget content;
+    if (subject != null) {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            subject,
+            textDirection: Fmt.textDirectionFor(subject),
+            style: TextStyle(
+              color: textColor,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              height: 1.35,
+            ),
+          ),
+          const SizedBox(height: 4),
+          inner,
+        ],
+      );
+    } else if (story != null) {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _StoryContextHeader(story: story, textColor: textColor),
+          const SizedBox(height: 6),
+          inner,
+        ],
+      );
+    } else {
+      content = inner;
+    }
+
+    // Native quick replies a chatbot MENU step offered on IG/Messenger —
+    // display-only chips under the prompt so the agent sees the options
+    // shown to the customer (mirrors the portal's ChatBubble chips).
+    final quickReplies = message.isOutbound ? message.quickReplies : null;
+    if (quickReplies == null) return content;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        content,
+        const SizedBox(height: 8),
+        QuickReplyChips(titles: quickReplies, textColor: textColor),
+      ],
+    );
+  }
+
+  Widget _typedContent(BuildContext context, WidgetRef ref, Color textColor) {
     final repo = ref.read(messagesRepoProvider);
     final headers = ref.watch(mediaHeadersProvider);
     final url = repo.mediaUrl(message.id);
@@ -746,22 +1015,49 @@ class _MessageBubble extends ConsumerWidget {
         if (message.isFlowResponse) {
           return _FlowResponseContent(message: message, textColor: textColor);
         }
-        return _bodyText(textColor);
+        if (message.isProductSend) {
+          return ProductMessageContent(message: message, textColor: textColor);
+        }
+        return _bodyText(context, textColor);
+      case MessageType.order:
+        return OrderMessageContent(message: message, textColor: textColor);
       default:
-        return _bodyText(textColor);
+        return _bodyText(context, textColor);
     }
   }
 
-  Widget _bodyText(Color textColor) => Text(
-    message.body.isEmpty ? '…' : message.body,
-    textDirection: Fmt.textDirectionFor(message.body),
-    style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
-  );
+  Widget _bodyText(BuildContext context, Color textColor) {
+    // Unknown type with no text (D4): IG 'share' attachments and other
+    // unmapped channel payloads — say so instead of an empty "…" bubble.
+    if (message.body.isEmpty && message.messageType == MessageType.unknown) {
+      return Text(
+        AppLocalizations.of(context).unsupportedMessage,
+        style: TextStyle(
+          color: textColor.withValues(alpha: 0.7),
+          fontStyle: FontStyle.italic,
+          fontSize: 14,
+        ),
+      );
+    }
+    return Text(
+      message.body.isEmpty ? '…' : message.body,
+      textDirection: Fmt.textDirectionFor(message.body),
+      style: TextStyle(color: textColor, fontSize: 15, height: 1.35),
+    );
+  }
 
   Widget _meta(BuildContext context, Color textColor, bool outbound) {
+    final channel = message.channelType;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        // Only non-WhatsApp channels get an icon — the API defaults
+        // channel_type to 'whatsapp' on every message, so gating on non-null
+        // alone would paint a glyph on every bubble for every tenant.
+        if (channel != null && channel != 'whatsapp') ...[
+          Icon(channelIcon(channel), size: 11, color: channelColor(channel)),
+          const SizedBox(width: 3),
+        ],
         Text(
           Fmt.timeOfDay(context, message.createdAtDate),
           style: TextStyle(
@@ -794,6 +1090,182 @@ class _MessageBubble extends ConsumerWidget {
     if (message.status == MessageStatus.failed) return AppColors.ember;
     return textColor.withValues(alpha: 0.6);
   }
+}
+
+/// A pending/failed scheduled template send, rendered inline in the thread
+/// at its `scheduledFor` position: faded, dashed-bordered, with a status
+/// chip and the formatted send time. Tapping it opens the shared
+/// [showScheduledMessageActions] sheet (View always; Edit/Cancel while
+/// pending, Retry/Reschedule while failed).
+class _ScheduledMessageBubble extends ConsumerWidget {
+  const _ScheduledMessageBubble({
+    required this.scheduledMessage,
+    required this.clientId,
+  });
+
+  final ScheduledMessage scheduledMessage;
+  final String clientId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final chat = context.chat;
+    final textColor = chat.outboundText;
+    final failed = scheduledMessage.isFailed;
+    final locale = Localizations.localeOf(context).toString();
+    final when = DateFormat.MMMd(
+      locale,
+    ).add_jm().format(scheduledMessage.scheduledFor.toLocal());
+
+    final templateId = scheduledMessage.templateId;
+    final template = templateId == null
+        ? null
+        : ref.watch(chatTemplateProvider(templateId)).asData?.value;
+    final body = scheduledMessage.renderedBody ?? '';
+
+    return Align(
+      alignment: Alignment.centerRight,
+      child: GestureDetector(
+        onTap: () => showScheduledMessageActions(
+          context,
+          ref,
+          scheduledMessage: scheduledMessage,
+          clientId: clientId,
+          onChanged: () =>
+              ref.invalidate(chatScheduledMessagesProvider(clientId)),
+        ),
+        child: Opacity(
+          opacity: 0.6,
+          child: _DashedBorder(
+            color: failed ? AppColors.ember : context.scheme.onSurfaceVariant,
+            radius: Radii.md,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.78,
+              ),
+              margin: const EdgeInsets.symmetric(
+                horizontal: Insets.md,
+                vertical: 3,
+              ),
+              padding: const EdgeInsets.fromLTRB(
+                Insets.md,
+                Insets.sm,
+                Insets.md,
+                6,
+              ),
+              decoration: BoxDecoration(
+                color: chat.outboundBubble,
+                borderRadius: BorderRadius.circular(Radii.md),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  StatusPill(
+                    label: failed
+                        ? l10n.scheduledMessageStatusFailed
+                        : l10n.scheduledMessageChip,
+                    color: failed ? AppColors.ember : AppColors.amber,
+                    icon: failed
+                        ? Icons.error_outline_rounded
+                        : Icons.schedule_rounded,
+                  ),
+                  const SizedBox(height: 6),
+                  if (template != null)
+                    TemplateContentView(
+                      template: template,
+                      body: body,
+                      textColor: textColor,
+                    )
+                  else
+                    Text(
+                      body.isEmpty ? '…' : body,
+                      textDirection: Fmt.textDirectionFor(body),
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: 15,
+                        height: 1.35,
+                      ),
+                    ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.scheduledMessageFor(when),
+                    style: TextStyle(
+                      color: textColor.withValues(alpha: 0.65),
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Thin dashed rounded-rect border, hand-rolled with a [CustomPainter] — the
+/// codebase has no dashed-border package (checked `pubspec.yaml`).
+class _DashedBorder extends StatelessWidget {
+  const _DashedBorder({
+    required this.child,
+    required this.color,
+    this.radius = Radii.md,
+  });
+
+  final Widget child;
+  final Color color;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _DashedBorderPainter(color: color, radius: radius),
+      child: child,
+    );
+  }
+}
+
+class _DashedBorderPainter extends CustomPainter {
+  _DashedBorderPainter({required this.color, required this.radius});
+
+  final Color color;
+  final double radius;
+
+  static const _strokeWidth = 1.4;
+  static const _dashWidth = 5.0;
+  static const _gapWidth = 3.0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const inset = _strokeWidth / 2;
+    final rrect = RRect.fromRectAndRadius(
+      const Offset(inset, inset) &
+          Size(size.width - _strokeWidth, size.height - _strokeWidth),
+      Radius.circular(radius),
+    );
+    final path = Path()..addRRect(rrect);
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = _strokeWidth;
+    for (final metric in path.computeMetrics()) {
+      var distance = 0.0;
+      while (distance < metric.length) {
+        final next = distance + _dashWidth;
+        canvas.drawPath(
+          metric.extractPath(distance, next.clamp(0.0, metric.length)),
+          paint,
+        );
+        distance = next + _gapWidth;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedBorderPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.radius != radius;
 }
 
 /// "Sent by `<team member>`" attribution under the last bubble of a member's
@@ -840,6 +1312,73 @@ class _SentByLabel extends StatelessWidget {
           child: Icon(Icons.help_outline_rounded, size: 13, color: muted),
         ),
       ],
+    );
+  }
+}
+
+/// Quoted "Replied to your story" / "Mentioned you in a story" header above
+/// an inbound IG story reply/mention (D2) — a small left-accented strip with
+/// the story thumbnail when the payload carries a URL. Mirrors the quoted
+/// look of WhatsApp reply headers, styled from the bubble's [textColor].
+class _StoryContextHeader extends StatelessWidget {
+  const _StoryContextHeader({required this.story, required this.textColor});
+
+  final Map<String, dynamic> story;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final label = story['kind'] == 'mention'
+        ? l10n.storyMention
+        : l10n.storyReply;
+    // The API stores the CDN link as `story_url`; accept `url` too for
+    // safety. Meta CDN URLs are public (short-lived), so no auth headers.
+    final rawUrl = story['story_url'] ?? story['url'];
+    final url = rawUrl is String && rawUrl.isNotEmpty ? rawUrl : null;
+
+    final muted = textColor.withValues(alpha: 0.75);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(Insets.sm, 4, Insets.sm, 4),
+      decoration: BoxDecoration(
+        color: textColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(Radii.sm),
+        border: Border(
+          left: BorderSide(color: textColor.withValues(alpha: 0.4), width: 3),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: muted,
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+          if (url != null) ...[
+            const SizedBox(width: Insets.sm),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(Radii.sm),
+              child: Image.network(
+                url,
+                width: 32,
+                height: 44,
+                fit: BoxFit.cover,
+                // Expired/unreachable story CDN link — drop the thumbnail
+                // silently and keep the label.
+                errorBuilder: (_, _, _) => const SizedBox.shrink(),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

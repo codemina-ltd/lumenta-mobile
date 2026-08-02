@@ -42,8 +42,12 @@ _Message _$MessageFromJson(Map<String, dynamic> json) => _Message(
   templateIdRaw: json['templateId'] as String?,
   templateData: json['templateData'] as Map<String, dynamic>?,
   senderId: json['senderId'] as String?,
+  channelType: json['channelType'] as String?,
+  channelAccountId: json['channelAccountId'] as String?,
+  channelPayload: json['channelPayload'] as Map<String, dynamic>?,
   sentByUserName: json['sentByUserName'] as String?,
   deletedForEveryoneAt: json['deletedForEveryoneAt'] as String?,
+  interactiveMetadata: json['interactiveMetadata'] as Map<String, dynamic>?,
   createdAt: json['createdAt'] as String,
 );
 
@@ -67,8 +71,12 @@ Map<String, dynamic> _$MessageToJson(_Message instance) => <String, dynamic>{
   'templateId': instance.templateIdRaw,
   'templateData': instance.templateData,
   'senderId': instance.senderId,
+  'channelType': instance.channelType,
+  'channelAccountId': instance.channelAccountId,
+  'channelPayload': instance.channelPayload,
   'sentByUserName': instance.sentByUserName,
   'deletedForEveryoneAt': instance.deletedForEveryoneAt,
+  'interactiveMetadata': instance.interactiveMetadata,
   'createdAt': instance.createdAt,
 };
 
@@ -98,5 +106,6 @@ const _$MessageTypeEnumMap = {
   MessageType.interactive: 'interactive',
   MessageType.template: 'template',
   MessageType.reaction: 'reaction',
+  MessageType.order: 'order',
   MessageType.unknown: 'unknown',
 };

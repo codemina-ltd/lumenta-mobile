@@ -51,6 +51,8 @@ enum MessageType {
   template,
   @JsonValue('reaction')
   reaction,
+  @JsonValue('order')
+  order,
   @JsonValue('unknown')
   unknown,
 }
@@ -103,6 +105,22 @@ abstract class Message with _$Message {
     /// rows written before sender attribution existed.
     String? senderId,
 
+    /// Originating channel ('whatsapp' | 'instagram' | 'messenger' | 'sms' |
+    /// 'email'); null on legacy rows written before channel attribution.
+    String? channelType,
+
+    /// Channel account that carried a non-WhatsApp message (the channel
+    /// counterpart of [senderId]) — matches [ChannelThread.channelAccountId],
+    /// which is how the chat channel tabs map a message to its thread. Null
+    /// on legacy rows written before channel attribution.
+    String? channelAccountId,
+
+    /// Channel-specific metadata the IG/Messenger webhook handler stores on
+    /// inbound rows: `story_context` (`{kind: 'reply'|'mention', story_id,
+    /// story_url}`), raw `attachments`, `postback`, `quick_reply`. Null on
+    /// WhatsApp rows and non-human-agent outbound channel sends.
+    Map<String, dynamic>? channelPayload,
+
     /// Team member who sent this outbound message ("Sent by …" attribution,
     /// mirrors the portal). Response-only field; null on inbound rows and
     /// rows whose user no longer exists.
@@ -111,6 +129,14 @@ abstract class Message with _$Message {
     /// "Delete for everyone" tombstone. When set, the server has cleared
     /// body/media and the bubble renders a "message deleted" placeholder.
     String? deletedForEveryoneAt,
+
+    /// Structured display metadata for interactive messages — mirrors the
+    /// portal's `Message.interactiveMetadata`. Outbound product/catalog
+    /// sends carry `catalogId` + `productRetailerId`/`sections`/`bodyText`;
+    /// inbound `order` (cart) rows carry the snapshot OrderCaptureService
+    /// writes back after parsing the cart (`orderId`/`itemCount`/
+    /// `subtotalMinor`/`currency`). Null on every other message type.
+    Map<String, dynamic>? interactiveMetadata,
     required String createdAt,
   }) = _Message;
 
@@ -149,6 +175,45 @@ abstract class Message with _$Message {
     if (RegExp(r'^\[Document(: .+)?\]$').hasMatch(b)) return null;
     return b;
   }
+  /// Story context on an inbound Instagram message — the customer replied to
+  /// (kind 'reply') or mentioned the business in (kind 'mention') a story.
+  /// `{kind, story_id, story_url}`; null for every other message.
+  Map<String, dynamic>? get storyContext {
+    final ctx = channelPayload?['story_context'];
+    return ctx is Map ? Map<String, dynamic>.from(ctx) : null;
+  }
+
+  /// Subject line of an email message (`channel_payload.subject`), trimmed —
+  /// rendered in bold above the quote-stripped reply [body], mirroring the
+  /// portal's email bubble. Null on non-email rows and when the payload has
+  /// no (non-empty) subject.
+  String? get emailSubject {
+    if (channelType != 'email') return null;
+    final subject = channelPayload?['subject'];
+    if (subject is! String) return null;
+    final trimmed = subject.trim();
+    return trimmed.isEmpty ? null : trimmed;
+  }
+
+  /// Titles of the native quick replies a chatbot MENU step offered on an
+  /// outbound IG/Messenger message (`channel_payload.quick_replies`, an
+  /// array of `{title, payload}`). Only the titles matter for display — the
+  /// bubble shows them as non-interactive chips so the agent can see the
+  /// options presented to the customer. Malformed entries are skipped; null
+  /// when the payload has no (usable) quick replies.
+  List<String>? get quickReplies {
+    final raw = channelPayload?['quick_replies'];
+    if (raw is! List) return null;
+    final titles = raw
+        .whereType<Map>()
+        .map((e) => e['title'])
+        .whereType<String>()
+        .map((t) => t.trim())
+        .where((t) => t.isNotEmpty)
+        .toList();
+    return titles.isEmpty ? null : titles;
+  }
+
   bool get hasReaction => reaction != null && reaction!.isNotEmpty;
   bool get isDeleted => deletedForEveryoneAt != null;
 
@@ -158,6 +223,32 @@ abstract class Message with _$Message {
   bool get isFlowResponse =>
       direction == MessageDirection.inbound &&
       messageType == MessageType.interactive;
+
+  /// An outbound single-product send — mirrors the portal's `ChatBubble`
+  /// check (`interactiveMetadata.type === 'product' &&
+  /// interactiveMetadata.productRetailerId`). Drives the rich product card
+  /// (image/name/price) instead of the plain-body fallback.
+  bool get isProductSend =>
+      isOutbound &&
+      messageType == MessageType.interactive &&
+      interactiveMetadata?['type'] == 'product' &&
+      interactiveMetadata?['productRetailerId'] != null;
+
+  String? get productCatalogId => interactiveMetadata?['catalogId'] as String?;
+  String? get productRetailerId =>
+      interactiveMetadata?['productRetailerId'] as String?;
+  String? get interactiveCtaText =>
+      interactiveMetadata?['flowCta'] as String?;
+
+  /// Inbound cart/order snapshot `OrderCaptureService` writes onto the
+  /// message row once it parses the customer's cart — null until capture
+  /// runs, or if capture found no items.
+  String? get orderId => interactiveMetadata?['orderId'] as String?;
+  int? get orderItemCount =>
+      (interactiveMetadata?['itemCount'] as num?)?.toInt();
+  int? get orderSubtotalMinor =>
+      (interactiveMetadata?['subtotalMinor'] as num?)?.toInt();
+  String? get orderCurrency => interactiveMetadata?['currency'] as String?;
 
   /// Flow name taken from the provider payload
   /// (`messages[0].interactive.nfm_reply.name`), capitalised. Null when the

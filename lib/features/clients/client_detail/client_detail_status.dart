@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../data/models/scheduled_message.dart';
 import '../../../data/models/smp_call.dart';
 
 /// Localised label + colour maps for the enum-ish string statuses shown across
@@ -76,6 +77,24 @@ String suppressionScopeLabel(AppLocalizations l10n, String scope) =>
       'marketing' => l10n.suppressionScopeMarketing,
       'all' => l10n.suppressionScopeAll,
       _ => scope,
+    };
+
+String scheduledMessageStatusLabel(
+  AppLocalizations l10n,
+  ScheduledMessageStatus status,
+) => switch (status) {
+  ScheduledMessageStatus.pending => l10n.scheduledMessageStatusPending,
+  ScheduledMessageStatus.sent => l10n.scheduledMessageStatusSent,
+  ScheduledMessageStatus.cancelled => l10n.scheduledMessageStatusCancelled,
+  ScheduledMessageStatus.failed => l10n.scheduledMessageStatusFailed,
+};
+
+Color scheduledMessageStatusColor(ScheduledMessageStatus status) =>
+    switch (status) {
+      ScheduledMessageStatus.sent => AppColors.signal,
+      ScheduledMessageStatus.pending => AppColors.amber,
+      ScheduledMessageStatus.cancelled => AppColors.slate,
+      ScheduledMessageStatus.failed => AppColors.ember,
     };
 
 String suppressionReasonLabel(AppLocalizations l10n, String reason) =>

@@ -317,6 +317,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get close => 'إغلاق';
 
   @override
+  String get chatProductView => 'عرض';
+
+  @override
+  String chatOrderItems(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عنصر',
+      many: '$count عنصرًا',
+      few: '$count عناصر',
+      two: 'عنصران',
+      one: 'عنصر واحد',
+      zero: '$count عنصر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String chatOrderEstimatedTotal(Object total) {
+    return '$total (الإجمالي التقديري)';
+  }
+
+  @override
+  String get chatOrderViewCart => 'عرض السلة المُرسَلة';
+
+  @override
+  String get chatOrderDetailsTitle => 'تفاصيل الطلب';
+
+  @override
+  String get chatOrderProductColumn => 'المنتج';
+
+  @override
+  String get chatOrderQuantityColumn => 'الكمية';
+
+  @override
+  String get chatOrderPriceColumn => 'السعر';
+
+  @override
   String get statusSent => 'تم الإرسال';
 
   @override
@@ -953,4 +991,184 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get messageTooFarBack =>
       'هذه الرسالة قديمة جدًا في المحادثة ولا يمكن الانتقال إليها.';
+
+  @override
+  String get clientDetailScheduledMessages => 'الرسائل المجدولة';
+
+  @override
+  String get clientDetailNoScheduledMessages =>
+      'لا توجد رسائل مجدولة لهذا العميل.';
+
+  @override
+  String get scheduledMessageChip => 'مجدولة';
+
+  @override
+  String scheduledMessageFor(Object when) {
+    return 'مجدولة في $when';
+  }
+
+  @override
+  String get scheduledMessageSendNow => 'إرسال الآن';
+
+  @override
+  String get scheduledMessageScheduleToggle => 'جدولة';
+
+  @override
+  String get scheduledMessagePickDateTime => 'اختر التاريخ والوقت';
+
+  @override
+  String get scheduledMessageMustBeFuture => 'اختر وقتًا في المستقبل';
+
+  @override
+  String get scheduledMessageSendButton => 'إرسال';
+
+  @override
+  String get scheduledMessageScheduleButton => 'جدولة الرسالة';
+
+  @override
+  String get scheduledMessageSaveButton => 'حفظ التغييرات';
+
+  @override
+  String get scheduledMessageCreated => 'تمت جدولة الرسالة';
+
+  @override
+  String get scheduledMessageCreateFailed =>
+      'تعذّرت جدولة الرسالة. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get scheduledMessageUpdated => 'تم تحديث الرسالة المجدولة';
+
+  @override
+  String get scheduledMessageUpdateFailed =>
+      'تعذّر تحديث الرسالة المجدولة. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get scheduledMessageActionsTitle => 'الرسالة المجدولة';
+
+  @override
+  String get scheduledMessageView => 'عرض التفاصيل';
+
+  @override
+  String get scheduledMessageEdit => 'تعديل';
+
+  @override
+  String get scheduledMessageCancelAction => 'إلغاء الرسالة';
+
+  @override
+  String get scheduledMessageRetryAction => 'إعادة المحاولة الآن';
+
+  @override
+  String get scheduledMessageRescheduleAction => 'إعادة الجدولة';
+
+  @override
+  String get scheduledMessageCancelTitle => 'إلغاء الرسالة المجدولة؟';
+
+  @override
+  String get scheduledMessageCancelConfirm =>
+      'لن يتم إرسال هذه الرسالة المجدولة. لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get scheduledMessageCancelReasonLabel => 'السبب (اختياري)';
+
+  @override
+  String get scheduledMessageCancelledSnack => 'تم إلغاء الرسالة المجدولة';
+
+  @override
+  String get scheduledMessageCancelFailed =>
+      'تعذّر الإلغاء. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get scheduledMessageRetriedSnack => 'تمت إعادة إرسال الرسالة';
+
+  @override
+  String get scheduledMessageRetryFailed =>
+      'تعذّرت إعادة المحاولة. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get scheduledMessageRescheduledSnack => 'تمت إعادة جدولة الرسالة';
+
+  @override
+  String get scheduledMessageRescheduleFailed =>
+      'تعذّرت إعادة الجدولة. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get scheduledMessageDetailsTitle => 'الرسالة المجدولة';
+
+  @override
+  String get scheduledMessageErrorLabel => 'الخطأ';
+
+  @override
+  String get scheduledMessageActivityTitle => 'النشاط';
+
+  @override
+  String get scheduledMessageStatusPending => 'قيد الانتظار';
+
+  @override
+  String get scheduledMessageStatusSent => 'تم الإرسال';
+
+  @override
+  String get scheduledMessageStatusCancelled => 'ملغاة';
+
+  @override
+  String get scheduledMessageStatusFailed => 'فشلت';
+
+  @override
+  String get scheduledMessageEventScheduled => 'تمت الجدولة';
+
+  @override
+  String get scheduledMessageEventEdited => 'تم التعديل';
+
+  @override
+  String get scheduledMessageEventCancelled => 'تم الإلغاء';
+
+  @override
+  String get scheduledMessageEventSent => 'تم الإرسال';
+
+  @override
+  String get scheduledMessageEventFailed => 'فشلت';
+
+  @override
+  String get scheduledMessageTemplateUnavailable =>
+      'لم يعد هذا القالب متاحًا، لذا لا يمكن تعديل محتواه — لا يزال بإمكانك إعادة جدولته.';
+
+  @override
+  String get scheduledMessageLoadFailed => 'تعذّر تحميل هذه الرسالة المجدولة.';
+
+  @override
+  String get noPhoneChannelContact =>
+      'لا يوجد رقم هاتف لجهة الاتصال هذه — قم بالرد من محادثة قناتها في البوابة الإلكترونية.';
+
+  @override
+  String get channelWhatsapp => 'WhatsApp';
+
+  @override
+  String get channelInstagram => 'Instagram';
+
+  @override
+  String get channelMessenger => 'Messenger';
+
+  @override
+  String get channelSms => 'SMS';
+
+  @override
+  String get channelEmail => 'Email';
+
+  @override
+  String get channelHumanAgentLabel => 'إرسال كوكيل بشري (نافذة 7 أيام)';
+
+  @override
+  String get channelWindowClosed =>
+      'أُغلقت نافذة المراسلة. يمكنك الرد بعد أن يراسلك العميل مرة أخرى.';
+
+  @override
+  String get channelSendFailed => 'فشل الإرسال. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get storyReply => 'ردّ على قصتك';
+
+  @override
+  String get storyMention => 'أشار إليك في قصة';
+
+  @override
+  String get unsupportedMessage => 'رسالة غير مدعومة';
 }

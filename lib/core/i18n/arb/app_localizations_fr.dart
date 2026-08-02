@@ -318,6 +318,40 @@ class AppLocalizationsFr extends AppLocalizations {
   String get close => 'Fermer';
 
   @override
+  String get chatProductView => 'Voir';
+
+  @override
+  String chatOrderItems(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count articles',
+      one: '$count article',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String chatOrderEstimatedTotal(Object total) {
+    return '$total (total estimé)';
+  }
+
+  @override
+  String get chatOrderViewCart => 'Voir le panier envoyé';
+
+  @override
+  String get chatOrderDetailsTitle => 'Détails de la commande';
+
+  @override
+  String get chatOrderProductColumn => 'Produit';
+
+  @override
+  String get chatOrderQuantityColumn => 'Qté';
+
+  @override
+  String get chatOrderPriceColumn => 'Prix';
+
+  @override
   String get statusSent => 'Envoyé';
 
   @override
@@ -965,4 +999,187 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get messageTooFarBack =>
       'Ce message est trop ancien dans l\'historique pour y accéder.';
+
+  @override
+  String get clientDetailScheduledMessages => 'Messages programmés';
+
+  @override
+  String get clientDetailNoScheduledMessages =>
+      'Aucun message programmé pour ce contact.';
+
+  @override
+  String get scheduledMessageChip => 'Programmé';
+
+  @override
+  String scheduledMessageFor(Object when) {
+    return 'Programmé pour $when';
+  }
+
+  @override
+  String get scheduledMessageSendNow => 'Envoyer maintenant';
+
+  @override
+  String get scheduledMessageScheduleToggle => 'Programmer';
+
+  @override
+  String get scheduledMessagePickDateTime => 'Choisir la date et l\'heure';
+
+  @override
+  String get scheduledMessageMustBeFuture =>
+      'Choisissez une heure dans le futur';
+
+  @override
+  String get scheduledMessageSendButton => 'Envoyer';
+
+  @override
+  String get scheduledMessageScheduleButton => 'Programmer le message';
+
+  @override
+  String get scheduledMessageSaveButton => 'Enregistrer les modifications';
+
+  @override
+  String get scheduledMessageCreated => 'Message programmé';
+
+  @override
+  String get scheduledMessageCreateFailed =>
+      'Impossible de programmer le message. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageUpdated => 'Message programmé mis à jour';
+
+  @override
+  String get scheduledMessageUpdateFailed =>
+      'Impossible de mettre à jour le message programmé. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageActionsTitle => 'Message programmé';
+
+  @override
+  String get scheduledMessageView => 'Voir les détails';
+
+  @override
+  String get scheduledMessageEdit => 'Modifier';
+
+  @override
+  String get scheduledMessageCancelAction => 'Annuler le message';
+
+  @override
+  String get scheduledMessageRetryAction => 'Réessayer maintenant';
+
+  @override
+  String get scheduledMessageRescheduleAction => 'Reprogrammer';
+
+  @override
+  String get scheduledMessageCancelTitle => 'Annuler le message programmé ?';
+
+  @override
+  String get scheduledMessageCancelConfirm =>
+      'Ce message programmé ne sera pas envoyé. Cette action est irréversible.';
+
+  @override
+  String get scheduledMessageCancelReasonLabel => 'Motif (facultatif)';
+
+  @override
+  String get scheduledMessageCancelledSnack => 'Message programmé annulé';
+
+  @override
+  String get scheduledMessageCancelFailed =>
+      'Impossible d\'annuler. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageRetriedSnack => 'Message renvoyé';
+
+  @override
+  String get scheduledMessageRetryFailed =>
+      'Impossible de réessayer. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageRescheduledSnack => 'Message reprogrammé';
+
+  @override
+  String get scheduledMessageRescheduleFailed =>
+      'Impossible de reprogrammer. Veuillez réessayer.';
+
+  @override
+  String get scheduledMessageDetailsTitle => 'Message programmé';
+
+  @override
+  String get scheduledMessageErrorLabel => 'Erreur';
+
+  @override
+  String get scheduledMessageActivityTitle => 'Activité';
+
+  @override
+  String get scheduledMessageStatusPending => 'En attente';
+
+  @override
+  String get scheduledMessageStatusSent => 'Envoyé';
+
+  @override
+  String get scheduledMessageStatusCancelled => 'Annulé';
+
+  @override
+  String get scheduledMessageStatusFailed => 'Échoué';
+
+  @override
+  String get scheduledMessageEventScheduled => 'Programmé';
+
+  @override
+  String get scheduledMessageEventEdited => 'Modifié';
+
+  @override
+  String get scheduledMessageEventCancelled => 'Annulé';
+
+  @override
+  String get scheduledMessageEventSent => 'Envoyé';
+
+  @override
+  String get scheduledMessageEventFailed => 'Échoué';
+
+  @override
+  String get scheduledMessageTemplateUnavailable =>
+      'Ce modèle n\'est plus disponible, son contenu ne peut donc pas être modifié ici — vous pouvez toujours le reprogrammer.';
+
+  @override
+  String get scheduledMessageLoadFailed =>
+      'Impossible de charger ce message programmé.';
+
+  @override
+  String get noPhoneChannelContact =>
+      'Ce contact n\'a pas de numéro de téléphone — répondez depuis sa conversation de canal dans le portail web.';
+
+  @override
+  String get channelWhatsapp => 'WhatsApp';
+
+  @override
+  String get channelInstagram => 'Instagram';
+
+  @override
+  String get channelMessenger => 'Messenger';
+
+  @override
+  String get channelSms => 'SMS';
+
+  @override
+  String get channelEmail => 'Email';
+
+  @override
+  String get channelHumanAgentLabel =>
+      'Envoyer en tant qu\'agent humain (fenêtre de 7 jours)';
+
+  @override
+  String get channelWindowClosed =>
+      'La fenêtre de messagerie est fermée. Vous pourrez répondre lorsque le client vous écrira à nouveau.';
+
+  @override
+  String get channelSendFailed => 'Échec de l\'envoi. Veuillez réessayer.';
+
+  @override
+  String get storyReply => 'A répondu à votre story';
+
+  @override
+  String get storyMention => 'Vous a mentionné dans une story';
+
+  @override
+  String get unsupportedMessage => 'Message non pris en charge';
 }

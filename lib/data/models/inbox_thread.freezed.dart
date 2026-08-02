@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InboxThreadContact {
 
- String get id; String get phoneNumber; String? get profileName;
+ String get id;/// Null for channel-only contacts (Instagram/Messenger) that have no
+/// WhatsApp phone number.
+ String? get phoneNumber; String? get profileName;
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +50,7 @@ abstract mixin class $InboxThreadContactCopyWith<$Res>  {
   factory $InboxThreadContactCopyWith(InboxThreadContact value, $Res Function(InboxThreadContact) _then) = _$InboxThreadContactCopyWithImpl;
 @useResult
 $Res call({
- String id, String phoneNumber, String? profileName
+ String id, String? phoneNumber, String? profileName
 });
 
 
@@ -65,11 +67,11 @@ class _$InboxThreadContactCopyWithImpl<$Res>
 
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phoneNumber = null,Object? profileName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -155,7 +157,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String phoneNumber,  String? profileName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InboxThreadContact() when $default != null:
 return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
@@ -176,7 +178,7 @@ return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String phoneNumber,  String? profileName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName)  $default,) {final _that = this;
 switch (_that) {
 case _InboxThreadContact():
 return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
@@ -196,7 +198,7 @@ return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String phoneNumber,  String? profileName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? phoneNumber,  String? profileName)?  $default,) {final _that = this;
 switch (_that) {
 case _InboxThreadContact() when $default != null:
 return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
@@ -211,11 +213,13 @@ return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
 @JsonSerializable()
 
 class _InboxThreadContact implements InboxThreadContact {
-  const _InboxThreadContact({required this.id, required this.phoneNumber, this.profileName});
+  const _InboxThreadContact({required this.id, this.phoneNumber, this.profileName});
   factory _InboxThreadContact.fromJson(Map<String, dynamic> json) => _$InboxThreadContactFromJson(json);
 
 @override final  String id;
-@override final  String phoneNumber;
+/// Null for channel-only contacts (Instagram/Messenger) that have no
+/// WhatsApp phone number.
+@override final  String? phoneNumber;
 @override final  String? profileName;
 
 /// Create a copy of InboxThreadContact
@@ -251,7 +255,7 @@ abstract mixin class _$InboxThreadContactCopyWith<$Res> implements $InboxThreadC
   factory _$InboxThreadContactCopyWith(_InboxThreadContact value, $Res Function(_InboxThreadContact) _then) = __$InboxThreadContactCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String phoneNumber, String? profileName
+ String id, String? phoneNumber, String? profileName
 });
 
 
@@ -268,11 +272,11 @@ class __$InboxThreadContactCopyWithImpl<$Res>
 
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phoneNumber = null,Object? profileName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,}) {
   return _then(_InboxThreadContact(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
-as String,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
+as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -284,7 +288,11 @@ as String?,
 /// @nodoc
 mixin _$InboxThread {
 
- String get id; String get senderId; String get clientId; String get status; String? get assignedUserId; String get priority; String? get snoozedUntil; String? get lastInboundAt; String? get lastOutboundAt; int get unreadCount; String? get serviceWindowExpiresAt; String? get updatedAt; List<InboxLabel> get labels; InboxThreadContact? get client;
+ String get id;/// Null on threads for channels without a WABA sender (Instagram,
+/// Messenger, SMS, email).
+ String? get senderId; String get clientId;/// Originating channel ('whatsapp' | 'instagram' | 'messenger' | 'sms' |
+/// 'email'); null on legacy rows written before channel attribution.
+ String? get channelType; String get status; String? get assignedUserId; String get priority; String? get snoozedUntil; String? get lastInboundAt; String? get lastOutboundAt; int get unreadCount; String? get serviceWindowExpiresAt; String? get updatedAt; List<InboxLabel> get labels; InboxThreadContact? get client;
 /// Create a copy of InboxThread
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -297,16 +305,16 @@ $InboxThreadCopyWith<InboxThread> get copyWith => _$InboxThreadCopyWithImpl<Inbo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThread&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.status, status) || other.status == status)&&(identical(other.assignedUserId, assignedUserId) || other.assignedUserId == assignedUserId)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.snoozedUntil, snoozedUntil) || other.snoozedUntil == snoozedUntil)&&(identical(other.lastInboundAt, lastInboundAt) || other.lastInboundAt == lastInboundAt)&&(identical(other.lastOutboundAt, lastOutboundAt) || other.lastOutboundAt == lastOutboundAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.serviceWindowExpiresAt, serviceWindowExpiresAt) || other.serviceWindowExpiresAt == serviceWindowExpiresAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.labels, labels)&&(identical(other.client, client) || other.client == client));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThread&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.channelType, channelType) || other.channelType == channelType)&&(identical(other.status, status) || other.status == status)&&(identical(other.assignedUserId, assignedUserId) || other.assignedUserId == assignedUserId)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.snoozedUntil, snoozedUntil) || other.snoozedUntil == snoozedUntil)&&(identical(other.lastInboundAt, lastInboundAt) || other.lastInboundAt == lastInboundAt)&&(identical(other.lastOutboundAt, lastOutboundAt) || other.lastOutboundAt == lastOutboundAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.serviceWindowExpiresAt, serviceWindowExpiresAt) || other.serviceWindowExpiresAt == serviceWindowExpiresAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.labels, labels)&&(identical(other.client, client) || other.client == client));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,clientId,status,assignedUserId,priority,snoozedUntil,lastInboundAt,lastOutboundAt,unreadCount,serviceWindowExpiresAt,updatedAt,const DeepCollectionEquality().hash(labels),client);
+int get hashCode => Object.hash(runtimeType,id,senderId,clientId,channelType,status,assignedUserId,priority,snoozedUntil,lastInboundAt,lastOutboundAt,unreadCount,serviceWindowExpiresAt,updatedAt,const DeepCollectionEquality().hash(labels),client);
 
 @override
 String toString() {
-  return 'InboxThread(id: $id, senderId: $senderId, clientId: $clientId, status: $status, assignedUserId: $assignedUserId, priority: $priority, snoozedUntil: $snoozedUntil, lastInboundAt: $lastInboundAt, lastOutboundAt: $lastOutboundAt, unreadCount: $unreadCount, serviceWindowExpiresAt: $serviceWindowExpiresAt, updatedAt: $updatedAt, labels: $labels, client: $client)';
+  return 'InboxThread(id: $id, senderId: $senderId, clientId: $clientId, channelType: $channelType, status: $status, assignedUserId: $assignedUserId, priority: $priority, snoozedUntil: $snoozedUntil, lastInboundAt: $lastInboundAt, lastOutboundAt: $lastOutboundAt, unreadCount: $unreadCount, serviceWindowExpiresAt: $serviceWindowExpiresAt, updatedAt: $updatedAt, labels: $labels, client: $client)';
 }
 
 
@@ -317,7 +325,7 @@ abstract mixin class $InboxThreadCopyWith<$Res>  {
   factory $InboxThreadCopyWith(InboxThread value, $Res Function(InboxThread) _then) = _$InboxThreadCopyWithImpl;
 @useResult
 $Res call({
- String id, String senderId, String clientId, String status, String? assignedUserId, String priority, String? snoozedUntil, String? lastInboundAt, String? lastOutboundAt, int unreadCount, String? serviceWindowExpiresAt, String? updatedAt, List<InboxLabel> labels, InboxThreadContact? client
+ String id, String? senderId, String clientId, String? channelType, String status, String? assignedUserId, String priority, String? snoozedUntil, String? lastInboundAt, String? lastOutboundAt, int unreadCount, String? serviceWindowExpiresAt, String? updatedAt, List<InboxLabel> labels, InboxThreadContact? client
 });
 
 
@@ -334,12 +342,13 @@ class _$InboxThreadCopyWithImpl<$Res>
 
 /// Create a copy of InboxThread
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? senderId = null,Object? clientId = null,Object? status = null,Object? assignedUserId = freezed,Object? priority = null,Object? snoozedUntil = freezed,Object? lastInboundAt = freezed,Object? lastOutboundAt = freezed,Object? unreadCount = null,Object? serviceWindowExpiresAt = freezed,Object? updatedAt = freezed,Object? labels = null,Object? client = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? senderId = freezed,Object? clientId = null,Object? channelType = freezed,Object? status = null,Object? assignedUserId = freezed,Object? priority = null,Object? snoozedUntil = freezed,Object? lastInboundAt = freezed,Object? lastOutboundAt = freezed,Object? unreadCount = null,Object? serviceWindowExpiresAt = freezed,Object? updatedAt = freezed,Object? labels = null,Object? client = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
-as String,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,senderId: freezed == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
+as String?,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
+as String,channelType: freezed == channelType ? _self.channelType : channelType // ignore: cast_nullable_to_non_nullable
+as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,assignedUserId: freezed == assignedUserId ? _self.assignedUserId : assignedUserId // ignore: cast_nullable_to_non_nullable
 as String?,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
 as String,snoozedUntil: freezed == snoozedUntil ? _self.snoozedUntil : snoozedUntil // ignore: cast_nullable_to_non_nullable
@@ -447,10 +456,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String senderId,  String clientId,  String status,  String? assignedUserId,  String priority,  String? snoozedUntil,  String? lastInboundAt,  String? lastOutboundAt,  int unreadCount,  String? serviceWindowExpiresAt,  String? updatedAt,  List<InboxLabel> labels,  InboxThreadContact? client)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? senderId,  String clientId,  String? channelType,  String status,  String? assignedUserId,  String priority,  String? snoozedUntil,  String? lastInboundAt,  String? lastOutboundAt,  int unreadCount,  String? serviceWindowExpiresAt,  String? updatedAt,  List<InboxLabel> labels,  InboxThreadContact? client)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InboxThread() when $default != null:
-return $default(_that.id,_that.senderId,_that.clientId,_that.status,_that.assignedUserId,_that.priority,_that.snoozedUntil,_that.lastInboundAt,_that.lastOutboundAt,_that.unreadCount,_that.serviceWindowExpiresAt,_that.updatedAt,_that.labels,_that.client);case _:
+return $default(_that.id,_that.senderId,_that.clientId,_that.channelType,_that.status,_that.assignedUserId,_that.priority,_that.snoozedUntil,_that.lastInboundAt,_that.lastOutboundAt,_that.unreadCount,_that.serviceWindowExpiresAt,_that.updatedAt,_that.labels,_that.client);case _:
   return orElse();
 
 }
@@ -468,10 +477,10 @@ return $default(_that.id,_that.senderId,_that.clientId,_that.status,_that.assign
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String senderId,  String clientId,  String status,  String? assignedUserId,  String priority,  String? snoozedUntil,  String? lastInboundAt,  String? lastOutboundAt,  int unreadCount,  String? serviceWindowExpiresAt,  String? updatedAt,  List<InboxLabel> labels,  InboxThreadContact? client)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? senderId,  String clientId,  String? channelType,  String status,  String? assignedUserId,  String priority,  String? snoozedUntil,  String? lastInboundAt,  String? lastOutboundAt,  int unreadCount,  String? serviceWindowExpiresAt,  String? updatedAt,  List<InboxLabel> labels,  InboxThreadContact? client)  $default,) {final _that = this;
 switch (_that) {
 case _InboxThread():
-return $default(_that.id,_that.senderId,_that.clientId,_that.status,_that.assignedUserId,_that.priority,_that.snoozedUntil,_that.lastInboundAt,_that.lastOutboundAt,_that.unreadCount,_that.serviceWindowExpiresAt,_that.updatedAt,_that.labels,_that.client);case _:
+return $default(_that.id,_that.senderId,_that.clientId,_that.channelType,_that.status,_that.assignedUserId,_that.priority,_that.snoozedUntil,_that.lastInboundAt,_that.lastOutboundAt,_that.unreadCount,_that.serviceWindowExpiresAt,_that.updatedAt,_that.labels,_that.client);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -488,10 +497,10 @@ return $default(_that.id,_that.senderId,_that.clientId,_that.status,_that.assign
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String senderId,  String clientId,  String status,  String? assignedUserId,  String priority,  String? snoozedUntil,  String? lastInboundAt,  String? lastOutboundAt,  int unreadCount,  String? serviceWindowExpiresAt,  String? updatedAt,  List<InboxLabel> labels,  InboxThreadContact? client)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? senderId,  String clientId,  String? channelType,  String status,  String? assignedUserId,  String priority,  String? snoozedUntil,  String? lastInboundAt,  String? lastOutboundAt,  int unreadCount,  String? serviceWindowExpiresAt,  String? updatedAt,  List<InboxLabel> labels,  InboxThreadContact? client)?  $default,) {final _that = this;
 switch (_that) {
 case _InboxThread() when $default != null:
-return $default(_that.id,_that.senderId,_that.clientId,_that.status,_that.assignedUserId,_that.priority,_that.snoozedUntil,_that.lastInboundAt,_that.lastOutboundAt,_that.unreadCount,_that.serviceWindowExpiresAt,_that.updatedAt,_that.labels,_that.client);case _:
+return $default(_that.id,_that.senderId,_that.clientId,_that.channelType,_that.status,_that.assignedUserId,_that.priority,_that.snoozedUntil,_that.lastInboundAt,_that.lastOutboundAt,_that.unreadCount,_that.serviceWindowExpiresAt,_that.updatedAt,_that.labels,_that.client);case _:
   return null;
 
 }
@@ -503,12 +512,17 @@ return $default(_that.id,_that.senderId,_that.clientId,_that.status,_that.assign
 @JsonSerializable()
 
 class _InboxThread extends InboxThread {
-  const _InboxThread({required this.id, required this.senderId, required this.clientId, this.status = 'open', this.assignedUserId, this.priority = 'normal', this.snoozedUntil, this.lastInboundAt, this.lastOutboundAt, this.unreadCount = 0, this.serviceWindowExpiresAt, this.updatedAt, final  List<InboxLabel> labels = const <InboxLabel>[], this.client}): _labels = labels,super._();
+  const _InboxThread({required this.id, this.senderId, required this.clientId, this.channelType, this.status = 'open', this.assignedUserId, this.priority = 'normal', this.snoozedUntil, this.lastInboundAt, this.lastOutboundAt, this.unreadCount = 0, this.serviceWindowExpiresAt, this.updatedAt, final  List<InboxLabel> labels = const <InboxLabel>[], this.client}): _labels = labels,super._();
   factory _InboxThread.fromJson(Map<String, dynamic> json) => _$InboxThreadFromJson(json);
 
 @override final  String id;
-@override final  String senderId;
+/// Null on threads for channels without a WABA sender (Instagram,
+/// Messenger, SMS, email).
+@override final  String? senderId;
 @override final  String clientId;
+/// Originating channel ('whatsapp' | 'instagram' | 'messenger' | 'sms' |
+/// 'email'); null on legacy rows written before channel attribution.
+@override final  String? channelType;
 @override@JsonKey() final  String status;
 @override final  String? assignedUserId;
 @override@JsonKey() final  String priority;
@@ -540,16 +554,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThread&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.status, status) || other.status == status)&&(identical(other.assignedUserId, assignedUserId) || other.assignedUserId == assignedUserId)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.snoozedUntil, snoozedUntil) || other.snoozedUntil == snoozedUntil)&&(identical(other.lastInboundAt, lastInboundAt) || other.lastInboundAt == lastInboundAt)&&(identical(other.lastOutboundAt, lastOutboundAt) || other.lastOutboundAt == lastOutboundAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.serviceWindowExpiresAt, serviceWindowExpiresAt) || other.serviceWindowExpiresAt == serviceWindowExpiresAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other._labels, _labels)&&(identical(other.client, client) || other.client == client));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThread&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.channelType, channelType) || other.channelType == channelType)&&(identical(other.status, status) || other.status == status)&&(identical(other.assignedUserId, assignedUserId) || other.assignedUserId == assignedUserId)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.snoozedUntil, snoozedUntil) || other.snoozedUntil == snoozedUntil)&&(identical(other.lastInboundAt, lastInboundAt) || other.lastInboundAt == lastInboundAt)&&(identical(other.lastOutboundAt, lastOutboundAt) || other.lastOutboundAt == lastOutboundAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.serviceWindowExpiresAt, serviceWindowExpiresAt) || other.serviceWindowExpiresAt == serviceWindowExpiresAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other._labels, _labels)&&(identical(other.client, client) || other.client == client));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,clientId,status,assignedUserId,priority,snoozedUntil,lastInboundAt,lastOutboundAt,unreadCount,serviceWindowExpiresAt,updatedAt,const DeepCollectionEquality().hash(_labels),client);
+int get hashCode => Object.hash(runtimeType,id,senderId,clientId,channelType,status,assignedUserId,priority,snoozedUntil,lastInboundAt,lastOutboundAt,unreadCount,serviceWindowExpiresAt,updatedAt,const DeepCollectionEquality().hash(_labels),client);
 
 @override
 String toString() {
-  return 'InboxThread(id: $id, senderId: $senderId, clientId: $clientId, status: $status, assignedUserId: $assignedUserId, priority: $priority, snoozedUntil: $snoozedUntil, lastInboundAt: $lastInboundAt, lastOutboundAt: $lastOutboundAt, unreadCount: $unreadCount, serviceWindowExpiresAt: $serviceWindowExpiresAt, updatedAt: $updatedAt, labels: $labels, client: $client)';
+  return 'InboxThread(id: $id, senderId: $senderId, clientId: $clientId, channelType: $channelType, status: $status, assignedUserId: $assignedUserId, priority: $priority, snoozedUntil: $snoozedUntil, lastInboundAt: $lastInboundAt, lastOutboundAt: $lastOutboundAt, unreadCount: $unreadCount, serviceWindowExpiresAt: $serviceWindowExpiresAt, updatedAt: $updatedAt, labels: $labels, client: $client)';
 }
 
 
@@ -560,7 +574,7 @@ abstract mixin class _$InboxThreadCopyWith<$Res> implements $InboxThreadCopyWith
   factory _$InboxThreadCopyWith(_InboxThread value, $Res Function(_InboxThread) _then) = __$InboxThreadCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String senderId, String clientId, String status, String? assignedUserId, String priority, String? snoozedUntil, String? lastInboundAt, String? lastOutboundAt, int unreadCount, String? serviceWindowExpiresAt, String? updatedAt, List<InboxLabel> labels, InboxThreadContact? client
+ String id, String? senderId, String clientId, String? channelType, String status, String? assignedUserId, String priority, String? snoozedUntil, String? lastInboundAt, String? lastOutboundAt, int unreadCount, String? serviceWindowExpiresAt, String? updatedAt, List<InboxLabel> labels, InboxThreadContact? client
 });
 
 
@@ -577,12 +591,13 @@ class __$InboxThreadCopyWithImpl<$Res>
 
 /// Create a copy of InboxThread
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? senderId = null,Object? clientId = null,Object? status = null,Object? assignedUserId = freezed,Object? priority = null,Object? snoozedUntil = freezed,Object? lastInboundAt = freezed,Object? lastOutboundAt = freezed,Object? unreadCount = null,Object? serviceWindowExpiresAt = freezed,Object? updatedAt = freezed,Object? labels = null,Object? client = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? senderId = freezed,Object? clientId = null,Object? channelType = freezed,Object? status = null,Object? assignedUserId = freezed,Object? priority = null,Object? snoozedUntil = freezed,Object? lastInboundAt = freezed,Object? lastOutboundAt = freezed,Object? unreadCount = null,Object? serviceWindowExpiresAt = freezed,Object? updatedAt = freezed,Object? labels = null,Object? client = freezed,}) {
   return _then(_InboxThread(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
-as String,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,senderId: freezed == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
+as String?,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
+as String,channelType: freezed == channelType ? _self.channelType : channelType // ignore: cast_nullable_to_non_nullable
+as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,assignedUserId: freezed == assignedUserId ? _self.assignedUserId : assignedUserId // ignore: cast_nullable_to_non_nullable
 as String?,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
 as String,snoozedUntil: freezed == snoozedUntil ? _self.snoozedUntil : snoozedUntil // ignore: cast_nullable_to_non_nullable

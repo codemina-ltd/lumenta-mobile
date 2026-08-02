@@ -9,7 +9,7 @@ part of 'conversation.dart';
 _Conversation _$ConversationFromJson(Map<String, dynamic> json) =>
     _Conversation(
       clientId: _clientId(json, 'clientId') as String,
-      phoneNumber: json['phoneNumber'] as String,
+      phoneNumber: json['phoneNumber'] as String?,
       profileName: json['profileName'] as String?,
       lastMessageBody: json['lastMessageBody'] as String?,
       lastMessageType: $enumDecodeNullable(
@@ -22,6 +22,7 @@ _Conversation _$ConversationFromJson(Map<String, dynamic> json) =>
         json['lastMessageDirection'],
         unknownValue: MessageDirection.inbound,
       ),
+      lastMessageChannelType: json['lastMessageChannelType'] as String?,
       lastMessageAt: json['lastMessageAt'] as String?,
     );
 
@@ -34,6 +35,7 @@ Map<String, dynamic> _$ConversationToJson(_Conversation instance) =>
       'lastMessageType': _$MessageTypeEnumMap[instance.lastMessageType],
       'lastMessageDirection':
           _$MessageDirectionEnumMap[instance.lastMessageDirection],
+      'lastMessageChannelType': instance.lastMessageChannelType,
       'lastMessageAt': instance.lastMessageAt,
     };
 
@@ -50,6 +52,7 @@ const _$MessageTypeEnumMap = {
   MessageType.interactive: 'interactive',
   MessageType.template: 'template',
   MessageType.reaction: 'reaction',
+  MessageType.order: 'order',
   MessageType.unknown: 'unknown',
 };
 

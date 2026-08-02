@@ -383,5 +383,15 @@
       "title": "Sending blocked",
       "body": "A message could not be sent because your account is suspended for a compliance violation."
     }
+  },
+  "scheduled_message": {
+    "sent": {
+      "title": "Scheduled message sent",
+      "body": "\"{{templateName}}\" was sent as scheduled."
+    },
+    "failed": {
+      "title": "Scheduled message failed",
+      "body": "\"{{templateName}}\" failed to send: {{reason}}"
+    }
   }
 }

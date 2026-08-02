@@ -80,12 +80,15 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     final clientId = _clientIdFor(n);
     if (clientId == null) return;
     final noteId = _noteIdFor(n);
+    // Chat/client detail are root-level routes over the tab shell: `push` so a
+    // back/pop returns to the notifications list (KAN-7). `go` replaced the
+    // route, so back dropped the user on the chats/clients tab instead.
     if (noteId != null) {
-      context.go('/clients/$clientId?noteId=$noteId');
+      context.push('/clients/$clientId?noteId=$noteId');
       return;
     }
     final messageId = _messageIdFor(n);
-    context.go(
+    context.push(
       messageId == null
           ? '/chats/$clientId'
           : '/chats/$clientId?messageId=$messageId',
