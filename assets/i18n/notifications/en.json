@@ -244,6 +244,10 @@
     "subscription_suspended": {
       "title": "Subscription suspended",
       "body": "Your subscription has been suspended. Resolve billing to restore service."
+    },
+    "manual_renewal_failed": {
+      "title": "Subscription renewal failed",
+      "body": "Your subscription could not renew because your credit balance is too low. Top up your credit to avoid a lapse in service."
     }
   },
   "message": {
@@ -268,6 +272,18 @@
     "note_assigned": {
       "title": "{{authorName}} assigned you a note",
       "body": "{{authorName}} assigned you an internal note on the conversation with {{clientName}}."
+    },
+    "lead_auto_assigned": {
+      "title": "A lead was assigned to you",
+      "body": "{{clientName}} moved to \"{{leadStatusLabel}}\" and was automatically assigned to you."
+    },
+    "urgent_followup": {
+      "title": "Urgent follow-up needed",
+      "body": "The AI reviewer flagged the conversation with {{clientName}} for an urgent follow-up: {{reason}}"
+    },
+    "urgent_followup_unroutable": {
+      "title": "Urgent follow-up unassigned",
+      "body": "The AI reviewer flagged {{clientName}} for an urgent follow-up but no agent could be auto-assigned. Please assign it."
     }
   },
   "reminder": {
@@ -326,6 +342,10 @@
     "support_notified": {
       "title": "Lume escalated to support",
       "body": "Lume could not answer a customer question and notified the Lumenta support team."
+    },
+    "team_alert": {
+      "title": "A customer needs the team",
+      "body": "The AI assistant flagged the conversation with {{clientName}}: {{reason}}"
     },
     "trial_exhausted": {
       "title": "Lume free trial used up",
@@ -392,6 +412,38 @@
     "failed": {
       "title": "Scheduled message failed",
       "body": "\"{{templateName}}\" failed to send: {{reason}}"
+    }
+  },
+  "referral": {
+    "signup": {
+      "title": "Someone signed up with your referral",
+      "body": "{{tenantName}} joined Lumenta using your referral code."
+    },
+    "trial_started": {
+      "title": "Your referral started a trial",
+      "body": "{{tenantName}} started their free trial."
+    },
+    "first_payment": {
+      "title": "Your referral converted to paying",
+      "body": "{{tenantName}} paid their first invoice — a reward is on its way."
+    },
+    "milestone_reached": {
+      "title": "Referral milestone reached",
+      "body": "You reached milestone {{stage}} for {{tenantName}}."
+    },
+    "credit_granted": {
+      "title": "Referral credit granted",
+      "body": "{{amount}} of referral credit was added to your account. New balance: {{balance}}."
+    },
+    "level_changed": {
+      "title": "Your referral level changed",
+      "body": "You are now a {{level}} referrer."
+    }
+  },
+  "order": {
+    "received": {
+      "title": "New order from {{clientName}}",
+      "body": "{{itemCount}} item(s), total {{total}}."
     }
   }
 }

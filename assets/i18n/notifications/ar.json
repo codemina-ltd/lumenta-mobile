@@ -244,6 +244,10 @@
     "subscription_suspended": {
       "title": "تم تعليق الاشتراك",
       "body": "تم تعليق اشتراكك. سوّ الفوترة لاستعادة الخدمة."
+    },
+    "manual_renewal_failed": {
+      "title": "فشل تجديد الاشتراك",
+      "body": "تعذّر تجديد اشتراكك لأن رصيدك منخفض جدًا. اشحن رصيدك لتجنّب انقطاع الخدمة."
     }
   },
   "message": {
@@ -268,6 +272,18 @@
     "note_assigned": {
       "title": "أسند إليك {{authorName}} ملاحظة",
       "body": "أسند إليك {{authorName}} ملاحظة داخلية على المحادثة مع {{clientName}}."
+    },
+    "lead_auto_assigned": {
+      "title": "أُسند إليك عميل محتمل",
+      "body": "انتقل {{clientName}} إلى \"{{leadStatusLabel}}\" وأُسند إليك تلقائيًا."
+    },
+    "urgent_followup": {
+      "title": "متابعة عاجلة مطلوبة",
+      "body": "حدّد المراجع الذكي المحادثة مع {{clientName}} كمتابعة عاجلة: {{reason}}"
+    },
+    "urgent_followup_unroutable": {
+      "title": "متابعة عاجلة غير مُسندة",
+      "body": "حدّد المراجع الذكي {{clientName}} كمتابعة عاجلة لكن تعذّر إسنادها تلقائيًا إلى وكيل. يُرجى إسنادها."
     }
   },
   "reminder": {
@@ -326,6 +342,10 @@
     "support_notified": {
       "title": "صعّد Lume إلى الدعم",
       "body": "لم يتمكّن Lume من الإجابة عن سؤال عميل وأبلغ فريق دعم Lumenta."
+    },
+    "team_alert": {
+      "title": "عميل يحتاج إلى الفريق",
+      "body": "أبرز المساعد الذكي المحادثة مع {{clientName}}: {{reason}}"
     },
     "trial_exhausted": {
       "title": "انتهت تجربة Lume المجانية",
@@ -392,6 +412,38 @@
     "failed": {
       "title": "فشلت الرسالة المجدولة",
       "body": "فشل إرسال \"{{templateName}}\": {{reason}}"
+    }
+  },
+  "referral": {
+    "signup": {
+      "title": "انضم شخص عبر رابط الإحالة الخاص بك",
+      "body": "انضم {{tenantName}} إلى Lumenta باستخدام رمز الإحالة الخاص بك."
+    },
+    "trial_started": {
+      "title": "بدأت إحالتك فترة تجريبية",
+      "body": "بدأ {{tenantName}} فترته التجريبية المجانية."
+    },
+    "first_payment": {
+      "title": "تحوّلت إحالتك إلى عميل مدفوع",
+      "body": "دفع {{tenantName}} أول فاتورة له — المكافأة في الطريق."
+    },
+    "milestone_reached": {
+      "title": "تم بلوغ مرحلة إحالة",
+      "body": "بلغت المرحلة {{stage}} مع {{tenantName}}."
+    },
+    "credit_granted": {
+      "title": "تم منح رصيد إحالة",
+      "body": "تمت إضافة {{amount}} كرصيد إحالة إلى حسابك. الرصيد الجديد: {{balance}}."
+    },
+    "level_changed": {
+      "title": "تغيّر مستوى الإحالة الخاص بك",
+      "body": "أنت الآن محيل من فئة {{level}}."
+    }
+  },
+  "order": {
+    "received": {
+      "title": "طلب جديد من {{clientName}}",
+      "body": "{{itemCount}} عنصر (عناصر)، الإجمالي {{total}}."
     }
   }
 }

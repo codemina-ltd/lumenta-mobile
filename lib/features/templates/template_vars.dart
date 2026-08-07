@@ -34,12 +34,17 @@ class TemplateButtonField {
     required this.key,
     required this.label,
     required this.buttonIndex,
+    this.example,
   });
 
-  /// Payload key sent in `buttonVariables` — always `coupon_code`.
+  /// Payload key sent in `buttonVariables` — `coupon_code` (COPY_CODE) or
+  /// `url_param` (dynamic URL button).
   final String key;
   final String label;
   final int buttonIndex;
+
+  /// Example value from the button definition, used as input placeholder.
+  final String? example;
 }
 
 final _positionalToken = RegExp(r'\{\{\s*(\d+)\s*\}\}');
@@ -108,19 +113,47 @@ List<TemplateVarField> templateVarFields(Template t) {
   }).toList();
 }
 
-/// Dynamic button parameters — only COPY_CODE buttons carry a send-time value
-/// (`coupon_code`); URL/QUICK_REPLY/PHONE_NUMBER buttons are static.
+/// Dynamic button parameters that carry a send-time value the provider
+/// consumes:
+///  - COPY_CODE → `coupon_code` (the offer code).
+///  - URL with a `{{N}}` placeholder in its `url` → `url_param` (the value that
+///    completes the link). Static URL / QUICK_REPLY / PHONE_NUMBER buttons need
+///    nothing. Meta allows at most one dynamic-URL button per template, so the
+///    single `url_param` key never collides. Keys MUST match what the API
+///    provider reads (`meta.provider.ts` buildTemplateComponents) and the
+///    portal's `getTemplateButtonFields`.
 List<TemplateButtonField> templateButtonFields(Template t) {
   final buttons = t.buttons;
   if (buttons == null) return const [];
   final out = <TemplateButtonField>[];
   for (var i = 0; i < buttons.length; i++) {
     final b = buttons[i];
-    if (b is Map && b['type'] == 'COPY_CODE') {
+    if (b is! Map) continue;
+    if (b['type'] == 'COPY_CODE') {
       out.add(TemplateButtonField(
         key: 'coupon_code',
         label: '${b['text'] ?? ''}',
         buttonIndex: i,
+      ));
+    } else if (b['type'] == 'URL' &&
+        b['url'] is String &&
+        (b['url'] as String).contains(RegExp(r'\{\{[^}]+\}\}'))) {
+      // The stored example is the FULL sample URL; the send-time value is only
+      // the part that replaces `{{1}}`. Strip the static prefix so the
+      // placeholder shows the suffix the user should actually type.
+      final url = b['url'] as String;
+      final ex = b['example'];
+      String? example =
+          (ex is List && ex.isNotEmpty) ? '${ex.first}' : null;
+      final prefix = url.substring(0, url.indexOf('{{'));
+      if (example != null && prefix.isNotEmpty && example.startsWith(prefix)) {
+        example = example.substring(prefix.length);
+      }
+      out.add(TemplateButtonField(
+        key: 'url_param',
+        label: '${b['text'] ?? ''}',
+        buttonIndex: i,
+        example: example,
       ));
     }
   }

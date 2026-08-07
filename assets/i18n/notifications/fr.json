@@ -244,6 +244,10 @@
     "subscription_suspended": {
       "title": "Abonnement suspendu",
       "body": "Votre abonnement a été suspendu. Régularisez la facturation pour rétablir le service."
+    },
+    "manual_renewal_failed": {
+      "title": "Échec du renouvellement de l'abonnement",
+      "body": "Votre abonnement n'a pas pu être renouvelé car votre solde de crédit est trop faible. Rechargez votre crédit pour éviter une interruption de service."
     }
   },
   "message": {
@@ -268,6 +272,18 @@
     "note_assigned": {
       "title": "{{authorName}} vous a assigné une note",
       "body": "{{authorName}} vous a assigné une note interne sur la conversation avec {{clientName}}."
+    },
+    "lead_auto_assigned": {
+      "title": "Un prospect vous a été attribué",
+      "body": "{{clientName}} est passé à « {{leadStatusLabel}} » et vous a été automatiquement attribué."
+    },
+    "urgent_followup": {
+      "title": "Suivi urgent requis",
+      "body": "Le réviseur IA a signalé la conversation avec {{clientName}} pour un suivi urgent : {{reason}}"
+    },
+    "urgent_followup_unroutable": {
+      "title": "Suivi urgent non assigné",
+      "body": "Le réviseur IA a signalé {{clientName}} pour un suivi urgent, mais aucun agent n'a pu être assigné automatiquement. Veuillez l'assigner."
     }
   },
   "reminder": {
@@ -326,6 +342,10 @@
     "support_notified": {
       "title": "Lume a transmis au support",
       "body": "Lume n'a pas pu répondre à une question client et a prévenu l'équipe de support Lumenta."
+    },
+    "team_alert": {
+      "title": "Un client a besoin de l'équipe",
+      "body": "L'assistant IA a signalé la conversation avec {{clientName}} : {{reason}}"
     },
     "trial_exhausted": {
       "title": "Essai gratuit Lume épuisé",
@@ -392,6 +412,38 @@
     "failed": {
       "title": "Échec du message programmé",
       "body": "Échec de l'envoi de « {{templateName}} » : {{reason}}"
+    }
+  },
+  "referral": {
+    "signup": {
+      "title": "Quelqu'un s'est inscrit avec votre parrainage",
+      "body": "{{tenantName}} a rejoint Lumenta grâce à votre code de parrainage."
+    },
+    "trial_started": {
+      "title": "Votre filleul a démarré un essai",
+      "body": "{{tenantName}} a démarré son essai gratuit."
+    },
+    "first_payment": {
+      "title": "Votre filleul est devenu client payant",
+      "body": "{{tenantName}} a payé sa première facture — une récompense arrive."
+    },
+    "milestone_reached": {
+      "title": "Palier de parrainage atteint",
+      "body": "Vous avez atteint le palier {{stage}} pour {{tenantName}}."
+    },
+    "credit_granted": {
+      "title": "Crédit de parrainage accordé",
+      "body": "{{amount}} de crédit de parrainage a été ajouté à votre compte. Nouveau solde : {{balance}}."
+    },
+    "level_changed": {
+      "title": "Votre niveau de parrainage a changé",
+      "body": "Vous êtes maintenant parrain {{level}}."
+    }
+  },
+  "order": {
+    "received": {
+      "title": "Nouvelle commande de {{clientName}}",
+      "body": "{{itemCount}} article(s), total {{total}}."
     }
   }
 }

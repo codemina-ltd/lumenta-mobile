@@ -356,7 +356,7 @@ class _TemplateFillScreenState extends ConsumerState<TemplateFillScreen> {
             _Field(
               controller: _controllers['b:${f.key}']!,
               label: f.label,
-              hint: null,
+              hint: f.example,
             ),
             const SizedBox(height: Insets.lg),
           ],
