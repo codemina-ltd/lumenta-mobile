@@ -47,6 +47,7 @@ class PushService {
   bool _available = false;
   bool _initialized = false;
   String? _registeredToken;
+  Future<void>? _registerFlight;
 
   bool get isAvailable => _available;
 
@@ -82,10 +83,20 @@ class PushService {
       }
     });
 
-    // Re-register on token rotation.
-    FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+    // Re-register on token rotation, retiring the old token server-side
+    // first — a rotated-out token can stay deliverable for days, and leaving
+    // its registration behind means every push arrives twice.
+    FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
+      final previous = _registeredToken;
       _registeredToken = null;
-      _registerToken(token);
+      if (previous != null && previous != token) {
+        try {
+          await _ref.read(deviceRepoProvider).deregister(previous);
+        } catch (_) {
+          // Best-effort — the server also retires it by install id.
+        }
+      }
+      await _registerToken(token);
     });
 
     // Register whenever the session becomes authenticated.
@@ -161,8 +172,28 @@ class PushService {
     if (token != null) await _registerToken(token);
   }
 
+  /// Registration is single-flight: at startup the auth-listener and the
+  /// token-refresh stream can both request registration in the same instant,
+  /// and two concurrent POSTs once raced past the server's exists-check and
+  /// created duplicate device rows — every push then arrived twice. The
+  /// server is idempotent against that now, but don't send the race at all.
   Future<void> _registerToken(String token) async {
     if (token == _registeredToken) return;
+    final inFlight = _registerFlight;
+    if (inFlight != null) {
+      await inFlight;
+      if (token == _registeredToken) return;
+    }
+    final flight = _doRegisterToken(token);
+    _registerFlight = flight;
+    try {
+      await flight;
+    } finally {
+      _registerFlight = null;
+    }
+  }
+
+  Future<void> _doRegisterToken(String token) async {
     try {
       await _ref
           .read(deviceRepoProvider)
@@ -170,6 +201,7 @@ class PushService {
             deviceToken: token,
             platform: Platform.isIOS ? 'ios' : 'android',
             label: await _deviceLabel(),
+            deviceId: await _ref.read(installIdStoreProvider).get(),
           );
       _registeredToken = token;
     } catch (e) {

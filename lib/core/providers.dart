@@ -22,9 +22,14 @@ import '../data/repos/suppression_repo.dart';
 import '../data/repos/templates_repo.dart';
 import '../data/repos/tenant_repo.dart';
 import '../data/session/auth_session.dart';
+import '../data/storage/install_id_store.dart';
 import '../data/storage/token_storage.dart';
 
 final tokenStorageProvider = Provider<TokenStorage>((ref) => TokenStorage());
+
+final installIdStoreProvider = Provider<InstallIdStore>(
+  (ref) => InstallIdStore(),
+);
 
 final authSessionProvider = Provider<AuthSession>((ref) {
   final session = AuthSession(ref.watch(tokenStorageProvider));

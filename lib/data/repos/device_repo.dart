@@ -6,10 +6,13 @@ class DeviceRepo {
 
   /// `POST /notifications/channels/fcm/register` — upserts + auto-verifies the
   /// FCM token for (tenant, user). `label` records platform + app version.
+  /// `deviceId` is the stable install id — it lets the server retire this
+  /// device's previous token after an FCM rotation instead of double-pushing.
   Future<void> register({
     required String deviceToken,
     required String platform, // 'ios' | 'android'
     String? label,
+    String? deviceId,
   }) {
     return _dio.post<void>(
       '/notifications/channels/fcm/register',
@@ -17,6 +20,7 @@ class DeviceRepo {
         'deviceToken': deviceToken,
         'platform': platform,
         'label': ?label,
+        'deviceId': ?deviceId,
       },
     );
   }
