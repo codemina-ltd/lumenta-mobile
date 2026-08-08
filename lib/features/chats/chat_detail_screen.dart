@@ -268,6 +268,59 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     return false;
   }
 
+  /// KAN-28: bottom-sheet picker for the recipient number, opened by tapping
+  /// the number under the client name in the header. Sets [_activeNumber],
+  /// which the composer sends to.
+  Future<void> _pickRecipientNumber(
+    BuildContext context,
+    List<ClientPhoneNumber> numbers,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+    final current = _activeNumber ?? numbers.firstOrNull?.phoneNumber;
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                Insets.lg,
+                Insets.sm,
+                Insets.lg,
+                Insets.xs,
+              ),
+              child: Text(
+                l10n.chatSendTo,
+                style: context.text.labelMedium?.copyWith(
+                  color: context.scheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            for (final n in numbers)
+              ListTile(
+                title: Text(
+                  '+${n.phoneNumber}',
+                  textDirection: TextDirection.ltr,
+                ),
+                subtitle: n.isPrimary
+                    ? Text(l10n.clientPhoneNumberPrimary)
+                    : (n.label != null && n.label!.isNotEmpty
+                          ? Text(n.label!)
+                          : null),
+                trailing: n.phoneNumber == current
+                    ? const Icon(Icons.check_rounded)
+                    : null,
+                onTap: () => Navigator.pop(sheetContext, n.phoneNumber),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (picked != null) setState(() => _activeNumber = picked);
+  }
+
   @override
   Widget build(BuildContext context) {
     final clientAsync = ref.watch(clientProvider(widget.clientId));
@@ -388,10 +441,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       data: (c) => c.initials,
       orElse: () => '',
     );
-    final phone = clientAsync.maybeWhen(
-      data: (c) => c.phoneNumber == null ? null : '+${c.phoneNumber}',
+    // KAN-28: the header shows the ACTIVE recipient number (the one the
+    // composer sends to), switchable when the profile has more than one.
+    final canonicalPhone = clientAsync.maybeWhen(
+      data: (c) => c.phoneNumber,
       orElse: () => null,
     );
+    final activePhone = _activeNumber ?? canonicalPhone;
+    final phone = activePhone == null ? null : '+$activePhone';
 
     if (threadKey != null) {
       ref.listen(threadControllerProvider(threadKey), (_, next) {
@@ -432,14 +489,43 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                       style: context.text.titleMedium?.copyWith(fontSize: 17),
                     ),
                     if (phone != null)
-                      Text(
-                        phone,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.text.labelSmall?.copyWith(
-                          color: context.scheme.onSurfaceVariant,
-                        ),
-                      ),
+                      phoneNumbers.length > 1
+                          // Tapping the number switches the recipient; the
+                          // inner tap wins the gesture arena so the header's
+                          // open-profile tap doesn't also fire.
+                          ? InkWell(
+                              onTap: () =>
+                                  _pickRecipientNumber(context, phoneNumbers),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      phone,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: context.text.labelSmall?.copyWith(
+                                        color: context.scheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 15,
+                                    color: context.scheme.onSurfaceVariant,
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Text(
+                              phone,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: context.text.labelSmall?.copyWith(
+                                color: context.scheme.onSurfaceVariant,
+                              ),
+                            ),
                   ],
                 ),
               ),
@@ -491,15 +577,10 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               )
             else if (clientAsync.value!.phoneNumber == null)
               _channelReplyArea(context, threadKey)
-            else ...[
-              if (phoneNumbers.length > 1)
-                _RecipientNumberBar(
-                  numbers: phoneNumbers,
-                  selected: _activeNumber ?? clientAsync.value!.phoneNumber!,
-                  onChanged: (v) => setState(() => _activeNumber = v),
-                ),
+            else
               ChatComposer(
                 threadKey: threadKey,
+                // KAN-28: the recipient number comes from the header switcher.
                 to: _activeNumber ?? clientAsync.value!.phoneNumber!,
                 windowOpen: _windowOpen(state),
                 onSent: () {
@@ -521,7 +602,6 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     !showSenderTabs ||
                     (activeSender?.isActive ?? activeConv?.isActive ?? true),
               ),
-            ],
         ],
       ),
     );
@@ -748,75 +828,6 @@ class _Row {
   final Message? message;
   final ScheduledMessage? scheduled;
   final bool showSentBy;
-}
-
-/// KAN-28: recipient-number switcher shown above the composer when the unified
-/// profile has more than one WhatsApp number. Picking a number changes which
-/// one the next message is sent to.
-class _RecipientNumberBar extends StatelessWidget {
-  const _RecipientNumberBar({
-    required this.numbers,
-    required this.selected,
-    required this.onChanged,
-  });
-  final List<ClientPhoneNumber> numbers;
-  final String selected;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Insets.lg,
-        vertical: Insets.sm,
-      ),
-      color: context.scheme.surfaceContainerHigh,
-      child: Row(
-        children: [
-          Icon(
-            Icons.send_outlined,
-            size: 16,
-            color: context.scheme.onSurfaceVariant,
-          ),
-          const SizedBox(width: Insets.sm),
-          Text(
-            '${l10n.chatSendTo}:',
-            style: context.text.labelMedium?.copyWith(
-              color: context.scheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(width: Insets.sm),
-          Expanded(
-            child: DropdownButton<String>(
-              value: selected,
-              isExpanded: true,
-              isDense: true,
-              underline: const SizedBox.shrink(),
-              onChanged: (v) {
-                if (v != null) onChanged(v);
-              },
-              items: [
-                for (final num in numbers)
-                  DropdownMenuItem(
-                    value: num.phoneNumber,
-                    child: Text(
-                      num.isPrimary
-                          ? '${num.phoneNumber} · ${l10n.clientPhoneNumberPrimary}'
-                          : (num.label != null && num.label!.isNotEmpty)
-                          ? '${num.phoneNumber} · ${num.label}'
-                          : num.phoneNumber,
-                      textDirection: TextDirection.ltr,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _DayHeader extends StatelessWidget {
