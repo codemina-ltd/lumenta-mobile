@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/providers.dart';
 import '../../data/models/channel_thread.dart';
 import '../../data/models/client.dart';
+import '../../data/models/client_phone_number.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/inbox_thread.dart';
 import '../../data/models/message.dart';
@@ -23,6 +24,14 @@ final clientProvider = FutureProvider.autoDispose.family<Client, String>((
 ) async {
   return ref.read(clientsRepoProvider).getById(id);
 });
+
+/// Every WhatsApp number on a unified client profile (KAN-28) — primary first.
+/// Powers the client-detail management section and the chat composer's
+/// recipient-number switcher. Invalidated after any number mutation or a merge.
+final clientPhoneNumbersProvider = FutureProvider.autoDispose
+    .family<List<ClientPhoneNumber>, String>((ref, clientId) async {
+      return ref.read(clientPhoneNumbersRepoProvider).list(clientId);
+    });
 
 /// Senders that have message history with this client — one thread tab each.
 /// Invalidated by [ThreadController] after a successful send so a first

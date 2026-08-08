@@ -2289,6 +2289,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unsupported message'**
   String get unsupportedMessage;
+
+  /// No description provided for @clientPhoneNumbersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone numbers'**
+  String get clientPhoneNumbersTitle;
+
+  /// No description provided for @clientPhoneNumberPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary'**
+  String get clientPhoneNumberPrimary;
+
+  /// No description provided for @clientPhoneNumberAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add number'**
+  String get clientPhoneNumberAdd;
+
+  /// No description provided for @clientPhoneNumberAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add phone number'**
+  String get clientPhoneNumberAddTitle;
+
+  /// No description provided for @clientPhoneNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number (country code first)'**
+  String get clientPhoneNumberHint;
+
+  /// No description provided for @clientPhoneNumberLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Label (optional)'**
+  String get clientPhoneNumberLabelHint;
+
+  /// No description provided for @clientPhoneNumberMakePrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Make primary'**
+  String get clientPhoneNumberMakePrimary;
+
+  /// No description provided for @clientPhoneNumberRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get clientPhoneNumberRemove;
+
+  /// No description provided for @clientPhoneNumberRemoveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {phone} from this profile? Messages to this number will no longer reach this contact.'**
+  String clientPhoneNumberRemoveConfirm(String phone);
+
+  /// No description provided for @clientPhoneNumberAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Number added'**
+  String get clientPhoneNumberAdded;
+
+  /// No description provided for @clientPhoneNumberRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Number removed'**
+  String get clientPhoneNumberRemoved;
+
+  /// No description provided for @clientPhoneNumberPrimarySet.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary number updated'**
+  String get clientPhoneNumberPrimarySet;
+
+  /// No description provided for @clientPhoneNumberActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get clientPhoneNumberActionFailed;
+
+  /// No description provided for @clientPhoneNumberSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get clientPhoneNumberSave;
+
+  /// No description provided for @mergeContactAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge another contact'**
+  String get mergeContactAction;
+
+  /// No description provided for @mergeContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge contact'**
+  String get mergeContactTitle;
+
+  /// No description provided for @mergeContactExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'The other contact\'s conversations and numbers move onto this profile. You can undo a merge later.'**
+  String get mergeContactExplainer;
+
+  /// No description provided for @mergeContactSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search a contact to merge in…'**
+  String get mergeContactSearchHint;
+
+  /// No description provided for @mergeContactConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge'**
+  String get mergeContactConfirm;
+
+  /// No description provided for @mergeContactDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts merged'**
+  String get mergeContactDone;
+
+  /// No description provided for @mergeContactFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge failed'**
+  String get mergeContactFailed;
+
+  /// No description provided for @chatSendTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to'**
+  String get chatSendTo;
 }
 
 class _AppLocalizationsDelegate

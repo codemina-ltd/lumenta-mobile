@@ -437,5 +437,34 @@
   "channelSendFailed": "Sending failed. Please try again.",
   "storyReply": "Replied to your story",
   "storyMention": "Mentioned you in a story",
-  "unsupportedMessage": "Unsupported message"
+  "unsupportedMessage": "Unsupported message",
+  "clientPhoneNumbersTitle": "Phone numbers",
+  "clientPhoneNumberPrimary": "Primary",
+  "clientPhoneNumberAdd": "Add number",
+  "clientPhoneNumberAddTitle": "Add phone number",
+  "clientPhoneNumberHint": "Phone number (country code first)",
+  "clientPhoneNumberLabelHint": "Label (optional)",
+  "clientPhoneNumberMakePrimary": "Make primary",
+  "clientPhoneNumberRemove": "Remove",
+  "clientPhoneNumberRemoveConfirm": "Remove {phone} from this profile? Messages to this number will no longer reach this contact.",
+  "@clientPhoneNumberRemoveConfirm": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "clientPhoneNumberAdded": "Number added",
+  "clientPhoneNumberRemoved": "Number removed",
+  "clientPhoneNumberPrimarySet": "Primary number updated",
+  "clientPhoneNumberActionFailed": "Something went wrong",
+  "clientPhoneNumberSave": "Save",
+  "mergeContactAction": "Merge another contact",
+  "mergeContactTitle": "Merge contact",
+  "mergeContactExplainer": "The other contact's conversations and numbers move onto this profile. You can undo a merge later.",
+  "mergeContactSearchHint": "Search a contact to merge in…",
+  "mergeContactConfirm": "Merge",
+  "mergeContactDone": "Contacts merged",
+  "mergeContactFailed": "Merge failed",
+  "chatSendTo": "Send to"
 }

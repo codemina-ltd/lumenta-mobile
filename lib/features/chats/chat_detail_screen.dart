@@ -16,6 +16,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/channel_thread.dart';
+import '../../data/models/client_phone_number.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/message.dart';
 import '../../data/models/scheduled_message.dart';
@@ -92,6 +93,10 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   /// ([autoSelectChannelThreadProvider]) may land the chat on the channel tab
   /// carrying the client's most recent inbound message.
   bool _tabPicked = false;
+
+  /// KAN-28: recipient number the composer sends to when the unified profile
+  /// has more than one WhatsApp number. Null = the client's canonical number.
+  String? _activeNumber;
 
   /// Resolved thread scope the scroll listener reads; null until the sender
   /// lookups settle so the first thread fetch is already correctly scoped.
@@ -266,6 +271,13 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final clientAsync = ref.watch(clientProvider(widget.clientId));
+
+    // KAN-28: every WhatsApp number on this unified profile — the composer can
+    // switch which one the next message goes to (single-number profiles never
+    // render the switcher).
+    final phoneNumbers =
+        ref.watch(clientPhoneNumbersProvider(widget.clientId)).asData?.value ??
+        const [];
 
     // ── Per-sender threads ──────────────────────────────────────────────
     // Which senders have history with this client (tab list) + all tenant
@@ -479,10 +491,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               )
             else if (clientAsync.value!.phoneNumber == null)
               _channelReplyArea(context, threadKey)
-            else
+            else ...[
+              if (phoneNumbers.length > 1)
+                _RecipientNumberBar(
+                  numbers: phoneNumbers,
+                  selected: _activeNumber ?? clientAsync.value!.phoneNumber!,
+                  onChanged: (v) => setState(() => _activeNumber = v),
+                ),
               ChatComposer(
                 threadKey: threadKey,
-                to: clientAsync.value!.phoneNumber!,
+                to: _activeNumber ?? clientAsync.value!.phoneNumber!,
                 windowOpen: _windowOpen(state),
                 onSent: () {
                   _scrollToBottom();
@@ -503,6 +521,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     !showSenderTabs ||
                     (activeSender?.isActive ?? activeConv?.isActive ?? true),
               ),
+            ],
         ],
       ),
     );
@@ -729,6 +748,75 @@ class _Row {
   final Message? message;
   final ScheduledMessage? scheduled;
   final bool showSentBy;
+}
+
+/// KAN-28: recipient-number switcher shown above the composer when the unified
+/// profile has more than one WhatsApp number. Picking a number changes which
+/// one the next message is sent to.
+class _RecipientNumberBar extends StatelessWidget {
+  const _RecipientNumberBar({
+    required this.numbers,
+    required this.selected,
+    required this.onChanged,
+  });
+  final List<ClientPhoneNumber> numbers;
+  final String selected;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.lg,
+        vertical: Insets.sm,
+      ),
+      color: context.scheme.surfaceContainerHigh,
+      child: Row(
+        children: [
+          Icon(
+            Icons.send_outlined,
+            size: 16,
+            color: context.scheme.onSurfaceVariant,
+          ),
+          const SizedBox(width: Insets.sm),
+          Text(
+            '${l10n.chatSendTo}:',
+            style: context.text.labelMedium?.copyWith(
+              color: context.scheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(width: Insets.sm),
+          Expanded(
+            child: DropdownButton<String>(
+              value: selected,
+              isExpanded: true,
+              isDense: true,
+              underline: const SizedBox.shrink(),
+              onChanged: (v) {
+                if (v != null) onChanged(v);
+              },
+              items: [
+                for (final num in numbers)
+                  DropdownMenuItem(
+                    value: num.phoneNumber,
+                    child: Text(
+                      num.isPrimary
+                          ? '${num.phoneNumber} · ${l10n.clientPhoneNumberPrimary}'
+                          : (num.label != null && num.label!.isNotEmpty)
+                          ? '${num.phoneNumber} · ${num.label}'
+                          : num.phoneNumber,
+                      textDirection: TextDirection.ltr,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _DayHeader extends StatelessWidget {

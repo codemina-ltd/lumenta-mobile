@@ -20,6 +20,7 @@ import 'client_campaigns_card.dart';
 import 'client_detail_providers.dart';
 import 'client_notes_card.dart';
 import 'client_orders_card.dart';
+import 'client_phone_numbers_card.dart';
 import 'client_profile_card.dart';
 import 'client_recent_messages_card.dart';
 import 'client_reminders_card.dart';
@@ -74,6 +75,10 @@ class ClientDetailScreen extends ConsumerWidget {
               title: l10n.clientDetailGroupProfile,
               cards: [
                 ClientProfileCard(clientId: clientId),
+                // Phone numbers on this unified profile (KAN-28) — primary plus
+                // any numbers folded on by merging WhatsApp contacts. Self-hides
+                // for phone-less (channel-only) contacts.
+                ClientPhoneNumbersCard(clientId: clientId),
                 ClientTeamCard(clientId: clientId),
               ],
             ),

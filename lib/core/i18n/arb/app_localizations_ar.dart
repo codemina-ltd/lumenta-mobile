@@ -1180,4 +1180,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unsupportedMessage => 'رسالة غير مدعومة';
+
+  @override
+  String get clientPhoneNumbersTitle => 'أرقام الهاتف';
+
+  @override
+  String get clientPhoneNumberPrimary => 'أساسي';
+
+  @override
+  String get clientPhoneNumberAdd => 'إضافة رقم';
+
+  @override
+  String get clientPhoneNumberAddTitle => 'إضافة رقم هاتف';
+
+  @override
+  String get clientPhoneNumberHint => 'رقم الهاتف (رمز الدولة أولاً)';
+
+  @override
+  String get clientPhoneNumberLabelHint => 'تسمية (اختياري)';
+
+  @override
+  String get clientPhoneNumberMakePrimary => 'تعيين كأساسي';
+
+  @override
+  String get clientPhoneNumberRemove => 'إزالة';
+
+  @override
+  String clientPhoneNumberRemoveConfirm(String phone) {
+    return 'إزالة $phone من هذا الملف؟ لن تصل الرسائل إلى هذا الرقم إلى جهة الاتصال هذه بعد الآن.';
+  }
+
+  @override
+  String get clientPhoneNumberAdded => 'تمت إضافة الرقم';
+
+  @override
+  String get clientPhoneNumberRemoved => 'تمت إزالة الرقم';
+
+  @override
+  String get clientPhoneNumberPrimarySet => 'تم تحديث الرقم الأساسي';
+
+  @override
+  String get clientPhoneNumberActionFailed => 'حدث خطأ ما';
+
+  @override
+  String get clientPhoneNumberSave => 'حفظ';
+
+  @override
+  String get mergeContactAction => 'دمج جهة اتصال أخرى';
+
+  @override
+  String get mergeContactTitle => 'دمج جهة الاتصال';
+
+  @override
+  String get mergeContactExplainer =>
+      'تنتقل محادثات وأرقام جهة الاتصال الأخرى إلى هذا الملف. يمكنك التراجع عن الدمج لاحقًا.';
+
+  @override
+  String get mergeContactSearchHint => 'ابحث عن جهة اتصال لدمجها…';
+
+  @override
+  String get mergeContactConfirm => 'دمج';
+
+  @override
+  String get mergeContactDone => 'تم دمج جهات الاتصال';
+
+  @override
+  String get mergeContactFailed => 'فشل الدمج';
+
+  @override
+  String get chatSendTo => 'إرسال إلى';
 }

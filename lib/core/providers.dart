@@ -5,6 +5,7 @@ import '../data/http/dio_client.dart';
 import '../data/repos/auth_repo.dart';
 import '../data/repos/calls_repo.dart';
 import '../data/repos/campaigns_repo.dart';
+import '../data/repos/client_phone_numbers_repo.dart';
 import '../data/repos/clients_repo.dart';
 import '../data/repos/commerce_repo.dart';
 import '../data/repos/contacts_repo.dart';
@@ -49,6 +50,9 @@ final tenantRepoProvider = Provider<TenantRepo>(
 );
 final clientsRepoProvider = Provider<ClientsRepo>(
   (ref) => ClientsRepo(ref.watch(dioProvider)),
+);
+final clientPhoneNumbersRepoProvider = Provider<ClientPhoneNumbersRepo>(
+  (ref) => ClientPhoneNumbersRepo(ref.watch(dioProvider)),
 );
 final messagesRepoProvider = Provider<MessagesRepo>(
   (ref) => MessagesRepo(ref.watch(dioProvider)),
