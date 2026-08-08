@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/providers.dart';
 import '../../data/models/channel_thread.dart';
 import '../../data/models/client.dart';
+import '../../data/models/client_phone_number.dart';
 import '../../data/models/conversation_sender.dart';
+import '../../data/models/flow.dart';
 import '../../data/models/inbox_thread.dart';
 import '../../data/models/message.dart';
 import '../../data/models/scheduled_message.dart';
@@ -23,6 +25,14 @@ final clientProvider = FutureProvider.autoDispose.family<Client, String>((
 ) async {
   return ref.read(clientsRepoProvider).getById(id);
 });
+
+/// Every WhatsApp number on a unified client profile (KAN-28) — primary first.
+/// Powers the client-detail management section and the chat composer's
+/// recipient-number switcher. Invalidated after any number mutation or a merge.
+final clientPhoneNumbersProvider = FutureProvider.autoDispose
+    .family<List<ClientPhoneNumber>, String>((ref, clientId) async {
+      return ref.read(clientPhoneNumbersRepoProvider).list(clientId);
+    });
 
 /// Senders that have message history with this client — one thread tab each.
 /// Invalidated by [ThreadController] after a successful send so a first
@@ -173,6 +183,17 @@ final chatScheduledMessagesProvider = FutureProvider.autoDispose
           .list(clientId, status: 'pending,failed', limit: 50);
       return page.data;
     });
+
+/// Every flow in the tenant (id + name + JSON), used to resolve an inbound
+/// flow response's raw keys/values into the labels and option titles the
+/// customer saw. Session-cached (NOT autoDispose) and tenant-rescoped, same
+/// rationale as [chatTemplateProvider] — a thread shouldn't refetch the flow
+/// list per opened response. A submission is matched to a flow by field-name
+/// overlap, since the message carries no flow id.
+final chatFlowsProvider = FutureProvider<List<Flow>>((ref) async {
+  ref.watch(authControllerProvider.select((s) => s.activeTenantId));
+  return ref.read(flowsRepoProvider).list();
+});
 
 /// Auth headers for loading proxied media (`/messages/:id/media`).
 final mediaHeadersProvider = Provider<Map<String, String>>((ref) {

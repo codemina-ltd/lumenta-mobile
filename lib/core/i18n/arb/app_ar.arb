@@ -59,7 +59,9 @@
   "liveCallWith": "في مكالمة مع {name}",
   "@liveCallWith": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "clientsTitle": "العملاء",
@@ -110,6 +112,8 @@
   "flowResponseDetailsTitle": "رد العميل",
   "flowFieldColumn": "الحقل",
   "flowValueColumn": "القيمة",
+  "flowValueYes": "نعم",
+  "flowValueNo": "لا",
   "close": "إغلاق",
   "chatProductView": "عرض",
   "chatOrderItems": "{count, plural, zero{{count} عنصر} one{عنصر واحد} two{عنصران} few{{count} عناصر} many{{count} عنصرًا} other{{count} عنصر}}",
@@ -427,5 +431,34 @@
   "channelSendFailed": "فشل الإرسال. يرجى المحاولة مرة أخرى.",
   "storyReply": "ردّ على قصتك",
   "storyMention": "أشار إليك في قصة",
-  "unsupportedMessage": "رسالة غير مدعومة"
+  "unsupportedMessage": "رسالة غير مدعومة",
+  "clientPhoneNumbersTitle": "أرقام الهاتف",
+  "clientPhoneNumberPrimary": "أساسي",
+  "clientPhoneNumberAdd": "إضافة رقم",
+  "clientPhoneNumberAddTitle": "إضافة رقم هاتف",
+  "clientPhoneNumberHint": "رقم الهاتف (رمز الدولة أولاً)",
+  "clientPhoneNumberLabelHint": "تسمية (اختياري)",
+  "clientPhoneNumberMakePrimary": "تعيين كأساسي",
+  "clientPhoneNumberRemove": "إزالة",
+  "clientPhoneNumberRemoveConfirm": "إزالة {phone} من هذا الملف؟ لن تصل الرسائل إلى هذا الرقم إلى جهة الاتصال هذه بعد الآن.",
+  "@clientPhoneNumberRemoveConfirm": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "clientPhoneNumberAdded": "تمت إضافة الرقم",
+  "clientPhoneNumberRemoved": "تمت إزالة الرقم",
+  "clientPhoneNumberPrimarySet": "تم تحديث الرقم الأساسي",
+  "clientPhoneNumberActionFailed": "حدث خطأ ما",
+  "clientPhoneNumberSave": "حفظ",
+  "mergeContactAction": "دمج جهة اتصال أخرى",
+  "mergeContactTitle": "دمج جهة الاتصال",
+  "mergeContactExplainer": "تنتقل محادثات وأرقام جهة الاتصال الأخرى إلى هذا الملف. يمكنك التراجع عن الدمج لاحقًا.",
+  "mergeContactSearchHint": "ابحث عن جهة اتصال لدمجها…",
+  "mergeContactConfirm": "دمج",
+  "mergeContactDone": "تم دمج جهات الاتصال",
+  "mergeContactFailed": "فشل الدمج",
+  "chatSendTo": "إرسال إلى"
 }

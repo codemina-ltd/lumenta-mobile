@@ -315,6 +315,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get flowValueColumn => 'Valeur';
 
   @override
+  String get flowValueYes => 'Oui';
+
+  @override
+  String get flowValueNo => 'Non';
+
+  @override
   String get close => 'Fermer';
 
   @override
@@ -1191,4 +1197,74 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get unsupportedMessage => 'Message non pris en charge';
+
+  @override
+  String get clientPhoneNumbersTitle => 'Numéros de téléphone';
+
+  @override
+  String get clientPhoneNumberPrimary => 'Principal';
+
+  @override
+  String get clientPhoneNumberAdd => 'Ajouter un numéro';
+
+  @override
+  String get clientPhoneNumberAddTitle => 'Ajouter un numéro';
+
+  @override
+  String get clientPhoneNumberHint =>
+      'Numéro de téléphone (indicatif pays en premier)';
+
+  @override
+  String get clientPhoneNumberLabelHint => 'Libellé (facultatif)';
+
+  @override
+  String get clientPhoneNumberMakePrimary => 'Définir comme principal';
+
+  @override
+  String get clientPhoneNumberRemove => 'Supprimer';
+
+  @override
+  String clientPhoneNumberRemoveConfirm(String phone) {
+    return 'Supprimer $phone de ce profil ? Les messages vers ce numéro n’atteindront plus ce contact.';
+  }
+
+  @override
+  String get clientPhoneNumberAdded => 'Numéro ajouté';
+
+  @override
+  String get clientPhoneNumberRemoved => 'Numéro supprimé';
+
+  @override
+  String get clientPhoneNumberPrimarySet => 'Numéro principal mis à jour';
+
+  @override
+  String get clientPhoneNumberActionFailed => 'Une erreur s’est produite';
+
+  @override
+  String get clientPhoneNumberSave => 'Enregistrer';
+
+  @override
+  String get mergeContactAction => 'Fusionner un autre contact';
+
+  @override
+  String get mergeContactTitle => 'Fusionner le contact';
+
+  @override
+  String get mergeContactExplainer =>
+      'Les conversations et numéros de l’autre contact sont déplacés vers ce profil. Vous pourrez annuler la fusion plus tard.';
+
+  @override
+  String get mergeContactSearchHint => 'Rechercher un contact à fusionner…';
+
+  @override
+  String get mergeContactConfirm => 'Fusionner';
+
+  @override
+  String get mergeContactDone => 'Contacts fusionnés';
+
+  @override
+  String get mergeContactFailed => 'Échec de la fusion';
+
+  @override
+  String get chatSendTo => 'Envoyer à';
 }

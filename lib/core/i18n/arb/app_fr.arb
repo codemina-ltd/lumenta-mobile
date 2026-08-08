@@ -59,7 +59,9 @@
   "liveCallWith": "En appel avec {name}",
   "@liveCallWith": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "clientsTitle": "Clients",
@@ -110,6 +112,8 @@
   "flowResponseDetailsTitle": "Détails de la réponse du client",
   "flowFieldColumn": "Champ",
   "flowValueColumn": "Valeur",
+  "flowValueYes": "Oui",
+  "flowValueNo": "Non",
   "close": "Fermer",
   "chatProductView": "Voir",
   "chatOrderItems": "{count, plural, one{{count} article} other{{count} articles}}",
@@ -427,5 +431,34 @@
   "channelSendFailed": "Échec de l'envoi. Veuillez réessayer.",
   "storyReply": "A répondu à votre story",
   "storyMention": "Vous a mentionné dans une story",
-  "unsupportedMessage": "Message non pris en charge"
+  "unsupportedMessage": "Message non pris en charge",
+  "clientPhoneNumbersTitle": "Numéros de téléphone",
+  "clientPhoneNumberPrimary": "Principal",
+  "clientPhoneNumberAdd": "Ajouter un numéro",
+  "clientPhoneNumberAddTitle": "Ajouter un numéro",
+  "clientPhoneNumberHint": "Numéro de téléphone (indicatif pays en premier)",
+  "clientPhoneNumberLabelHint": "Libellé (facultatif)",
+  "clientPhoneNumberMakePrimary": "Définir comme principal",
+  "clientPhoneNumberRemove": "Supprimer",
+  "clientPhoneNumberRemoveConfirm": "Supprimer {phone} de ce profil ? Les messages vers ce numéro n’atteindront plus ce contact.",
+  "@clientPhoneNumberRemoveConfirm": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "clientPhoneNumberAdded": "Numéro ajouté",
+  "clientPhoneNumberRemoved": "Numéro supprimé",
+  "clientPhoneNumberPrimarySet": "Numéro principal mis à jour",
+  "clientPhoneNumberActionFailed": "Une erreur s’est produite",
+  "clientPhoneNumberSave": "Enregistrer",
+  "mergeContactAction": "Fusionner un autre contact",
+  "mergeContactTitle": "Fusionner le contact",
+  "mergeContactExplainer": "Les conversations et numéros de l’autre contact sont déplacés vers ce profil. Vous pourrez annuler la fusion plus tard.",
+  "mergeContactSearchHint": "Rechercher un contact à fusionner…",
+  "mergeContactConfirm": "Fusionner",
+  "mergeContactDone": "Contacts fusionnés",
+  "mergeContactFailed": "Échec de la fusion",
+  "chatSendTo": "Envoyer à"
 }

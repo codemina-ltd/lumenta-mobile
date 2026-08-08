@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
+import '../../core/flow_field_meta.dart';
 import '../../core/format.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/providers.dart';
@@ -16,6 +16,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_dimens.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/models/channel_thread.dart';
+import '../../data/models/client_phone_number.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/message.dart';
 import '../../data/models/scheduled_message.dart';
@@ -92,6 +93,10 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   /// ([autoSelectChannelThreadProvider]) may land the chat on the channel tab
   /// carrying the client's most recent inbound message.
   bool _tabPicked = false;
+
+  /// KAN-28: recipient number the composer sends to when the unified profile
+  /// has more than one WhatsApp number. Null = the client's canonical number.
+  String? _activeNumber;
 
   /// Resolved thread scope the scroll listener reads; null until the sender
   /// lookups settle so the first thread fetch is already correctly scoped.
@@ -263,9 +268,69 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     return false;
   }
 
+  /// KAN-28: bottom-sheet picker for the recipient number, opened by tapping
+  /// the number under the client name in the header. Sets [_activeNumber],
+  /// which the composer sends to.
+  Future<void> _pickRecipientNumber(
+    BuildContext context,
+    List<ClientPhoneNumber> numbers,
+  ) async {
+    final l10n = AppLocalizations.of(context);
+    final current = _activeNumber ?? numbers.firstOrNull?.phoneNumber;
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                Insets.lg,
+                Insets.sm,
+                Insets.lg,
+                Insets.xs,
+              ),
+              child: Text(
+                l10n.chatSendTo,
+                style: context.text.labelMedium?.copyWith(
+                  color: context.scheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            for (final n in numbers)
+              ListTile(
+                title: Text(
+                  '+${n.phoneNumber}',
+                  textDirection: TextDirection.ltr,
+                ),
+                subtitle: n.isPrimary
+                    ? Text(l10n.clientPhoneNumberPrimary)
+                    : (n.label != null && n.label!.isNotEmpty
+                          ? Text(n.label!)
+                          : null),
+                trailing: n.phoneNumber == current
+                    ? const Icon(Icons.check_rounded)
+                    : null,
+                onTap: () => Navigator.pop(sheetContext, n.phoneNumber),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (picked != null) setState(() => _activeNumber = picked);
+  }
+
   @override
   Widget build(BuildContext context) {
     final clientAsync = ref.watch(clientProvider(widget.clientId));
+
+    // KAN-28: every WhatsApp number on this unified profile — the composer can
+    // switch which one the next message goes to (single-number profiles never
+    // render the switcher).
+    final phoneNumbers =
+        ref.watch(clientPhoneNumbersProvider(widget.clientId)).asData?.value ??
+        const [];
 
     // ── Per-sender threads ──────────────────────────────────────────────
     // Which senders have history with this client (tab list) + all tenant
@@ -376,10 +441,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       data: (c) => c.initials,
       orElse: () => '',
     );
-    final phone = clientAsync.maybeWhen(
-      data: (c) => c.phoneNumber == null ? null : '+${c.phoneNumber}',
+    // KAN-28: the header shows the ACTIVE recipient number (the one the
+    // composer sends to), switchable when the profile has more than one.
+    final canonicalPhone = clientAsync.maybeWhen(
+      data: (c) => c.phoneNumber,
       orElse: () => null,
     );
+    final activePhone = _activeNumber ?? canonicalPhone;
+    final phone = activePhone == null ? null : '+$activePhone';
 
     if (threadKey != null) {
       ref.listen(threadControllerProvider(threadKey), (_, next) {
@@ -420,14 +489,43 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                       style: context.text.titleMedium?.copyWith(fontSize: 17),
                     ),
                     if (phone != null)
-                      Text(
-                        phone,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: context.text.labelSmall?.copyWith(
-                          color: context.scheme.onSurfaceVariant,
-                        ),
-                      ),
+                      phoneNumbers.length > 1
+                          // Tapping the number switches the recipient; the
+                          // inner tap wins the gesture arena so the header's
+                          // open-profile tap doesn't also fire.
+                          ? InkWell(
+                              onTap: () =>
+                                  _pickRecipientNumber(context, phoneNumbers),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      phone,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: context.text.labelSmall?.copyWith(
+                                        color: context.scheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 15,
+                                    color: context.scheme.onSurfaceVariant,
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Text(
+                              phone,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: context.text.labelSmall?.copyWith(
+                                color: context.scheme.onSurfaceVariant,
+                              ),
+                            ),
                   ],
                 ),
               ),
@@ -482,7 +580,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
             else
               ChatComposer(
                 threadKey: threadKey,
-                to: clientAsync.value!.phoneNumber!,
+                // KAN-28: the recipient number comes from the header switcher.
+                to: _activeNumber ?? clientAsync.value!.phoneNumber!,
                 windowOpen: _windowOpen(state),
                 onSent: () {
                   _scrollToBottom();
@@ -1559,11 +1658,32 @@ class _FlowResponseContent extends StatelessWidget {
 
   void _showDetails(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final response = message.flowResponseFields;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.flowResponseDetailsTitle),
-        content: _FlowResponseTable(fields: message.flowResponseFields),
+        // Resolve the submitted keys/values into the labels + option titles the
+        // customer saw, using the tenant's flow definitions (matched by
+        // field-name overlap). While the flow list loads — and if it fails —
+        // fall back to humanized keys so a table always renders.
+        content: Consumer(
+          builder: (context, ref, _) {
+            final flowsAsync = ref.watch(chatFlowsProvider);
+            if (flowsAsync.isLoading) {
+              return const SizedBox(
+                height: 96,
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            final flows = flowsAsync.asData?.value ?? const [];
+            final fields = buildDisplayFlowFields(
+              matchFlowFields(flows, response),
+              response,
+            );
+            return _FlowResponseTable(fields: fields, response: response);
+          },
+        ),
         actions: [
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -1575,26 +1695,32 @@ class _FlowResponseContent extends StatelessWidget {
   }
 }
 
-/// Renders the submitted flow fields as a bordered Field/Value table.
+/// Renders the submitted flow fields as a bordered Field/Value table, with
+/// each value resolved to what the customer saw — option titles instead of
+/// ids, Yes/No for opt-ins, formatted dates, chips for multi-selects. Mirrors
+/// the portal's "Customer Response Details" modal.
 class _FlowResponseTable extends StatelessWidget {
-  const _FlowResponseTable({required this.fields});
-  final Map<String, dynamic> fields;
+  const _FlowResponseTable({required this.fields, required this.response});
+  final List<FlowFieldMeta> fields;
+  final Map<String, dynamic> response;
 
-  static String _label(String key) =>
-      key.isEmpty ? key : key[0].toUpperCase() + key.substring(1);
-
-  static String _value(dynamic value) {
-    if (value == null) return '';
-    if (value is String) return value;
-    if (value is Map || value is List) return jsonEncode(value);
-    return value.toString();
-  }
+  /// A submitted value counts as answered when it's present and non-empty —
+  /// mirrors the portal's summary filter so blank fields don't clutter the
+  /// table.
+  static bool _hasValue(dynamic v) =>
+      v != null && v != '' && !(v is List && v.isEmpty);
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final border = TableBorder.all(color: AppColors.hairline);
-    final entries = fields.entries.toList();
+    final localeName = Localizations.localeOf(context).toString();
+    String formatDate(DateTime d) => DateFormat.yMMMMd(localeName).format(d);
+
+    final answered = fields
+        .where((f) => _hasValue(response[f.key]))
+        .toList();
+
     return SizedBox(
       width: double.maxFinite,
       child: SingleChildScrollView(
@@ -1615,15 +1741,63 @@ class _FlowResponseTable extends StatelessWidget {
                 _HeaderCell(l10n.flowValueColumn),
               ],
             ),
-            for (final e in entries)
+            for (final field in answered)
               TableRow(
                 children: [
-                  _Cell(_label(e.key), bold: true),
-                  _Cell(_value(e.value)),
+                  _Cell(field.label, bold: true),
+                  if (field.kind == FlowFieldKind.multiSelect)
+                    _FlowChipsCell(
+                      labels: flowMultiSelectLabels(field, response[field.key]),
+                    )
+                  else
+                    _Cell(
+                      flowDisplayValue(
+                        field,
+                        response[field.key],
+                        yes: l10n.flowValueYes,
+                        no: l10n.flowValueNo,
+                        formatDate: formatDate,
+                      ),
+                    ),
                 ],
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// A table cell rendering a multi-select answer as wrapped chips (e.g. the
+/// "Channels you need" answer → WhatsApp / Instagram / Messenger).
+class _FlowChipsCell extends StatelessWidget {
+  const _FlowChipsCell({required this.labels});
+  final List<String> labels;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.md,
+        vertical: Insets.sm,
+      ),
+      child: Wrap(
+        spacing: Insets.xs,
+        runSpacing: Insets.xs,
+        children: [
+          for (final label in labels)
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Insets.sm,
+                vertical: 2,
+              ),
+              decoration: BoxDecoration(
+                color: context.scheme.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(Radii.sm),
+              ),
+              child: Text(label, style: context.text.bodySmall),
+            ),
+        ],
       ),
     );
   }

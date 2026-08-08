@@ -310,6 +310,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get flowValueColumn => 'Value';
 
   @override
+  String get flowValueYes => 'Yes';
+
+  @override
+  String get flowValueNo => 'No';
+
+  @override
   String get close => 'Close';
 
   @override
@@ -1177,4 +1183,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unsupportedMessage => 'Unsupported message';
+
+  @override
+  String get clientPhoneNumbersTitle => 'Phone numbers';
+
+  @override
+  String get clientPhoneNumberPrimary => 'Primary';
+
+  @override
+  String get clientPhoneNumberAdd => 'Add number';
+
+  @override
+  String get clientPhoneNumberAddTitle => 'Add phone number';
+
+  @override
+  String get clientPhoneNumberHint => 'Phone number (country code first)';
+
+  @override
+  String get clientPhoneNumberLabelHint => 'Label (optional)';
+
+  @override
+  String get clientPhoneNumberMakePrimary => 'Make primary';
+
+  @override
+  String get clientPhoneNumberRemove => 'Remove';
+
+  @override
+  String clientPhoneNumberRemoveConfirm(String phone) {
+    return 'Remove $phone from this profile? Messages to this number will no longer reach this contact.';
+  }
+
+  @override
+  String get clientPhoneNumberAdded => 'Number added';
+
+  @override
+  String get clientPhoneNumberRemoved => 'Number removed';
+
+  @override
+  String get clientPhoneNumberPrimarySet => 'Primary number updated';
+
+  @override
+  String get clientPhoneNumberActionFailed => 'Something went wrong';
+
+  @override
+  String get clientPhoneNumberSave => 'Save';
+
+  @override
+  String get mergeContactAction => 'Merge another contact';
+
+  @override
+  String get mergeContactTitle => 'Merge contact';
+
+  @override
+  String get mergeContactExplainer =>
+      'The other contact\'s conversations and numbers move onto this profile. You can undo a merge later.';
+
+  @override
+  String get mergeContactSearchHint => 'Search a contact to merge in…';
+
+  @override
+  String get mergeContactConfirm => 'Merge';
+
+  @override
+  String get mergeContactDone => 'Contacts merged';
+
+  @override
+  String get mergeContactFailed => 'Merge failed';
+
+  @override
+  String get chatSendTo => 'Send to';
 }

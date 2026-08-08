@@ -5,11 +5,13 @@ import '../data/http/dio_client.dart';
 import '../data/repos/auth_repo.dart';
 import '../data/repos/calls_repo.dart';
 import '../data/repos/campaigns_repo.dart';
+import '../data/repos/client_phone_numbers_repo.dart';
 import '../data/repos/clients_repo.dart';
 import '../data/repos/commerce_repo.dart';
 import '../data/repos/contacts_repo.dart';
 import '../data/repos/device_repo.dart';
 import '../data/repos/features_repo.dart';
+import '../data/repos/flows_repo.dart';
 import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
@@ -22,9 +24,14 @@ import '../data/repos/suppression_repo.dart';
 import '../data/repos/templates_repo.dart';
 import '../data/repos/tenant_repo.dart';
 import '../data/session/auth_session.dart';
+import '../data/storage/install_id_store.dart';
 import '../data/storage/token_storage.dart';
 
 final tokenStorageProvider = Provider<TokenStorage>((ref) => TokenStorage());
+
+final installIdStoreProvider = Provider<InstallIdStore>(
+  (ref) => InstallIdStore(),
+);
 
 final authSessionProvider = Provider<AuthSession>((ref) {
   final session = AuthSession(ref.watch(tokenStorageProvider));
@@ -44,6 +51,9 @@ final tenantRepoProvider = Provider<TenantRepo>(
 );
 final clientsRepoProvider = Provider<ClientsRepo>(
   (ref) => ClientsRepo(ref.watch(dioProvider)),
+);
+final clientPhoneNumbersRepoProvider = Provider<ClientPhoneNumbersRepo>(
+  (ref) => ClientPhoneNumbersRepo(ref.watch(dioProvider)),
 );
 final messagesRepoProvider = Provider<MessagesRepo>(
   (ref) => MessagesRepo(ref.watch(dioProvider)),
@@ -92,4 +102,7 @@ final deviceRepoProvider = Provider<DeviceRepo>(
 );
 final featuresRepoProvider = Provider<FeaturesRepo>(
   (ref) => FeaturesRepo(ref.watch(dioProvider)),
+);
+final flowsRepoProvider = Provider<FlowsRepo>(
+  (ref) => FlowsRepo(ref.watch(dioProvider)),
 );
