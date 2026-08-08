@@ -11,6 +11,7 @@ import '../data/repos/commerce_repo.dart';
 import '../data/repos/contacts_repo.dart';
 import '../data/repos/device_repo.dart';
 import '../data/repos/features_repo.dart';
+import '../data/repos/flows_repo.dart';
 import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
@@ -101,4 +102,7 @@ final deviceRepoProvider = Provider<DeviceRepo>(
 );
 final featuresRepoProvider = Provider<FeaturesRepo>(
   (ref) => FeaturesRepo(ref.watch(dioProvider)),
+);
+final flowsRepoProvider = Provider<FlowsRepo>(
+  (ref) => FlowsRepo(ref.watch(dioProvider)),
 );

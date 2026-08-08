@@ -670,6 +670,18 @@ abstract class AppLocalizations {
   /// **'Value'**
   String get flowValueColumn;
 
+  /// No description provided for @flowValueYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get flowValueYes;
+
+  /// No description provided for @flowValueNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get flowValueNo;
+
   /// No description provided for @close.
   ///
   /// In en, this message translates to:

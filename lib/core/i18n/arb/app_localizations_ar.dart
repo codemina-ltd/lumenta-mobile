@@ -314,6 +314,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get flowValueColumn => 'القيمة';
 
   @override
+  String get flowValueYes => 'نعم';
+
+  @override
+  String get flowValueNo => 'لا';
+
+  @override
   String get close => 'إغلاق';
 
   @override

@@ -112,6 +112,8 @@
   "flowResponseDetailsTitle": "Détails de la réponse du client",
   "flowFieldColumn": "Champ",
   "flowValueColumn": "Valeur",
+  "flowValueYes": "Oui",
+  "flowValueNo": "Non",
   "close": "Fermer",
   "chatProductView": "Voir",
   "chatOrderItems": "{count, plural, one{{count} article} other{{count} articles}}",

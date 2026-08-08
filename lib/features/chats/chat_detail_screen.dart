@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 
+import '../../core/flow_field_meta.dart';
 import '../../core/format.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/providers.dart';
@@ -1647,11 +1647,32 @@ class _FlowResponseContent extends StatelessWidget {
 
   void _showDetails(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final response = message.flowResponseFields;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.flowResponseDetailsTitle),
-        content: _FlowResponseTable(fields: message.flowResponseFields),
+        // Resolve the submitted keys/values into the labels + option titles the
+        // customer saw, using the tenant's flow definitions (matched by
+        // field-name overlap). While the flow list loads — and if it fails —
+        // fall back to humanized keys so a table always renders.
+        content: Consumer(
+          builder: (context, ref, _) {
+            final flowsAsync = ref.watch(chatFlowsProvider);
+            if (flowsAsync.isLoading) {
+              return const SizedBox(
+                height: 96,
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            final flows = flowsAsync.asData?.value ?? const [];
+            final fields = buildDisplayFlowFields(
+              matchFlowFields(flows, response),
+              response,
+            );
+            return _FlowResponseTable(fields: fields, response: response);
+          },
+        ),
         actions: [
           FilledButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -1663,26 +1684,32 @@ class _FlowResponseContent extends StatelessWidget {
   }
 }
 
-/// Renders the submitted flow fields as a bordered Field/Value table.
+/// Renders the submitted flow fields as a bordered Field/Value table, with
+/// each value resolved to what the customer saw — option titles instead of
+/// ids, Yes/No for opt-ins, formatted dates, chips for multi-selects. Mirrors
+/// the portal's "Customer Response Details" modal.
 class _FlowResponseTable extends StatelessWidget {
-  const _FlowResponseTable({required this.fields});
-  final Map<String, dynamic> fields;
+  const _FlowResponseTable({required this.fields, required this.response});
+  final List<FlowFieldMeta> fields;
+  final Map<String, dynamic> response;
 
-  static String _label(String key) =>
-      key.isEmpty ? key : key[0].toUpperCase() + key.substring(1);
-
-  static String _value(dynamic value) {
-    if (value == null) return '';
-    if (value is String) return value;
-    if (value is Map || value is List) return jsonEncode(value);
-    return value.toString();
-  }
+  /// A submitted value counts as answered when it's present and non-empty —
+  /// mirrors the portal's summary filter so blank fields don't clutter the
+  /// table.
+  static bool _hasValue(dynamic v) =>
+      v != null && v != '' && !(v is List && v.isEmpty);
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final border = TableBorder.all(color: AppColors.hairline);
-    final entries = fields.entries.toList();
+    final localeName = Localizations.localeOf(context).toString();
+    String formatDate(DateTime d) => DateFormat.yMMMMd(localeName).format(d);
+
+    final answered = fields
+        .where((f) => _hasValue(response[f.key]))
+        .toList();
+
     return SizedBox(
       width: double.maxFinite,
       child: SingleChildScrollView(
@@ -1703,15 +1730,63 @@ class _FlowResponseTable extends StatelessWidget {
                 _HeaderCell(l10n.flowValueColumn),
               ],
             ),
-            for (final e in entries)
+            for (final field in answered)
               TableRow(
                 children: [
-                  _Cell(_label(e.key), bold: true),
-                  _Cell(_value(e.value)),
+                  _Cell(field.label, bold: true),
+                  if (field.kind == FlowFieldKind.multiSelect)
+                    _FlowChipsCell(
+                      labels: flowMultiSelectLabels(field, response[field.key]),
+                    )
+                  else
+                    _Cell(
+                      flowDisplayValue(
+                        field,
+                        response[field.key],
+                        yes: l10n.flowValueYes,
+                        no: l10n.flowValueNo,
+                        formatDate: formatDate,
+                      ),
+                    ),
                 ],
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// A table cell rendering a multi-select answer as wrapped chips (e.g. the
+/// "Channels you need" answer → WhatsApp / Instagram / Messenger).
+class _FlowChipsCell extends StatelessWidget {
+  const _FlowChipsCell({required this.labels});
+  final List<String> labels;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.md,
+        vertical: Insets.sm,
+      ),
+      child: Wrap(
+        spacing: Insets.xs,
+        runSpacing: Insets.xs,
+        children: [
+          for (final label in labels)
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Insets.sm,
+                vertical: 2,
+              ),
+              decoration: BoxDecoration(
+                color: context.scheme.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(Radii.sm),
+              ),
+              child: Text(label, style: context.text.bodySmall),
+            ),
+        ],
       ),
     );
   }

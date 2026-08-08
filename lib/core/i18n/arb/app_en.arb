@@ -120,6 +120,8 @@
   "flowResponseDetailsTitle": "Customer Response",
   "flowFieldColumn": "Field",
   "flowValueColumn": "Value",
+  "flowValueYes": "Yes",
+  "flowValueNo": "No",
   "close": "Close",
   "chatProductView": "View",
   "chatOrderItems": "{count, plural, one{{count} item} other{{count} items}}",

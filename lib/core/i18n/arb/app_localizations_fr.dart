@@ -315,6 +315,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get flowValueColumn => 'Valeur';
 
   @override
+  String get flowValueYes => 'Oui';
+
+  @override
+  String get flowValueNo => 'Non';
+
+  @override
   String get close => 'Fermer';
 
   @override
