@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Branching (MANDATORY)
+
+**Never create a new branch for any feature or work unless the user literally asks you to.** Do the work on the current branch and commit there; if a task would normally warrant a branch, ask first rather than creating one.
+
 Lumenta Mobile is a Flutter companion app for tenant (business) users: log in, browse clients, view WhatsApp-style chat threads with media, send replies inside the 24h service window, and read in-app notifications. Backend is a NestJS API (`/v1` prefix); contract details live in `README.md`.
 
 ## Commands
