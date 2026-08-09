@@ -148,6 +148,12 @@ abstract class AppLocalizations {
   /// **'Choose a workspace'**
   String get tenantPickerTitle;
 
+  /// No description provided for @tenantMobileLoginDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile login is not enabled for this workspace. Contact your administrator.'**
+  String get tenantMobileLoginDisabled;
+
   /// No description provided for @switchTenant.
   ///
   /// In en, this message translates to:

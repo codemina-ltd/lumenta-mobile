@@ -8,6 +8,7 @@
   "loginButton": "Sign in",
   "loginError": "Couldn't sign in. Check your details and try again.",
   "tenantPickerTitle": "Choose a workspace",
+  "tenantMobileLoginDisabled": "Mobile login is not enabled for this workspace. Contact your administrator.",
   "switchTenant": "Switch workspace",
   "logout": "Log out",
   "navClients": "Clients",

@@ -8,6 +8,7 @@
   "loginButton": "Se connecter",
   "loginError": "Connexion impossible. Vérifiez vos informations et réessayez.",
   "tenantPickerTitle": "Choisir un espace de travail",
+  "tenantMobileLoginDisabled": "La connexion mobile n'est pas activée pour cet espace de travail. Contactez votre administrateur.",
   "switchTenant": "Changer d'espace",
   "logout": "Se déconnecter",
   "navClients": "Clients",

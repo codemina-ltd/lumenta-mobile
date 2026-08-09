@@ -14,6 +14,7 @@ _TenantSummary _$TenantSummaryFromJson(Map<String, dynamic> json) =>
       role: json['role'] as String?,
       complianceStatus: json['complianceStatus'] as String?,
       suspendedReason: json['suspendedReason'] as String?,
+      mobileLoginEnabled: json['mobileLoginEnabled'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$TenantSummaryToJson(_TenantSummary instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$TenantSummaryToJson(_TenantSummary instance) =>
       'role': instance.role,
       'complianceStatus': instance.complianceStatus,
       'suspendedReason': instance.suspendedReason,
+      'mobileLoginEnabled': instance.mobileLoginEnabled,
     };

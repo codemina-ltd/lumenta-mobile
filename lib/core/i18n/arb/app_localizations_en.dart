@@ -34,6 +34,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tenantPickerTitle => 'Choose a workspace';
 
   @override
+  String get tenantMobileLoginDisabled =>
+      'Mobile login is not enabled for this workspace. Contact your administrator.';
+
+  @override
   String get switchTenant => 'Switch workspace';
 
   @override

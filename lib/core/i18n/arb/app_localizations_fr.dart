@@ -34,6 +34,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tenantPickerTitle => 'Choisir un espace de travail';
 
   @override
+  String get tenantMobileLoginDisabled =>
+      'La connexion mobile n\'est pas activée pour cet espace de travail. Contactez votre administrateur.';
+
+  @override
   String get switchTenant => 'Changer d\'espace';
 
   @override

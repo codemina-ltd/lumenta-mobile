@@ -145,6 +145,18 @@ class AuthController extends Notifier<AuthState> {
       active = tenants.first.id;
     }
 
+    // KAN-64 — never auto-enter a workspace whose mobile login is disabled.
+    // A single-tenant user or a previously-selected tenant must pass through
+    // the picker (which explains why it's blocked) rather than entering.
+    if (active != null) {
+      for (final t in tenants) {
+        if (t.id == active && !t.mobileLoginEnabled) {
+          active = null;
+          break;
+        }
+      }
+    }
+
     if (active != null) {
       await _session.setActiveTenant(active);
       state = AuthState(

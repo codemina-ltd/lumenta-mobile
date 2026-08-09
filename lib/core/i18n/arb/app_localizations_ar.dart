@@ -34,6 +34,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tenantPickerTitle => 'اختر مساحة عمل';
 
   @override
+  String get tenantMobileLoginDisabled =>
+      'تسجيل الدخول عبر تطبيق الجوال غير مُفعّل لمساحة العمل هذه. يرجى التواصل مع المسؤول.';
+
+  @override
   String get switchTenant => 'تبديل مساحة العمل';
 
   @override

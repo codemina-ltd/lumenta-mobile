@@ -32,12 +32,24 @@ class TenantPickerScreen extends ConsumerWidget {
         separatorBuilder: (_, _) => const SizedBox(height: Insets.md),
         itemBuilder: (context, i) {
           final TenantSummary t = tenants[i];
+          // KAN-64 — a workspace with mobile login OFF is shown greyed and, on
+          // tap, explains it's disabled rather than entering. Compliance-
+          // inactive workspaces stay fully non-interactive (null onTap).
+          final selectable = t.isActive && t.mobileLoginEnabled;
+          final mobileBlocked = t.isActive && !t.mobileLoginEnabled;
           return _TenantCard(
             tenant: t,
-            onTap: t.isActive
+            disabled: !selectable,
+            onTap: selectable
                 ? () => ref
                     .read(authControllerProvider.notifier)
                     .selectTenant(t.id)
+                : mobileBlocked
+                ? () => ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(content: Text(l10n.tenantMobileLoginDisabled)),
+                    )
                 : null,
           );
         },
@@ -47,14 +59,18 @@ class TenantPickerScreen extends ConsumerWidget {
 }
 
 class _TenantCard extends StatelessWidget {
-  const _TenantCard({required this.tenant, required this.onTap});
+  const _TenantCard({
+    required this.tenant,
+    required this.onTap,
+    required this.disabled,
+  });
 
   final TenantSummary tenant;
   final VoidCallback? onTap;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
-    final disabled = onTap == null;
     final letter = tenant.name.isNotEmpty ? tenant.name[0].toUpperCase() : '?';
 
     return Opacity(

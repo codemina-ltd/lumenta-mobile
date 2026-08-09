@@ -13,6 +13,9 @@ abstract class TenantSummary with _$TenantSummary {
     String? role,
     String? complianceStatus,
     String? suspendedReason,
+    // KAN-64 — when false, the app blocks this workspace at the tenant picker.
+    // Defaults ON so an older API (no field) keeps working unchanged.
+    @Default(true) bool mobileLoginEnabled,
   }) = _TenantSummary;
 
   const TenantSummary._();
