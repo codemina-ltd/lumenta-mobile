@@ -883,6 +883,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clientDetailSuppressedAll => 'Tous les messages bloqués';
 
   @override
+  String get clientDetailLockedAll =>
+      'La modification est désactivée tant que tous les messages sont bloqués. Levez la suppression pour modifier.';
+
+  @override
   String get clientDetailSuppressedMarketing => 'Marketing bloqué';
 
   @override

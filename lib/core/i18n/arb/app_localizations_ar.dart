@@ -875,6 +875,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientDetailSuppressedAll => 'جميع الرسائل محظورة';
 
   @override
+  String get clientDetailLockedAll =>
+      'التعديل معطّل أثناء حظر جميع الرسائل. قم بإلغاء التقييد للتعديل.';
+
+  @override
   String get clientDetailSuppressedMarketing => 'الرسائل التسويقية محظورة';
 
   @override

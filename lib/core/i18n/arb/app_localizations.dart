@@ -1702,6 +1702,12 @@ abstract class AppLocalizations {
   /// **'All messages blocked'**
   String get clientDetailSuppressedAll;
 
+  /// No description provided for @clientDetailLockedAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Editing is disabled while all messages are blocked. Release the suppression to edit.'**
+  String get clientDetailLockedAll;
+
   /// No description provided for @clientDetailSuppressedMarketing.
   ///
   /// In en, this message translates to:

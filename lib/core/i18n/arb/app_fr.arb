@@ -327,6 +327,7 @@
   "clientDetailSuppression": "Suppression",
   "clientDetailSuppressionNone": "Ciblable — aucun blocage actif",
   "clientDetailSuppressedAll": "Tous les messages bloqués",
+  "clientDetailLockedAll": "La modification est désactivée tant que tous les messages sont bloqués. Levez la suppression pour modifier.",
   "clientDetailSuppressedMarketing": "Marketing bloqué",
   "clientDetailRelease": "Débloquer",
   "clientDetailReleased": "Blocage levé",

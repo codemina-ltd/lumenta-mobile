@@ -27,12 +27,16 @@ class ClientNotesCard extends ConsumerWidget {
     super.key,
     required this.clientId,
     this.highlightNoteId,
+    this.locked = false,
   });
   final String clientId;
 
   /// Deep-link target from a mention/assignment notification — scrolled to
   /// and briefly highlighted once the notes list loads.
   final String? highlightNoteId;
+
+  /// KAN-63: an active `all`-scope suppression locks note editing.
+  final bool locked;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,10 +54,12 @@ class ClientNotesCard extends ConsumerWidget {
           : TextButton.icon(
               icon: const Icon(Icons.add_rounded, size: 18),
               label: Text(l10n.clientDetailAddNote),
-              onPressed: () async {
-                await showAddNoteDialog(context, ref, thread);
-                ref.invalidate(threadNotesProvider(thread.id));
-              },
+              onPressed: locked
+                  ? null
+                  : () async {
+                      await showAddNoteDialog(context, ref, thread);
+                      ref.invalidate(threadNotesProvider(thread.id));
+                    },
             ),
       child: threadAsync.when(
         loading: () => const Padding(

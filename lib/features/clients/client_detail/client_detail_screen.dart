@@ -70,15 +70,25 @@ class ClientDetailScreen extends ConsumerWidget {
           onRetry: () => ref.invalidate(clientProvider(clientId)),
         ),
         data: (client) {
+          // KAN-63: an active `all`-scope suppression locks profile editing on
+          // this screen (mirrors the server-side 409 lock). Releasing the
+          // suppression invalidates this provider, so the lock lifts reactively.
+          final isLocked =
+              ref
+                  .watch(clientSuppressionsProvider(clientId))
+                  .asData
+                  ?.value
+                  .any((r) => r.scope == 'all') ??
+              false;
           final groups = <({String title, List<Widget> cards})>[
             (
               title: l10n.clientDetailGroupProfile,
               cards: [
-                ClientProfileCard(clientId: clientId),
+                ClientProfileCard(clientId: clientId, locked: isLocked),
                 // Phone numbers on this unified profile (KAN-28) — primary plus
                 // any numbers folded on by merging WhatsApp contacts. Self-hides
                 // for phone-less (channel-only) contacts.
-                ClientPhoneNumbersCard(clientId: clientId),
+                ClientPhoneNumbersCard(clientId: clientId, locked: isLocked),
                 ClientTeamCard(clientId: clientId),
               ],
             ),
@@ -90,6 +100,7 @@ class ClientDetailScreen extends ConsumerWidget {
                 ClientNotesCard(
                   clientId: clientId,
                   highlightNoteId: highlightNoteId,
+                  locked: isLocked,
                 ),
                 ClientRecentMessagesCard(clientId: clientId),
                 ClientCallsCard(clientId: clientId),

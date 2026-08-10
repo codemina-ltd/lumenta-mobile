@@ -871,6 +871,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientDetailSuppressedAll => 'All messages blocked';
 
   @override
+  String get clientDetailLockedAll =>
+      'Editing is disabled while all messages are blocked. Release the suppression to edit.';
+
+  @override
   String get clientDetailSuppressedMarketing => 'Marketing blocked';
 
   @override

@@ -15,8 +15,15 @@ import 'client_detail_providers.dart';
 /// email dialog, select picker, multiselect checklist, date picker, or an
 /// inline boolean toggle), each persisted via `PUT /contacts/:id/fields`.
 class ClientProfileCard extends ConsumerWidget {
-  const ClientProfileCard({super.key, required this.clientId});
+  const ClientProfileCard({
+    super.key,
+    required this.clientId,
+    this.locked = false,
+  });
   final String clientId;
+
+  /// KAN-63: an active `all`-scope suppression locks profile editing.
+  final bool locked;
 
   Future<void> _setLifecycle(WidgetRef ref, String? stageId) async {
     await ref
@@ -98,6 +105,15 @@ class ClientProfileCard extends ConsumerWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (locked) ...[
+                Text(
+                  l10n.clientDetailLockedAll,
+                  style: context.text.bodySmall?.copyWith(
+                    color: context.scheme.error,
+                  ),
+                ),
+                const SizedBox(height: Insets.sm),
+              ],
               Text(
                 l10n.contactLifecycle,
                 style: context.text.labelMedium?.copyWith(
@@ -119,25 +135,29 @@ class ClientProfileCard extends ConsumerWidget {
                       child: Text(s.label),
                     ),
                 ],
-                onChanged: (stageId) async {
-                  try {
-                    await _setLifecycle(ref, stageId);
-                  } catch (_) {
-                    if (context.mounted) _snackFailed(context);
-                  }
-                },
+                onChanged: locked
+                    ? null
+                    : (stageId) async {
+                        try {
+                          await _setLifecycle(ref, stageId);
+                        } catch (_) {
+                          if (context.mounted) _snackFailed(context);
+                        }
+                      },
               ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(l10n.contactOptIn),
                 value: profile?.optInMarketing ?? false,
-                onChanged: (value) async {
-                  try {
-                    await _setOptIn(ref, value);
-                  } catch (_) {
-                    if (context.mounted) _snackFailed(context);
-                  }
-                },
+                onChanged: locked
+                    ? null
+                    : (value) async {
+                        try {
+                          await _setOptIn(ref, value);
+                        } catch (_) {
+                          if (context.mounted) _snackFailed(context);
+                        }
+                      },
               ),
               const Divider(height: Insets.lg),
               Text(
@@ -154,6 +174,7 @@ class ClientProfileCard extends ConsumerWidget {
                   (f) => _CustomFieldRow(
                     field: f,
                     value: values[f.key] ?? '',
+                    enabled: !locked,
                     onEdit: () =>
                         _editField(context, ref, f, values[f.key] ?? ''),
                     onToggle: (v) =>
@@ -176,12 +197,14 @@ class _CustomFieldRow extends StatelessWidget {
     required this.value,
     required this.onEdit,
     required this.onToggle,
+    this.enabled = true,
   });
 
   final ContactField field;
   final String value;
   final VoidCallback onEdit;
   final ValueChanged<bool> onToggle;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -195,14 +218,17 @@ class _CustomFieldRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(child: Text(field.label, style: labelStyle)),
-            Switch(value: value == 'true', onChanged: onToggle),
+            Switch(
+              value: value == 'true',
+              onChanged: enabled ? onToggle : null,
+            ),
           ],
         ),
       );
     }
 
     return InkWell(
-      onTap: onEdit,
+      onTap: enabled ? onEdit : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(

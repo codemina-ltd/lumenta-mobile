@@ -335,6 +335,7 @@
   "clientDetailSuppression": "Suppression",
   "clientDetailSuppressionNone": "Targetable — no active blocks",
   "clientDetailSuppressedAll": "All messages blocked",
+  "clientDetailLockedAll": "Editing is disabled while all messages are blocked. Release the suppression to edit.",
   "clientDetailSuppressedMarketing": "Marketing blocked",
   "clientDetailRelease": "Release",
   "clientDetailReleased": "Suppression released",

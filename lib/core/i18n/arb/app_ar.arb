@@ -327,6 +327,7 @@
   "clientDetailSuppression": "الحظر",
   "clientDetailSuppressionNone": "قابل للاستهداف — لا توجد قيود نشطة",
   "clientDetailSuppressedAll": "جميع الرسائل محظورة",
+  "clientDetailLockedAll": "التعديل معطّل أثناء حظر جميع الرسائل. قم بإلغاء التقييد للتعديل.",
   "clientDetailSuppressedMarketing": "الرسائل التسويقية محظورة",
   "clientDetailRelease": "إلغاء الحظر",
   "clientDetailReleased": "تم إلغاء الحظر",

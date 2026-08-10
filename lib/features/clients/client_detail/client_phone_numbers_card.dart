@@ -18,8 +18,15 @@ import 'client_detail_card.dart';
 /// an additional one, or merge another contact into this profile. Hidden for
 /// phone-less contacts (Instagram/Messenger-only) — they have no numbers.
 class ClientPhoneNumbersCard extends ConsumerWidget {
-  const ClientPhoneNumbersCard({super.key, required this.clientId});
+  const ClientPhoneNumbersCard({
+    super.key,
+    required this.clientId,
+    this.locked = false,
+  });
   final String clientId;
+
+  /// KAN-63: an active `all`-scope suppression locks contact-info editing.
+  final bool locked;
 
   void _refresh(WidgetRef ref) =>
       ref.invalidate(clientPhoneNumbersProvider(clientId));
@@ -196,7 +203,7 @@ class ClientPhoneNumbersCard extends ConsumerWidget {
           trailing: TextButton.icon(
             icon: const Icon(Icons.add_rounded, size: 18),
             label: Text(l10n.clientPhoneNumberAdd),
-            onPressed: () => _add(context, ref),
+            onPressed: locked ? null : () => _add(context, ref),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,7 +247,7 @@ class ClientPhoneNumbersCard extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      if (!num.isPrimary)
+                      if (!num.isPrimary && !locked)
                         PopupMenuButton<String>(
                           icon: const Icon(Icons.more_vert, size: 20),
                           onSelected: (value) {
@@ -270,6 +277,7 @@ class ClientPhoneNumbersCard extends ConsumerWidget {
                 child: TextButton.icon(
                   icon: const Icon(Icons.merge_rounded, size: 18),
                   label: Text(l10n.mergeContactAction),
+                  // Merge is explicitly out of scope for the KAN-63 lock.
                   onPressed: () => _merge(context, ref),
                 ),
               ),
