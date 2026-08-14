@@ -21,6 +21,10 @@ class TemplatesRepo {
       '/templates',
       queryParameters: {
         'status': 'approved',
+        // KAN-120: chat sends + scheduled messages are client-facing, so the
+        // mobile picker mirrors the portal's `clients` usage filter
+        // (untagged templates are always included server-side).
+        'usage': 'clients',
         'limit': limit,
         'page': page,
         'forSenderId': ?forSenderId,
