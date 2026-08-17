@@ -101,8 +101,7 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
   }
 
   Future<void> _pickDocument() async {
-    final result = await FilePicker.pickFiles();
-    final file = result?.files.single;
+    final file = await FilePicker.pickFile();
     if (file?.path == null) return;
     _thread.sendMedia(
       to: widget.to,

@@ -5,29 +5,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/format.dart';
 import '../../../core/i18n/arb/app_localizations.dart';
-import '../../../core/providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../data/models/inbox_note.dart';
 import '../../../data/repos/tenant_repo.dart';
-import '../../auth/auth_controller.dart';
 import '../../chats/chat_providers.dart';
-import '../../chats/widgets/add_note_dialog.dart';
 import '../../inbox/inbox_controller.dart';
 import 'client_detail_card.dart';
 import 'client_detail_providers.dart';
 
 /// Internal notes for the contact — lists the Team Inbox thread's notes with
-/// @mention highlighting and an author line, and opens the shared mention
-/// composer to add one. Mirrors the portal's `ClientNotesCard`; renders an
-/// empty state when the contact has no thread yet.
+/// @mention highlighting and an author line. Read-only on mobile: notes are
+/// written and deleted on the web portal. Renders an empty state when the
+/// contact has no thread yet.
 class ClientNotesCard extends ConsumerWidget {
   const ClientNotesCard({
     super.key,
     required this.clientId,
     this.highlightNoteId,
-    this.locked = false,
   });
   final String clientId;
 
@@ -35,32 +31,16 @@ class ClientNotesCard extends ConsumerWidget {
   /// and briefly highlighted once the notes list loads.
   final String? highlightNoteId;
 
-  /// KAN-63: an active `all`-scope suppression locks note editing.
-  final bool locked;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final threadAsync = ref.watch(
       chatInboxThreadProvider((clientId: clientId, senderId: null)),
     );
-    final thread = threadAsync.asData?.value;
 
     return ClientDetailCard(
       title: l10n.clientDetailNotes,
       icon: Icons.sticky_note_2_outlined,
-      trailing: thread == null
-          ? null
-          : TextButton.icon(
-              icon: const Icon(Icons.add_rounded, size: 18),
-              label: Text(l10n.clientDetailAddNote),
-              onPressed: locked
-                  ? null
-                  : () async {
-                      await showAddNoteDialog(context, ref, thread);
-                      ref.invalidate(threadNotesProvider(thread.id));
-                    },
-            ),
       child: threadAsync.when(
         loading: () => const Padding(
           padding: EdgeInsets.symmetric(vertical: Insets.sm),
@@ -147,18 +127,6 @@ class _NotesListState extends ConsumerState<_NotesList> {
     );
   }
 
-  Future<void> _delete(String noteId) async {
-    try {
-      await ref.read(inboxRepoProvider).deleteNote(widget.threadId, noteId);
-      ref.invalidate(threadNotesProvider(widget.threadId));
-    } catch (_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).inboxActionFailed)),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -166,7 +134,6 @@ class _NotesListState extends ConsumerState<_NotesList> {
     final members =
         ref.watch(tenantMembersProvider).asData?.value ??
         const <TenantMemberLite>[];
-    final myId = ref.watch(authControllerProvider).user?.id;
 
     return notesAsync.when(
       loading: () => const Padding(
@@ -188,8 +155,6 @@ class _NotesListState extends ConsumerState<_NotesList> {
                 key: n.id == _highlightId ? _highlightKey : null,
                 note: n,
                 members: members,
-                canDelete: n.authorUserId == myId,
-                onDelete: () => _delete(n.id),
                 highlighted: _highlightOn && n.id == _highlightId,
               ),
           ],
@@ -204,15 +169,11 @@ class _NoteTile extends StatelessWidget {
     super.key,
     required this.note,
     required this.members,
-    required this.canDelete,
-    required this.onDelete,
     this.highlighted = false,
   });
 
   final InboxNote note;
   final List<TenantMemberLite> members;
-  final bool canDelete;
-  final VoidCallback onDelete;
 
   /// Briefly tinted amber when this is the note a mention/assignment
   /// notification deep-linked to.
@@ -229,7 +190,6 @@ class _NoteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final created = note.createdAtDate;
     final meta = created == null
         ? _authorName()
@@ -274,13 +234,6 @@ class _NoteTile extends StatelessWidget {
               ],
             ),
           ),
-          if (canDelete)
-            IconButton(
-              tooltip: l10n.clientDetailDeleteNote,
-              visualDensity: VisualDensity.compact,
-              icon: const Icon(Icons.delete_outline_rounded, size: 18),
-              onPressed: onDelete,
-            ),
         ],
       ),
     );

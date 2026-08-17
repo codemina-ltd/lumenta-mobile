@@ -6,16 +6,14 @@ import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../data/models/scheduled_message.dart';
-import '../../chats/widgets/scheduled_message_actions_sheet.dart';
 import '../../shared/widgets.dart';
 import 'client_detail_card.dart';
 import 'client_detail_providers.dart';
 import 'client_detail_status.dart';
 
 /// The contact's scheduled template sends, every status, newest-first —
-/// mirrors `client_reminders_card.dart`'s shape. Row tap opens the same
-/// actions sheet as the inline chat-thread bubble (View always;
-/// Edit/Cancel while pending; Retry/Reschedule while failed).
+/// mirrors `client_reminders_card.dart`'s shape. Read-only on mobile:
+/// edit/cancel/retry happen on the web portal.
 class ClientScheduledMessagesCard extends ConsumerWidget {
   const ClientScheduledMessagesCard({super.key, required this.clientId});
   final String clientId;
@@ -44,18 +42,7 @@ class ClientScheduledMessagesCard extends ConsumerWidget {
             : Column(
                 children: [
                   for (final item in items)
-                    _ScheduledRow(
-                      scheduledMessage: item,
-                      onTap: () => showScheduledMessageActions(
-                        context,
-                        ref,
-                        scheduledMessage: item,
-                        clientId: clientId,
-                        onChanged: () => ref.invalidate(
-                          clientScheduledMessagesProvider(clientId),
-                        ),
-                      ),
-                    ),
+                    _ScheduledRow(scheduledMessage: item),
                 ],
               ),
       ),
@@ -64,10 +51,9 @@ class ClientScheduledMessagesCard extends ConsumerWidget {
 }
 
 class _ScheduledRow extends StatelessWidget {
-  const _ScheduledRow({required this.scheduledMessage, required this.onTap});
+  const _ScheduledRow({required this.scheduledMessage});
 
   final ScheduledMessage scheduledMessage;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +66,6 @@ class _ScheduledRow extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       visualDensity: VisualDensity.compact,
-      onTap: onTap,
       leading: Icon(
         Icons.schedule_send_rounded,
         color: scheduledMessageStatusColor(scheduledMessage.status),

@@ -2,86 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/i18n/arb/app_localizations.dart';
-import '../../../core/providers.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../data/models/contact_field.dart';
 import 'client_detail_card.dart';
 import 'client_detail_providers.dart';
 
-/// CRM profile section — lifecycle stage + marketing opt-in quick-edit and the
-/// contact's custom fields. Mirrors the portal's `ContactProfilePanel`: every
-/// custom field is editable with a type-appropriate input (text/number/url/
-/// email dialog, select picker, multiselect checklist, date picker, or an
-/// inline boolean toggle), each persisted via `PUT /contacts/:id/fields`.
+/// CRM profile section — read-only view of the lifecycle stage, marketing
+/// opt-in and the contact's custom field values. Profile management happens on
+/// the web portal; the mobile app only previews the contact.
 class ClientProfileCard extends ConsumerWidget {
-  const ClientProfileCard({
-    super.key,
-    required this.clientId,
-    this.locked = false,
-  });
+  const ClientProfileCard({super.key, required this.clientId});
   final String clientId;
-
-  /// KAN-63: an active `all`-scope suppression locks profile editing.
-  final bool locked;
-
-  Future<void> _setLifecycle(WidgetRef ref, String? stageId) async {
-    await ref
-        .read(contactsRepoProvider)
-        .updateProfile(clientId, lifecycleStageId: stageId);
-    ref.invalidate(contactProfileBundleProvider(clientId));
-  }
-
-  Future<void> _setOptIn(WidgetRef ref, bool value) async {
-    await ref
-        .read(contactsRepoProvider)
-        .updateProfile(clientId, optInMarketing: value);
-    ref.invalidate(contactProfileBundleProvider(clientId));
-  }
-
-  /// Persists a custom field value then refreshes the bundle.
-  Future<void> _setField(
-    BuildContext context,
-    WidgetRef ref,
-    String key,
-    Object? value,
-  ) async {
-    try {
-      await ref.read(contactsRepoProvider).setFieldValue(clientId, key, value);
-      ref.invalidate(contactProfileBundleProvider(clientId));
-    } catch (_) {
-      if (context.mounted) _snackFailed(context);
-    }
-  }
-
-  /// Opens the type-appropriate editor for a custom field and, if a value comes
-  /// back, persists it. Boolean fields toggle inline and don't reach here.
-  Future<void> _editField(
-    BuildContext context,
-    WidgetRef ref,
-    ContactField field,
-    String current,
-  ) async {
-    final String? next;
-    final type = field.type;
-    if (type == 'date') {
-      next = await _pickDate(context, current);
-    } else if (type == 'select') {
-      next = await _pickSelect(context, field, current);
-    } else if (type == 'multiselect') {
-      next = await _pickMultiSelect(context, field, current);
-    } else {
-      next = await _editText(context, field, current);
-    }
-    if (next == null || !context.mounted) return;
-    await _setField(context, ref, field.key, next);
-  }
-
-  void _snackFailed(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context).contactSaveFailed)),
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -102,62 +34,22 @@ class ClientProfileCard extends ConsumerWidget {
         data: (bundle) {
           final profile = bundle.response.profile;
           final values = bundle.response.fieldValues;
+          final stageLabel = bundle.stages
+              .where((s) => s.id == profile?.lifecycleStageId)
+              .firstOrNull
+              ?.label;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (locked) ...[
-                Text(
-                  l10n.clientDetailLockedAll,
-                  style: context.text.bodySmall?.copyWith(
-                    color: context.scheme.error,
-                  ),
-                ),
-                const SizedBox(height: Insets.sm),
-              ],
-              Text(
-                l10n.contactLifecycle,
-                style: context.text.labelMedium?.copyWith(
-                  color: context.scheme.onSurfaceVariant,
-                ),
+              _ReadOnlyRow(
+                label: l10n.contactLifecycle,
+                value: stageLabel ?? l10n.contactNoStage,
               ),
-              DropdownButton<String?>(
-                isExpanded: true,
-                value: profile?.lifecycleStageId,
-                hint: Text(l10n.contactNoStage),
-                items: [
-                  DropdownMenuItem<String?>(
-                    value: null,
-                    child: Text(l10n.contactNoStage),
-                  ),
-                  for (final s in bundle.stages)
-                    DropdownMenuItem<String?>(
-                      value: s.id,
-                      child: Text(s.label),
-                    ),
-                ],
-                onChanged: locked
-                    ? null
-                    : (stageId) async {
-                        try {
-                          await _setLifecycle(ref, stageId);
-                        } catch (_) {
-                          if (context.mounted) _snackFailed(context);
-                        }
-                      },
-              ),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.contactOptIn),
-                value: profile?.optInMarketing ?? false,
-                onChanged: locked
-                    ? null
-                    : (value) async {
-                        try {
-                          await _setOptIn(ref, value);
-                        } catch (_) {
-                          if (context.mounted) _snackFailed(context);
-                        }
-                      },
+              _ReadOnlyRow(
+                label: l10n.contactOptIn,
+                value: (profile?.optInMarketing ?? false)
+                    ? l10n.commonYes
+                    : l10n.commonNo,
               ),
               const Divider(height: Insets.lg),
               Text(
@@ -171,14 +63,9 @@ class ClientProfileCard extends ConsumerWidget {
                 ClientDetailEmpty(l10n.contactNoFields)
               else
                 ...bundle.fields.map(
-                  (f) => _CustomFieldRow(
-                    field: f,
-                    value: values[f.key] ?? '',
-                    enabled: !locked,
-                    onEdit: () =>
-                        _editField(context, ref, f, values[f.key] ?? ''),
-                    onToggle: (v) =>
-                        _setField(context, ref, f.key, v ? 'true' : 'false'),
+                  (f) => _ReadOnlyRow(
+                    label: f.label,
+                    value: _display(l10n, f, values[f.key] ?? ''),
                   ),
                 ),
             ],
@@ -187,223 +74,46 @@ class ClientProfileCard extends ConsumerWidget {
       ),
     );
   }
-}
 
-/// One editable custom-field row. Boolean fields show an inline switch; every
-/// other type opens an editor on tap and shows the current value (or "—").
-class _CustomFieldRow extends StatelessWidget {
-  const _CustomFieldRow({
-    required this.field,
-    required this.value,
-    required this.onEdit,
-    required this.onToggle,
-    this.enabled = true,
-  });
-
-  final ContactField field;
-  final String value;
-  final VoidCallback onEdit;
-  final ValueChanged<bool> onToggle;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    final labelStyle = context.text.bodyMedium?.copyWith(
-      color: context.scheme.onSurfaceVariant,
-    );
-
+  /// Human-readable value for a custom field — booleans render as Yes/No,
+  /// everything else shows its stored text (or "—" when empty).
+  String _display(AppLocalizations l10n, ContactField field, String value) {
     if (field.type == 'boolean') {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Row(
-          children: [
-            Expanded(child: Text(field.label, style: labelStyle)),
-            Switch(
-              value: value == 'true',
-              onChanged: enabled ? onToggle : null,
-            ),
-          ],
-        ),
-      );
+      return value == 'true' ? l10n.commonYes : l10n.commonNo;
     }
-
-    return InkWell(
-      onTap: enabled ? onEdit : null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          children: [
-            Expanded(child: Text(field.label, style: labelStyle)),
-            const SizedBox(width: Insets.md),
-            Flexible(
-              child: Text(
-                value.isEmpty ? '—' : value,
-                textAlign: TextAlign.end,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.text.bodyMedium,
-              ),
-            ),
-            const SizedBox(width: Insets.xs),
-            Icon(
-              Icons.edit_outlined,
-              size: 16,
-              color: context.scheme.onSurfaceVariant,
-            ),
-          ],
-        ),
-      ),
-    );
+    return value.isEmpty ? '—' : value;
   }
 }
 
-// ── Per-type editors ────────────────────────────────────────────────────────
+/// One read-only label/value row.
+class _ReadOnlyRow extends StatelessWidget {
+  const _ReadOnlyRow({required this.label, required this.value});
 
-/// Text / number / url / email — a single-field dialog. Returns the (trimmed)
-/// text, or null when cancelled.
-Future<String?> _editText(
-  BuildContext context,
-  ContactField field,
-  String current,
-) {
-  final l10n = AppLocalizations.of(context);
-  final controller = TextEditingController(text: current);
-  final keyboard = switch (field.type) {
-    'number' => const TextInputType.numberWithOptions(decimal: true),
-    'email' => TextInputType.emailAddress,
-    'url' => TextInputType.url,
-    _ => TextInputType.text,
-  };
-  return showDialog<String>(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text(field.label),
-      content: TextField(
-        controller: controller,
-        autofocus: true,
-        keyboardType: keyboard,
-        decoration: InputDecoration(hintText: field.label),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx),
-          child: Text(l10n.cancel),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-          child: Text(l10n.inboxSave),
-        ),
-      ],
-    ),
-  );
-}
-
-/// Date field — the OS date picker. Stores an ISO `YYYY-MM-DD` string.
-Future<String?> _pickDate(BuildContext context, String current) async {
-  final initial = DateTime.tryParse(current) ?? DateTime.now();
-  final picked = await showDatePicker(
-    context: context,
-    initialDate: initial,
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2100),
-  );
-  if (picked == null) return null;
-  return picked.toIso8601String().split('T').first;
-}
-
-/// Single-choice select — a bottom sheet of the field's options plus a clear
-/// action. Returns the chosen option, '' to clear, or null when dismissed.
-Future<String?> _pickSelect(
-  BuildContext context,
-  ContactField field,
-  String current,
-) {
-  final l10n = AppLocalizations.of(context);
-  return showModalBottomSheet<String>(
-    context: context,
-    showDragHandle: true,
-    builder: (sheetContext) => SafeArea(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          for (final o in field.options ?? const [])
-            ListTile(
-              title: Text(o),
-              trailing: o == current ? const Icon(Icons.check_rounded) : null,
-              onTap: () => Navigator.pop(sheetContext, o),
-            ),
-          ListTile(
-            leading: const Icon(Icons.clear_rounded),
-            title: Text(l10n.clientDetailClear),
-            onTap: () => Navigator.pop(sheetContext, ''),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
-/// Multi-choice select — a checklist bottom sheet. Returns the selected values
-/// joined by ', ' (the portal's storage format), or null when dismissed.
-Future<String?> _pickMultiSelect(
-  BuildContext context,
-  ContactField field,
-  String current,
-) {
-  final initial = current.isEmpty
-      ? <String>{}
-      : current.split(', ').where((e) => e.isNotEmpty).toSet();
-  return showModalBottomSheet<String>(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
-    builder: (_) =>
-        _MultiSelectSheet(options: field.options ?? const [], initial: initial),
-  );
-}
-
-class _MultiSelectSheet extends StatefulWidget {
-  const _MultiSelectSheet({required this.options, required this.initial});
-  final List<String> options;
-  final Set<String> initial;
-
-  @override
-  State<_MultiSelectSheet> createState() => _MultiSelectSheetState();
-}
-
-class _MultiSelectSheetState extends State<_MultiSelectSheet> {
-  late final Set<String> _selected = {...widget.initial};
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
         children: [
-          Flexible(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                for (final o in widget.options)
-                  CheckboxListTile(
-                    value: _selected.contains(o),
-                    title: Text(o),
-                    onChanged: (v) => setState(
-                      () => v == true ? _selected.add(o) : _selected.remove(o),
-                    ),
-                  ),
-              ],
+          Expanded(
+            child: Text(
+              label,
+              style: context.text.bodyMedium?.copyWith(
+                color: context.scheme.onSurfaceVariant,
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(Insets.md),
-            child: SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () => Navigator.pop(context, _selected.join(', ')),
-                child: Text(l10n.inboxSave),
-              ),
+          const SizedBox(width: Insets.md),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: context.text.bodyMedium,
             ),
           ),
         ],

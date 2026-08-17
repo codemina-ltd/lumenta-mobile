@@ -155,6 +155,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contactNoFields => 'لا توجد حقول مخصصة';
 
   @override
+  String get commonYes => 'نعم';
+
+  @override
+  String get commonNo => 'لا';
+
+  @override
+  String get clientDetailPreviewHint =>
+      'للعرض فقط — تُدار بيانات العميل من بوابة الويب';
+
+  @override
   String get contactLoadError => 'تعذّر تحميل تفاصيل العميل.';
 
   @override

@@ -8,11 +8,9 @@ import '../../data/models/contact_profile.dart';
 import '../../data/repos/contacts_repo.dart';
 
 /// Opens the contact-CRM detail sheet for a client (LUMENTA_GROWTH plan §14):
-/// lifecycle + opt-in quick-edit and read of custom field values.
-Future<void> showContactDetailsSheet(
-  BuildContext context,
-  String clientId,
-) {
+/// a read-only preview of lifecycle, opt-in and custom field values — profile
+/// editing happens on the web portal, not on mobile.
+Future<void> showContactDetailsSheet(BuildContext context, String clientId) {
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
@@ -70,35 +68,6 @@ class _SheetState extends ConsumerState<_ContactDetailsSheet> {
     }
   }
 
-  Future<void> _setLifecycle(String? stageId) async {
-    try {
-      await ref
-          .read(contactsRepoProvider)
-          .updateProfile(widget.clientId, lifecycleStageId: stageId);
-      await _load();
-    } catch (_) {
-      _snack();
-    }
-  }
-
-  Future<void> _setOptIn(bool value) async {
-    try {
-      await ref
-          .read(contactsRepoProvider)
-          .updateProfile(widget.clientId, optInMarketing: value);
-      await _load();
-    } catch (_) {
-      _snack();
-    }
-  }
-
-  void _snack() {
-    if (!mounted) return;
-    final l10n = AppLocalizations.of(context);
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(l10n.contactSaveFailed)));
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -118,98 +87,109 @@ class _SheetState extends ConsumerState<_ContactDetailsSheet> {
               child: Center(child: CircularProgressIndicator()),
             )
           : _error
-              ? Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(l10n.contactLoadError),
-                )
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.contactDetails,
-                      style: Theme.of(context).textTheme.titleMedium,
+          ? Padding(
+              padding: const EdgeInsets.all(24),
+              child: Text(l10n.contactLoadError),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.contactDetails,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                if (_ctwa.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    if (_ctwa.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(8),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.campaign_outlined, size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            '${l10n.contactCameFrom} ${_ctwa.first.label}',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.campaign_outlined, size: 18),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                '${l10n.contactCameFrom} ${_ctwa.first.label}',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ),
-                          ],
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(l10n.contactLifecycle),
+                      Flexible(
+                        child: Text(
+                          _stages
+                                  .where(
+                                    (s) => s.id == profile?.lifecycleStageId,
+                                  )
+                                  .firstOrNull
+                                  ?.label ??
+                              l10n.contactNoStage,
+                          textAlign: TextAlign.right,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
-                    const SizedBox(height: 16),
-                    Text(l10n.contactLifecycle,
-                        style: Theme.of(context).textTheme.labelMedium),
-                    const SizedBox(height: 4),
-                    DropdownButton<String?>(
-                      isExpanded: true,
-                      value: profile?.lifecycleStageId,
-                      hint: Text(l10n.contactNoStage),
-                      items: [
-                        DropdownMenuItem<String?>(
-                          value: null,
-                          child: Text(l10n.contactNoStage),
-                        ),
-                        for (final s in _stages)
-                          DropdownMenuItem<String?>(
-                            value: s.id,
-                            child: Text(s.label),
-                          ),
-                      ],
-                      onChanged: _setLifecycle,
-                    ),
-                    const SizedBox(height: 8),
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(l10n.contactOptIn),
-                      value: profile?.optInMarketing ?? false,
-                      onChanged: _setOptIn,
-                    ),
-                    const Divider(),
-                    Text(l10n.contactFields,
-                        style: Theme.of(context).textTheme.labelMedium),
-                    const SizedBox(height: 4),
-                    if (_fields.isEmpty)
-                      Text(l10n.contactNoFields)
-                    else
-                      ..._fields.map(
-                        (f) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(f.label),
-                              Flexible(
-                                child: Text(
-                                  values[f.key] ?? '—',
-                                  textAlign: TextAlign.right,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                  ],
+                  ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(l10n.contactOptIn),
+                      Text(
+                        (profile?.optInMarketing ?? false)
+                            ? l10n.commonYes
+                            : l10n.commonNo,
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                Text(
+                  l10n.contactFields,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                const SizedBox(height: 4),
+                if (_fields.isEmpty)
+                  Text(l10n.contactNoFields)
+                else
+                  ..._fields.map(
+                    (f) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(f.label),
+                          Flexible(
+                            child: Text(
+                              values[f.key] ?? '—',
+                              textAlign: TextAlign.right,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
     );
   }
 }

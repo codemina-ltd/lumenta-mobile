@@ -155,6 +155,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactNoFields => 'No custom fields';
 
   @override
+  String get commonYes => 'Yes';
+
+  @override
+  String get commonNo => 'No';
+
+  @override
+  String get clientDetailPreviewHint =>
+      'View only — manage this client from the web portal';
+
+  @override
   String get contactLoadError => 'Couldn\'t load contact details.';
 
   @override

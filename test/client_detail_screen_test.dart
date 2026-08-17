@@ -160,8 +160,9 @@ void main() {
     await tester.pumpWidget(host());
     await tester.pumpAndSettle();
 
-    // Hero.
-    expect(find.text('Acme Co'), findsOneWidget);
+    // Hero — the name renders twice by design (expanded identity block plus
+    // the collapsed toolbar title kept in the tree at zero opacity).
+    expect(find.text('Acme Co'), findsWidgets);
     expect(find.text('+15551234567'), findsOneWidget);
 
     // Section titles (each rendered once).

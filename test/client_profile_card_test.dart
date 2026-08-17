@@ -10,7 +10,8 @@ import 'package:mobile/data/models/contact_profile.dart';
 import 'package:mobile/data/repos/contacts_repo.dart';
 import 'package:mobile/features/clients/client_detail/client_profile_card.dart';
 
-/// Fake contacts repo: one text custom field, captures the last field write.
+/// Fake contacts repo: one text custom field with a value, captures any
+/// (unexpected) field write.
 class _FakeContacts extends ContactsRepo {
   _FakeContacts() : super(Dio());
 
@@ -19,7 +20,7 @@ class _FakeContacts extends ContactsRepo {
 
   @override
   Future<ContactProfileResponse> profile(String clientId) async =>
-      const ContactProfileResponse();
+      const ContactProfileResponse(fieldValues: {'city': 'Cairo'});
   @override
   Future<List<ContactLifecycleStage>> lifecycleStages() async => const [];
   @override
@@ -34,7 +35,7 @@ class _FakeContacts extends ContactsRepo {
 }
 
 void main() {
-  testWidgets('editing a text custom field persists via setFieldValue', (
+  testWidgets('renders custom field values read-only — no editor, no write', (
     tester,
   ) async {
     final repo = _FakeContacts();
@@ -55,16 +56,17 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // The field renders empty; tapping opens the editor dialog.
+    // The field renders with its stored value.
     expect(find.text('City'), findsOneWidget);
+    expect(find.text('Cairo'), findsOneWidget);
+
+    // The profile is preview-only on mobile: tapping a field opens no editor
+    // and persists nothing.
     await tester.tap(find.text('City'));
     await tester.pumpAndSettle();
-
-    await tester.enterText(find.byType(TextField), 'Cairo');
-    await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
-
-    expect(repo.lastKey, 'city');
-    expect(repo.lastValue, 'Cairo');
+    expect(find.byType(TextField), findsNothing);
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(repo.lastKey, isNull);
+    expect(repo.lastValue, isNull);
   });
 }

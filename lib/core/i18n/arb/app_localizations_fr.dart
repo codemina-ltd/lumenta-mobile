@@ -156,6 +156,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get contactNoFields => 'Aucun champ personnalisé';
 
   @override
+  String get commonYes => 'Oui';
+
+  @override
+  String get commonNo => 'Non';
+
+  @override
+  String get clientDetailPreviewHint =>
+      'Consultation seule — gérez ce client depuis le portail web';
+
+  @override
   String get contactLoadError =>
       'Impossible de charger les détails du contact.';
 

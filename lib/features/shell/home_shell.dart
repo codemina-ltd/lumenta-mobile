@@ -64,19 +64,21 @@ class HomeShell extends ConsumerWidget {
                   .read(notificationsControllerProvider.notifier)
                   .markAllRead(),
             ),
-          if (auth.activeTenant != null)
-            _WorkspaceMenu(
-              name: auth.activeTenant!.name,
-              canSwitch: auth.tenants.length > 1,
-              onProfile: () => context.push('/profile'),
-              onSwitch: () => context.go('/select-tenant'),
-              onLogout: () async {
-                // Unregister the device while the token is still valid, then
-                // clear the session.
-                await ref.read(pushServiceProvider).deregister();
-                await ref.read(authControllerProvider.notifier).logout();
-              },
-            ),
+          // Always rendered: after a degraded bootstrap (profile/tenant fetch
+          // failed) activeTenant is null, and this menu is the only way out
+          // of a broken session — hiding it would trap the user.
+          _WorkspaceMenu(
+            name: auth.activeTenant?.name,
+            canSwitch: auth.tenants.length > 1,
+            onProfile: () => context.push('/profile'),
+            onSwitch: () => context.go('/select-tenant'),
+            onLogout: () async {
+              // Unregister the device while the token is still valid, then
+              // clear the session.
+              await ref.read(pushServiceProvider).deregister();
+              await ref.read(authControllerProvider.notifier).logout();
+            },
+          ),
           const SizedBox(width: Insets.sm),
         ],
       ),
@@ -122,6 +124,8 @@ class HomeShell extends ConsumerWidget {
 }
 
 /// The active-workspace chip in the app bar; tapping opens switch / logout.
+/// [name] is null while the workspace hasn't loaded (degraded session) — the
+/// chip then falls back to a plain account icon but keeps the menu usable.
 class _WorkspaceMenu extends StatelessWidget {
   const _WorkspaceMenu({
     required this.name,
@@ -131,7 +135,7 @@ class _WorkspaceMenu extends StatelessWidget {
     required this.onLogout,
   });
 
-  final String name;
+  final String? name;
   final bool canSwitch;
   final VoidCallback onProfile;
   final VoidCallback onSwitch;
@@ -141,7 +145,7 @@ class _WorkspaceMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return PopupMenuButton<String>(
-      tooltip: name,
+      tooltip: name ?? l10n.profileTitle,
       position: PopupMenuPosition.under,
       offset: const Offset(0, Insets.sm),
       shape: const RoundedRectangleBorder(
@@ -198,18 +202,25 @@ class _WorkspaceMenu extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.workspaces_rounded,
-                size: 16, color: AppColors.signalDeep),
-            const SizedBox(width: Insets.sm),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 120),
-              child: Text(
-                name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: context.text.labelLarge?.copyWith(fontSize: 13),
-              ),
+            Icon(
+              name != null
+                  ? Icons.workspaces_rounded
+                  : Icons.person_outline_rounded,
+              size: 16,
+              color: AppColors.signalDeep,
             ),
+            if (name != null) ...[
+              const SizedBox(width: Insets.sm),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 120),
+                child: Text(
+                  name!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: context.text.labelLarge?.copyWith(fontSize: 13),
+                ),
+              ),
+            ],
             Icon(Icons.expand_more_rounded,
                 size: 18, color: context.scheme.onSurfaceVariant),
           ],

@@ -388,6 +388,24 @@ abstract class AppLocalizations {
   /// **'No custom fields'**
   String get contactNoFields;
 
+  /// No description provided for @commonYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get commonYes;
+
+  /// No description provided for @commonNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get commonNo;
+
+  /// No description provided for @clientDetailPreviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'View only — manage this client from the web portal'**
+  String get clientDetailPreviewHint;
+
   /// No description provided for @contactLoadError.
   ///
   /// In en, this message translates to:

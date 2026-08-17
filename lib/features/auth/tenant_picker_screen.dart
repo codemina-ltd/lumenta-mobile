@@ -20,7 +20,20 @@ class TenantPickerScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.tenantPickerTitle)),
+      appBar: AppBar(
+        title: Text(l10n.tenantPickerTitle),
+        actions: [
+          // Escape hatch: without it a user whose every workspace is blocked
+          // (or whose tenant list failed to load) has no way to sign out.
+          IconButton(
+            icon: const Icon(Icons.logout_rounded, color: AppColors.ember),
+            tooltip: l10n.logout,
+            onPressed: () =>
+                ref.read(authControllerProvider.notifier).logout(),
+          ),
+          const SizedBox(width: Insets.sm),
+        ],
+      ),
       body: ListView.separated(
         padding: const EdgeInsets.fromLTRB(
           Insets.lg,

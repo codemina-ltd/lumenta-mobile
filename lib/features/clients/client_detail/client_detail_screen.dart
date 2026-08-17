@@ -35,6 +35,9 @@ import 'client_team_card.dart';
 /// sections are grouped (profile & team · activity · marketing & commerce) so
 /// the long scroll reads as one system. Each section owns its own query and
 /// loads independently.
+///
+/// The whole screen is a read-only preview: chatting is the only action on
+/// mobile, and client management happens on the web portal.
 class ClientDetailScreen extends ConsumerWidget {
   const ClientDetailScreen({
     super.key,
@@ -70,25 +73,15 @@ class ClientDetailScreen extends ConsumerWidget {
           onRetry: () => ref.invalidate(clientProvider(clientId)),
         ),
         data: (client) {
-          // KAN-63: an active `all`-scope suppression locks profile editing on
-          // this screen (mirrors the server-side 409 lock). Releasing the
-          // suppression invalidates this provider, so the lock lifts reactively.
-          final isLocked =
-              ref
-                  .watch(clientSuppressionsProvider(clientId))
-                  .asData
-                  ?.value
-                  .any((r) => r.scope == 'all') ??
-              false;
           final groups = <({String title, List<Widget> cards})>[
             (
               title: l10n.clientDetailGroupProfile,
               cards: [
-                ClientProfileCard(clientId: clientId, locked: isLocked),
+                ClientProfileCard(clientId: clientId),
                 // Phone numbers on this unified profile (KAN-28) — primary plus
                 // any numbers folded on by merging WhatsApp contacts. Self-hides
                 // for phone-less (channel-only) contacts.
-                ClientPhoneNumbersCard(clientId: clientId, locked: isLocked),
+                ClientPhoneNumbersCard(clientId: clientId),
                 ClientTeamCard(clientId: clientId),
               ],
             ),
@@ -100,7 +93,6 @@ class ClientDetailScreen extends ConsumerWidget {
                 ClientNotesCard(
                   clientId: clientId,
                   highlightNoteId: highlightNoteId,
-                  locked: isLocked,
                 ),
                 ClientRecentMessagesCard(clientId: clientId),
                 ClientCallsCard(clientId: clientId),
@@ -119,6 +111,8 @@ class ClientDetailScreen extends ConsumerWidget {
 
           final children = <Widget>[
             _PrimaryAction(clientId: clientId),
+            const SizedBox(height: Insets.sm),
+            const _PreviewHint(),
             const SizedBox(height: Insets.lg),
             _StatCard(clientId: clientId, client: client),
           ];
@@ -373,7 +367,11 @@ class _PhoneChip extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 6),
-            const Icon(Icons.copy_rounded, size: 14, color: AppColors.onDarkMed),
+            const Icon(
+              Icons.copy_rounded,
+              size: 14,
+              color: AppColors.onDarkMed,
+            ),
           ],
         ),
       ),
@@ -442,6 +440,37 @@ class _PrimaryAction extends StatelessWidget {
       onPressed: () => _openConversation(context),
       icon: const Icon(Icons.chat_bubble_rounded, size: 20),
       label: Text(l10n.clientDetailOpenChat),
+    );
+  }
+}
+
+/// Small muted line telling the operator this screen is a read-only preview
+/// and that client management lives on the web portal.
+class _PreviewHint extends StatelessWidget {
+  const _PreviewHint();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.visibility_outlined,
+          size: 14,
+          color: context.scheme.onSurfaceVariant,
+        ),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            l10n.clientDetailPreviewHint,
+            textAlign: TextAlign.center,
+            style: context.text.labelSmall?.copyWith(
+              color: context.scheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
