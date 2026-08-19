@@ -124,7 +124,10 @@
     "export": "Rapport",
     "webhook": "Webhook",
     "system": "Système",
-    "inbox": "Boîte de réception"
+    "inbox": "Boîte de réception",
+    "reminder": "Rappels",
+    "commerce": "Commerce",
+    "referral": "Parrainages"
   },
   "template": {
     "approved": {
@@ -277,6 +280,10 @@
       "title": "Un prospect vous a été attribué",
       "body": "{{clientName}} est passé à « {{leadStatusLabel}} » et vous a été automatiquement attribué."
     },
+    "member_cart_assigned": {
+      "title": "Nouveaux clients qui vous sont attribués",
+      "body": "{{managerName}} vous a attribué {{count}} client(s) dans le segment « {{segmentName}} »."
+    },
     "urgent_followup": {
       "title": "Suivi urgent requis",
       "body": "Le réviseur IA a signalé la conversation avec {{clientName}} pour un suivi urgent : {{reason}}"
@@ -290,6 +297,10 @@
     "assigned": {
       "title": "Rappel qui vous est assigné",
       "body": "\"{{title}}\" — échéance {{dueAt}}."
+    },
+    "upcoming": {
+      "title": "Rappel imminent : {{title}}",
+      "body": "« {{title}} » arrive à échéance dans environ 15 minutes ({{dueAt}})."
     },
     "due": {
       "title": "Rappel à échéance : {{title}}",
@@ -444,6 +455,36 @@
     "received": {
       "title": "Nouvelle commande de {{clientName}}",
       "body": "{{itemCount}} article(s), total {{total}}."
+    }
+  },
+  "crm": {
+    "lead_sla_breached": {
+      "title": "SLA dépassé : {{clientName}}",
+      "body": "{{clientName}} est dans « {{leadStatusLabel}} » au-delà de son SLA de {{slaLabel}}. Passez à l'action suivante pour faire avancer l'affaire."
+    }
+  },
+  "ownership_transfer": {
+    "requested": {
+      "title": "Transfert de prospect demandé",
+      "body": "{{requesterName}} a demandé le transfert de {{clientName}} ({{reason}}). Examinez et approuvez ou refusez."
+    },
+    "decided": {
+      "title": "Votre transfert de prospect a été {{decision}}",
+      "body": "Votre demande de transfert de {{clientName}} a été traitée par {{deciderName}} ({{decision}})."
+    }
+  },
+  "sales_queue": {
+    "lead_assigned": {
+      "title": "Nouveaux leads dans votre file",
+      "body": "{{count}} lead(s) ont été routés vers votre file de vente. Prenez le suivant quand vous êtes prêt."
+    },
+    "lease_approaching": {
+      "title": "Action requise dans {{minutes}} min",
+      "body": "{{clientName}} attend dans votre file de vente — la fenêtre de première action se ferme dans environ {{minutes}} minutes."
+    },
+    "lease_breached": {
+      "title": "SLA de file manqué : {{clientName}}",
+      "body": "La fenêtre de première action pour {{clientName}} a expiré sans action enregistrée."
     }
   }
 }

@@ -124,7 +124,10 @@
     "export": "تقرير",
     "webhook": "Webhook",
     "system": "النظام",
-    "inbox": "صندوق الوارد"
+    "inbox": "صندوق الوارد",
+    "reminder": "التذكيرات",
+    "commerce": "المتجر",
+    "referral": "الإحالات"
   },
   "template": {
     "approved": {
@@ -277,6 +280,10 @@
       "title": "أُسند إليك عميل محتمل",
       "body": "انتقل {{clientName}} إلى \"{{leadStatusLabel}}\" وأُسند إليك تلقائيًا."
     },
+    "member_cart_assigned": {
+      "title": "عملاء جدد تم إسنادهم إليك",
+      "body": "أسند إليك {{managerName}} {{count}} عميل/عملاء في الشريحة \"{{segmentName}}\"."
+    },
     "urgent_followup": {
       "title": "متابعة عاجلة مطلوبة",
       "body": "حدّد المراجع الذكي المحادثة مع {{clientName}} كمتابعة عاجلة: {{reason}}"
@@ -290,6 +297,10 @@
     "assigned": {
       "title": "تم إسناد تذكير إليك",
       "body": "\"{{title}}\" — موعد الاستحقاق {{dueAt}}."
+    },
+    "upcoming": {
+      "title": "تذكير قادم: {{title}}",
+      "body": "يحين موعد \"{{title}}\" خلال 15 دقيقة تقريبًا ({{dueAt}})."
     },
     "due": {
       "title": "حان موعد التذكير: {{title}}",
@@ -444,6 +455,36 @@
     "received": {
       "title": "طلب جديد من {{clientName}}",
       "body": "{{itemCount}} عنصر (عناصر)، الإجمالي {{total}}."
+    }
+  },
+  "crm": {
+    "lead_sla_breached": {
+      "title": "تجاوز مهلة الاستجابة: {{clientName}}",
+      "body": "ظل {{clientName}} في \"{{leadStatusLabel}}\" بعد تجاوز مهلة {{slaLabel}}. اتخذ الإجراء التالي للحفاظ على تقدم الصفقة."
+    }
+  },
+  "ownership_transfer": {
+    "requested": {
+      "title": "طلب نقل عميل محتمل",
+      "body": "طلب {{requesterName}} نقل {{clientName}} ({{reason}}). راجع الطلب ووافق عليه أو ارفضه."
+    },
+    "decided": {
+      "title": "تم {{decision}} طلب نقل العميل الخاص بك",
+      "body": "تمت معالجة طلبك لنقل {{clientName}} بواسطة {{deciderName}} ({{decision}})."
+    }
+  },
+  "sales_queue": {
+    "lead_assigned": {
+      "title": "عملاء محتملون جدد في قائمتك",
+      "body": "تم توجيه {{count}} عميل/عملاء محتملين إلى قائمة المبيعات الخاصة بك. اسحب التالي عندما تكون جاهزًا."
+    },
+    "lease_approaching": {
+      "title": "مطلوب إجراء خلال {{minutes}} دقيقة",
+      "body": "{{clientName}} بانتظارك في قائمة المبيعات — تنتهي مهلة الإجراء الأول خلال {{minutes}} دقيقة تقريبًا."
+    },
+    "lease_breached": {
+      "title": "تجاوز مهلة القائمة: {{clientName}}",
+      "body": "انتهت مهلة الإجراء الأول للعميل {{clientName}} دون تسجيل أي إجراء."
     }
   }
 }

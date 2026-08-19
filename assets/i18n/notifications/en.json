@@ -124,7 +124,10 @@
     "export": "Report",
     "webhook": "Webhook",
     "system": "System",
-    "inbox": "Inbox"
+    "inbox": "Inbox",
+    "reminder": "Reminders",
+    "commerce": "Commerce",
+    "referral": "Referrals"
   },
   "template": {
     "approved": {
@@ -277,6 +280,10 @@
       "title": "A lead was assigned to you",
       "body": "{{clientName}} moved to \"{{leadStatusLabel}}\" and was automatically assigned to you."
     },
+    "member_cart_assigned": {
+      "title": "New clients assigned to you",
+      "body": "{{managerName}} assigned you {{count}} client(s) in the segment \"{{segmentName}}\"."
+    },
     "urgent_followup": {
       "title": "Urgent follow-up needed",
       "body": "The AI reviewer flagged the conversation with {{clientName}} for an urgent follow-up: {{reason}}"
@@ -290,6 +297,10 @@
     "assigned": {
       "title": "Reminder assigned to you",
       "body": "\"{{title}}\" — due {{dueAt}}."
+    },
+    "upcoming": {
+      "title": "Reminder coming up: {{title}}",
+      "body": "\"{{title}}\" is due in about 15 minutes ({{dueAt}})."
     },
     "due": {
       "title": "Reminder due: {{title}}",
@@ -444,6 +455,36 @@
     "received": {
       "title": "New order from {{clientName}}",
       "body": "{{itemCount}} item(s), total {{total}}."
+    }
+  },
+  "crm": {
+    "lead_sla_breached": {
+      "title": "SLA missed: {{clientName}}",
+      "body": "{{clientName}} has been in \"{{leadStatusLabel}}\" past its {{slaLabel}} SLA. Take the next action to keep the deal moving."
+    }
+  },
+  "ownership_transfer": {
+    "requested": {
+      "title": "Lead transfer requested",
+      "body": "{{requesterName}} asked to transfer {{clientName}} ({{reason}}). Review and approve or reject."
+    },
+    "decided": {
+      "title": "Your lead transfer was {{decision}}",
+      "body": "Your request to transfer {{clientName}} was {{decision}} by {{deciderName}}."
+    }
+  },
+  "sales_queue": {
+    "lead_assigned": {
+      "title": "New leads in your queue",
+      "body": "{{count}} lead(s) were routed to your sales queue. Pull the next one when you are ready."
+    },
+    "lease_approaching": {
+      "title": "Lead needs action in {{minutes}} min",
+      "body": "{{clientName}} is waiting in your sales queue — the first-action window closes in about {{minutes}} minutes."
+    },
+    "lease_breached": {
+      "title": "Queue SLA missed: {{clientName}}",
+      "body": "The first-action window for {{clientName}} expired without any logged action."
     }
   }
 }
