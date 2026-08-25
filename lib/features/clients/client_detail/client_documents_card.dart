@@ -7,6 +7,7 @@ import '../../../core/i18n/arb/app_localizations.dart';
 import '../../../core/providers.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../shared/tenant_features.dart';
 import '../../shared/widgets.dart';
 import 'client_detail_card.dart';
 import 'client_detail_providers.dart';
@@ -63,6 +64,13 @@ class ClientDocumentsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    // KAN-177 addendum — Console-enabled pilot flag, default OFF. Fail
+    // closed: the card only renders once the flags resolve to an explicit
+    // true (a hidden card is correct while the pilot is off or unknown).
+    final flags = ref.watch(tenantFeaturesProvider).asData?.value;
+    if (flags?['client_documents'] != true) {
+      return const SizedBox.shrink();
+    }
     final async = ref.watch(clientDocumentsProvider(clientId));
 
     return ClientDetailCard(
