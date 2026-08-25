@@ -16,6 +16,7 @@ import '../../shared/live_call_badge.dart';
 import '../../shared/skeletons.dart';
 import '../../shared/widgets.dart';
 import 'client_calls_card.dart';
+import 'client_documents_card.dart';
 import 'client_campaigns_card.dart';
 import 'client_detail_providers.dart';
 import 'client_notes_card.dart';
@@ -96,6 +97,8 @@ class ClientDetailScreen extends ConsumerWidget {
                 ),
                 ClientRecentMessagesCard(clientId: clientId),
                 ClientCallsCard(clientId: clientId),
+                // KAN-177 — read-only Document Center preview.
+                ClientDocumentsCard(clientId: clientId),
               ],
             ),
             (

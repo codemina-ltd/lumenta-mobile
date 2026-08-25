@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../models/client_document.dart';
 import '../models/contact_field.dart';
 import '../models/contact_profile.dart';
 
@@ -14,6 +15,22 @@ class ContactsRepo {
       '/contacts/$clientId/profile',
     );
     return ContactProfileResponse.fromJson(res.data!);
+  }
+
+  /// KAN-177 — the client's Document Center files (read-only on mobile).
+  Future<List<ClientDocument>> listDocuments(String clientId) async {
+    final res = await _dio.get<List<dynamic>>('/contacts/$clientId/documents');
+    return (res.data ?? const [])
+        .map((e) => ClientDocument.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// KAN-177 — short-lived signed download URL for one document.
+  Future<String> documentUrl(String clientId, String documentId) async {
+    final res = await _dio.get<Map<String, dynamic>>(
+      '/contacts/$clientId/documents/$documentId/url',
+    );
+    return res.data!['url'] as String;
   }
 
   Future<List<ContactLifecycleStage>> lifecycleStages() async {

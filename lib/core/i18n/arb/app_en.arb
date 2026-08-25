@@ -59,6 +59,12 @@
   "ordersActionFailed": "Couldn't update. Please try again.",
   "clientDetailCallsTitle": "Calls",
   "clientDetailCallsEmpty": "No calls for this contact",
+  "clientDetailDocumentsTitle": "Documents",
+  "clientDetailDocumentsEmpty": "No documents for this contact",
+  "clientDetailDocumentOpenFailed": "Couldn't open the document",
+  "clientDetailDocumentCategoryEstimation": "Estimation",
+  "clientDetailDocumentCategoryContract": "Contract",
+  "clientDetailDocumentCategoryOther": "Other",
   "liveCallInProgress": "On a call",
   "liveCallWith": "On a call with {name}",
   "@liveCallWith": {

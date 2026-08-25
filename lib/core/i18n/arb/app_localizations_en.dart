@@ -189,6 +189,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientDetailCallsEmpty => 'No calls for this contact';
 
   @override
+  String get clientDetailDocumentsTitle => 'Documents';
+
+  @override
+  String get clientDetailDocumentsEmpty => 'No documents for this contact';
+
+  @override
+  String get clientDetailDocumentOpenFailed => 'Couldn\'t open the document';
+
+  @override
+  String get clientDetailDocumentCategoryEstimation => 'Estimation';
+
+  @override
+  String get clientDetailDocumentCategoryContract => 'Contract';
+
+  @override
+  String get clientDetailDocumentCategoryOther => 'Other';
+
+  @override
   String get liveCallInProgress => 'On a call';
 
   @override

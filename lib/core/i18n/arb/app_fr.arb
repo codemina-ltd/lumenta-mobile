@@ -59,6 +59,12 @@
   "ordersActionFailed": "Échec de la mise à jour. Veuillez réessayer.",
   "clientDetailCallsTitle": "Appels",
   "clientDetailCallsEmpty": "Aucun appel pour ce contact",
+  "clientDetailDocumentsTitle": "Documents",
+  "clientDetailDocumentsEmpty": "Aucun document pour ce contact",
+  "clientDetailDocumentOpenFailed": "Impossible d'ouvrir le document",
+  "clientDetailDocumentCategoryEstimation": "Devis",
+  "clientDetailDocumentCategoryContract": "Contrat",
+  "clientDetailDocumentCategoryOther": "Autre",
   "liveCallInProgress": "En appel",
   "liveCallWith": "En appel avec {name}",
   "@liveCallWith": {

@@ -59,6 +59,12 @@
   "ordersActionFailed": "تعذّر التحديث. حاول مرة أخرى.",
   "clientDetailCallsTitle": "المكالمات",
   "clientDetailCallsEmpty": "لا توجد مكالمات لهذا العميل",
+  "clientDetailDocumentsTitle": "المستندات",
+  "clientDetailDocumentsEmpty": "لا توجد مستندات لهذا العميل",
+  "clientDetailDocumentOpenFailed": "تعذّر فتح المستند",
+  "clientDetailDocumentCategoryEstimation": "عرض سعر",
+  "clientDetailDocumentCategoryContract": "عقد",
+  "clientDetailDocumentCategoryOther": "أخرى",
   "liveCallInProgress": "في مكالمة الآن",
   "liveCallWith": "في مكالمة مع {name}",
   "@liveCallWith": {

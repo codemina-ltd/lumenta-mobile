@@ -454,6 +454,42 @@ abstract class AppLocalizations {
   /// **'No calls for this contact'**
   String get clientDetailCallsEmpty;
 
+  /// No description provided for @clientDetailDocumentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get clientDetailDocumentsTitle;
+
+  /// No description provided for @clientDetailDocumentsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No documents for this contact'**
+  String get clientDetailDocumentsEmpty;
+
+  /// No description provided for @clientDetailDocumentOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the document'**
+  String get clientDetailDocumentOpenFailed;
+
+  /// No description provided for @clientDetailDocumentCategoryEstimation.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimation'**
+  String get clientDetailDocumentCategoryEstimation;
+
+  /// No description provided for @clientDetailDocumentCategoryContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract'**
+  String get clientDetailDocumentCategoryContract;
+
+  /// No description provided for @clientDetailDocumentCategoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get clientDetailDocumentCategoryOther;
+
   /// No description provided for @liveCallInProgress.
   ///
   /// In en, this message translates to:

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
+import '../../../data/models/client_document.dart';
 import '../../../data/models/contact_field.dart';
 import '../../../data/models/contact_profile.dart';
 import '../../../data/models/inbox_note.dart';
@@ -34,6 +35,12 @@ final clientOrdersProvider = FutureProvider.autoDispose
 final clientCallsProvider = FutureProvider.autoDispose
     .family<List<SmpCall>, String>((ref, clientId) async {
       return ref.read(callsRepoProvider).listForClient(clientId);
+    });
+
+/// KAN-177 — the client's Document Center files (read-only preview).
+final clientDocumentsProvider = FutureProvider.autoDispose
+    .family<List<ClientDocument>, String>((ref, clientId) async {
+      return ref.read(contactsRepoProvider).listDocuments(clientId);
     });
 
 /// Contact CRM profile bundled with the tenant's lifecycle stages and custom

@@ -193,6 +193,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clientDetailCallsEmpty => 'Aucun appel pour ce contact';
 
   @override
+  String get clientDetailDocumentsTitle => 'Documents';
+
+  @override
+  String get clientDetailDocumentsEmpty => 'Aucun document pour ce contact';
+
+  @override
+  String get clientDetailDocumentOpenFailed =>
+      'Impossible d\'ouvrir le document';
+
+  @override
+  String get clientDetailDocumentCategoryEstimation => 'Devis';
+
+  @override
+  String get clientDetailDocumentCategoryContract => 'Contrat';
+
+  @override
+  String get clientDetailDocumentCategoryOther => 'Autre';
+
+  @override
   String get liveCallInProgress => 'En appel';
 
   @override

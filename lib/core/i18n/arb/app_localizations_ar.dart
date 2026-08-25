@@ -189,6 +189,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientDetailCallsEmpty => 'لا توجد مكالمات لهذا العميل';
 
   @override
+  String get clientDetailDocumentsTitle => 'المستندات';
+
+  @override
+  String get clientDetailDocumentsEmpty => 'لا توجد مستندات لهذا العميل';
+
+  @override
+  String get clientDetailDocumentOpenFailed => 'تعذّر فتح المستند';
+
+  @override
+  String get clientDetailDocumentCategoryEstimation => 'عرض سعر';
+
+  @override
+  String get clientDetailDocumentCategoryContract => 'عقد';
+
+  @override
+  String get clientDetailDocumentCategoryOther => 'أخرى';
+
+  @override
   String get liveCallInProgress => 'في مكالمة الآن';
 
   @override
