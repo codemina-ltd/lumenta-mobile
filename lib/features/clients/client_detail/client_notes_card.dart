@@ -231,11 +231,54 @@ class _NoteTile extends StatelessWidget {
                   textDirection: Fmt.textDirectionFor(note.body),
                   style: context.text.bodyMedium,
                 ),
+                if (note.reactions.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  _ReactionPills(reactions: note.reactions),
+                ],
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// KAN-186 — read-only reaction pills (`👍 2`), tinted when the signed-in
+/// member reacted. Toggling stays on the web portal for now.
+class _ReactionPills extends StatelessWidget {
+  const _ReactionPills({required this.reactions});
+
+  final List<InboxNoteReaction> reactions;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = context.scheme;
+    return Wrap(
+      spacing: 6,
+      runSpacing: 4,
+      children: [
+        for (final r in reactions)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: r.reactedByMe
+                  ? scheme.primary.withValues(alpha: 0.12)
+                  : scheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: r.reactedByMe ? scheme.primary : scheme.outlineVariant,
+              ),
+            ),
+            child: Text(
+              '${r.emoji} ${r.count}',
+              style: context.text.labelSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: r.reactedByMe ? scheme.primary : scheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

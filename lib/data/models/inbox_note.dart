@@ -14,6 +14,8 @@ abstract class InboxNote with _$InboxNote {
     required String authorUserId,
     required String body,
     String? createdAt,
+    /// KAN-186 — emoji reactions aggregated by the API (read-only here).
+    @Default(<InboxNoteReaction>[]) List<InboxNoteReaction> reactions,
   }) = _InboxNote;
 
   const InboxNote._();
@@ -23,4 +25,19 @@ abstract class InboxNote with _$InboxNote {
 
   DateTime? get createdAtDate =>
       createdAt == null ? null : DateTime.tryParse(createdAt!)?.toLocal();
+}
+
+/// KAN-186 — one emoji on a note: how many reacted, who, and whether the
+/// signed-in member is among them.
+@freezed
+abstract class InboxNoteReaction with _$InboxNoteReaction {
+  const factory InboxNoteReaction({
+    required String emoji,
+    @Default(0) int count,
+    @Default(<String>[]) List<String> userIds,
+    @Default(false) bool reactedByMe,
+  }) = _InboxNoteReaction;
+
+  factory InboxNoteReaction.fromJson(Map<String, dynamic> json) =>
+      _$InboxNoteReactionFromJson(json);
 }

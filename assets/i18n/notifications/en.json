@@ -276,6 +276,10 @@
       "title": "{{authorName}} assigned you a note",
       "body": "{{authorName}} assigned you an internal note on the conversation with {{clientName}}."
     },
+    "note_reaction": {
+      "title": "{{actorName}} reacted {{emoji}} to your note",
+      "body": "{{actorName}} reacted {{emoji}} to your internal note on the conversation with {{clientName}}."
+    },
     "lead_auto_assigned": {
       "title": "A lead was assigned to you",
       "body": "{{clientName}} moved to \"{{leadStatusLabel}}\" and was automatically assigned to you."

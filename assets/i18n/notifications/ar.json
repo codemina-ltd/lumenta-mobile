@@ -276,6 +276,10 @@
       "title": "أسند إليك {{authorName}} ملاحظة",
       "body": "أسند إليك {{authorName}} ملاحظة داخلية على المحادثة مع {{clientName}}."
     },
+    "note_reaction": {
+      "title": "تفاعل {{actorName}} بـ {{emoji}} مع ملاحظتك",
+      "body": "تفاعل {{actorName}} بـ {{emoji}} مع ملاحظتك الداخلية على المحادثة مع {{clientName}}."
+    },
     "lead_auto_assigned": {
       "title": "أُسند إليك عميل محتمل",
       "body": "انتقل {{clientName}} إلى \"{{leadStatusLabel}}\" وأُسند إليك تلقائيًا."
