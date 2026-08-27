@@ -38,6 +38,14 @@ class AppLocalizationsFr extends AppLocalizations {
       'La connexion mobile n\'est pas activée pour cet espace de travail. Contactez votre administrateur.';
 
   @override
+  String get tenantAccessRevoked =>
+      'Votre accès à cet espace de travail a été désactivé par un administrateur.';
+
+  @override
+  String get tenantPickerEmpty =>
+      'Vous n\'appartenez encore à aucun espace de travail.';
+
+  @override
   String get switchTenant => 'Changer d\'espace';
 
   @override

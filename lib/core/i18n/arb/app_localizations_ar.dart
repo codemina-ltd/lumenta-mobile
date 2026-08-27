@@ -38,6 +38,13 @@ class AppLocalizationsAr extends AppLocalizations {
       'تسجيل الدخول عبر تطبيق الجوال غير مُفعّل لمساحة العمل هذه. يرجى التواصل مع المسؤول.';
 
   @override
+  String get tenantAccessRevoked =>
+      'قام مسؤول بتعطيل وصولك إلى مساحة العمل تلك.';
+
+  @override
+  String get tenantPickerEmpty => 'لست عضوًا في أي مساحة عمل بعد.';
+
+  @override
   String get switchTenant => 'تبديل مساحة العمل';
 
   @override

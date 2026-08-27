@@ -15,8 +15,10 @@ class TenantRepo {
         .toList();
   }
 
-  /// `GET /tenants/:id/members` — every user in the workspace, for the
-  /// inbox assignee picker. Caller must be a member of the tenant.
+  /// `GET /tenants/:id/members` — every ACTIVE user in the workspace, for
+  /// the inbox assignee picker (KAN-198: the API omits disabled members
+  /// unless `includeDisabled=true`, which pickers never pass). Caller must be
+  /// a member of the tenant.
   Future<List<TenantMemberLite>> members(String tenantId) async {
     final res = await _dio.get<Map<String, dynamic>>(
       '/tenants/$tenantId/members',

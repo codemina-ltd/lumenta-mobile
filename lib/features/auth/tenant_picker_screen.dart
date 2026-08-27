@@ -18,6 +18,27 @@ class TenantPickerScreen extends ConsumerWidget {
     final tenants = ref.watch(
       authControllerProvider.select((s) => s.tenants),
     );
+    // KAN-198 — one-shot explanation after the active workspace revoked the
+    // user's membership (disabled / removed) mid-session.
+    final notice = ref.watch(
+      authControllerProvider.select((s) => s.notice),
+    );
+    ref.listen<AuthNotice?>(
+      authControllerProvider.select((s) => s.notice),
+      (_, next) {
+        if (next == AuthNotice.tenantAccessRevoked) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(l10n.tenantAccessRevoked),
+                duration: const Duration(seconds: 6),
+              ),
+            );
+          ref.read(authControllerProvider.notifier).clearNotice();
+        }
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -34,7 +55,19 @@ class TenantPickerScreen extends ConsumerWidget {
           const SizedBox(width: Insets.sm),
         ],
       ),
-      body: ListView.separated(
+      body: tenants.isEmpty
+          ? Padding(
+              padding: const EdgeInsets.all(Insets.lg),
+              child: Center(
+                child: Text(
+                  notice == AuthNotice.tenantAccessRevoked
+                      ? l10n.tenantAccessRevoked
+                      : l10n.tenantPickerEmpty,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          : ListView.separated(
         padding: const EdgeInsets.fromLTRB(
           Insets.lg,
           Insets.md,

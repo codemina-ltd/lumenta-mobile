@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -11,6 +13,9 @@ import 'recaptcha_service.dart';
 
 enum AuthStatus { bootstrapping, unauthenticated, needsTenant, authenticated }
 
+/// One-shot notices surfaced on the workspace picker (KAN-198).
+enum AuthNotice { tenantAccessRevoked }
+
 @immutable
 class AuthState {
   const AuthState({
@@ -20,6 +25,7 @@ class AuthState {
     this.activeTenantId,
     this.error,
     this.busy = false,
+    this.notice,
   });
 
   final AuthStatus status;
@@ -28,6 +34,7 @@ class AuthState {
   final String? activeTenantId;
   final Object? error;
   final bool busy;
+  final AuthNotice? notice;
 
   TenantSummary? get activeTenant {
     for (final t in tenants) {
@@ -44,6 +51,8 @@ class AuthState {
     Object? error,
     bool clearError = false,
     bool? busy,
+    AuthNotice? notice,
+    bool clearNotice = false,
   }) {
     return AuthState(
       status: status ?? this.status,
@@ -52,6 +61,7 @@ class AuthState {
       activeTenantId: activeTenantId ?? this.activeTenantId,
       error: clearError ? null : (error ?? this.error),
       busy: busy ?? this.busy,
+      notice: clearNotice ? null : (notice ?? this.notice),
     );
   }
 }
@@ -71,7 +81,39 @@ class AuthController extends Notifier<AuthState> {
   void _onSessionChanged() {
     if (!_session.isAuthenticated && state.status == AuthStatus.authenticated) {
       state = const AuthState(status: AuthStatus.unauthenticated);
+      return;
     }
+    // KAN-198 — the interceptor dropped the active workspace after a 403
+    // TENANT_FORBIDDEN: reload the (now shorter) tenant list and land on the
+    // picker with an explanation. Tokens are still valid.
+    if (_session.tenantAccessRevoked &&
+        state.status == AuthStatus.authenticated) {
+      _session.acknowledgeTenantAccessRevoked();
+      unawaited(_onTenantAccessRevoked());
+    }
+  }
+
+  Future<void> _onTenantAccessRevoked() async {
+    List<TenantSummary> tenants = state.tenants;
+    try {
+      tenants = await ref.read(tenantRepoProvider).listMine();
+    } catch (_) {
+      // Offline / transient: fall back to the cached list minus the revoked
+      // workspace so the picker never re-offers it.
+      final revoked = state.activeTenantId;
+      tenants = tenants.where((t) => t.id != revoked).toList();
+    }
+    state = AuthState(
+      status: AuthStatus.needsTenant,
+      user: state.user,
+      tenants: tenants,
+      notice: AuthNotice.tenantAccessRevoked,
+    );
+  }
+
+  /// The picker has shown the one-shot notice.
+  void clearNotice() {
+    if (state.notice != null) state = state.copyWith(clearNotice: true);
   }
 
   /// Called from `main()` on launch.
@@ -185,6 +227,7 @@ class AuthController extends Notifier<AuthState> {
     state = state.copyWith(
       status: AuthStatus.authenticated,
       activeTenantId: tenantId,
+      clearNotice: true,
     );
   }
 

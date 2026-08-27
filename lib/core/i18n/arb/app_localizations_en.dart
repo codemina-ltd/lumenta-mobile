@@ -38,6 +38,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Mobile login is not enabled for this workspace. Contact your administrator.';
 
   @override
+  String get tenantAccessRevoked =>
+      'Your access to that workspace has been disabled by an administrator.';
+
+  @override
+  String get tenantPickerEmpty => 'You don\'t belong to any workspace yet.';
+
+  @override
   String get switchTenant => 'Switch workspace';
 
   @override

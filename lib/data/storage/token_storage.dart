@@ -27,6 +27,9 @@ class TokenStorage {
   Future<void> writeTenant(String tenantId) =>
       _storage.write(key: _kTenant, value: tenantId);
 
+  /// KAN-198 — forget only the workspace selection (tokens stay valid).
+  Future<void> clearTenant() => _storage.delete(key: _kTenant);
+
   Future<void> clear() async {
     await _storage.delete(key: _kAccess);
     await _storage.delete(key: _kRefresh);

@@ -154,6 +154,18 @@ abstract class AppLocalizations {
   /// **'Mobile login is not enabled for this workspace. Contact your administrator.'**
   String get tenantMobileLoginDisabled;
 
+  /// No description provided for @tenantAccessRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your access to that workspace has been disabled by an administrator.'**
+  String get tenantAccessRevoked;
+
+  /// No description provided for @tenantPickerEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t belong to any workspace yet.'**
+  String get tenantPickerEmpty;
+
   /// No description provided for @switchTenant.
   ///
   /// In en, this message translates to:

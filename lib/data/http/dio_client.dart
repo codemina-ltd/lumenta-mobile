@@ -65,6 +65,19 @@ class _AuthRefreshInterceptor extends Interceptor {
     ErrorInterceptorHandler handler,
   ) async {
     final response = err.response;
+
+    // KAN-198 — a 403 TENANT_FORBIDDEN on a request that carried the active
+    // tenant header means this user can no longer act in that workspace
+    // (membership disabled / removed). Drop the selection so the app falls
+    // back to the workspace picker instead of showing errors on every tab.
+    if (response?.statusCode == 403 && _isTenantForbidden(response)) {
+      final sentTenant = err.requestOptions.headers['X-Tenant-Id'];
+      if (sentTenant != null && sentTenant == session.activeTenantId) {
+        unawaited(session.revokeActiveTenant());
+      }
+      return handler.next(err);
+    }
+
     final isAuthFailure = response?.statusCode == 401;
     final isRefreshCall = err.requestOptions.path.contains('/auth/refresh');
     final alreadyRetried = err.requestOptions.extra['__retried'] == true;
@@ -90,6 +103,14 @@ class _AuthRefreshInterceptor extends Interceptor {
     } catch (_) {
       return handler.next(err);
     }
+  }
+
+  static bool _isTenantForbidden(Response<dynamic>? response) {
+    final data = response?.data;
+    if (data is Map) {
+      return data['errorCode'] == 'TENANT_FORBIDDEN';
+    }
+    return false;
   }
 
   Future<String?> _refreshOnce() {

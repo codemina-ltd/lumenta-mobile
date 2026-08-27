@@ -39,6 +39,25 @@ class AuthSession extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// KAN-198 — the API said the user is no longer a member of the active
+  /// workspace (403 TENANT_FORBIDDEN, e.g. their membership was disabled).
+  /// Drops the selection so the app returns to the picker; tokens stay.
+  bool _tenantAccessRevoked = false;
+  bool get tenantAccessRevoked => _tenantAccessRevoked;
+
+  Future<void> revokeActiveTenant() async {
+    if (_activeTenantId == null) return;
+    _activeTenantId = null;
+    _tenantAccessRevoked = true;
+    await _storage.clearTenant();
+    notifyListeners();
+  }
+
+  /// Consumed by the auth controller once it has reacted to the revocation.
+  void acknowledgeTenantAccessRevoked() {
+    _tenantAccessRevoked = false;
+  }
+
   Future<void> clear() async {
     _accessToken = null;
     _refreshToken = null;

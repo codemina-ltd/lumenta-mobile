@@ -9,6 +9,8 @@
   "loginError": "Connexion impossible. Vérifiez vos informations et réessayez.",
   "tenantPickerTitle": "Choisir un espace de travail",
   "tenantMobileLoginDisabled": "La connexion mobile n'est pas activée pour cet espace de travail. Contactez votre administrateur.",
+  "tenantAccessRevoked": "Votre accès à cet espace de travail a été désactivé par un administrateur.",
+  "tenantPickerEmpty": "Vous n'appartenez encore à aucun espace de travail.",
   "switchTenant": "Changer d'espace",
   "logout": "Se déconnecter",
   "navClients": "Clients",
