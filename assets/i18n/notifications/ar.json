@@ -219,6 +219,10 @@
     "role_changed": {
       "title": "تغيّر دورك",
       "body": "أصبح دورك في مساحة العمل الآن {{role}}."
+    },
+    "push_device_revoked": {
+      "title": "تمت إزالة جهاز الإشعارات",
+      "body": "قام {{actorName}} بإلغاء إشعارات الدفع لجهازك \"{{deviceLabel}}\"."
     }
   },
   "api_key": {

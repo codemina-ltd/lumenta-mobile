@@ -219,6 +219,10 @@
     "role_changed": {
       "title": "Votre rôle a changé",
       "body": "Votre rôle dans cet espace de travail est désormais {{role}}."
+    },
+    "push_device_revoked": {
+      "title": "Appareil push retiré",
+      "body": "Votre appareil mobile « {{deviceLabel}} » a été déconnecté des notifications push par {{actorName}}."
     }
   },
   "api_key": {

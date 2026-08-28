@@ -219,6 +219,10 @@
     "role_changed": {
       "title": "Your role changed",
       "body": "Your role in this workspace is now {{role}}."
+    },
+    "push_device_revoked": {
+      "title": "Mobile push device removed",
+      "body": "Your mobile device \"{{deviceLabel}}\" was signed out of push notifications by {{actorName}}."
     }
   },
   "api_key": {
