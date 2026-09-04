@@ -377,6 +377,14 @@
   "suppressionReasonHardBounce": "Hard bounce",
   "suppressionReasonBlockedByUser": "Blocked by user",
   "suppressionReasonCompliance": "Compliance",
+  "suppressionByJourney": "Suppressed by journey {name}",
+  "@suppressionByJourney": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "messageActionCreateReminder": "Create reminder",
   "reminderTitleLabel": "Title",
   "reminderTitleRequired": "Please enter a title",

@@ -113,7 +113,16 @@ class _SuppressionRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(subtitle, style: context.text.bodySmall),
-                if (row.notes?.trim().isNotEmpty ?? false)
+                // KAN-205: journey-created rows show the journey name
+                // instead of a free-text note.
+                if (row.journeyName != null)
+                  Text(
+                    l10n.suppressionByJourney(row.journeyName!),
+                    style: context.text.labelSmall?.copyWith(
+                      color: context.scheme.onSurfaceVariant,
+                    ),
+                  )
+                else if (row.notes?.trim().isNotEmpty ?? false)
                   Text(
                     row.notes!,
                     style: context.text.labelSmall?.copyWith(

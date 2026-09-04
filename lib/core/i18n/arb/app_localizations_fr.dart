@@ -1014,6 +1014,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get suppressionReasonCompliance => 'Conformité';
 
   @override
+  String suppressionByJourney(String name) {
+    return 'Suspendu par le parcours $name';
+  }
+
+  @override
   String get messageActionCreateReminder => 'Créer un rappel';
 
   @override

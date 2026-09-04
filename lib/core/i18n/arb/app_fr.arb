@@ -369,6 +369,14 @@
   "suppressionReasonHardBounce": "Rebond définitif",
   "suppressionReasonBlockedByUser": "Bloqué par l'utilisateur",
   "suppressionReasonCompliance": "Conformité",
+  "suppressionByJourney": "Suspendu par le parcours {name}",
+  "@suppressionByJourney": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "messageActionCreateReminder": "Créer un rappel",
   "reminderTitleLabel": "Titre",
   "reminderTitleRequired": "Veuillez saisir un titre",

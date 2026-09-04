@@ -52,6 +52,7 @@ class ClientSuppression {
     required this.source,
     this.notes,
     this.createdAt,
+    this.journeyName,
   });
 
   final String id;
@@ -61,6 +62,10 @@ class ClientSuppression {
   final String? notes;
   final String? createdAt;
 
+  /// Name of the journey whose Suppress node created this row (KAN-205);
+  /// null for other sources or when the journey has been deleted.
+  final String? journeyName;
+
   factory ClientSuppression.fromJson(Map<String, dynamic> m) =>
       ClientSuppression(
         id: m['id'] as String,
@@ -69,5 +74,6 @@ class ClientSuppression {
         source: (m['source'] as String?) ?? 'portal',
         notes: m['notes'] as String?,
         createdAt: m['createdAt'] as String?,
+        journeyName: (m['journey'] as Map<String, dynamic>?)?['name'] as String?,
       );
 }

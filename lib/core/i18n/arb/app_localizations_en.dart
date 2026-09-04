@@ -1000,6 +1000,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get suppressionReasonCompliance => 'Compliance';
 
   @override
+  String suppressionByJourney(String name) {
+    return 'Suppressed by journey $name';
+  }
+
+  @override
   String get messageActionCreateReminder => 'Create reminder';
 
   @override

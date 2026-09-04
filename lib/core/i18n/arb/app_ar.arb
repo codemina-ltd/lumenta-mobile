@@ -369,6 +369,14 @@
   "suppressionReasonHardBounce": "ارتداد دائم",
   "suppressionReasonBlockedByUser": "حظره المستخدم",
   "suppressionReasonCompliance": "الامتثال",
+  "suppressionByJourney": "تم الإيقاف بواسطة الرحلة {name}",
+  "@suppressionByJourney": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "messageActionCreateReminder": "إنشاء تذكير",
   "reminderTitleLabel": "العنوان",
   "reminderTitleRequired": "يرجى إدخال عنوان",

@@ -1954,6 +1954,12 @@ abstract class AppLocalizations {
   /// **'Compliance'**
   String get suppressionReasonCompliance;
 
+  /// No description provided for @suppressionByJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Suppressed by journey {name}'**
+  String suppressionByJourney(String name);
+
   /// No description provided for @messageActionCreateReminder.
   ///
   /// In en, this message translates to:

@@ -1004,6 +1004,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get suppressionReasonCompliance => 'الامتثال';
 
   @override
+  String suppressionByJourney(String name) {
+    return 'تم الإيقاف بواسطة الرحلة $name';
+  }
+
+  @override
   String get messageActionCreateReminder => 'إنشاء تذكير';
 
   @override
