@@ -223,6 +223,10 @@
     "push_device_revoked": {
       "title": "Appareil push retiré",
       "body": "Votre appareil mobile « {{deviceLabel}} » a été déconnecté des notifications push par {{actorName}}."
+    },
+    "added_to_workspace": {
+      "title": "Ajouté à un espace de travail",
+      "body": "{{actorName}} vous a ajouté à l'espace de travail « {{workspaceName}} » en tant que {{role}}."
     }
   },
   "api_key": {

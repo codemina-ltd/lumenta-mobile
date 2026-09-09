@@ -223,6 +223,10 @@
     "push_device_revoked": {
       "title": "Mobile push device removed",
       "body": "Your mobile device \"{{deviceLabel}}\" was signed out of push notifications by {{actorName}}."
+    },
+    "added_to_workspace": {
+      "title": "Added to a workspace",
+      "body": "{{actorName}} added you to the workspace \"{{workspaceName}}\" as {{role}}."
     }
   },
   "api_key": {

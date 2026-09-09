@@ -223,6 +223,10 @@
     "push_device_revoked": {
       "title": "تمت إزالة جهاز الإشعارات",
       "body": "قام {{actorName}} بإلغاء إشعارات الدفع لجهازك \"{{deviceLabel}}\"."
+    },
+    "added_to_workspace": {
+      "title": "تمت إضافتك إلى مساحة عمل",
+      "body": "أضافك {{actorName}} إلى مساحة العمل \"{{workspaceName}}\" بصفة {{role}}."
     }
   },
   "api_key": {
