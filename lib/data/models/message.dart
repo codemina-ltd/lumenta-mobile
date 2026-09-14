@@ -85,6 +85,10 @@ abstract class Message with _$Message {
     String? transcription,
     String? transcriptionStatus,
 
+    /// Lume Voice — set on an outbound voice reply Lume synthesised (TTS);
+    /// the [body] is then the text it spoke. Null on every other row.
+    String? ttsProvider,
+
     /// Emoji the customer reacted with (webhook writes it onto the reacted-to
     /// message row); null / empty when there is no active reaction.
     String? reaction,
@@ -153,6 +157,14 @@ abstract class Message with _$Message {
       messageType == MessageType.document ||
       messageType == MessageType.sticker;
   bool get transcriptionReady => transcriptionStatus == 'ready';
+
+  /// Transcription requested but not landed yet (Lume is still working).
+  bool get transcriptionInFlight =>
+      transcriptionStatus == 'pending' || transcriptionStatus == 'in_progress';
+
+  /// Outbound voice note Lume synthesised, whose [body] is the spoken text.
+  bool get isLumeVoiceReply =>
+      (ttsProvider?.isNotEmpty ?? false) && body.trim().isNotEmpty;
 
   /// Filename of a document message, when known. The API encodes it in the
   /// body as `[Document: name.pdf]` (inbound rows and outbound rows without

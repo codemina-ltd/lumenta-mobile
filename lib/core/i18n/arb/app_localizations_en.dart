@@ -419,6 +419,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transcription => 'Transcription';
 
   @override
+  String get transcribedByLume => 'Transcribed by Lume';
+
+  @override
+  String get lumeVoiceReply => 'Lume voice reply';
+
+  @override
+  String get lumeTranscribing => 'Lume is transcribing…';
+
+  @override
+  String get playVoiceNote => 'Play voice note';
+
+  @override
+  String get pauseVoiceNote => 'Pause voice note';
+
+  @override
+  String playbackSpeed(String speed) {
+    return 'Playback speed $speed';
+  }
+
+  @override
   String get openDocument => 'Open document';
 
   @override

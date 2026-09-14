@@ -427,6 +427,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get transcription => 'النص المكتوب';
 
   @override
+  String get transcribedByLume => 'تم التفريغ بواسطة Lume';
+
+  @override
+  String get lumeVoiceReply => 'رد صوتي من Lume';
+
+  @override
+  String get lumeTranscribing => 'Lume يقوم بالتفريغ…';
+
+  @override
+  String get playVoiceNote => 'تشغيل الرسالة الصوتية';
+
+  @override
+  String get pauseVoiceNote => 'إيقاف الرسالة الصوتية مؤقتاً';
+
+  @override
+  String playbackSpeed(String speed) {
+    return 'سرعة التشغيل $speed';
+  }
+
+  @override
   String get openDocument => 'فتح المستند';
 
   @override

@@ -164,6 +164,19 @@
   "today": "Today",
   "yesterday": "Yesterday",
   "transcription": "Transcription",
+  "transcribedByLume": "Transcribed by Lume",
+  "lumeVoiceReply": "Lume voice reply",
+  "lumeTranscribing": "Lume is transcribing…",
+  "playVoiceNote": "Play voice note",
+  "pauseVoiceNote": "Pause voice note",
+  "playbackSpeed": "Playback speed {speed}",
+  "@playbackSpeed": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
   "openDocument": "Open document",
   "openVideo": "Open video",
   "documentOpenFailed": "Couldn't open the document. Please try again.",

@@ -52,4 +52,8 @@ class AppColors {
   static const emberTint = Color(0xFFFFE2D9);
   static const amberTint = Color(0xFFFBEDCF);
   static const lilacTint = Color(0xFFEAE3FF);
+
+  /// Lume (AI agent) accent — mirrors the portal's CHAT_DESIGN.lumeIcon.
+  static const lume = Color(0xFF7C3AED);
+  static const lumeOnDark = Color(0xFFC4B5FD);
 }

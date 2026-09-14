@@ -862,6 +862,42 @@ abstract class AppLocalizations {
   /// **'Transcription'**
   String get transcription;
 
+  /// No description provided for @transcribedByLume.
+  ///
+  /// In en, this message translates to:
+  /// **'Transcribed by Lume'**
+  String get transcribedByLume;
+
+  /// No description provided for @lumeVoiceReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Lume voice reply'**
+  String get lumeVoiceReply;
+
+  /// No description provided for @lumeTranscribing.
+  ///
+  /// In en, this message translates to:
+  /// **'Lume is transcribing…'**
+  String get lumeTranscribing;
+
+  /// No description provided for @playVoiceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Play voice note'**
+  String get playVoiceNote;
+
+  /// No description provided for @pauseVoiceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause voice note'**
+  String get pauseVoiceNote;
+
+  /// No description provided for @playbackSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback speed {speed}'**
+  String playbackSpeed(String speed);
+
   /// No description provided for @openDocument.
   ///
   /// In en, this message translates to:

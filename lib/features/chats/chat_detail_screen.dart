@@ -28,7 +28,6 @@ import 'chat_providers.dart';
 import 'thread_controller.dart';
 import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
-import 'widgets/audio_bubble.dart';
 import 'widgets/channel_composer.dart';
 import 'widgets/channel_indicator.dart';
 import 'widgets/chat_composer.dart';
@@ -40,6 +39,7 @@ import 'widgets/quick_reply_chips.dart';
 import 'widgets/scheduled_message_actions_sheet.dart';
 import 'widgets/sender_thread_bar.dart';
 import 'widgets/template_bubble.dart';
+import 'widgets/voice_note_bubble.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
   const ChatDetailScreen({
@@ -1078,29 +1078,10 @@ class _MessageBubble extends ConsumerWidget {
           textColor: textColor,
         );
       case MessageType.audio:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AudioBubble(
-              color: textColor,
-              mimeType: message.mediaMimeType,
-              loadBytes: () => ref.read(mediaBytesLoaderProvider)(url),
-            ),
-            if (message.transcriptionReady &&
-                (message.transcription?.isNotEmpty ?? false))
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  message.transcription!,
-                  textDirection: Fmt.textDirectionFor(message.transcription!),
-                  style: TextStyle(
-                    color: textColor.withValues(alpha: 0.85),
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-          ],
+        return VoiceNoteContent(
+          message: message,
+          textColor: textColor,
+          loadBytes: () => ref.read(mediaBytesLoaderProvider)(url),
         );
       case MessageType.video:
         return VideoBubble(message: message, textColor: textColor);
