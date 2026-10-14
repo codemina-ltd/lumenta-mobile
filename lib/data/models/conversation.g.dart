@@ -11,6 +11,8 @@ _Conversation _$ConversationFromJson(Map<String, dynamic> json) =>
       clientId: _clientId(json, 'clientId') as String,
       phoneNumber: json['phoneNumber'] as String?,
       profileName: json['profileName'] as String?,
+      workspaceName: json['displayName'] as String?,
+      name: json['name'] as String?,
       lastMessageBody: json['lastMessageBody'] as String?,
       lastMessageType: $enumDecodeNullable(
         _$MessageTypeEnumMap,
@@ -31,6 +33,8 @@ Map<String, dynamic> _$ConversationToJson(_Conversation instance) =>
       'clientId': instance.clientId,
       'phoneNumber': instance.phoneNumber,
       'profileName': instance.profileName,
+      'displayName': instance.workspaceName,
+      'name': instance.name,
       'lastMessageBody': instance.lastMessageBody,
       'lastMessageType': _$MessageTypeEnumMap[instance.lastMessageType],
       'lastMessageDirection':

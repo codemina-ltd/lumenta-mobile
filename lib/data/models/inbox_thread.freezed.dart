@@ -17,7 +17,10 @@ mixin _$InboxThreadContact {
 
  String get id;/// Null for channel-only contacts (Instagram/Messenger) that have no
 /// WhatsApp phone number.
- String? get phoneNumber; String? get profileName;
+ String? get phoneNumber;/// Channel-owned WhatsApp profile name (KAN-301: never workspace-edited).
+ String? get profileName;/// KAN-301 — this workspace's own name for the client (JSON `displayName`).
+@JsonKey(name: 'displayName') String? get workspaceName;/// KAN-301 — effective name ([workspaceName] else [profileName]).
+ String? get name;
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +33,16 @@ $InboxThreadContactCopyWith<InboxThreadContact> get copyWith => _$InboxThreadCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThreadContact&&(identical(other.id, id) || other.id == id)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThreadContact&&(identical(other.id, id) || other.id == id)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,phoneNumber,profileName);
+int get hashCode => Object.hash(runtimeType,id,phoneNumber,profileName,workspaceName,name);
 
 @override
 String toString() {
-  return 'InboxThreadContact(id: $id, phoneNumber: $phoneNumber, profileName: $profileName)';
+  return 'InboxThreadContact(id: $id, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name)';
 }
 
 
@@ -50,7 +53,7 @@ abstract mixin class $InboxThreadContactCopyWith<$Res>  {
   factory $InboxThreadContactCopyWith(InboxThreadContact value, $Res Function(InboxThreadContact) _then) = _$InboxThreadContactCopyWithImpl;
 @useResult
 $Res call({
- String id, String? phoneNumber, String? profileName
+ String id, String? phoneNumber, String? profileName,@JsonKey(name: 'displayName') String? workspaceName, String? name
 });
 
 
@@ -67,11 +70,13 @@ class _$InboxThreadContactCopyWithImpl<$Res>
 
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? workspaceName = freezed,Object? name = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String?,workspaceName: freezed == workspaceName ? _self.workspaceName : workspaceName // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -157,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName, @JsonKey(name: 'displayName')  String? workspaceName,  String? name)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InboxThreadContact() when $default != null:
-return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
+return $default(_that.id,_that.phoneNumber,_that.profileName,_that.workspaceName,_that.name);case _:
   return orElse();
 
 }
@@ -178,10 +183,10 @@ return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? phoneNumber,  String? profileName, @JsonKey(name: 'displayName')  String? workspaceName,  String? name)  $default,) {final _that = this;
 switch (_that) {
 case _InboxThreadContact():
-return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
+return $default(_that.id,_that.phoneNumber,_that.profileName,_that.workspaceName,_that.name);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +203,10 @@ return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? phoneNumber,  String? profileName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? phoneNumber,  String? profileName, @JsonKey(name: 'displayName')  String? workspaceName,  String? name)?  $default,) {final _that = this;
 switch (_that) {
 case _InboxThreadContact() when $default != null:
-return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
+return $default(_that.id,_that.phoneNumber,_that.profileName,_that.workspaceName,_that.name);case _:
   return null;
 
 }
@@ -213,14 +218,19 @@ return $default(_that.id,_that.phoneNumber,_that.profileName);case _:
 @JsonSerializable()
 
 class _InboxThreadContact implements InboxThreadContact {
-  const _InboxThreadContact({required this.id, this.phoneNumber, this.profileName});
+  const _InboxThreadContact({required this.id, this.phoneNumber, this.profileName, @JsonKey(name: 'displayName') this.workspaceName, this.name});
   factory _InboxThreadContact.fromJson(Map<String, dynamic> json) => _$InboxThreadContactFromJson(json);
 
 @override final  String id;
 /// Null for channel-only contacts (Instagram/Messenger) that have no
 /// WhatsApp phone number.
 @override final  String? phoneNumber;
+/// Channel-owned WhatsApp profile name (KAN-301: never workspace-edited).
 @override final  String? profileName;
+/// KAN-301 — this workspace's own name for the client (JSON `displayName`).
+@override@JsonKey(name: 'displayName') final  String? workspaceName;
+/// KAN-301 — effective name ([workspaceName] else [profileName]).
+@override final  String? name;
 
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThreadContact&&(identical(other.id, id) || other.id == id)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThreadContact&&(identical(other.id, id) || other.id == id)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,phoneNumber,profileName);
+int get hashCode => Object.hash(runtimeType,id,phoneNumber,profileName,workspaceName,name);
 
 @override
 String toString() {
-  return 'InboxThreadContact(id: $id, phoneNumber: $phoneNumber, profileName: $profileName)';
+  return 'InboxThreadContact(id: $id, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name)';
 }
 
 
@@ -255,7 +265,7 @@ abstract mixin class _$InboxThreadContactCopyWith<$Res> implements $InboxThreadC
   factory _$InboxThreadContactCopyWith(_InboxThreadContact value, $Res Function(_InboxThreadContact) _then) = __$InboxThreadContactCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? phoneNumber, String? profileName
+ String id, String? phoneNumber, String? profileName,@JsonKey(name: 'displayName') String? workspaceName, String? name
 });
 
 
@@ -272,11 +282,13 @@ class __$InboxThreadContactCopyWithImpl<$Res>
 
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? workspaceName = freezed,Object? name = freezed,}) {
   return _then(_InboxThreadContact(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
+as String?,workspaceName: freezed == workspaceName ? _self.workspaceName : workspaceName // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

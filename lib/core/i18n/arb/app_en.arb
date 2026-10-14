@@ -502,5 +502,17 @@
   "mergeContactConfirm": "Merge",
   "mergeContactDone": "Contacts merged",
   "mergeContactFailed": "Merge failed",
-  "chatSendTo": "Send to"
+  "chatSendTo": "Send to",
+  "clientDetailEditName": "Edit name",
+  "clientDetailEditNameHint": "The name your workspace sees for this client. Other workspaces and the customer's WhatsApp profile are not affected.",
+  "clientDetailNameLabel": "Name in this workspace",
+  "clientDetailWhatsAppName": "WhatsApp name: {name}",
+  "@clientDetailWhatsAppName": {"placeholders": {"name": {"type": "String"}}},
+  "clientDetailUseWhatsAppName": "Use WhatsApp name",
+  "clientDetailNameSaved": "Name updated",
+  "clientDetailNameReset": "Showing the WhatsApp name again",
+  "clientDetailNameForbidden": "You don't have permission to edit this client's name",
+  "clientDetailNameSaveFailed": "Couldn't update the name. Please try again.",
+  "clientDetailNameSave": "Save",
+  "clientDetailNameCancel": "Cancel"
 }

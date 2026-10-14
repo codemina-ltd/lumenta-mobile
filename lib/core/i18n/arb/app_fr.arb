@@ -487,5 +487,17 @@
   "mergeContactConfirm": "Fusionner",
   "mergeContactDone": "Contacts fusionnés",
   "mergeContactFailed": "Échec de la fusion",
-  "chatSendTo": "Envoyer à"
+  "chatSendTo": "Envoyer à",
+  "clientDetailEditName": "Modifier le nom",
+  "clientDetailEditNameHint": "Le nom que votre espace de travail affiche pour ce client. Les autres espaces et le profil WhatsApp du client ne sont pas modifiés.",
+  "clientDetailNameLabel": "Nom dans cet espace de travail",
+  "clientDetailWhatsAppName": "Nom WhatsApp : {name}",
+  "@clientDetailWhatsAppName": {"placeholders": {"name": {"type": "String"}}},
+  "clientDetailUseWhatsAppName": "Utiliser le nom WhatsApp",
+  "clientDetailNameSaved": "Nom mis à jour",
+  "clientDetailNameReset": "Le nom WhatsApp est de nouveau affiché",
+  "clientDetailNameForbidden": "Vous n'avez pas la permission de modifier le nom de ce client",
+  "clientDetailNameSaveFailed": "Impossible de mettre à jour le nom. Réessayez.",
+  "clientDetailNameSave": "Enregistrer",
+  "clientDetailNameCancel": "Annuler"
 }

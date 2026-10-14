@@ -15,7 +15,15 @@ abstract class InboxThreadContact with _$InboxThreadContact {
     /// Null for channel-only contacts (Instagram/Messenger) that have no
     /// WhatsApp phone number.
     String? phoneNumber,
+
+    /// Channel-owned WhatsApp profile name (KAN-301: never workspace-edited).
     String? profileName,
+
+    /// KAN-301 — this workspace's own name for the client (JSON `displayName`).
+    @JsonKey(name: 'displayName') String? workspaceName,
+
+    /// KAN-301 — effective name ([workspaceName] else [profileName]).
+    String? name,
   }) = _InboxThreadContact;
 
   factory InboxThreadContact.fromJson(Map<String, dynamic> json) =>
@@ -56,9 +64,18 @@ abstract class InboxThread with _$InboxThread {
   factory InboxThread.fromJson(Map<String, dynamic> json) =>
       _$InboxThreadFromJson(json);
 
+  /// Effective name (KAN-301): the workspace's own name wins over the
+  /// WhatsApp profile name; phone / neutral fallback otherwise.
   String get displayName {
-    final name = client?.profileName;
-    if (name != null && name.trim().isNotEmpty) return name;
+    for (final candidate in [
+      client?.name,
+      client?.workspaceName,
+      client?.profileName,
+    ]) {
+      if (candidate != null && candidate.trim().isNotEmpty) {
+        return candidate.trim();
+      }
+    }
     final phone = client?.phoneNumber;
     return phone != null ? '+$phone' : 'Unknown contact';
   }

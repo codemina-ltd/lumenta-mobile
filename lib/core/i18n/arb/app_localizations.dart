@@ -2553,6 +2553,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send to'**
   String get chatSendTo;
+
+  /// No description provided for @clientDetailEditName.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit name'**
+  String get clientDetailEditName;
+
+  /// No description provided for @clientDetailEditNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The name your workspace sees for this client. Other workspaces and the customer\'s WhatsApp profile are not affected.'**
+  String get clientDetailEditNameHint;
+
+  /// No description provided for @clientDetailNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name in this workspace'**
+  String get clientDetailNameLabel;
+
+  /// No description provided for @clientDetailWhatsAppName.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp name: {name}'**
+  String clientDetailWhatsAppName(String name);
+
+  /// No description provided for @clientDetailUseWhatsAppName.
+  ///
+  /// In en, this message translates to:
+  /// **'Use WhatsApp name'**
+  String get clientDetailUseWhatsAppName;
+
+  /// No description provided for @clientDetailNameSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Name updated'**
+  String get clientDetailNameSaved;
+
+  /// No description provided for @clientDetailNameReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing the WhatsApp name again'**
+  String get clientDetailNameReset;
+
+  /// No description provided for @clientDetailNameForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to edit this client\'s name'**
+  String get clientDetailNameForbidden;
+
+  /// No description provided for @clientDetailNameSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update the name. Please try again.'**
+  String get clientDetailNameSaveFailed;
+
+  /// No description provided for @clientDetailNameSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get clientDetailNameSave;
+
+  /// No description provided for @clientDetailNameCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get clientDetailNameCancel;
 }
 
 class _AppLocalizationsDelegate

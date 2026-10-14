@@ -11,6 +11,8 @@ _InboxThreadContact _$InboxThreadContactFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       phoneNumber: json['phoneNumber'] as String?,
       profileName: json['profileName'] as String?,
+      workspaceName: json['displayName'] as String?,
+      name: json['name'] as String?,
     );
 
 Map<String, dynamic> _$InboxThreadContactToJson(_InboxThreadContact instance) =>
@@ -18,6 +20,8 @@ Map<String, dynamic> _$InboxThreadContactToJson(_InboxThreadContact instance) =>
       'id': instance.id,
       'phoneNumber': instance.phoneNumber,
       'profileName': instance.profileName,
+      'displayName': instance.workspaceName,
+      'name': instance.name,
     };
 
 _InboxThread _$InboxThreadFromJson(Map<String, dynamic> json) => _InboxThread(

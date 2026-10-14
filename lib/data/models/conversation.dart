@@ -18,7 +18,16 @@ abstract class Conversation with _$Conversation {
     /// Null for channel-only contacts (Instagram/Messenger) that have no
     /// WhatsApp phone number.
     String? phoneNumber,
+
+    /// Channel-owned WhatsApp profile name (KAN-301: never workspace-edited).
     String? profileName,
+
+    /// KAN-301 — this workspace's own name for the client (JSON `displayName`).
+    @JsonKey(name: 'displayName') String? workspaceName,
+
+    /// KAN-301 — effective name from the API ([workspaceName] else
+    /// [profileName]); null on servers predating the field.
+    String? name,
     String? lastMessageBody,
     @JsonKey(unknownEnumValue: MessageType.text) MessageType? lastMessageType,
     @JsonKey(unknownEnumValue: MessageDirection.inbound)
@@ -36,26 +45,37 @@ abstract class Conversation with _$Conversation {
   factory Conversation.fromJson(Map<String, dynamic> json) =>
       _$ConversationFromJson(json);
 
+  /// Effective name (KAN-301): workspace name, else WhatsApp name, else null.
+  String? get effectiveName =>
+      _nonBlank(name) ?? _nonBlank(workspaceName) ?? _nonBlank(profileName);
+
   String get displayName {
-    if (profileName != null && profileName!.trim().isNotEmpty) {
-      return profileName!;
-    }
+    final effective = effectiveName;
+    if (effective != null) return effective;
     final phone = phoneNumber;
     return phone != null ? '+$phone' : 'Unknown contact';
   }
 
-  DateTime? get lastMessageAtDate =>
-      lastMessageAt == null ? null : DateTime.tryParse(lastMessageAt!)?.toLocal();
+  DateTime? get lastMessageAtDate => lastMessageAt == null
+      ? null
+      : DateTime.tryParse(lastMessageAt!)?.toLocal();
 
   String get initials {
-    final source = (profileName?.trim().isNotEmpty ?? false)
-        ? profileName!.trim()
-        : (phoneNumber ?? '');
-    final parts = source.split(RegExp(r'\s+')).where((p) => p.isNotEmpty);
+    final source = effectiveName ?? (phoneNumber ?? '');
+    // Skip symbol-only words (the dash in "Ahmed — VIP") so initials come
+    // from real name parts.
+    final parts = source
+        .split(RegExp(r'\s+'))
+        .where((p) => RegExp(r'[\p{L}\p{N}]', unicode: true).hasMatch(p));
     if (parts.isEmpty) return '?';
     if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
     return (parts.first.substring(0, 1) + parts.elementAt(1).substring(0, 1))
         .toUpperCase();
+  }
+
+  static String? _nonBlank(String? v) {
+    final t = v?.trim();
+    return (t == null || t.isEmpty) ? null : t;
   }
 }
 

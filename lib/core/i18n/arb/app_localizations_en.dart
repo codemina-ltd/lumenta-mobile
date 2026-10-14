@@ -1320,4 +1320,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatSendTo => 'Send to';
+
+  @override
+  String get clientDetailEditName => 'Edit name';
+
+  @override
+  String get clientDetailEditNameHint =>
+      'The name your workspace sees for this client. Other workspaces and the customer\'s WhatsApp profile are not affected.';
+
+  @override
+  String get clientDetailNameLabel => 'Name in this workspace';
+
+  @override
+  String clientDetailWhatsAppName(String name) {
+    return 'WhatsApp name: $name';
+  }
+
+  @override
+  String get clientDetailUseWhatsAppName => 'Use WhatsApp name';
+
+  @override
+  String get clientDetailNameSaved => 'Name updated';
+
+  @override
+  String get clientDetailNameReset => 'Showing the WhatsApp name again';
+
+  @override
+  String get clientDetailNameForbidden =>
+      'You don\'t have permission to edit this client\'s name';
+
+  @override
+  String get clientDetailNameSaveFailed =>
+      'Couldn\'t update the name. Please try again.';
+
+  @override
+  String get clientDetailNameSave => 'Save';
+
+  @override
+  String get clientDetailNameCancel => 'Cancel';
 }

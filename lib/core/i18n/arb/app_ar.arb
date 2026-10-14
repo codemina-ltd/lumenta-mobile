@@ -487,5 +487,17 @@
   "mergeContactConfirm": "دمج",
   "mergeContactDone": "تم دمج جهات الاتصال",
   "mergeContactFailed": "فشل الدمج",
-  "chatSendTo": "إرسال إلى"
+  "chatSendTo": "إرسال إلى",
+  "clientDetailEditName": "تعديل الاسم",
+  "clientDetailEditNameHint": "الاسم الذي تراه مساحة عملك لهذا العميل. لا يتأثر به باقي مساحات العمل ولا اسم ملف واتساب الخاص بالعميل.",
+  "clientDetailNameLabel": "الاسم في مساحة العمل هذه",
+  "clientDetailWhatsAppName": "اسم واتساب: {name}",
+  "@clientDetailWhatsAppName": {"placeholders": {"name": {"type": "String"}}},
+  "clientDetailUseWhatsAppName": "استخدام اسم واتساب",
+  "clientDetailNameSaved": "تم تحديث الاسم",
+  "clientDetailNameReset": "تم العودة إلى اسم واتساب",
+  "clientDetailNameForbidden": "ليست لديك صلاحية تعديل اسم هذا العميل",
+  "clientDetailNameSaveFailed": "تعذّر تحديث الاسم. حاول مرة أخرى.",
+  "clientDetailNameSave": "حفظ",
+  "clientDetailNameCancel": "إلغاء"
 }

@@ -29,6 +29,7 @@ import 'client_scheduled_messages_card.dart';
 import 'client_segments_card.dart';
 import 'client_suppression_card.dart';
 import 'client_team_card.dart';
+import 'edit_client_name_sheet.dart';
 
 /// Full contact profile, reached by tapping the client name in the chat header.
 /// A collapsing brand hero carries the contact's identity and a primary
@@ -200,6 +201,10 @@ class _HeroAppBar extends ConsumerWidget {
     final ctwa = ref.watch(clientCtwaProvider(client.id)).asData?.value;
     final source = (ctwa != null && ctwa.isNotEmpty) ? ctwa.first.label : null;
 
+    // KAN-301 — per-workspace name: editable unless the API already refused
+    // (field ACL) for this session.
+    final canEditName = !ref.watch(clientNameEditForbiddenProvider);
+
     return SliverAppBar(
       pinned: true,
       expandedHeight: _expandedHeight,
@@ -208,6 +213,16 @@ class _HeroAppBar extends ConsumerWidget {
       surfaceTintColor: Colors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle.light,
       elevation: 0,
+      actions: [
+        if (canEditName)
+          IconButton(
+            key: const ValueKey('client-edit-name'),
+            tooltip: l10n.clientDetailEditName,
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () =>
+                showEditClientNameSheet(context, ref, client: client),
+          ),
+      ],
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
           final maxExtent = _expandedHeight + topPad;
@@ -297,6 +312,24 @@ class _HeroAppBar extends ConsumerWidget {
                                               fontWeight: FontWeight.w700,
                                             ),
                                       ),
+                                      // KAN-301 — the customer's own WhatsApp
+                                      // name, shown when the workspace renamed
+                                      // them.
+                                      if (client.hasDistinctWhatsAppName) ...[
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          l10n.clientDetailWhatsAppName(
+                                            client.profileName!.trim(),
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: context.text.bodySmall
+                                              ?.copyWith(
+                                                color: AppColors.onDarkHigh
+                                                    .withValues(alpha: 0.78),
+                                              ),
+                                        ),
+                                      ],
                                       if (client.phoneNumber != null) ...[
                                         const SizedBox(height: 2),
                                         _PhoneChip(

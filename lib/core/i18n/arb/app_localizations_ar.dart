@@ -1323,4 +1323,41 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatSendTo => 'إرسال إلى';
+
+  @override
+  String get clientDetailEditName => 'تعديل الاسم';
+
+  @override
+  String get clientDetailEditNameHint =>
+      'الاسم الذي تراه مساحة عملك لهذا العميل. لا يتأثر به باقي مساحات العمل ولا اسم ملف واتساب الخاص بالعميل.';
+
+  @override
+  String get clientDetailNameLabel => 'الاسم في مساحة العمل هذه';
+
+  @override
+  String clientDetailWhatsAppName(String name) {
+    return 'اسم واتساب: $name';
+  }
+
+  @override
+  String get clientDetailUseWhatsAppName => 'استخدام اسم واتساب';
+
+  @override
+  String get clientDetailNameSaved => 'تم تحديث الاسم';
+
+  @override
+  String get clientDetailNameReset => 'تم العودة إلى اسم واتساب';
+
+  @override
+  String get clientDetailNameForbidden =>
+      'ليست لديك صلاحية تعديل اسم هذا العميل';
+
+  @override
+  String get clientDetailNameSaveFailed => 'تعذّر تحديث الاسم. حاول مرة أخرى.';
+
+  @override
+  String get clientDetailNameSave => 'حفظ';
+
+  @override
+  String get clientDetailNameCancel => 'إلغاء';
 }
