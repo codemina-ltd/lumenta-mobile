@@ -61,6 +61,13 @@ class ThreadController extends Notifier<ThreadState> {
 
   @override
   ThreadState build() {
+    // A push for this client merges the newest page in place instead of
+    // invalidating the controller — invalidation reset the thread to its
+    // loading state, swapping the list for a spinner (flicker) and losing
+    // the user's scroll position.
+    ref.listen(threadPushSignalProvider, (_, next) {
+      if (next != null && next.clientId == clientId) reloadLatest();
+    });
     // Deferred: build() must return the initial state before `state` is used.
     Future.microtask(refresh);
     return const ThreadState();
@@ -81,10 +88,33 @@ class ThreadController extends Notifier<ThreadState> {
 
   final Map<String, Message> _byId = {};
 
+  /// Reloads from page 1. Already-loaded messages stay on screen until the
+  /// fetch lands (the view only shows a spinner when there's nothing yet).
   Future<void> refresh() async {
-    _byId.clear();
     state = state.copyWith(loading: true, clearError: true);
-    await _loadPage(1);
+    await _loadPage(1, reset: true);
+  }
+
+  /// Merges the newest page into the loaded history without touching paging
+  /// or the loading flags — for pushes, where the user may be mid-scroll.
+  Future<void> reloadLatest() async {
+    if (state.loading) return;
+    try {
+      final result = await ref
+          .read(messagesRepoProvider)
+          .thread(
+            clientId,
+            page: 1,
+            senderId: senderId,
+            channelAccountId: channelAccountId,
+          );
+      for (final m in result.data) {
+        _byId[m.id] = m;
+      }
+      _resort();
+    } catch (_) {
+      // Best effort — the next push or a pull-to-refresh catches up.
+    }
   }
 
   Future<void> loadOlder() async {
@@ -93,7 +123,7 @@ class ThreadController extends Notifier<ThreadState> {
     await _loadPage(state.page + 1);
   }
 
-  Future<void> _loadPage(int page) async {
+  Future<void> _loadPage(int page, {bool reset = false}) async {
     try {
       final result = await ref
           .read(messagesRepoProvider)
@@ -103,6 +133,7 @@ class ThreadController extends Notifier<ThreadState> {
             senderId: senderId,
             channelAccountId: channelAccountId,
           );
+      if (reset) _byId.clear();
       for (final m in result.data) {
         _byId[m.id] = m;
       }
@@ -360,6 +391,21 @@ class ThreadController extends Notifier<ThreadState> {
     state = state.copyWith(messages: sorted);
   }
 }
+
+/// Bumped by the push service when a push concerns [clientId]; live thread
+/// controllers for that client merge the newest page in place.
+class ThreadPushSignal extends Notifier<({String clientId, int seq})?> {
+  @override
+  ({String clientId, int seq})? build() => null;
+
+  void ping(String clientId) =>
+      state = (clientId: clientId, seq: (state?.seq ?? 0) + 1);
+}
+
+final threadPushSignalProvider =
+    NotifierProvider<ThreadPushSignal, ({String clientId, int seq})?>(
+      ThreadPushSignal.new,
+    );
 
 /// One controller per thread scope — switching sender tabs switches to a
 /// separate controller (and message cache) keyed by `(clientId, senderId)`.

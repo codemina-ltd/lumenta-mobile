@@ -264,10 +264,11 @@ class PushService {
     final clientId = data['client_id'] as String?;
     if (clientId != null && clientId.isNotEmpty) {
       // Threads are keyed by (clientId, senderId) and the push doesn't say
-      // which sender tab is open — invalidate the whole family (autoDispose
-      // means only the open thread is alive) plus this client's tab list, so
-      // an inbound via a new sender materialises its tab.
-      _ref.invalidate(threadControllerProvider);
+      // which sender tab is open — signal every live thread of this client to
+      // merge its newest page in place (no reset, so no spinner flash or
+      // scroll jump), plus refetch the tab list so an inbound via a new
+      // sender materialises its tab.
+      _ref.read(threadPushSignalProvider.notifier).ping(clientId);
       _ref.invalidate(conversationSendersProvider(clientId));
     }
   }

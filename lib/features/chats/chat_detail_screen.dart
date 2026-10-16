@@ -60,8 +60,23 @@ class ChatDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
+  /// Drives a `reverse: true` list: offset 0 is the newest message, so the
+  /// thread opens at the bottom without a post-layout jump, and older pages
+  /// prepended at the far end never shift what the user is looking at.
   final _scroll = ScrollController();
   bool _didInitialScroll = false;
+
+  /// Newest timestamp already written to the last-read store, so the thread
+  /// listener doesn't re-mark on every state change.
+  DateTime? _markedReadAt;
+
+  /// The auto-resolved tab (latest sender / channel peek) is captured once
+  /// the thread scope first resolves. Without this, a refetched sender list
+  /// or channel peek (after a push or a send) could re-pick a different tab
+  /// mid-read, remounting the thread and snapping it to the bottom.
+  bool _autoTabLatched = false;
+  String? _autoSenderId;
+  String? _autoChannelThreadId;
 
   // ── Deep-link scroll + highlight ────────────────────────────────────
   /// The message the screen was deep-linked to; keys its row while set so
@@ -108,7 +123,9 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     _highlightAnchorId = widget.highlightMessageId;
     _scroll.addListener(() {
       final key = _threadKey;
-      if (key != null && _scroll.position.pixels <= 80) {
+      // Reversed list: the oldest end is maxScrollExtent.
+      if (key != null &&
+          _scroll.position.pixels >= _scroll.position.maxScrollExtent - 80) {
         ref.read(threadControllerProvider(key).notifier).loadOlder();
       }
     });
@@ -124,7 +141,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 
   void _onLoaded(DateTime? newest) {
     // Clear unread for this chat.
-    if (newest != null) {
+    if (newest != null && newest != _markedReadAt) {
+      _markedReadAt = newest;
       ref
           .read(lastReadStoreProvider.notifier)
           .markRead(widget.clientId, newest);
@@ -237,9 +255,10 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     final index = messages.indexWhere((m) => m.id == id);
     if (index < 0) return;
     final max = _scroll.position.maxScrollExtent;
+    // Reversed list: newest (last index) sits at offset 0.
     final estimate = messages.length <= 1
         ? 0.0
-        : (index / (messages.length - 1)) * max;
+        : (1 - index / (messages.length - 1)) * max;
     _scroll.jumpTo(estimate.clamp(0.0, max));
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _scrollToMessage(id, attempt + 1),
@@ -248,9 +267,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scroll.hasClients) {
-        _scroll.jumpTo(_scroll.position.maxScrollExtent);
-      }
+      if (_scroll.hasClients && _scroll.offset != 0) _scroll.jumpTo(0);
     });
   }
 
@@ -368,7 +385,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     if (channelThreads.isNotEmpty) {
       final selectedId = _tabPicked
           ? _selectedChannelThreadId
-          : autoAsync.value;
+          : (_autoTabLatched ? _autoChannelThreadId : autoAsync.value);
       activeChannelThread = channelThreads
           .where((t) => t.id == selectedId)
           .firstOrNull;
@@ -386,7 +403,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
 
     String? activeSenderId;
     if (showSenderTabs) {
-      final selected = _selectedSenderId;
+      final selected =
+          _selectedSenderId ?? (_autoTabLatched ? _autoSenderId : null);
       activeSenderId =
           (selected != null &&
               (senders.any((s) => s.id == selected) ||
@@ -416,6 +434,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                   channelAccountId: null,
                 ))
         : null;
+    if (threadKey != null && !_autoTabLatched) {
+      _autoTabLatched = true;
+      _autoSenderId = activeSenderId;
+      _autoChannelThreadId = activeChannelThread?.id;
+    }
     if (threadKey != _threadKey) {
       // Scope changed (tab click or initial resolution): re-run the
       // scroll-to-bottom on the freshly loaded thread.
@@ -562,7 +585,9 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : _body(context, state, threadKey, scheduled),
           ),
-          if (clientAsync.hasValue && threadKey != null && !state.loading)
+          if (clientAsync.hasValue &&
+              threadKey != null &&
+              !(state.loading && state.messages.isEmpty))
             // An active channel tab binds the (text-only) channel composer
             // to that thread. Otherwise: channel-only contacts have no
             // phone number, so WhatsApp sends are impossible — reply on
@@ -681,7 +706,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     List<ScheduledMessage> scheduled,
   ) {
     final controller = ref.read(threadControllerProvider(threadKey).notifier);
-    if (state.loading) {
+    // Only the first load shows a spinner; a refresh keeps the list mounted.
+    if (state.loading && state.messages.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
     if (state.error != null && state.messages.isEmpty) {
@@ -708,13 +734,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       onRefresh: onRefresh,
       child: ListView.builder(
         controller: _scroll,
+        reverse: true,
         padding: const EdgeInsets.symmetric(
           vertical: Insets.md,
           horizontal: Insets.xs,
         ),
         itemCount: rows.length + (state.loadingOlder ? 1 : 0),
         itemBuilder: (context, i) {
-          if (state.loadingOlder && i == 0) {
+          // Reversed: index 0 is the newest row; the older-page spinner sits
+          // past the last row, i.e. at the top.
+          if (i >= rows.length) {
             return const Padding(
               padding: EdgeInsets.all(Insets.sm),
               child: Center(
@@ -726,7 +755,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               ),
             );
           }
-          final row = rows[i - (state.loadingOlder ? 1 : 0)];
+          final row = rows[rows.length - 1 - i];
           if (row.isHeader) return _DayHeader(label: row.headerLabel!);
           if (row.scheduled != null) {
             return _ScheduledMessageBubble(
