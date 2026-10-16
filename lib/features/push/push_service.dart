@@ -4,10 +4,12 @@ import 'dart:io' show Platform;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile/firebase_options.dart';
 
+import '../../core/i18n/arb/app_localizations.dart';
 import '../../core/providers.dart';
 import '../../core/router/app_router.dart';
 import '../auth/auth_controller.dart';
@@ -296,7 +298,15 @@ class PushService {
         targetTenant.isNotEmpty &&
         targetTenant != auth.activeTenantId &&
         auth.tenants.any((t) => t.id == targetTenant)) {
-      _ref.read(authControllerProvider.notifier).selectTenant(targetTenant);
+      final controller = _ref.read(authControllerProvider.notifier);
+      // KAN-64 — a tap must not smuggle the user into a workspace whose
+      // mobile login is OFF. Stay put and explain instead of opening the
+      // target route against the current (wrong) workspace.
+      if (!controller.canEnterTenant(targetTenant)) {
+        _showTenantBlocked();
+        return;
+      }
+      controller.selectTenant(targetTenant);
     }
 
     // Chat/client detail are root-level routes stacked over the tab shell —
@@ -311,6 +321,24 @@ class PushService {
     } else {
       router.go(target);
     }
+  }
+
+  void _showTenantBlocked() {
+    final context = _ref
+        .read(routerProvider)
+        .routerDelegate
+        .navigatorKey
+        .currentContext;
+    if (context == null) return;
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).tenantMobileLoginDisabled),
+        ),
+      );
   }
 
   /// Map a portal-relative `action_url` to a mobile route: conversation

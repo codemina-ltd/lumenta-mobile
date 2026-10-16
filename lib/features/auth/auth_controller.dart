@@ -222,13 +222,27 @@ class AuthController extends Notifier<AuthState> {
     state = state.copyWith(user: user);
   }
 
-  Future<void> selectTenant(String tenantId) async {
+  /// Whether [tenantId] may be entered from the app: a known, compliance-
+  /// active workspace with mobile login on (KAN-64).
+  bool canEnterTenant(String tenantId) {
+    for (final t in state.tenants) {
+      if (t.id == tenantId) return t.isActive && t.mobileLoginEnabled;
+    }
+    return false;
+  }
+
+  /// Enter [tenantId]. Every entry path (picker, push deep-link) funnels
+  /// through here, so a workspace with mobile login OFF is refused even when
+  /// the user is already signed in to another one. Returns false if refused.
+  Future<bool> selectTenant(String tenantId) async {
+    if (!canEnterTenant(tenantId)) return false;
     await _session.setActiveTenant(tenantId);
     state = state.copyWith(
       status: AuthStatus.authenticated,
       activeTenantId: tenantId,
       clearNotice: true,
     );
+    return true;
   }
 
   Future<void> logout() async {
