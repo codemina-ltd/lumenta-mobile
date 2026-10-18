@@ -15,33 +15,45 @@ class TenantPickerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    final tenants = ref.watch(
-      authControllerProvider.select((s) => s.tenants),
-    );
+    final tenants = ref.watch(authControllerProvider.select((s) => s.tenants));
     // KAN-198 — one-shot explanation after the active workspace revoked the
     // user's membership (disabled / removed) mid-session.
-    final notice = ref.watch(
-      authControllerProvider.select((s) => s.notice),
-    );
-    ref.listen<AuthNotice?>(
-      authControllerProvider.select((s) => s.notice),
-      (_, next) {
-        if (next == AuthNotice.tenantAccessRevoked) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(l10n.tenantAccessRevoked),
-                duration: const Duration(seconds: 6),
-              ),
-            );
-          ref.read(authControllerProvider.notifier).clearNotice();
-        }
-      },
+    final notice = ref.watch(authControllerProvider.select((s) => s.notice));
+    ref.listen<AuthNotice?>(authControllerProvider.select((s) => s.notice), (
+      _,
+      next,
+    ) {
+      if (next == AuthNotice.tenantAccessRevoked) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(l10n.tenantAccessRevoked),
+              duration: const Duration(seconds: 6),
+            ),
+          );
+        ref.read(authControllerProvider.notifier).clearNotice();
+      }
+    });
+
+    // Switching mode: opened from inside the app with a workspace already
+    // active. Offer a way back to it; a first-time picker has no back.
+    final canReturn = ref.watch(
+      authControllerProvider.select(
+        (s) => s.activeTenantId != null && s.activeTenant != null,
+      ),
     );
 
     return Scaffold(
       appBar: AppBar(
+        leading: canReturn
+            ? BackButton(
+                onPressed: () => ref
+                    .read(authControllerProvider.notifier)
+                    .cancelSwitchTenant(),
+              )
+            : null,
+        automaticallyImplyLeading: false,
         title: Text(l10n.tenantPickerTitle),
         actions: [
           // Escape hatch: without it a user whose every workspace is blocked
@@ -49,8 +61,7 @@ class TenantPickerScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.logout_rounded, color: AppColors.ember),
             tooltip: l10n.logout,
-            onPressed: () =>
-                ref.read(authControllerProvider.notifier).logout(),
+            onPressed: () => ref.read(authControllerProvider.notifier).logout(),
           ),
           const SizedBox(width: Insets.sm),
         ],
@@ -68,38 +79,40 @@ class TenantPickerScreen extends ConsumerWidget {
               ),
             )
           : ListView.separated(
-        padding: const EdgeInsets.fromLTRB(
-          Insets.lg,
-          Insets.md,
-          Insets.lg,
-          Insets.lg,
-        ),
-        itemCount: tenants.length,
-        separatorBuilder: (_, _) => const SizedBox(height: Insets.md),
-        itemBuilder: (context, i) {
-          final TenantSummary t = tenants[i];
-          // KAN-64 — a workspace with mobile login OFF is shown greyed and, on
-          // tap, explains it's disabled rather than entering. Compliance-
-          // inactive workspaces stay fully non-interactive (null onTap).
-          final selectable = t.isActive && t.mobileLoginEnabled;
-          final mobileBlocked = t.isActive && !t.mobileLoginEnabled;
-          return _TenantCard(
-            tenant: t,
-            disabled: !selectable,
-            onTap: selectable
-                ? () => ref
-                    .read(authControllerProvider.notifier)
-                    .selectTenant(t.id)
-                : mobileBlocked
-                ? () => ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                      SnackBar(content: Text(l10n.tenantMobileLoginDisabled)),
-                    )
-                : null,
-          );
-        },
-      ),
+              padding: const EdgeInsets.fromLTRB(
+                Insets.lg,
+                Insets.md,
+                Insets.lg,
+                Insets.lg,
+              ),
+              itemCount: tenants.length,
+              separatorBuilder: (_, _) => const SizedBox(height: Insets.md),
+              itemBuilder: (context, i) {
+                final TenantSummary t = tenants[i];
+                // KAN-64 — a workspace with mobile login OFF is shown greyed and, on
+                // tap, explains it's disabled rather than entering. Compliance-
+                // inactive workspaces stay fully non-interactive (null onTap).
+                final selectable = t.isActive && t.mobileLoginEnabled;
+                final mobileBlocked = t.isActive && !t.mobileLoginEnabled;
+                return _TenantCard(
+                  tenant: t,
+                  disabled: !selectable,
+                  onTap: selectable
+                      ? () => ref
+                            .read(authControllerProvider.notifier)
+                            .selectTenant(t.id)
+                      : mobileBlocked
+                      ? () => ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.tenantMobileLoginDisabled),
+                            ),
+                          )
+                      : null,
+                );
+              },
+            ),
     );
   }
 }

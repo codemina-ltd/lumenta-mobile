@@ -71,7 +71,11 @@ class HomeShell extends ConsumerWidget {
             name: auth.activeTenant?.name,
             canSwitch: auth.tenants.length > 1,
             onProfile: () => context.push('/profile'),
-            onSwitch: () => context.go('/select-tenant'),
+            // Drive the picker through the auth state machine; the router
+            // redirect bounces a direct `go('/select-tenant')` back to
+            // `/chats` while the status is still `authenticated`.
+            onSwitch: () =>
+                ref.read(authControllerProvider.notifier).switchTenant(),
             onLogout: () async {
               // Unregister the device while the token is still valid, then
               // clear the session.
@@ -85,10 +89,8 @@ class HomeShell extends ConsumerWidget {
       body: navigationShell,
       bottomNavigationBar: AppNavBar(
         selectedIndex: index,
-        onSelect: (i) => navigationShell.goBranch(
-          i,
-          initialLocation: i == index,
-        ),
+        onSelect: (i) =>
+            navigationShell.goBranch(i, initialLocation: i == index),
         destinations: [
           AppNavDestination(
             icon: Icons.people_alt_outlined,
@@ -186,7 +188,11 @@ class _WorkspaceMenu extends StatelessWidget {
           value: 'logout',
           child: Row(
             children: [
-              const Icon(Icons.logout_rounded, size: 20, color: AppColors.ember),
+              const Icon(
+                Icons.logout_rounded,
+                size: 20,
+                color: AppColors.ember,
+              ),
               const SizedBox(width: Insets.md),
               Text(l10n.logout),
             ],
@@ -194,7 +200,12 @@ class _WorkspaceMenu extends StatelessWidget {
         ),
       ],
       child: Container(
-        padding: const EdgeInsets.fromLTRB(Insets.md, Insets.sm, Insets.sm, Insets.sm),
+        padding: const EdgeInsets.fromLTRB(
+          Insets.md,
+          Insets.sm,
+          Insets.sm,
+          Insets.sm,
+        ),
         decoration: BoxDecoration(
           color: context.scheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(Radii.pill),
@@ -221,8 +232,11 @@ class _WorkspaceMenu extends StatelessWidget {
                 ),
               ),
             ],
-            Icon(Icons.expand_more_rounded,
-                size: 18, color: context.scheme.onSurfaceVariant),
+            Icon(
+              Icons.expand_more_rounded,
+              size: 18,
+              color: context.scheme.onSurfaceVariant,
+            ),
           ],
         ),
       ),

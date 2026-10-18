@@ -245,6 +245,35 @@ class AuthController extends Notifier<AuthState> {
     return true;
   }
 
+  /// Open the workspace picker from inside the app (the "Switch workspace"
+  /// menu action). Navigation is driven by the auth state machine: the router
+  /// redirect only allows `/select-tenant` while status is `needsTenant`, so
+  /// a bare `context.go('/select-tenant')` from an authenticated shell is
+  /// bounced straight back to `/chats`. `activeTenantId` is kept so the picker
+  /// can offer a way back to the current workspace, and the persisted tenant
+  /// is untouched so a cold start still restores it.
+  Future<void> switchTenant() async {
+    if (state.status != AuthStatus.authenticated) return;
+    state = state.copyWith(status: AuthStatus.needsTenant, clearNotice: true);
+    // Best-effort refresh so newly granted / revoked memberships show up;
+    // offline keeps the cached list.
+    try {
+      final tenants = await ref.read(tenantRepoProvider).listMine();
+      if (state.status == AuthStatus.needsTenant) {
+        state = state.copyWith(tenants: tenants);
+      }
+    } catch (_) {}
+  }
+
+  /// Return to the current workspace from the picker without re-selecting.
+  /// No-op when there is no current workspace (first-time selection).
+  void cancelSwitchTenant() {
+    final current = state.activeTenantId;
+    if (state.status != AuthStatus.needsTenant || current == null) return;
+    if (!canEnterTenant(current)) return;
+    state = state.copyWith(status: AuthStatus.authenticated, clearNotice: true);
+  }
+
   Future<void> logout() async {
     // Best-effort server-side cleanup; local clear always happens. Sending
     // the refresh token revokes only this device's session server-side,
