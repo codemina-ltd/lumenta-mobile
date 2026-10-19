@@ -543,6 +543,35 @@ class AppLocalizationsFr extends AppLocalizations {
   String get composerHint => 'Message';
 
   @override
+  String get composerRecordVoice => 'Enregistrer une note vocale';
+
+  @override
+  String get composerHoldToRecord =>
+      'Maintenez pour enregistrer, relâchez pour envoyer';
+
+  @override
+  String get composerSlideToCancel => 'Glisser pour annuler';
+
+  @override
+  String get composerDeleteRecording => 'Supprimer l\'enregistrement';
+
+  @override
+  String get composerPauseRecording => 'Mettre l\'enregistrement en pause';
+
+  @override
+  String get composerResumeRecording => 'Reprendre l\'enregistrement';
+
+  @override
+  String get composerSendRecording => 'Envoyer la note vocale';
+
+  @override
+  String get composerMicDenied =>
+      'Autorisez l\'accès au micro pour enregistrer des notes vocales';
+
+  @override
+  String get composerRecordFailed => 'Impossible d\'enregistrer. Réessayez.';
+
+  @override
   String get windowClosed =>
       'Hors de la fenêtre de 24 heures. Envoyez un modèle approuvé pour démarrer une nouvelle conversation.';
 

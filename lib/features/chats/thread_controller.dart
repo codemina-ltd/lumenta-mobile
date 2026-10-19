@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -242,6 +243,10 @@ class ThreadController extends Notifier<ThreadState> {
     required String filePath,
     String? caption,
     String? filename,
+    /// Recorded voice note (hold-to-record): sent as `voiceNote=true` so the
+    /// API transcodes to OGG/Opus and WhatsApp shows the voice bubble.
+    bool voiceNote = false,
+    DioMediaType? contentType,
   }) async {
     final type = _typeFromMedia(mediaType);
     final temp = _optimistic(body: caption ?? '', type: type);
@@ -256,6 +261,8 @@ class ThreadController extends Notifier<ThreadState> {
             caption: caption,
             filename: filename,
             senderId: senderId,
+            voiceNote: voiceNote,
+            contentType: contentType,
           );
       _replace(temp.id, sent);
       _onSendSucceeded();

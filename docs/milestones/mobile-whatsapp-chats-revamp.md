@@ -100,6 +100,37 @@ tab list adds `MediaQuery.paddingOf(context).bottom` so the last row scrolls
 clear of the dock. Verified on the simulator mid-scroll in
 light and dark mode (rows visibly blur through the dock).
 
+## Follow-up: WhatsApp-style composer with hold-to-record voice notes
+
+`ChatComposer` row is now `+ · message pill · camera · mic` (the mic becomes
+the send arrow once there is text; the camera opens the camera directly).
+Voice notes (`widgets/voice_recorder.dart`, package `record` 7.x):
+
+- **Hold** the mic → recording starts instantly (raw `Listener`, no
+  long-press delay): pulsing red mic, running clock, "Slide to cancel ‹"
+  that trails the finger, lock pill floating above the enlarged mic.
+- **Slide toward the start edge** past 110 px → cancel (RTL-aware);
+  **slide up** past 70 px → **locked** hands-free mode.
+- **Locked panel**: clock + live waveform (amplitude polled every 90 ms,
+  dBFS → 0..1, 48 bars), then delete · pause/resume · send.
+- **Release** while holding sends; a tap shorter than 1 s is discarded with a
+  "Hold to record, release to send" hint. Mic permission denied → hint.
+- Clip is mono AAC `.m4a` (64 kbps) sent via `POST /messages/send-media` with
+  `mediaType=audio`, `voiceNote=true`, `Content-Type: audio/mp4`; the API
+  re-encodes to OGG/Opus so WhatsApp shows a voice bubble. Thread gets the
+  usual optimistic audio bubble.
+- `VoiceRecorderController` is a `ChangeNotifier` state machine
+  (idle / holding / locked, paused, elapsed, samples, drag progress) that the
+  composer drives from pointer events; injectable for tests and previews.
+  Android gains `RECORD_AUDIO`; iOS already declared the mic usage string.
+
+Verified: 8 unit tests with a fake `RecordPlatform` (send, too-short tap,
+LTR/RTL slide-to-cancel, slide-up lock + pause/resume/finish, amplitude
+normalisation/cap, permission denied); simulator screenshots of idle,
+holding, sliding, locked (waveform), paused, driven through the injected
+controller with the simulator mic pre-granted via `simctl privacy`.
+Not exercised: a real device recording round-trip through the API.
+
 ## Remaining caveats
 
 - Against an API predating this change the app degrades: no pins (the pin

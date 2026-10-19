@@ -534,6 +534,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get composerHint => 'Message';
 
   @override
+  String get composerRecordVoice => 'Record a voice note';
+
+  @override
+  String get composerHoldToRecord => 'Hold to record, release to send';
+
+  @override
+  String get composerSlideToCancel => 'Slide to cancel';
+
+  @override
+  String get composerDeleteRecording => 'Delete recording';
+
+  @override
+  String get composerPauseRecording => 'Pause recording';
+
+  @override
+  String get composerResumeRecording => 'Resume recording';
+
+  @override
+  String get composerSendRecording => 'Send voice note';
+
+  @override
+  String get composerMicDenied =>
+      'Allow microphone access to record voice notes';
+
+  @override
+  String get composerRecordFailed => 'Couldn\'t record. Please try again.';
+
+  @override
   String get windowClosed =>
       'Outside the 24-hour window. Send an approved template to start a new conversation.';
 

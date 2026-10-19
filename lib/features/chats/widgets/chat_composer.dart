@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart' show DioMediaType;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../templates/template_picker_sheet.dart';
 import '../thread_controller.dart';
+import 'voice_recorder.dart';
 
 /// Reply composer for the chat thread (Phase 7). Free-form sending is only
 /// allowed inside WhatsApp's 24-hour service window ([windowOpen]); otherwise
@@ -29,6 +31,7 @@ class ChatComposer extends ConsumerStatefulWidget {
     this.senderLabel,
     this.senderNumber,
     this.senderActive = true,
+    this.recorderController,
   });
 
   final ThreadKey threadKey;
@@ -39,6 +42,10 @@ class ChatComposer extends ConsumerStatefulWidget {
   final String? senderNumber;
   final bool senderActive;
 
+  /// Voice-note state machine. Injected by tests / previews; the composer
+  /// creates (and owns) one when null.
+  final VoiceRecorderController? recorderController;
+
   @override
   ConsumerState<ChatComposer> createState() => _ChatComposerState();
 }
@@ -46,6 +53,13 @@ class ChatComposer extends ConsumerStatefulWidget {
 class _ChatComposerState extends ConsumerState<ChatComposer> {
   final _controller = TextEditingController();
   bool _hasText = false;
+
+  late final VoiceRecorderController _recorder =
+      widget.recorderController ?? VoiceRecorderController();
+  late final bool _ownsRecorder = widget.recorderController == null;
+
+  /// True while the finger that started a held recording is still down.
+  bool _micPointerDown = false;
 
   /// Direction of the draft, detected from its content so Arabic input lays
   /// out RTL even in an English UI. Null while empty → follow the app locale
@@ -55,6 +69,7 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
   @override
   void initState() {
     super.initState();
+    _recorder.addListener(_onRecorderChanged);
     _controller.addListener(() {
       final text = _controller.text;
       final has = text.trim().isNotEmpty;
@@ -70,8 +85,73 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
 
   @override
   void dispose() {
+    _recorder.removeListener(_onRecorderChanged);
+    if (_ownsRecorder) _recorder.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onRecorderChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _snack(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  // --- Voice notes -------------------------------------------------------
+
+  Future<void> _onMicDown() async {
+    if (_recorder.isActive) return;
+    _micPointerDown = true;
+    final ok = await _recorder.start();
+    if (!mounted) return;
+    if (!ok) {
+      _micPointerDown = false;
+      final l10n = AppLocalizations.of(context);
+      _snack(
+        _recorder.permissionDenied
+            ? l10n.composerMicDenied
+            : l10n.composerRecordFailed,
+      );
+    }
+  }
+
+  void _onMicMove(Offset delta) {
+    if (!_micPointerDown) return;
+    _recorder.updateDrag(delta, textDirection: Directionality.of(context));
+  }
+
+  Future<void> _onMicUp() async {
+    if (!_micPointerDown) return;
+    _micPointerDown = false;
+    final result = await _recorder.release();
+    if (!mounted) return;
+    if (result.tooShort) {
+      _snack(AppLocalizations.of(context).composerHoldToRecord);
+      return;
+    }
+    if (result.path != null) _sendVoiceNote(result.path!);
+  }
+
+  Future<void> _sendLockedRecording() async {
+    final path = await _recorder.finish();
+    if (!mounted || path == null) return;
+    _sendVoiceNote(path);
+  }
+
+  void _sendVoiceNote(String path) {
+    _thread.sendMedia(
+      to: widget.to,
+      mediaType: 'audio',
+      filePath: path,
+      filename: path.split('/').last,
+      voiceNote: true,
+      contentType: DioMediaType('audio', 'mp4'),
+    );
+    widget.onSent();
   }
 
   ThreadController get _thread =>
@@ -307,6 +387,7 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
       );
     }
 
+    final phase = _recorder.phase;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: scheme.surface,
@@ -324,7 +405,7 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (caption != null)
+              if (caption != null && phase == RecordPhase.idle)
                 Padding(
                   padding: const EdgeInsetsDirectional.only(
                     start: Insets.md,
@@ -335,48 +416,154 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
                     child: caption,
                   ),
                 ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.add_circle_outline_rounded),
-                    color: scheme.onSurfaceVariant,
-                    onPressed: _openAttachSheet,
-                  ),
-                  Expanded(
-                    child: Container(
-                      constraints: const BoxConstraints(minHeight: 44),
-                      decoration: BoxDecoration(
-                        color: scheme.surfaceContainerHigh,
-                        borderRadius: BorderRadius.circular(Radii.xl),
-                      ),
-                      child: TextField(
-                        controller: _controller,
-                        textDirection: _inputDirection,
-                        minLines: 1,
-                        maxLines: 5,
-                        textInputAction: TextInputAction.newline,
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: l10n.composerHint,
-                          isDense: true,
-                          filled: false,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: Insets.lg,
-                            vertical: Insets.md,
+              if (phase == RecordPhase.locked)
+                LockedRecordingPanel(
+                  controller: _recorder,
+                  onDelete: _recorder.cancel,
+                  onSend: _sendLockedRecording,
+                )
+              else
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        if (phase == RecordPhase.holding)
+                          Expanded(
+                            child: SizedBox(
+                              height: 44,
+                              child: HoldRecordingBar(controller: _recorder),
+                            ),
+                          )
+                        else ...[
+                          IconButton(
+                            icon: const Icon(Icons.add_rounded, size: 28),
+                            color: scheme.onSurface,
+                            tooltip: l10n.attachDocument,
+                            onPressed: _openAttachSheet,
                           ),
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                      ),
+                          Expanded(
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 44),
+                              decoration: BoxDecoration(
+                                color: scheme.surfaceContainerLow,
+                                borderRadius: BorderRadius.circular(Radii.xl),
+                                border: Border.all(
+                                  color: scheme.outlineVariant,
+                                ),
+                              ),
+                              child: TextField(
+                                controller: _controller,
+                                textDirection: _inputDirection,
+                                minLines: 1,
+                                maxLines: 5,
+                                textInputAction: TextInputAction.newline,
+                                keyboardType: TextInputType.multiline,
+                                decoration: InputDecoration(
+                                  hintText: l10n.composerHint,
+                                  isDense: true,
+                                  filled: false,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: Insets.lg,
+                                    vertical: Insets.md,
+                                  ),
+                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (!_hasText)
+                            IconButton(
+                              icon: const Icon(
+                                Icons.photo_camera_outlined,
+                                size: 26,
+                              ),
+                              color: scheme.onSurface,
+                              tooltip: l10n.attachCamera,
+                              onPressed: () => _pickImage(ImageSource.camera),
+                            )
+                          else
+                            const SizedBox(width: Insets.sm),
+                        ],
+                        if (_hasText && phase == RecordPhase.idle)
+                          _SendButton(enabled: true, onTap: _sendText)
+                        else
+                          _MicButton(
+                            key: const ValueKey('composer-mic'),
+                            recording: phase == RecordPhase.holding,
+                            tooltip: l10n.composerRecordVoice,
+                            onDown: _onMicDown,
+                            onMove: _onMicMove,
+                            onUp: _onMicUp,
+                          ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: Insets.sm),
-                  _SendButton(enabled: _hasText, onTap: _sendText),
-                ],
-              ),
+                    if (phase == RecordPhase.holding)
+                      PositionedDirectional(
+                        end: 2,
+                        bottom: 56,
+                        child: RecordLockHint(progress: _recorder.lockProgress),
+                      ),
+                  ],
+                ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Hold-to-record mic (WhatsApp): pointer down starts recording, the finger's
+/// travel feeds slide-to-cancel / slide-up-to-lock, release sends. A raw
+/// [Listener] so the gesture starts instantly and keeps tracking after the
+/// finger leaves the button.
+class _MicButton extends StatelessWidget {
+  const _MicButton({
+    super.key,
+    required this.recording,
+    required this.tooltip,
+    required this.onDown,
+    required this.onMove,
+    required this.onUp,
+  });
+
+  final bool recording;
+  final String tooltip;
+  final VoidCallback onDown;
+  final ValueChanged<Offset> onMove;
+  final VoidCallback onUp;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: tooltip,
+      child: Listener(
+        behavior: HitTestBehavior.opaque,
+        onPointerDown: (_) => onDown(),
+        onPointerMove: (e) => onMove(e.delta),
+        onPointerUp: (_) => onUp(),
+        onPointerCancel: (_) => onUp(),
+        child: AnimatedScale(
+          scale: recording ? 1.35 : 1,
+          duration: Motion.normal,
+          curve: Motion.emphasized,
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.signal,
+            ),
+            child: const Icon(
+              Icons.mic_rounded,
+              color: AppColors.deepForest,
+              size: 24,
+            ),
           ),
         ),
       ),

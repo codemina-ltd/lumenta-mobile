@@ -69,6 +69,7 @@ dependencies:
   # Opens template button URLs and dials PHONE_NUMBER buttons (tel:) from the
   # chat thread.
   url_launcher: ^6.3.2
+  record: ^7.1.2
 
   # NOTE: permission_handler intentionally NOT used — FirebaseMessaging and
   # image_picker request their own permissions. Its iOS pod compiles all
@@ -86,7 +87,6 @@ dev_dependencies:
   freezed: ^3.2.5
   json_serializable: ^6.14.0
   riverpod_generator: ^4.0.4
-
 flutter_launcher_icons:
   android: true
   ios: true

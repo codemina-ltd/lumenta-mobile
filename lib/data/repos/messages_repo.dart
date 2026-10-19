@@ -215,7 +215,10 @@ class MessagesRepo {
     return Message.fromJson(res.data!);
   }
 
-  /// `POST /messages/send-media` — multipart media reply.
+  /// `POST /messages/send-media` — multipart media reply. [voiceNote] marks
+  /// a recorded clip so the API re-encodes it to OGG/Opus and WhatsApp
+  /// renders it as a voice message. [contentType] overrides the part's MIME
+  /// (the API validates it against the kind's allow-list).
   Future<Message> sendMedia({
     required String to,
     required String mediaType, // image | audio | video | document
@@ -223,6 +226,8 @@ class MessagesRepo {
     String? caption,
     String? filename,
     String? senderId,
+    bool voiceNote = false,
+    DioMediaType? contentType,
   }) async {
     final form = FormData.fromMap({
       'to': to,
@@ -230,7 +235,12 @@ class MessagesRepo {
       'caption': ?caption,
       'filename': ?filename,
       'senderId': ?senderId,
-      'file': await MultipartFile.fromFile(filePath, filename: filename),
+      if (voiceNote) 'voiceNote': 'true',
+      'file': await MultipartFile.fromFile(
+        filePath,
+        filename: filename,
+        contentType: contentType,
+      ),
     });
     final res = await _dio.post<Map<String, dynamic>>(
       '/messages/send-media',

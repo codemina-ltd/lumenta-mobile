@@ -541,6 +541,34 @@ class AppLocalizationsAr extends AppLocalizations {
   String get composerHint => 'رسالة';
 
   @override
+  String get composerRecordVoice => 'تسجيل رسالة صوتية';
+
+  @override
+  String get composerHoldToRecord => 'اضغط مطولاً للتسجيل، وارفع إصبعك للإرسال';
+
+  @override
+  String get composerSlideToCancel => 'اسحب للإلغاء';
+
+  @override
+  String get composerDeleteRecording => 'حذف التسجيل';
+
+  @override
+  String get composerPauseRecording => 'إيقاف التسجيل مؤقتاً';
+
+  @override
+  String get composerResumeRecording => 'استئناف التسجيل';
+
+  @override
+  String get composerSendRecording => 'إرسال الرسالة الصوتية';
+
+  @override
+  String get composerMicDenied =>
+      'اسمح بالوصول إلى الميكروفون لتسجيل الرسائل الصوتية';
+
+  @override
+  String get composerRecordFailed => 'تعذر التسجيل. حاول مرة أخرى.';
+
+  @override
   String get windowClosed =>
       'خارج نافذة الـ 24 ساعة. أرسِل قالبًا معتمدًا لبدء محادثة جديدة.';
 

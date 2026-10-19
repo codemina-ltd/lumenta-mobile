@@ -1078,6 +1078,60 @@ abstract class AppLocalizations {
   /// **'Message'**
   String get composerHint;
 
+  /// No description provided for @composerRecordVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a voice note'**
+  String get composerRecordVoice;
+
+  /// No description provided for @composerHoldToRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold to record, release to send'**
+  String get composerHoldToRecord;
+
+  /// No description provided for @composerSlideToCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Slide to cancel'**
+  String get composerSlideToCancel;
+
+  /// No description provided for @composerDeleteRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete recording'**
+  String get composerDeleteRecording;
+
+  /// No description provided for @composerPauseRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause recording'**
+  String get composerPauseRecording;
+
+  /// No description provided for @composerResumeRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume recording'**
+  String get composerResumeRecording;
+
+  /// No description provided for @composerSendRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Send voice note'**
+  String get composerSendRecording;
+
+  /// No description provided for @composerMicDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow microphone access to record voice notes'**
+  String get composerMicDenied;
+
+  /// No description provided for @composerRecordFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t record. Please try again.'**
+  String get composerRecordFailed;
+
   /// No description provided for @windowClosed.
   ///
   /// In en, this message translates to:

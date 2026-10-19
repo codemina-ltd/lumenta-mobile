@@ -78,6 +78,7 @@ UI work should reuse the theme/token layer rather than hardcoding values:
 
 ## Conventions & gotchas
 
+- Voice notes use the `record` package (`features/chats/widgets/voice_recorder.dart`); it requests mic permission itself. Keep `VoiceRecorderController` as the single state machine — the composer only forwards pointer events to it.
 - **`permission_handler` is intentionally absent** — `FirebaseMessaging` and `image_picker` request their own permissions. Adding it compiles all permission pods (incl. CoreLocation), triggering App Store rejection ITMS-90683. Don't add it. (See the note in `pubspec.yaml`.)
 - App bundle id is `com.codemina.apps.lumenta` (Android + iOS).
 - `Env` (`core/config/env.dart`) is the only config surface — all values come from `--dart-define` (`API_BASE_URL`, `RECAPTCHA_SITE_KEY`, `FLAVOR`). No `.env` file.
