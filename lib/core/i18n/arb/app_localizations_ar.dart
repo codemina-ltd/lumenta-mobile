@@ -569,6 +569,60 @@ class AppLocalizationsAr extends AppLocalizations {
   String get composerRecordFailed => 'تعذر التسجيل. حاول مرة أخرى.';
 
   @override
+  String get controllerHuman => 'موظف بشري';
+
+  @override
+  String controllerHumanNamed(String name) {
+    return 'موظف بشري · $name';
+  }
+
+  @override
+  String get controllerChatbot => 'روبوت المحادثة';
+
+  @override
+  String controllerChatbotNamed(String name) {
+    return 'روبوت المحادثة · $name';
+  }
+
+  @override
+  String get controllerJourney => 'رحلة';
+
+  @override
+  String controllerJourneyNamed(String name) {
+    return 'رحلة · $name';
+  }
+
+  @override
+  String get controllerLume => 'Lume';
+
+  @override
+  String controllerLumeNamed(String name) {
+    return 'Lume · $name';
+  }
+
+  @override
+  String get controllerReleased => 'متاحة';
+
+  @override
+  String controllerHintHuman(String until) {
+    return 'ردّ أحد أعضاء الفريق مؤخرًا — تتوقف الأتمتة حتى $until';
+  }
+
+  @override
+  String get controllerHintChatbot =>
+      'جلسة روبوت محادثة نشطة تتولى الرد على هذه المحادثة';
+
+  @override
+  String get controllerHintJourney => 'رحلة نشطة توجّه هذه المحادثة';
+
+  @override
+  String get controllerHintLume => 'سيرد Lume على الرسالة الواردة التالية';
+
+  @override
+  String get controllerHintReleased =>
+      'لا توجد أتمتة تتحكم بهذه المحادثة — بانتظار موظف بشري';
+
+  @override
   String get windowClosed =>
       'خارج نافذة الـ 24 ساعة. أرسِل قالبًا معتمدًا لبدء محادثة جديدة.';
 

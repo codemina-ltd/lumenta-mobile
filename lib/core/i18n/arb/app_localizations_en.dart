@@ -562,6 +562,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get composerRecordFailed => 'Couldn\'t record. Please try again.';
 
   @override
+  String get controllerHuman => 'Human agent';
+
+  @override
+  String controllerHumanNamed(String name) {
+    return 'Human agent · $name';
+  }
+
+  @override
+  String get controllerChatbot => 'Chatbot';
+
+  @override
+  String controllerChatbotNamed(String name) {
+    return 'Chatbot · $name';
+  }
+
+  @override
+  String get controllerJourney => 'Journey';
+
+  @override
+  String controllerJourneyNamed(String name) {
+    return 'Journey · $name';
+  }
+
+  @override
+  String get controllerLume => 'Lume';
+
+  @override
+  String controllerLumeNamed(String name) {
+    return 'Lume · $name';
+  }
+
+  @override
+  String get controllerReleased => 'Released';
+
+  @override
+  String controllerHintHuman(String until) {
+    return 'A team member replied recently — automations stand down until $until';
+  }
+
+  @override
+  String get controllerHintChatbot =>
+      'An active chatbot session is answering this conversation';
+
+  @override
+  String get controllerHintJourney =>
+      'An active journey is guiding this conversation';
+
+  @override
+  String get controllerHintLume => 'Lume will answer the next incoming message';
+
+  @override
+  String get controllerHintReleased =>
+      'No automation holds this conversation — it\'s waiting for a human';
+
+  @override
   String get windowClosed =>
       'Outside the 24-hour window. Send an approved template to start a new conversation.';
 

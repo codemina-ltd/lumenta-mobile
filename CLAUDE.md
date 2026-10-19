@@ -78,6 +78,7 @@ UI work should reuse the theme/token layer rather than hardcoding values:
 
 ## Conventions & gotchas
 
+- The chat header's "who controls this conversation" chip (`widgets/controller_chip.dart`) polls `GET /clients/:id/conversation-controller` every 30s via `conversationControllerProvider`; invalidate that provider after anything that can change the controller (sends already do).
 - Voice notes use the `record` package (`features/chats/widgets/voice_recorder.dart`); it requests mic permission itself. Keep `VoiceRecorderController` as the single state machine — the composer only forwards pointer events to it.
 - **`permission_handler` is intentionally absent** — `FirebaseMessaging` and `image_picker` request their own permissions. Adding it compiles all permission pods (incl. CoreLocation), triggering App Store rejection ITMS-90683. Don't add it. (See the note in `pubspec.yaml`.)
 - App bundle id is `com.codemina.apps.lumenta` (Android + iOS).

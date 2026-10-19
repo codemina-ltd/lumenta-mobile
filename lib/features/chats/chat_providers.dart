@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -7,6 +8,7 @@ import '../../core/providers.dart';
 import '../../data/models/channel_thread.dart';
 import '../../data/models/client.dart';
 import '../../data/models/client_phone_number.dart';
+import '../../data/models/conversation_controller.dart';
 import '../../data/models/conversation_sender.dart';
 import '../../data/models/flow.dart';
 import '../../data/models/inbox_thread.dart';
@@ -221,4 +223,24 @@ final mediaBytesLoaderProvider =
           return null;
         }
       };
+    });
+
+/// Scope of a controller lookup: the client, optionally narrowed to the
+/// sender whose tab is open (Lume assignments can be sender-scoped).
+typedef ConversationControllerKey = ({String clientId, String? senderId});
+
+/// Who controls the conversation right now (KAN-34) for the chat header
+/// chip. Server state changes with every inbound and every human reply, so
+/// this re-polls every 30s while the thread is open (mirrors the portal) and
+/// is invalidated by [ThreadController] after a successful send.
+final conversationControllerProvider = FutureProvider.autoDispose
+    .family<ConversationControllerState, ConversationControllerKey>((
+      ref,
+      key,
+    ) async {
+      final timer = Timer(const Duration(seconds: 30), ref.invalidateSelf);
+      ref.onDispose(timer.cancel);
+      return ref
+          .read(clientsRepoProvider)
+          .conversationController(key.clientId, senderId: key.senderId);
     });

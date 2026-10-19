@@ -345,6 +345,9 @@ class ThreadController extends Notifier<ThreadState> {
   /// tab list so a thread started via "Start conversation via…" materialises.
   void _onSendSucceeded() {
     ref.invalidate(conversationSendersProvider(clientId));
+    // A human reply pauses automations (takeover) — refresh the header chip
+    // now instead of waiting out its poll interval.
+    ref.invalidate(conversationControllerProvider);
   }
 
   Message _optimistic({required String body, required MessageType type}) {

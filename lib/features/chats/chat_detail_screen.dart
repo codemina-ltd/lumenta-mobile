@@ -32,6 +32,7 @@ import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/channel_composer.dart';
 import 'widgets/channel_indicator.dart';
+import 'widgets/controller_chip.dart';
 import 'widgets/chat_composer.dart';
 import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
@@ -581,6 +582,14 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
       ),
       body: Column(
         children: [
+          // KAN-34: who is answering this conversation right now (human
+          // takeover / chatbot / journey / Lume / released) — same chip as
+          // the portal chat header. Hidden on non-WhatsApp channel tabs.
+          if (activeChannelThread == null)
+            ConversationControllerBar(
+              clientId: widget.clientId,
+              senderId: activeSenderId,
+            ),
           LiveCallBanner(clientId: widget.clientId),
           if (showTabs)
             SenderThreadBar(

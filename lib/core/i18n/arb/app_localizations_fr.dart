@@ -572,6 +572,61 @@ class AppLocalizationsFr extends AppLocalizations {
   String get composerRecordFailed => 'Impossible d\'enregistrer. Réessayez.';
 
   @override
+  String get controllerHuman => 'Agent humain';
+
+  @override
+  String controllerHumanNamed(String name) {
+    return 'Agent humain · $name';
+  }
+
+  @override
+  String get controllerChatbot => 'Chatbot';
+
+  @override
+  String controllerChatbotNamed(String name) {
+    return 'Chatbot · $name';
+  }
+
+  @override
+  String get controllerJourney => 'Parcours';
+
+  @override
+  String controllerJourneyNamed(String name) {
+    return 'Parcours · $name';
+  }
+
+  @override
+  String get controllerLume => 'Lume';
+
+  @override
+  String controllerLumeNamed(String name) {
+    return 'Lume · $name';
+  }
+
+  @override
+  String get controllerReleased => 'Libérée';
+
+  @override
+  String controllerHintHuman(String until) {
+    return 'Un membre de l\'équipe a répondu récemment — les automatisations sont en pause jusqu\'à $until';
+  }
+
+  @override
+  String get controllerHintChatbot =>
+      'Une session de chatbot active répond à cette conversation';
+
+  @override
+  String get controllerHintJourney =>
+      'Un parcours actif guide cette conversation';
+
+  @override
+  String get controllerHintLume => 'Lume répondra au prochain message entrant';
+
+  @override
+  String get controllerHintReleased =>
+      'Aucune automatisation ne contrôle cette conversation — en attente d\'un humain';
+
+  @override
   String get windowClosed =>
       'Hors de la fenêtre de 24 heures. Envoyez un modèle approuvé pour démarrer une nouvelle conversation.';
 

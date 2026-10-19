@@ -131,6 +131,32 @@ holding, sliding, locked (waveform), paused, driven through the injected
 controller with the simulator mic pre-granted via `simctl privacy`.
 Not exercised: a real device recording round-trip through the API.
 
+## Follow-up: conversation controller chip in the chat header
+
+The portal chat header shows who answers the conversation right now
+(KAN-34: human takeover → chatbot → journey → Lume → released). Mobile now
+shows the same pill directly under the chat app bar.
+
+- `data/models/conversation_controller.dart` — `ConversationControllerKind`
+  + `ConversationControllerState.fromMap` (unknown kinds degrade to
+  `released`); `ClientsRepo.conversationController(clientId, {senderId})`
+  calls the existing JWT-reachable `GET /clients/:id/conversation-controller`.
+- `conversationControllerProvider` (`chat_providers.dart`) — autoDispose
+  family keyed by `(clientId, senderId)`; re-polls every 30s while the thread
+  is open (portal parity) and is invalidated by `ThreadController` after any
+  successful send, since a human reply flips the state to "human".
+- `widgets/controller_chip.dart` — `ConversationControllerBar` (hidden until
+  the first lookup lands, holds the last state during re-polls, hidden on
+  non-WhatsApp channel tabs) and pure `controllerChipLabel` /
+  `controllerChipHint`. Human assignee names resolve through
+  `tenantMembersProvider`. Tap shows the explanation as a tooltip.
+- Strings `controller*` in en/ar/fr mirror the portal's `controller.*` keys.
+
+Verified: analyzer clean, 100 tests (5 new for parsing + labels); simulator
+screenshots of all five kinds in light and dark; live smoke against dev
+(`GET /clients/<id>/conversation-controller` → `lume` / label `Nour` for the
+smoke tenant). Not exercised: a live human-takeover flip on device.
+
 ## Remaining caveats
 
 - Against an API predating this change the app degrades: no pins (the pin

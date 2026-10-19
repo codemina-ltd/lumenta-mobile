@@ -1132,6 +1132,90 @@ abstract class AppLocalizations {
   /// **'Couldn\'t record. Please try again.'**
   String get composerRecordFailed;
 
+  /// No description provided for @controllerHuman.
+  ///
+  /// In en, this message translates to:
+  /// **'Human agent'**
+  String get controllerHuman;
+
+  /// No description provided for @controllerHumanNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Human agent · {name}'**
+  String controllerHumanNamed(String name);
+
+  /// No description provided for @controllerChatbot.
+  ///
+  /// In en, this message translates to:
+  /// **'Chatbot'**
+  String get controllerChatbot;
+
+  /// No description provided for @controllerChatbotNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Chatbot · {name}'**
+  String controllerChatbotNamed(String name);
+
+  /// No description provided for @controllerJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Journey'**
+  String get controllerJourney;
+
+  /// No description provided for @controllerJourneyNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Journey · {name}'**
+  String controllerJourneyNamed(String name);
+
+  /// No description provided for @controllerLume.
+  ///
+  /// In en, this message translates to:
+  /// **'Lume'**
+  String get controllerLume;
+
+  /// No description provided for @controllerLumeNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Lume · {name}'**
+  String controllerLumeNamed(String name);
+
+  /// No description provided for @controllerReleased.
+  ///
+  /// In en, this message translates to:
+  /// **'Released'**
+  String get controllerReleased;
+
+  /// No description provided for @controllerHintHuman.
+  ///
+  /// In en, this message translates to:
+  /// **'A team member replied recently — automations stand down until {until}'**
+  String controllerHintHuman(String until);
+
+  /// No description provided for @controllerHintChatbot.
+  ///
+  /// In en, this message translates to:
+  /// **'An active chatbot session is answering this conversation'**
+  String get controllerHintChatbot;
+
+  /// No description provided for @controllerHintJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'An active journey is guiding this conversation'**
+  String get controllerHintJourney;
+
+  /// No description provided for @controllerHintLume.
+  ///
+  /// In en, this message translates to:
+  /// **'Lume will answer the next incoming message'**
+  String get controllerHintLume;
+
+  /// No description provided for @controllerHintReleased.
+  ///
+  /// In en, this message translates to:
+  /// **'No automation holds this conversation — it\'s waiting for a human'**
+  String get controllerHintReleased;
+
   /// No description provided for @windowClosed.
   ///
   /// In en, this message translates to:
