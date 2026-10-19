@@ -264,6 +264,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatsEmpty => 'No conversations yet';
 
   @override
+  String get navYou => 'You';
+
+  @override
+  String get chatsFilterAll => 'All';
+
+  @override
+  String get chatsFilterUnread => 'Unread';
+
+  @override
+  String chatsFilterUnreadCount(int count) {
+    return 'Unread $count';
+  }
+
+  @override
+  String get chatsNoUnreadTitle => 'You\'re all caught up';
+
+  @override
+  String get chatsNoUnreadBody => 'No unread chats right now';
+
+  @override
+  String get chatsPin => 'Pin chat';
+
+  @override
+  String get chatsUnpin => 'Unpin chat';
+
+  @override
+  String get chatsPinned => 'Pinned';
+
+  @override
+  String get chatsMarkRead => 'Mark as read';
+
+  @override
+  String get chatsOpenProfile => 'View profile';
+
+  @override
+  String get chatsMoreActions => 'More';
+
+  @override
+  String get chatsNewChat => 'New chat';
+
+  @override
+  String get newChatSearchHint => 'Name or number';
+
+  @override
+  String get newChatRecent => 'Recent chats';
+
+  @override
+  String get newChatAllClients => 'All clients';
+
+  @override
+  String get newChatNoResults => 'No clients match';
+
+  @override
+  String get newChatSearchEverything => 'Search messages, notes and more';
+
+  @override
+  String get youWorkspace => 'Workspace';
+
+  @override
+  String get youAccount => 'Account';
+
+  @override
+  String get youProfileSubtitle => 'Name, photo, language, password';
+
+  @override
+  String get youClientsSubtitle => 'Browse and search your contacts';
+
+  @override
   String get chatAssign => 'Assign to team member';
 
   @override

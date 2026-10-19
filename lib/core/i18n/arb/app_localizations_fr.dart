@@ -270,6 +270,75 @@ class AppLocalizationsFr extends AppLocalizations {
   String get chatsEmpty => 'Aucune conversation pour le moment';
 
   @override
+  String get navYou => 'Vous';
+
+  @override
+  String get chatsFilterAll => 'Tous';
+
+  @override
+  String get chatsFilterUnread => 'Non lus';
+
+  @override
+  String chatsFilterUnreadCount(int count) {
+    return 'Non lus $count';
+  }
+
+  @override
+  String get chatsNoUnreadTitle => 'Vous êtes à jour';
+
+  @override
+  String get chatsNoUnreadBody => 'Aucune discussion non lue pour le moment';
+
+  @override
+  String get chatsPin => 'Épingler la discussion';
+
+  @override
+  String get chatsUnpin => 'Désépingler la discussion';
+
+  @override
+  String get chatsPinned => 'Épinglée';
+
+  @override
+  String get chatsMarkRead => 'Marquer comme lue';
+
+  @override
+  String get chatsOpenProfile => 'Voir le profil';
+
+  @override
+  String get chatsMoreActions => 'Plus';
+
+  @override
+  String get chatsNewChat => 'Nouvelle discussion';
+
+  @override
+  String get newChatSearchHint => 'Nom ou numéro';
+
+  @override
+  String get newChatRecent => 'Discussions récentes';
+
+  @override
+  String get newChatAllClients => 'Tous les clients';
+
+  @override
+  String get newChatNoResults => 'Aucun client ne correspond';
+
+  @override
+  String get newChatSearchEverything =>
+      'Rechercher dans les messages, notes et plus';
+
+  @override
+  String get youWorkspace => 'Espace de travail';
+
+  @override
+  String get youAccount => 'Compte';
+
+  @override
+  String get youProfileSubtitle => 'Nom, photo, langue, mot de passe';
+
+  @override
+  String get youClientsSubtitle => 'Parcourir et rechercher vos contacts';
+
+  @override
   String get chatAssign => 'Assigner à un membre de l\'équipe';
 
   @override

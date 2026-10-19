@@ -62,6 +62,23 @@ class LastReadStore extends Notifier<LastReadState> {
     await _storage.write(key: _key, value: jsonEncode(_map));
     state = LastReadState(Map.unmodifiable(_map));
   }
+
+  /// Advances the cursor for many chats at once (chats "Mark all as read").
+  /// Entries that wouldn't move the cursor forward are skipped; one storage
+  /// write at the end.
+  Future<void> markAllRead(Map<String, DateTime> latestByClient) async {
+    await _ensureLoaded();
+    var changed = false;
+    latestByClient.forEach((clientId, when) {
+      final existing = state.lastRead(clientId);
+      if (existing != null && !when.isAfter(existing)) return;
+      _map[clientId] = when.toIso8601String();
+      changed = true;
+    });
+    if (!changed) return;
+    await _storage.write(key: _key, value: jsonEncode(_map));
+    state = LastReadState(Map.unmodifiable(_map));
+  }
 }
 
 final lastReadStoreProvider = NotifierProvider<LastReadStore, LastReadState>(

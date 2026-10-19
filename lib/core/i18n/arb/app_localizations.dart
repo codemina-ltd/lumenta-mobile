@@ -592,6 +592,138 @@ abstract class AppLocalizations {
   /// **'No conversations yet'**
   String get chatsEmpty;
 
+  /// No description provided for @navYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get navYou;
+
+  /// No description provided for @chatsFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get chatsFilterAll;
+
+  /// No description provided for @chatsFilterUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get chatsFilterUnread;
+
+  /// No description provided for @chatsFilterUnreadCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread {count}'**
+  String chatsFilterUnreadCount(int count);
+
+  /// No description provided for @chatsNoUnreadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all caught up'**
+  String get chatsNoUnreadTitle;
+
+  /// No description provided for @chatsNoUnreadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No unread chats right now'**
+  String get chatsNoUnreadBody;
+
+  /// No description provided for @chatsPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin chat'**
+  String get chatsPin;
+
+  /// No description provided for @chatsUnpin.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin chat'**
+  String get chatsUnpin;
+
+  /// No description provided for @chatsPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned'**
+  String get chatsPinned;
+
+  /// No description provided for @chatsMarkRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as read'**
+  String get chatsMarkRead;
+
+  /// No description provided for @chatsOpenProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View profile'**
+  String get chatsOpenProfile;
+
+  /// No description provided for @chatsMoreActions.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get chatsMoreActions;
+
+  /// No description provided for @chatsNewChat.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat'**
+  String get chatsNewChat;
+
+  /// No description provided for @newChatSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name or number'**
+  String get newChatSearchHint;
+
+  /// No description provided for @newChatRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent chats'**
+  String get newChatRecent;
+
+  /// No description provided for @newChatAllClients.
+  ///
+  /// In en, this message translates to:
+  /// **'All clients'**
+  String get newChatAllClients;
+
+  /// No description provided for @newChatNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No clients match'**
+  String get newChatNoResults;
+
+  /// No description provided for @newChatSearchEverything.
+  ///
+  /// In en, this message translates to:
+  /// **'Search messages, notes and more'**
+  String get newChatSearchEverything;
+
+  /// No description provided for @youWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace'**
+  String get youWorkspace;
+
+  /// No description provided for @youAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get youAccount;
+
+  /// No description provided for @youProfileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Name, photo, language, password'**
+  String get youProfileSubtitle;
+
+  /// No description provided for @youClientsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse and search your contacts'**
+  String get youClientsSubtitle;
+
   /// No description provided for @chatAssign.
   ///
   /// In en, this message translates to:

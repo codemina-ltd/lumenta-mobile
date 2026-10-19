@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'core/i18n/notification_i18n.dart';
 import 'data/storage/last_read_store.dart';
+import 'data/storage/pinned_chats_store.dart';
 import 'features/auth/auth_controller.dart';
 import 'features/push/push_service.dart';
 
@@ -28,6 +29,7 @@ Future<void> main() async {
   // off session bootstrap (the splash screen shows until it resolves).
   await NotificationI18n.load();
   await container.read(lastReadStoreProvider.notifier).hydrate();
+  await container.read(pinnedChatsStoreProvider.notifier).hydrate();
   unawaited(container.read(authControllerProvider.notifier).bootstrap());
 
   runApp(

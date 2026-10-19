@@ -10,12 +10,12 @@ import '../../features/chats/chat_detail_screen.dart';
 import '../../features/chats/chats_screen.dart';
 import '../../features/clients/client_detail/client_detail_screen.dart';
 import '../../features/clients/clients_screen.dart';
-import '../../features/inbox/inbox_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/reminders/reminders_screen.dart';
 import '../../features/search/search_screen.dart';
 import '../../features/shell/home_shell.dart';
+import '../../features/you/you_screen.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 final _shellKey = GlobalKey<NavigatorState>();
@@ -69,9 +69,15 @@ final routerProvider = Provider<GoRouter>((ref) {
           highlightMessageId: state.uri.queryParameters['messageId'],
         ),
       ),
+      // Clients directory. No longer a tab — pushed from the You tab and
+      // the chats "⋯" menu, so it stacks over the shell.
+      GoRoute(
+        path: '/clients',
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ClientsPage(),
+      ),
       // Full contact profile, opened from the chat header. Root-level so it
-      // stacks over the chat and `pop` returns there. Distinct from the
-      // `/clients` list route (a tab-shell branch).
+      // stacks over the chat and `pop` returns there.
       GoRoute(
         path: '/clients/:clientId',
         parentNavigatorKey: _rootKey,
@@ -85,6 +91,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const SearchScreen(),
       ),
+      // Tab order must match [HomeTab].
       StatefulShellRoute.indexedStack(
         builder: (_, _, navigationShell) =>
             HomeShell(navigationShell: navigationShell),
@@ -92,20 +99,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             navigatorKey: _shellKey,
             routes: [
-              GoRoute(
-                path: '/clients',
-                builder: (_, _) => const ClientsScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
               GoRoute(path: '/chats', builder: (_, _) => const ChatsScreen()),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(path: '/inbox', builder: (_, _) => const InboxScreen()),
             ],
           ),
           StatefulShellBranch(
@@ -114,6 +108,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: '/reminders',
                 builder: (_, _) => const RemindersScreen(),
               ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: '/you', builder: (_, _) => const YouScreen()),
             ],
           ),
           StatefulShellBranch(

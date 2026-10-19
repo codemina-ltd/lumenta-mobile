@@ -3,18 +3,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/i18n/arb/app_localizations.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_dimens.dart';
-import '../../core/theme/app_theme.dart';
+import '../../data/storage/last_read_store.dart';
 import '../auth/auth_controller.dart';
+import '../chats/chats_controller.dart';
+import '../chats/widgets/new_chat_sheet.dart';
 import '../notifications/notifications_controller.dart';
-import '../push/push_service.dart';
 import '../reminders/reminders_controller.dart';
 import '../shared/tenant_features.dart';
+import '../you/you_screen.dart';
 import 'app_nav_bar.dart';
+import 'tab_header.dart';
 
-/// App chrome for the three primary tabs: app bar (workspace switch + logout)
-/// and a bottom navigation bar. Body is the branch's [navigationShell].
+/// Tab indexes of the shell branches (must match the router's branch order).
+abstract final class HomeTab {
+  static const chats = 0;
+  static const reminders = 1;
+  static const you = 2;
+  static const notifications = 3;
+}
+
+/// App chrome for the four primary tabs, WhatsApp-style: each tab gets a
+/// large-title masthead with round actions ([TabHeader]) instead of a
+/// Material app bar, and a floating pill dock ([AppNavBar]) at the bottom.
+/// Body is the branch's [navigationShell].
 class HomeShell extends ConsumerWidget {
   const HomeShell({super.key, required this.navigationShell});
 
@@ -25,7 +36,7 @@ class HomeShell extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final auth = ref.watch(authControllerProvider);
     // Kick off (and keep warm) the tenant feature flags as soon as the shell
-    // mounts — chat/inbox screens read them synchronously via .value.
+    // mounts — chat screens read them synchronously via .value.
     ref.watch(tenantFeaturesProvider);
     final unread = ref.watch(
       notificationsControllerProvider.select((s) => s.unreadCount),
@@ -34,84 +45,36 @@ class HomeShell extends ConsumerWidget {
     final remindersDue = ref.watch(
       remindersControllerProvider.select((s) => s.dueCount),
     );
-
-    final titles = [
-      l10n.navClients,
-      l10n.navChats,
-      l10n.navInbox,
-      l10n.navReminders,
-      l10n.navNotifications,
-    ];
     final index = navigationShell.currentIndex;
 
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: Insets.lg,
-        title: Text(titles[index]),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search_rounded),
-            tooltip: l10n.searchGlobalTitle,
-            onPressed: () => context.push('/search'),
-          ),
-          // On the notifications tab, offer a one-tap "mark all as read" while
-          // there are unread items. The controller updates state optimistically.
-          if (index == 4 && unread > 0)
-            IconButton(
-              icon: const Icon(Icons.done_all_rounded),
-              tooltip: l10n.markAllRead,
-              onPressed: () => ref
-                  .read(notificationsControllerProvider.notifier)
-                  .markAllRead(),
-            ),
-          // Always rendered: after a degraded bootstrap (profile/tenant fetch
-          // failed) activeTenant is null, and this menu is the only way out
-          // of a broken session — hiding it would trap the user.
-          _WorkspaceMenu(
-            name: auth.activeTenant?.name,
-            canSwitch: auth.tenants.length > 1,
-            onProfile: () => context.push('/profile'),
-            // Drive the picker through the auth state machine; the router
-            // redirect bounces a direct `go('/select-tenant')` back to
-            // `/chats` while the status is still `authenticated`.
-            onSwitch: () =>
-                ref.read(authControllerProvider.notifier).switchTenant(),
-            onLogout: () async {
-              // Unregister the device while the token is still valid, then
-              // clear the session.
-              await ref.read(pushServiceProvider).deregister();
-              await ref.read(authControllerProvider.notifier).logout();
-            },
-          ),
-          const SizedBox(width: Insets.sm),
+      body: Column(
+        children: [
+          _header(context, ref, l10n, index, unread, auth.tenants.length > 1),
+          Expanded(child: navigationShell),
         ],
       ),
-      body: navigationShell,
       bottomNavigationBar: AppNavBar(
         selectedIndex: index,
         onSelect: (i) =>
             navigationShell.goBranch(i, initialLocation: i == index),
         destinations: [
           AppNavDestination(
-            icon: Icons.people_alt_outlined,
-            selectedIcon: Icons.people_alt_rounded,
-            label: l10n.navClients,
-          ),
-          AppNavDestination(
-            icon: Icons.forum_outlined,
-            selectedIcon: Icons.forum_rounded,
+            icon: Icons.chat_bubble_outline_rounded,
+            selectedIcon: Icons.chat_bubble_rounded,
             label: l10n.navChats,
-          ),
-          AppNavDestination(
-            icon: Icons.inbox_outlined,
-            selectedIcon: Icons.inbox_rounded,
-            label: l10n.navInbox,
           ),
           AppNavDestination(
             icon: Icons.alarm_outlined,
             selectedIcon: Icons.alarm_rounded,
             label: l10n.navReminders,
             badgeCount: remindersDue,
+          ),
+          AppNavDestination(
+            icon: Icons.person_outline_rounded,
+            selectedIcon: Icons.person_rounded,
+            label: l10n.navYou,
+            avatar: UserAvatar(user: auth.user, radius: 11),
           ),
           AppNavDestination(
             icon: Icons.notifications_none_rounded,
@@ -123,123 +86,96 @@ class HomeShell extends ConsumerWidget {
       ),
     );
   }
-}
 
-/// The active-workspace chip in the app bar; tapping opens switch / logout.
-/// [name] is null while the workspace hasn't loaded (degraded session) — the
-/// chip then falls back to a plain account icon but keeps the menu usable.
-class _WorkspaceMenu extends StatelessWidget {
-  const _WorkspaceMenu({
-    required this.name,
-    required this.canSwitch,
-    required this.onProfile,
-    required this.onSwitch,
-    required this.onLogout,
-  });
-
-  final String? name;
-  final bool canSwitch;
-  final VoidCallback onProfile;
-  final VoidCallback onSwitch;
-  final Future<void> Function() onLogout;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    return PopupMenuButton<String>(
-      tooltip: name ?? l10n.profileTitle,
-      position: PopupMenuPosition.under,
-      offset: const Offset(0, Insets.sm),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(Radii.md)),
-      ),
-      onSelected: (value) {
-        if (value == 'profile') {
-          onProfile();
-        } else if (value == 'switch') {
-          onSwitch();
-        } else if (value == 'logout') {
-          onLogout();
-        }
-      },
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'profile',
-          child: Row(
-            children: [
-              const Icon(Icons.person_outline_rounded, size: 20),
-              const SizedBox(width: Insets.md),
-              Text(l10n.profileTitle),
-            ],
-          ),
-        ),
-        if (canSwitch)
-          PopupMenuItem(
-            value: 'switch',
-            child: Row(
-              children: [
-                const Icon(Icons.swap_horiz_rounded, size: 20),
-                const SizedBox(width: Insets.md),
-                Text(l10n.switchTenant),
-              ],
-            ),
-          ),
-        PopupMenuItem(
-          value: 'logout',
-          child: Row(
-            children: [
-              const Icon(
-                Icons.logout_rounded,
-                size: 20,
-                color: AppColors.ember,
-              ),
-              const SizedBox(width: Insets.md),
-              Text(l10n.logout),
-            ],
-          ),
-        ),
-      ],
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(
-          Insets.md,
-          Insets.sm,
-          Insets.sm,
-          Insets.sm,
-        ),
-        decoration: BoxDecoration(
-          color: context.scheme.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(Radii.pill),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              name != null
-                  ? Icons.workspaces_rounded
-                  : Icons.person_outline_rounded,
-              size: 16,
-              color: AppColors.signalDeep,
-            ),
-            if (name != null) ...[
-              const SizedBox(width: Insets.sm),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 120),
-                child: Text(
-                  name!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.text.labelLarge?.copyWith(fontSize: 13),
+  Widget _header(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    int index,
+    int unreadNotifications,
+    bool canSwitch,
+  ) {
+    switch (index) {
+      case HomeTab.chats:
+        return TabHeader(
+          title: l10n.navChats,
+          leading: [
+            HeaderMenuButton<_ChatsMenu>(
+              tooltip: l10n.chatsMoreActions,
+              items: [
+                headerMenuItem(
+                  _ChatsMenu.markAllRead,
+                  Icons.done_all_rounded,
+                  l10n.markAllRead,
                 ),
-              ),
-            ],
-            Icon(
-              Icons.expand_more_rounded,
-              size: 18,
-              color: context.scheme.onSurfaceVariant,
+                headerMenuItem(
+                  _ChatsMenu.clients,
+                  Icons.people_alt_outlined,
+                  l10n.navClients,
+                ),
+                if (canSwitch)
+                  headerMenuItem(
+                    _ChatsMenu.switchWorkspace,
+                    Icons.swap_horiz_rounded,
+                    l10n.switchTenant,
+                  ),
+              ],
+              onSelected: (value) => _onChatsMenu(context, ref, value),
             ),
           ],
-        ),
-      ),
-    );
+          trailing: [
+            HeaderCircleButton(
+              icon: Icons.search_rounded,
+              tooltip: l10n.searchGlobalTitle,
+              onPressed: () => context.push('/search'),
+            ),
+            HeaderCircleButton(
+              icon: Icons.add_rounded,
+              tooltip: l10n.chatsNewChat,
+              primary: true,
+              onPressed: () => showNewChatSheet(context),
+            ),
+          ],
+        );
+      case HomeTab.reminders:
+        return TabHeader(title: l10n.navReminders);
+      case HomeTab.you:
+        return TabHeader(title: l10n.navYou);
+      case HomeTab.notifications:
+      default:
+        return TabHeader(
+          title: l10n.navNotifications,
+          trailing: [
+            // One-tap "mark all as read" while there are unread items. The
+            // controller updates state optimistically.
+            if (unreadNotifications > 0)
+              HeaderCircleButton(
+                icon: Icons.done_all_rounded,
+                tooltip: l10n.markAllRead,
+                onPressed: () => ref
+                    .read(notificationsControllerProvider.notifier)
+                    .markAllRead(),
+              ),
+          ],
+        );
+    }
+  }
+
+  void _onChatsMenu(BuildContext context, WidgetRef ref, _ChatsMenu value) {
+    switch (value) {
+      case _ChatsMenu.markAllRead:
+        // Advance the on-device cursor for every loaded chat.
+        final items = ref.read(chatsControllerProvider).items;
+        ref.read(lastReadStoreProvider.notifier).markAllRead({
+          for (final c in items)
+            if (c.lastMessageAtDate != null) c.clientId: c.lastMessageAtDate!,
+        });
+      case _ChatsMenu.clients:
+        context.push('/clients');
+      case _ChatsMenu.switchWorkspace:
+        ref.read(authControllerProvider.notifier).switchTenant();
+    }
   }
 }
+
+enum _ChatsMenu { markAllRead, clients, switchWorkspace }

@@ -285,10 +285,12 @@ class PushService {
     // Fallback for pushes whose resource isn't a message/client (e.g.
     // reminders): the FCM data block always carries `action_url`, so parse
     // the SPA path with the same shapes the in-app feed understands.
+    // Thread-only pushes used to land on the inbox tab; the inbox is out of
+    // the mobile app for now, so they fall back to the chats list.
     final target = hasChat
         ? '/chats/$clientId'
         : hasThread
-        ? '/inbox'
+        ? '/chats'
         : _routeFromActionUrl(data['action_url'] as String?);
     if (target == null) return;
 
@@ -311,7 +313,7 @@ class PushService {
 
     // Chat/client detail are root-level routes stacked over the tab shell —
     // push so back/pop returns to whatever tab was showing. The bare tab
-    // routes (`/inbox`, `/reminders`) are shell branches: `go` switches tabs
+    // routes (`/chats`, `/reminders`) are shell branches: `go` switches tabs
     // in place instead of stacking a duplicate branch on the root navigator.
     final isDetailRoute =
         target.startsWith('/chats/') || target.startsWith('/clients/');

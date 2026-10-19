@@ -12,18 +12,23 @@ class AppNavDestination {
     required this.selectedIcon,
     required this.label,
     this.badgeCount = 0,
+    this.avatar,
   });
 
   final IconData icon;
   final IconData selectedIcon;
   final String label;
   final int badgeCount;
+
+  /// Rendered instead of the icon when set (the "You" tab shows the signed-in
+  /// user's picture, like WhatsApp). Should be ~24pt and circular.
+  final Widget? avatar;
 }
 
-/// Branded bottom navigation dock: a raised surface with rounded top corners
-/// and an upward brand shadow, an animated pill indicator behind the active
-/// icon, and ember count badges. Pure presentation — route switching stays
-/// with the caller.
+/// Branded bottom navigation dock, WhatsApp-style: a floating pill inset
+/// from the screen edges with an upward brand shadow, an animated pill
+/// indicator behind the active icon, and ember count badges. Pure
+/// presentation — route switching stays with the caller.
 class AppNavBar extends StatelessWidget {
   const AppNavBar({
     super.key,
@@ -41,19 +46,20 @@ class AppNavBar extends StatelessWidget {
     final scheme = context.scheme;
     final brightness = Theme.of(context).brightness;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLow,
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(Radii.xl),
-        ),
-        border: Border.all(color: scheme.outlineVariant),
-        boxShadow: Shadows.dock(brightness),
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 64,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: Insets.sm),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.xs),
+        child: Container(
+          height: 68,
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(Radii.pill),
+            border: Border.all(color: scheme.outlineVariant),
+            boxShadow: Shadows.dock(brightness),
+          ),
+          clipBehavior: Clip.antiAlias,
           child: Row(
             children: [
               for (var i = 0; i < destinations.length; i++)
@@ -147,19 +153,40 @@ class _NavItemState extends State<_NavItem> {
                         switchOutCurve: Motion.standard,
                         transitionBuilder: (child, animation) =>
                             ScaleTransition(
-                              scale: Tween(begin: 0.7, end: 1.0)
-                                  .animate(animation),
+                              scale: Tween(
+                                begin: 0.7,
+                                end: 1.0,
+                              ).animate(animation),
                               child: FadeTransition(
                                 opacity: animation,
                                 child: child,
                               ),
                             ),
-                        child: Icon(
-                          selected ? d.selectedIcon : d.icon,
-                          key: ValueKey(selected),
-                          size: 23,
-                          color: iconColor,
-                        ),
+                        child: d.avatar != null
+                            ? Container(
+                                key: ValueKey(selected),
+                                padding: const EdgeInsets.all(1.5),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: selected
+                                        ? iconColor
+                                        : Colors.transparent,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: ClipOval(child: d.avatar),
+                                ),
+                              )
+                            : Icon(
+                                selected ? d.selectedIcon : d.icon,
+                                key: ValueKey(selected),
+                                size: 23,
+                                color: iconColor,
+                              ),
                       ),
                     ),
                   ),

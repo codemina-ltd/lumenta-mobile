@@ -12,6 +12,20 @@ import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'clients_controller.dart';
 
+/// Standalone clients directory (root route `/clients`): the list under its
+/// own app bar, since it no longer lives in the tab shell.
+class ClientsPage extends StatelessWidget {
+  const ClientsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(AppLocalizations.of(context).navClients)),
+      body: const ClientsScreen(),
+    );
+  }
+}
+
 class ClientsScreen extends ConsumerStatefulWidget {
   const ClientsScreen({super.key});
 
@@ -39,8 +53,7 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
   }
 
   void _onScroll() {
-    if (_scroll.position.pixels >=
-        _scroll.position.maxScrollExtent - 320) {
+    if (_scroll.position.pixels >= _scroll.position.maxScrollExtent - 320) {
       ref.read(clientsControllerProvider.notifier).loadMore();
     }
   }
@@ -126,9 +139,7 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                       clientId: c.id,
                       initials: c.initials,
                       name: c.displayName,
-                      phone: c.phoneNumber == null
-                          ? null
-                          : '+${c.phoneNumber}',
+                      phone: c.phoneNumber == null ? null : '+${c.phoneNumber}',
                       onTap: () => context.push('/chats/${c.id}'),
                     );
                   },

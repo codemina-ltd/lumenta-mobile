@@ -264,6 +264,74 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatsEmpty => 'لا توجد محادثات بعد';
 
   @override
+  String get navYou => 'أنت';
+
+  @override
+  String get chatsFilterAll => 'الكل';
+
+  @override
+  String get chatsFilterUnread => 'غير مقروءة';
+
+  @override
+  String chatsFilterUnreadCount(int count) {
+    return 'غير مقروءة $count';
+  }
+
+  @override
+  String get chatsNoUnreadTitle => 'أنت على اطلاع بكل شيء';
+
+  @override
+  String get chatsNoUnreadBody => 'لا توجد محادثات غير مقروءة الآن';
+
+  @override
+  String get chatsPin => 'تثبيت المحادثة';
+
+  @override
+  String get chatsUnpin => 'إلغاء تثبيت المحادثة';
+
+  @override
+  String get chatsPinned => 'مثبتة';
+
+  @override
+  String get chatsMarkRead => 'تحديد كمقروءة';
+
+  @override
+  String get chatsOpenProfile => 'عرض الملف';
+
+  @override
+  String get chatsMoreActions => 'المزيد';
+
+  @override
+  String get chatsNewChat => 'محادثة جديدة';
+
+  @override
+  String get newChatSearchHint => 'الاسم أو الرقم';
+
+  @override
+  String get newChatRecent => 'المحادثات الأخيرة';
+
+  @override
+  String get newChatAllClients => 'كل العملاء';
+
+  @override
+  String get newChatNoResults => 'لا يوجد عملاء مطابقون';
+
+  @override
+  String get newChatSearchEverything => 'البحث في الرسائل والملاحظات والمزيد';
+
+  @override
+  String get youWorkspace => 'مساحة العمل';
+
+  @override
+  String get youAccount => 'الحساب';
+
+  @override
+  String get youProfileSubtitle => 'الاسم والصورة واللغة وكلمة المرور';
+
+  @override
+  String get youClientsSubtitle => 'تصفح جهات الاتصال وابحث فيها';
+
+  @override
   String get chatAssign => 'إسناد إلى عضو في الفريق';
 
   @override
