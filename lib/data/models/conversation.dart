@@ -38,6 +38,20 @@ abstract class Conversation with _$Conversation {
     /// values are worth surfacing; null on servers predating the field.
     String? lastMessageChannelType,
     String? lastMessageAt,
+
+    /// Delivery status of the last message (outbound: sent / delivered /
+    /// read / failed). Null on servers predating the field.
+    @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
+    MessageStatus? lastMessageStatus,
+
+    /// Inbound messages newer than this member's server-side read cursor.
+    /// Null on servers predating the field (the app then falls back to the
+    /// on-device cursor).
+    int? unreadCount,
+
+    /// When this member pinned the chat (server-side, follows the member
+    /// across devices); null when not pinned.
+    String? pinnedAt,
   }) = _Conversation;
 
   const Conversation._();
@@ -59,6 +73,11 @@ abstract class Conversation with _$Conversation {
   DateTime? get lastMessageAtDate => lastMessageAt == null
       ? null
       : DateTime.tryParse(lastMessageAt!)?.toLocal();
+
+  bool get isPinned => pinnedAt != null;
+
+  DateTime? get pinnedAtDate =>
+      pinnedAt == null ? null : DateTime.tryParse(pinnedAt!);
 
   String get initials {
     final source = effectiveName ?? (phoneNumber ?? '');

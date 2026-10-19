@@ -2,13 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/data/models/conversation.dart';
 import 'package:mobile/data/models/message.dart';
 import 'package:mobile/data/storage/last_read_store.dart';
-import 'package:mobile/data/storage/pinned_chats_store.dart';
 import 'package:mobile/features/chats/chat_list_logic.dart';
 
 Conversation _conv(
   String id, {
   required DateTime at,
   MessageDirection direction = MessageDirection.inbound,
+  int? unreadCount,
+  DateTime? pinnedAt,
 }) => Conversation(
   clientId: id,
   name: 'Client $id',
@@ -16,80 +17,92 @@ Conversation _conv(
   lastMessageDirection: direction,
   lastMessageType: MessageType.text,
   lastMessageBody: 'hi',
+  unreadCount: unreadCount,
+  pinnedAt: pinnedAt?.toUtc().toIso8601String(),
 );
 
 void main() {
   final t0 = DateTime(2026, 10, 19, 12);
-  // Server order: newest first.
-  final items = [
-    _conv('a', at: t0),
-    _conv('b', at: t0.subtract(const Duration(hours: 1))),
-    _conv('c', at: t0.subtract(const Duration(hours: 2))),
-    _conv(
-      'd',
-      at: t0.subtract(const Duration(hours: 3)),
-      direction: MessageDirection.outbound,
-    ),
-  ];
-  const noPins = PinnedChatsState([]);
   const nothingRead = LastReadState({});
 
   group('arrangeConversations', () {
-    test('keeps server order when nothing is pinned', () {
-      final rows = arrangeConversations(
-        items,
-        pinned: noPins,
-        lastRead: nothingRead,
-      );
-      expect(rows.map((c) => c.clientId), ['a', 'b', 'c', 'd']);
-    });
+    // Server order: newest first.
+    final items = [
+      _conv('a', at: t0, unreadCount: 2),
+      _conv('b', at: t0.subtract(const Duration(hours: 1)), unreadCount: 0),
+      _conv(
+        'c',
+        at: t0.subtract(const Duration(hours: 2)),
+        unreadCount: 5,
+        pinnedAt: t0.subtract(const Duration(days: 1)),
+      ),
+      _conv(
+        'd',
+        at: t0.subtract(const Duration(hours: 3)),
+        direction: MessageDirection.outbound,
+        unreadCount: 0,
+        pinnedAt: t0.subtract(const Duration(days: 2)),
+      ),
+    ];
 
-    test('hoists pinned chats to the top in pin order', () {
-      // 'c' was pinned most recently, then 'd'.
-      const pins = PinnedChatsState(['c', 'd']);
-      final rows = arrangeConversations(
-        items,
-        pinned: pins,
-        lastRead: nothingRead,
-      );
+    test('hoists pinned chats to the top, most recently pinned first', () {
+      final rows = arrangeConversations(items, lastRead: nothingRead);
       expect(rows.map((c) => c.clientId), ['c', 'd', 'a', 'b']);
     });
 
-    test('ignores pins for chats that are not loaded', () {
-      const pins = PinnedChatsState(['zzz', 'b']);
+    test('unread filter keeps chats with a server unread count', () {
       final rows = arrangeConversations(
         items,
-        pinned: pins,
         lastRead: nothingRead,
-      );
-      expect(rows.map((c) => c.clientId), ['b', 'a', 'c', 'd']);
-    });
-
-    test('unread filter keeps inbound chats newer than the read cursor', () {
-      final lastRead = LastReadState({
-        // 'b' read after its last message → not unread.
-        'b': t0.toIso8601String(),
-        // 'c' read before its last message → still unread.
-        'c': t0.subtract(const Duration(hours: 5)).toIso8601String(),
-      });
-      final rows = arrangeConversations(
-        items,
-        pinned: const PinnedChatsState(['c']),
-        lastRead: lastRead,
         filter: ChatFilter.unread,
       );
-      // 'd' is outbound, so never unread; pinned 'c' still leads.
       expect(rows.map((c) => c.clientId), ['c', 'a']);
-      expect(countUnread(items, lastRead), 2);
+      expect(countUnread(items, nothingRead), 2);
     });
   });
 
-  group('PinnedChatsState', () {
-    test('rank reflects pin order and null when unpinned', () {
-      const pins = PinnedChatsState(['x', 'y']);
-      expect(pins.isPinned('x'), isTrue);
-      expect(pins.rank('y'), 1);
-      expect(pins.rank('nope'), isNull);
+  group('unread fallback (servers without unreadCount)', () {
+    final legacy = [
+      _conv('x', at: t0),
+      _conv('y', at: t0.subtract(const Duration(hours: 1))),
+      _conv(
+        'z',
+        at: t0.subtract(const Duration(hours: 2)),
+        direction: MessageDirection.outbound,
+      ),
+    ];
+
+    test('uses the on-device cursor and a badge of 1', () {
+      final lastRead = LastReadState({
+        // read after its last message → not unread
+        'y': t0.toIso8601String(),
+      });
+      expect(conversationIsUnread(legacy[0], lastRead), isTrue);
+      expect(conversationIsUnread(legacy[1], lastRead), isFalse);
+      expect(conversationIsUnread(legacy[2], lastRead), isFalse);
+      expect(unreadBadgeCount(legacy[0], lastRead), 1);
+      expect(unreadBadgeCount(legacy[1], lastRead), 0);
+      final rows = arrangeConversations(
+        legacy,
+        lastRead: lastRead,
+        filter: ChatFilter.unread,
+      );
+      expect(rows.map((c) => c.clientId), ['x']);
     });
+
+    test('server count wins over the local cursor', () {
+      final lastRead = LastReadState({'a': t0.toIso8601String()});
+      final conv = _conv('a', at: t0, unreadCount: 4);
+      expect(conversationIsUnread(conv, lastRead), isTrue);
+      expect(unreadBadgeCount(conv, lastRead), 4);
+      expect(unreadBadgeCount(_conv('b', at: t0, unreadCount: 0), lastRead), 0);
+    });
+  });
+
+  test('Conversation pin accessors', () {
+    final pinned = _conv('p', at: t0, pinnedAt: t0);
+    expect(pinned.isPinned, isTrue);
+    expect(pinned.pinnedAtDate, isNotNull);
+    expect(_conv('q', at: t0).isPinned, isFalse);
   });
 }

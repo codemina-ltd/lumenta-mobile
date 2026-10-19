@@ -25,6 +25,8 @@ import '../../data/storage/last_read_store.dart';
 import '../shared/live_call_badge.dart';
 import '../shared/widgets.dart';
 import 'chat_providers.dart';
+import 'chats_controller.dart';
+import 'chat_list_logic.dart';
 import 'thread_controller.dart';
 import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
@@ -139,13 +141,30 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     super.dispose();
   }
 
+  /// Advance the server read cursor. Goes through the chats list controller
+  /// when it is alive (so its row zeroes immediately), else straight to the
+  /// API (deep link / push with no list mounted). Best-effort.
+  void _syncServerRead() {
+    final id = widget.clientId;
+    if (ref.exists(chatsControllerProvider(ChatFilter.all))) {
+      ref.read(chatsControllerProvider(ChatFilter.all).notifier).markRead([id]);
+      return;
+    }
+    ref
+        .read(messagesRepoProvider)
+        .markConversationsRead([id])
+        .catchError((_) {});
+  }
+
   void _onLoaded(DateTime? newest) {
-    // Clear unread for this chat.
+    // Clear unread for this chat: the on-device cursor (older servers +
+    // instant badge) and the member's server-side cursor (every device).
     if (newest != null && newest != _markedReadAt) {
       _markedReadAt = newest;
       ref
           .read(lastReadStoreProvider.notifier)
           .markRead(widget.clientId, newest);
+      _syncServerRead();
     }
     if (!_didInitialScroll) {
       _didInitialScroll = true;
@@ -1727,9 +1746,7 @@ class _FlowResponseTable extends StatelessWidget {
     final localeName = Localizations.localeOf(context).toString();
     String formatDate(DateTime d) => DateFormat.yMMMMd(localeName).format(d);
 
-    final answered = fields
-        .where((f) => _hasValue(response[f.key]))
-        .toList();
+    final answered = fields.where((f) => _hasValue(response[f.key])).toList();
 
     return SizedBox(
       width: double.maxFinite,

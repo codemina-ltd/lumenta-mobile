@@ -26,6 +26,13 @@ _Conversation _$ConversationFromJson(Map<String, dynamic> json) =>
       ),
       lastMessageChannelType: json['lastMessageChannelType'] as String?,
       lastMessageAt: json['lastMessageAt'] as String?,
+      lastMessageStatus: $enumDecodeNullable(
+        _$MessageStatusEnumMap,
+        json['lastMessageStatus'],
+        unknownValue: JsonKey.nullForUndefinedEnumValue,
+      ),
+      unreadCount: (json['unreadCount'] as num?)?.toInt(),
+      pinnedAt: json['pinnedAt'] as String?,
     );
 
 Map<String, dynamic> _$ConversationToJson(_Conversation instance) =>
@@ -41,6 +48,9 @@ Map<String, dynamic> _$ConversationToJson(_Conversation instance) =>
           _$MessageDirectionEnumMap[instance.lastMessageDirection],
       'lastMessageChannelType': instance.lastMessageChannelType,
       'lastMessageAt': instance.lastMessageAt,
+      'lastMessageStatus': _$MessageStatusEnumMap[instance.lastMessageStatus],
+      'unreadCount': instance.unreadCount,
+      'pinnedAt': instance.pinnedAt,
     };
 
 const _$MessageTypeEnumMap = {
@@ -63,4 +73,12 @@ const _$MessageTypeEnumMap = {
 const _$MessageDirectionEnumMap = {
   MessageDirection.inbound: 'inbound',
   MessageDirection.outbound: 'outbound',
+};
+
+const _$MessageStatusEnumMap = {
+  MessageStatus.sent: 'sent',
+  MessageStatus.delivered: 'delivered',
+  MessageStatus.read: 'read',
+  MessageStatus.failed: 'failed',
+  MessageStatus.received: 'received',
 };

@@ -349,14 +349,10 @@ Future<void> _forward(
         await dir.delete(recursive: true).catchError((_) => dir);
       }
     } else {
-      await repo.sendText(
-        to: to,
-        body: text!,
-        senderId: threadKey.senderId,
-      );
+      await repo.sendText(to: to, body: text!, senderId: threadKey.senderId);
     }
     // Bump the target conversation to the top of the chats list.
-    ref.read(chatsControllerProvider.notifier).refresh();
+    refreshChatsListsFromWidget(ref);
     messenger.showSnackBar(
       SnackBar(content: Text(l10n.forwardSent(client.displayName))),
     );

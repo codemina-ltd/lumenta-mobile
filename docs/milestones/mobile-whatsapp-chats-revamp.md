@@ -62,16 +62,40 @@
   headless) and real API data — the logic they call is unit-tested and the
   sheet is plain `ListTile`s.
 
-## Caveats / follow-ups
+## Follow-up (same day): server-backed pins, counts and ticks
 
-- Pins and the read cursor are **on-device** (secure storage), not synced to
-  the server or across a member's devices. A pinned chat that hasn't been
-  paged in yet can't be hoisted to the top; the server can't sort by pins.
-- Outbound rows show a single tick regardless of delivery status — the
-  conversations endpoint doesn't return the last message's status.
-- Unread is still boolean (no per-chat count); the dot stands in for
-  WhatsApp's count badge.
-- `navInbox` / `navClients` strings stay in the ARBs (Clients is reused; Inbox
-  is dormant for the return of the inbox).
+The first cut kept pins and unread on-device, which left four caveats
+(boolean unread, one tick for every outbound row, pinned chats outside the
+loaded pages not hoisted, pins not syncing across devices). Resolved by
+moving that state into the API — see
+`api/docs/milestones/mobile-conversation-member-state.md`:
+
+- **Pins** → `PUT/DELETE /messages/conversations/:clientId/pin`; the server
+  sorts pinned first across pagination. `pinned_chats_store.dart` removed.
+- **Unread count badge** (WhatsApp green pill, `99+` cap) from the server's
+  per-member `unreadCount`; the "Unread N" chip reads
+  `meta.unreadConversations` (member-wide, not just loaded pages).
+- **Unread filter** is now a server filter (`?unread=true`): `ChatsController`
+  became a family keyed by `ChatFilter`, so All and Unread page independently;
+  pin/read mutations are optimistic on the active list and invalidate the
+  sibling.
+- **Delivery ticks** on the row from `lastMessageStatus` (one tick sent, two
+  delivered, two lilac read, ember error failed), mirroring the bubble meta.
+- **Read cursor** is advanced on the server when a thread loads
+  (`POST /messages/conversations/read`) and by Mark as read / Mark all as
+  read; the on-device cursor is kept as a fallback for older servers and for
+  instant badges.
+
+Verified again on the simulator with the fake-data entrypoint (scripted pin +
+mark-read → row hoisted, chip 6 → 5; Unread view; count badges and ticks).
+
+## Remaining caveats
+
+- Against an API predating this change the app degrades: no pins (the pin
+  action shows "Something went wrong"), unread falls back to the on-device
+  cursor with a badge of 1, outbound rows show a single tick.
+- Unread for a never-opened chat counts *all* its inbound messages (same
+  semantics as before); opening it once resets the cursor.
+- `navInbox` strings stay in the ARBs for the inbox's return.
 - Notifications empty state shows the same string as title and body
   (pre-existing).

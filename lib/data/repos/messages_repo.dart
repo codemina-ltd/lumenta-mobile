@@ -17,12 +17,47 @@ class MessagesRepo {
   Future<Paginated<Conversation>> conversations({
     int page = 1,
     int limit = 20,
+
+    /// Server-side "Unread" filter (this member's read cursor).
+    bool unreadOnly = false,
   }) async {
     final res = await _dio.get<Map<String, dynamic>>(
       '/messages/conversations',
-      queryParameters: {'page': page, 'limit': limit},
+      queryParameters: {
+        'page': page,
+        'limit': limit,
+        if (unreadOnly) 'unread': 'true',
+      },
     );
     return Paginated.fromJson(res.data!, Conversation.fromJson);
+  }
+
+  /// `PUT /messages/conversations/:clientId/pin` — pin (or re-pin to the
+  /// top) for the signed-in member. Returns the server pin time.
+  Future<String?> pinConversation(String clientId) async {
+    final res = await _dio.put<Map<String, dynamic>>(
+      '/messages/conversations/$clientId/pin',
+    );
+    return res.data?['pinnedAt'] as String?;
+  }
+
+  /// `DELETE /messages/conversations/:clientId/pin`.
+  Future<void> unpinConversation(String clientId) =>
+      _dio.delete<void>('/messages/conversations/$clientId/pin');
+
+  /// `POST /messages/conversations/read` — move this member's read cursor
+  /// to now for [clientIds] (max 200 per call; chunked here).
+  Future<void> markConversationsRead(List<String> clientIds) async {
+    for (var i = 0; i < clientIds.length; i += 200) {
+      final chunk = clientIds.sublist(
+        i,
+        i + 200 > clientIds.length ? clientIds.length : i + 200,
+      );
+      await _dio.post<void>(
+        '/messages/conversations/read',
+        data: {'clientIds': chunk},
+      );
+    }
   }
 
   /// `GET /clients/:id/messages` — the message thread for one client.

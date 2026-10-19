@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +11,6 @@ import '../../core/theme/app_theme.dart';
 import '../../data/models/conversation.dart';
 import '../../data/models/message.dart';
 import '../../data/storage/last_read_store.dart';
-import '../../data/storage/pinned_chats_store.dart';
 import '../shared/skeletons.dart';
 import '../shared/widgets.dart';
 import 'chat_list_logic.dart';
@@ -34,8 +31,10 @@ final chatFilterProvider = NotifierProvider<ChatFilterNotifier, ChatFilter>(
   ChatFilterNotifier.new,
 );
 
-/// WhatsApp-style chats tab: filter chips, pinned chats on top, swipe or
-/// long-press a row to pin / mark read.
+/// WhatsApp-style chats tab: All / Unread filter (server-side), pinned chats
+/// on top, unread counts, delivery ticks; swipe or long-press a row to pin /
+/// mark read. Pins and read cursors are per member and follow them across
+/// devices.
 class ChatsScreen extends ConsumerStatefulWidget {
   const ChatsScreen({super.key});
 
@@ -51,7 +50,11 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
     super.initState();
     _scroll.addListener(() {
       if (_scroll.position.pixels >= _scroll.position.maxScrollExtent - 320) {
-        ref.read(chatsControllerProvider.notifier).loadMore();
+        ref
+            .read(
+              chatsControllerProvider(ref.read(chatFilterProvider)).notifier,
+            )
+            .loadMore();
       }
     });
   }
@@ -62,22 +65,29 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
     super.dispose();
   }
 
+  ChatsController get _active =>
+      ref.read(chatsControllerProvider(ref.read(chatFilterProvider)).notifier);
+
   Future<void> _togglePin(Conversation conv) async {
     HapticFeedback.mediumImpact();
-    await ref.read(pinnedChatsStoreProvider.notifier).toggle(conv.clientId);
+    final ok = await _active.togglePin(conv.clientId);
+    if (!ok && mounted) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context).inboxActionFailed),
+          ),
+        );
+    }
   }
 
-  Future<void> _markRead(Conversation conv) async {
-    final when = conv.lastMessageAtDate;
-    if (when == null) return;
-    await ref
-        .read(lastReadStoreProvider.notifier)
-        .markRead(conv.clientId, when);
-  }
+  Future<void> _markRead(Conversation conv) =>
+      _active.markRead([conv.clientId]);
 
   Future<void> _showActions(Conversation conv, bool unread) async {
     final l10n = AppLocalizations.of(context);
-    final pinned = ref.read(pinnedChatsStoreProvider).isPinned(conv.clientId);
+    final pinned = conv.isPinned;
     HapticFeedback.selectionClick();
     final action = await showModalBottomSheet<_RowAction>(
       context: context,
@@ -134,35 +144,28 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final state = ref.watch(chatsControllerProvider);
-    final controller = ref.read(chatsControllerProvider.notifier);
-    final lastRead = ref.watch(lastReadStoreProvider);
-    final pinned = ref.watch(pinnedChatsStoreProvider);
     final filter = ref.watch(chatFilterProvider);
+    final state = ref.watch(chatsControllerProvider(filter));
+    final controller = ref.read(chatsControllerProvider(filter).notifier);
+    // The All list stays warm for its server-wide unread total (the chip).
+    final allState = ref.watch(chatsControllerProvider(ChatFilter.all));
+    final lastRead = ref.watch(lastReadStoreProvider);
 
-    final unreadCount = countUnread(state.items, lastRead);
+    final unreadTotal =
+        allState.unreadConversations ??
+        state.unreadConversations ??
+        countUnread(allState.items, lastRead);
     final rows = arrangeConversations(
       state.items,
-      pinned: pinned,
       lastRead: lastRead,
       filter: filter,
     );
-
-    // The unread view filters client-side over what's paged in; keep pulling
-    // pages while it looks thin so a short list isn't just "not loaded yet".
-    if (filter == ChatFilter.unread &&
-        rows.length < 10 &&
-        state.hasMore &&
-        !state.loading &&
-        !state.loadingMore) {
-      scheduleMicrotask(controller.loadMore);
-    }
 
     return Column(
       children: [
         _FilterChips(
           filter: filter,
-          unreadCount: unreadCount,
+          unreadCount: unreadTotal,
           onChanged: (f) {
             HapticFeedback.selectionClick();
             ref.read(chatFilterProvider.notifier).set(f);
@@ -177,7 +180,6 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
             rows,
             filter,
             lastRead,
-            pinned,
           ),
         ),
       ],
@@ -192,7 +194,6 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
     List<Conversation> rows,
     ChatFilter filter,
     LastReadState lastRead,
-    PinnedChatsState pinned,
   ) {
     if (state.loading) {
       return const SkeletonList(count: 8);
@@ -208,7 +209,7 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
       return ErrorRetry(onRetry: controller.refresh);
     }
     if (rows.isEmpty) {
-      final allCaughtUp = filter == ChatFilter.unread && state.items.isNotEmpty;
+      final allCaughtUp = filter == ChatFilter.unread;
       return RefreshIndicator(
         onRefresh: controller.refresh,
         child: LayoutBuilder(
@@ -260,16 +261,14 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
           }
           final conv = rows[i];
           final unread = conversationIsUnread(conv, lastRead);
-          final isPinned = pinned.isPinned(conv.clientId);
           return _SwipeActions(
             key: ValueKey(conv.clientId),
-            pinned: isPinned,
+            pinned: conv.isPinned,
             onPin: () => _togglePin(conv),
             onMore: () => _showActions(conv, unread),
             child: ChatRow(
               conversation: conv,
-              unread: unread,
-              pinned: isPinned,
+              unreadCount: unreadBadgeCount(conv, lastRead),
               onTap: () => context.push('/chats/${conv.clientId}'),
               onLongPress: () => _showActions(conv, unread),
             ),
@@ -468,13 +467,13 @@ class FilterPill extends StatelessWidget {
 }
 
 /// One conversation row: large avatar, bold name, two-line preview, time on
-/// the end side with a green unread dot or a pin glyph under it.
+/// the end side, a green unread-count badge and/or a pin glyph under it, and
+/// WhatsApp-style delivery ticks for outbound last messages.
 class ChatRow extends StatelessWidget {
   const ChatRow({
     super.key,
     required this.conversation,
-    required this.unread,
-    required this.pinned,
+    required this.unreadCount,
     required this.onTap,
     this.onLongPress,
   });
@@ -482,10 +481,13 @@ class ChatRow extends StatelessWidget {
   static const double avatarRadius = 27;
 
   final Conversation conversation;
-  final bool unread;
-  final bool pinned;
+
+  /// 0 = read; otherwise printed in the green badge.
+  final int unreadCount;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
+
+  bool get unread => unreadCount > 0;
 
   @override
   Widget build(BuildContext context) {
@@ -579,9 +581,8 @@ class ChatRow extends StatelessWidget {
                       if (outbound) ...[
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
-                          child: Icon(
-                            Icons.check_rounded,
-                            size: 16,
+                          child: DeliveryTicks(
+                            status: conv.lastMessageStatus,
                             color: muted,
                           ),
                         ),
@@ -604,30 +605,9 @@ class ChatRow extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: Insets.sm),
-                      if (unread)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                            width: 12,
-                            height: 12,
-                            decoration: const BoxDecoration(
-                              color: AppColors.signal,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        )
-                      else if (pinned)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 1),
-                          child: Icon(
-                            Icons.push_pin_rounded,
-                            size: 16,
-                            color: muted,
-                            semanticLabel: l10n.chatsPinned,
-                          ),
-                        ),
-                      if (unread && pinned) ...[
-                        const SizedBox(width: Insets.xs),
+                      if (unread) UnreadBadge(count: unreadCount),
+                      if (conv.isPinned) ...[
+                        if (unread) const SizedBox(width: Insets.xs),
                         Padding(
                           padding: const EdgeInsets.only(top: 1),
                           child: Icon(
@@ -647,5 +627,65 @@ class ChatRow extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// WhatsApp-style green count pill ("3", "99+").
+class UnreadBadge extends StatelessWidget {
+  const UnreadBadge({super.key, required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minWidth: 20),
+      height: 20,
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: AppColors.signal,
+        borderRadius: BorderRadius.circular(Radii.pill),
+      ),
+      child: Text(
+        count > 99 ? '99+' : '$count',
+        style: const TextStyle(
+          fontSize: 12,
+          height: 1,
+          fontWeight: FontWeight.w700,
+          color: AppColors.deepForest,
+        ),
+      ),
+    );
+  }
+}
+
+/// Delivery ticks for an outbound last message, mirroring the bubble meta:
+/// one tick sent, two delivered, two tinted read, error glyph failed.
+/// Unknown status (older servers) falls back to a single tick.
+class DeliveryTicks extends StatelessWidget {
+  const DeliveryTicks({super.key, required this.status, required this.color});
+
+  final MessageStatus? status;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (status) {
+      case MessageStatus.read:
+        return Icon(Icons.done_all_rounded, size: 16, color: AppColors.lilac);
+      case MessageStatus.delivered:
+        return Icon(Icons.done_all_rounded, size: 16, color: color);
+      case MessageStatus.failed:
+        return const Icon(
+          Icons.error_outline_rounded,
+          size: 16,
+          color: AppColors.ember,
+        );
+      case MessageStatus.sent:
+      case MessageStatus.received:
+      case null:
+        return Icon(Icons.check_rounded, size: 16, color: color);
+    }
   }
 }

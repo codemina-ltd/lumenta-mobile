@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/i18n/arb/app_localizations.dart';
 import '../../data/storage/last_read_store.dart';
 import '../auth/auth_controller.dart';
+import '../chats/chat_list_logic.dart';
 import '../chats/chats_controller.dart';
 import '../chats/widgets/new_chat_sheet.dart';
 import '../notifications/notifications_controller.dart';
@@ -164,12 +165,10 @@ class HomeShell extends ConsumerWidget {
   void _onChatsMenu(BuildContext context, WidgetRef ref, _ChatsMenu value) {
     switch (value) {
       case _ChatsMenu.markAllRead:
-        // Advance the on-device cursor for every loaded chat.
-        final items = ref.read(chatsControllerProvider).items;
-        ref.read(lastReadStoreProvider.notifier).markAllRead({
-          for (final c in items)
-            if (c.lastMessageAtDate != null) c.clientId: c.lastMessageAtDate!,
-        });
+        // Every loaded unread chat, here and on the server (all devices).
+        ref
+            .read(chatsControllerProvider(ChatFilter.all).notifier)
+            .markAllRead(ref.read(lastReadStoreProvider));
       case _ChatsMenu.clients:
         context.push('/clients');
       case _ChatsMenu.switchWorkspace:

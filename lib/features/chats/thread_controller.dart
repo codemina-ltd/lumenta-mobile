@@ -227,7 +227,7 @@ class ThreadController extends Notifier<ThreadState> {
       _replace(temp.id, sent);
       _onSendSucceeded();
       // Bump the conversation to the top of the chats list.
-      ref.read(chatsControllerProvider.notifier).refresh();
+      refreshChatsLists(ref);
       return null;
     } catch (e) {
       _markFailed(temp.id);

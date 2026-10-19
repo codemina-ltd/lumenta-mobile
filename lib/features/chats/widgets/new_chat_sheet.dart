@@ -11,6 +11,7 @@ import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../shared/skeletons.dart';
 import '../../shared/widgets.dart';
+import '../chat_list_logic.dart';
 import '../chats_controller.dart';
 import '../new_chat_controller.dart';
 
@@ -81,7 +82,11 @@ class _NewChatSheetState extends ConsumerState<_NewChatSheet> {
     final recent = searching
         ? const <_Entry>[]
         : [
-            for (final c in ref.watch(chatsControllerProvider).items.take(5))
+            for (final c
+                in ref
+                    .watch(chatsControllerProvider(ChatFilter.all))
+                    .items
+                    .take(5))
               _Entry(
                 id: c.clientId,
                 name: c.displayName,

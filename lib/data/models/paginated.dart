@@ -6,6 +6,7 @@ class Paginated<T> {
     required this.page,
     required this.limit,
     required this.totalPages,
+    this.meta = const {},
   });
 
   final List<T> data;
@@ -13,6 +14,10 @@ class Paginated<T> {
   final int page;
   final int limit;
   final int totalPages;
+
+  /// The raw `meta` object, for endpoint-specific extras (e.g. the chats
+  /// list's `unreadConversations`).
+  final Map<String, dynamic> meta;
 
   bool get hasMore => page < totalPages;
 
@@ -30,6 +35,7 @@ class Paginated<T> {
       page: (meta['page'] as num?)?.toInt() ?? 1,
       limit: (meta['limit'] as num?)?.toInt() ?? items.length,
       totalPages: (meta['totalPages'] as num?)?.toInt() ?? 1,
+      meta: meta,
     );
   }
 }
