@@ -92,10 +92,12 @@ mark-read → row hoisted, chip 6 → 5; Unread view; count badges and ticks).
 ## Follow-up: floating glass dock
 
 The dock now floats over the content like WhatsApp's: `HomeShell` uses
-`extendBody: true`, `AppNavBar` is a translucent surface (alpha 0.66 light /
-0.62 dark) behind a 22px `BackdropFilter` blur with the shadow outside the
-clip, and every tab list adds `MediaQuery.paddingOf(context).bottom` so the
-last row scrolls clear of the dock. Verified on the simulator mid-scroll in
+`extendBody: true`; `AppNavBar` is liquid glass — a 28px `BackdropFilter`
+blur composed with a mild saturation matrix, a white specular gradient tint
+(0.62→0.30 light, 0.16→0.06 dark), a painted top-left-bright gradient rim,
+a white glass pill behind the active tab, shadow outside the clip — and every
+tab list adds `MediaQuery.paddingOf(context).bottom` so the last row scrolls
+clear of the dock. Verified on the simulator mid-scroll in
 light and dark mode (rows visibly blur through the dock).
 
 ## Remaining caveats

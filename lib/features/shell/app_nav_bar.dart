@@ -45,17 +45,18 @@ class AppNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = context.scheme;
     final brightness = Theme.of(context).brightness;
+    final isDark = brightness == Brightness.dark;
 
     return SafeArea(
       top: false,
       minimum: const EdgeInsets.only(bottom: Insets.sm),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.xs),
-        // Frosted glass, WhatsApp-style: the shell extends the body under the
-        // dock, so the list shows through a blurred, translucent surface. The
-        // shadow sits outside the clip; the blur + tint live inside it.
+        // Liquid glass, WhatsApp-style: the shell extends the body under the
+        // dock, so the list shows through a blurred, lightly tinted pill with
+        // a specular top highlight and a bright gradient rim. The shadow sits
+        // outside the clip; blur + tint + rim live inside it.
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Radii.pill),
@@ -64,33 +65,58 @@ class AppNavBar extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(Radii.pill),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
-              child: Container(
-                height: 68,
-                decoration: BoxDecoration(
-                  color: scheme.surfaceContainerLow.withValues(
-                    alpha: brightness == Brightness.dark ? 0.62 : 0.66,
-                  ),
-                  borderRadius: BorderRadius.circular(Radii.pill),
-                  border: Border.all(
-                    color: scheme.outlineVariant.withValues(alpha: 0.7),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    for (var i = 0; i < destinations.length; i++)
-                      Expanded(
-                        child: _NavItem(
-                          destination: destinations[i],
-                          selected: i == selectedIndex,
-                          onTap: () {
-                            HapticFeedback.selectionClick();
-                            onSelect(i);
-                          },
+              filter: ImageFilter.compose(
+                outer: ImageFilter.blur(sigmaX: 28, sigmaY: 28),
+                inner: const ColorFilter.matrix(_saturate),
+              ),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Radii.pill),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: isDark
+                              ? [
+                                  Colors.white.withValues(alpha: 0.16),
+                                  Colors.white.withValues(alpha: 0.06),
+                                ]
+                              : [
+                                  Colors.white.withValues(alpha: 0.62),
+                                  Colors.white.withValues(alpha: 0.30),
+                                ],
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 68,
+                    child: Row(
+                      children: [
+                        for (var i = 0; i < destinations.length; i++)
+                          Expanded(
+                            child: _NavItem(
+                              destination: destinations[i],
+                              selected: i == selectedIndex,
+                              onTap: () {
+                                HapticFeedback.selectionClick();
+                                onSelect(i);
+                              },
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  // Gradient rim: bright where light would catch the edge
+                  // (top-left), fading out toward the bottom-right.
+                  const Positioned.fill(
+                    child: IgnorePointer(
+                      child: CustomPaint(painter: _GlassRim()),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -98,6 +124,46 @@ class AppNavBar extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Mild saturation boost applied to what's behind the glass, so the blurred
+/// content reads as vibrant rather than washed out (the iOS material trick).
+const List<double> _saturate = [
+  1.1, -0.075, -0.025, 0, 0, //
+  -0.1, 1.125, -0.025, 0, 0, //
+  -0.1, -0.075, 1.175, 0, 0, //
+  0, 0, 0, 1, 0, //
+];
+
+class _GlassRim extends CustomPainter {
+  const _GlassRim();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final rrect = RRect.fromRectAndRadius(
+      rect.deflate(0.75),
+      Radius.circular(size.height),
+    );
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5
+      ..shader = LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Colors.white.withValues(alpha: 0.95),
+          Colors.white.withValues(alpha: 0.35),
+          Colors.white.withValues(alpha: 0.10),
+          Colors.white.withValues(alpha: 0.45),
+        ],
+        stops: const [0, 0.35, 0.7, 1],
+      ).createShader(rect);
+    canvas.drawRRect(rrect, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _GlassRim oldDelegate) => false;
 }
 
 class _NavItem extends StatefulWidget {
@@ -129,10 +195,11 @@ class _NavItemState extends State<_NavItem> {
     final d = widget.destination;
     final selected = widget.selected;
 
-    // Mirrors the filled-button pairing: signal surface, deep-forest glyph.
+    // A lighter glass pill behind the active icon (WhatsApp-style), with the
+    // brand glyph colour on top.
     final indicatorColor = isDark
-        ? AppColors.signal.withValues(alpha: 0.22)
-        : AppColors.signalTint;
+        ? Colors.white.withValues(alpha: 0.16)
+        : Colors.white.withValues(alpha: 0.70);
     final iconColor = selected
         ? (isDark ? AppColors.signal : AppColors.deepForest)
         : scheme.onSurfaceVariant;
@@ -215,7 +282,9 @@ class _NavItemState extends State<_NavItem> {
                       end: -2,
                       child: _CountBadge(
                         count: d.badgeCount,
-                        ringColor: scheme.surfaceContainerLow,
+                        ringColor: isDark
+                            ? const Color(0xFF1C3530)
+                            : Colors.white,
                       ),
                     ),
                 ],
