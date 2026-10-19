@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -51,29 +53,46 @@ class AppNavBar extends StatelessWidget {
       minimum: const EdgeInsets.only(bottom: Insets.sm),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.xs),
-        child: Container(
-          height: 68,
+        // Frosted glass, WhatsApp-style: the shell extends the body under the
+        // dock, so the list shows through a blurred, translucent surface. The
+        // shadow sits outside the clip; the blur + tint live inside it.
+        child: DecoratedBox(
           decoration: BoxDecoration(
-            color: scheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(Radii.pill),
-            border: Border.all(color: scheme.outlineVariant),
             boxShadow: Shadows.dock(brightness),
           ),
-          clipBehavior: Clip.antiAlias,
-          child: Row(
-            children: [
-              for (var i = 0; i < destinations.length; i++)
-                Expanded(
-                  child: _NavItem(
-                    destination: destinations[i],
-                    selected: i == selectedIndex,
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      onSelect(i);
-                    },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(Radii.pill),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
+              child: Container(
+                height: 68,
+                decoration: BoxDecoration(
+                  color: scheme.surfaceContainerLow.withValues(
+                    alpha: brightness == Brightness.dark ? 0.62 : 0.66,
+                  ),
+                  borderRadius: BorderRadius.circular(Radii.pill),
+                  border: Border.all(
+                    color: scheme.outlineVariant.withValues(alpha: 0.7),
                   ),
                 ),
-            ],
+                child: Row(
+                  children: [
+                    for (var i = 0; i < destinations.length; i++)
+                      Expanded(
+                        child: _NavItem(
+                          destination: destinations[i],
+                          selected: i == selectedIndex,
+                          onTap: () {
+                            HapticFeedback.selectionClick();
+                            onSelect(i);
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

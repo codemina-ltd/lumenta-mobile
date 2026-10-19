@@ -73,6 +73,7 @@ UI work should reuse the theme/token layer rather than hardcoding values:
 - `core/theme/app_dimens.dart` — `Insets`, `Radii`, `Motion`, `Shadows` tokens (no magic spacing/radius numbers).
 - `core/theme/app_colors.dart` — the brand palette + derived tones; add new tones here, don't inline hex.
 - `core/theme/app_theme.dart` — one `_build(brightness)` produces light + dark with full component themes and two `ThemeExtension`s (`ChatColors`, `BrandColors`). Access via the `ThemeX` extension on `BuildContext`: `context.scheme`, `context.text`, `context.brand`, `context.chat`.
+- **Floating glass dock**: `HomeShell` sets `extendBody: true`, so tab bodies run underneath the translucent, blurred `AppNavBar`. Any scrollable placed in a tab must add `MediaQuery.paddingOf(context).bottom` to its bottom padding (Scaffold sets it to the dock height) or its last row hides behind the dock — see the chats / reminders / notifications / You lists.
 - `features/shared/` — reusable `brand_mark.dart` (`AppIconMark`, `LumentaMark`, `LumentaWordmark`), `skeletons.dart` (`Shimmer`/`SkeletonList` for first-load), and `widgets.dart` (`InitialsAvatar`, `EmptyState`, `ErrorRetry`, `StatusPill`).
 
 ## Conventions & gotchas

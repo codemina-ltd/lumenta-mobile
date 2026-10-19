@@ -120,7 +120,9 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       onRefresh: controller.refresh,
       child: ListView.separated(
         controller: _scroll,
-        padding: const EdgeInsets.only(bottom: Insets.lg),
+        padding: EdgeInsets.only(
+          bottom: Insets.lg + MediaQuery.paddingOf(context).bottom,
+        ),
         itemCount: state.items.length + (state.hasMore ? 1 : 0),
         separatorBuilder: (_, _) => Divider(
           height: 1,

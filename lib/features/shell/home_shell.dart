@@ -49,6 +49,9 @@ class HomeShell extends ConsumerWidget {
     final index = navigationShell.currentIndex;
 
     return Scaffold(
+      // Tab content scrolls beneath the floating dock; each list pads its
+      // bottom by MediaQuery.padding (which Scaffold sets to the dock height).
+      extendBody: true,
       body: Column(
         children: [
           _header(context, ref, l10n, index, unread, auth.tenants.length > 1),

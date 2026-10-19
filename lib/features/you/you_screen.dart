@@ -75,11 +75,11 @@ class YouScreen extends ConsumerWidget {
         : (user?.profileName ?? user?.email ?? '');
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
+      padding: EdgeInsets.fromLTRB(
         Insets.lg,
         Insets.sm,
         Insets.lg,
-        Insets.xxl,
+        Insets.xxl + MediaQuery.paddingOf(context).bottom,
       ),
       children: [
         _GroupCard(

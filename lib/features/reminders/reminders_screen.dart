@@ -60,7 +60,9 @@ class RemindersScreen extends ConsumerWidget {
     return RefreshIndicator(
       onRefresh: controller.refresh,
       child: ListView(
-        padding: const EdgeInsets.only(bottom: Insets.xxl),
+        padding: EdgeInsets.only(
+          bottom: Insets.xxl + MediaQuery.paddingOf(context).bottom,
+        ),
         children: [
           for (final (title, rows, accent) in nonEmpty) ...[
             Padding(

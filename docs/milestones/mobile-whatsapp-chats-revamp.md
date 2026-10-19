@@ -89,6 +89,15 @@ moving that state into the API — see
 Verified again on the simulator with the fake-data entrypoint (scripted pin +
 mark-read → row hoisted, chip 6 → 5; Unread view; count badges and ticks).
 
+## Follow-up: floating glass dock
+
+The dock now floats over the content like WhatsApp's: `HomeShell` uses
+`extendBody: true`, `AppNavBar` is a translucent surface (alpha 0.66 light /
+0.62 dark) behind a 22px `BackdropFilter` blur with the shadow outside the
+clip, and every tab list adds `MediaQuery.paddingOf(context).bottom` so the
+last row scrolls clear of the dock. Verified on the simulator mid-scroll in
+light and dark mode (rows visibly blur through the dock).
+
 ## Remaining caveats
 
 - Against an API predating this change the app degrades: no pins (the pin
