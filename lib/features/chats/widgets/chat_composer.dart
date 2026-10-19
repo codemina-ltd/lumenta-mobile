@@ -517,6 +517,10 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
   }
 }
 
+/// Trailing composer action (mic / send): a 36pt disc inside a 44pt hit box.
+const double _composerActionDisc = 36;
+const double _composerActionHit = 44;
+
 /// Hold-to-record mic (WhatsApp): pointer down starts recording, the finger's
 /// travel feeds slide-to-cancel / slide-up-to-lock, release sends. A raw
 /// [Listener] so the gesture starts instantly and keeps tracking after the
@@ -548,21 +552,29 @@ class _MicButton extends StatelessWidget {
         onPointerMove: (e) => onMove(e.delta),
         onPointerUp: (_) => onUp(),
         onPointerCancel: (_) => onUp(),
-        child: AnimatedScale(
-          scale: recording ? 1.35 : 1,
-          duration: Motion.normal,
-          curve: Motion.emphasized,
-          child: Container(
-            width: 44,
-            height: 44,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.signal,
-            ),
-            child: const Icon(
-              Icons.mic_rounded,
-              color: AppColors.deepForest,
-              size: 24,
+        // 44pt hit box around a smaller disc so the target stays comfortable
+        // while the button sits visually lighter next to the field pill.
+        child: SizedBox(
+          width: _composerActionHit,
+          height: _composerActionHit,
+          child: Center(
+            child: AnimatedScale(
+              scale: recording ? 1.35 : 1,
+              duration: Motion.normal,
+              curve: Motion.emphasized,
+              child: Container(
+                width: _composerActionDisc,
+                height: _composerActionDisc,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.signal,
+                ),
+                child: const Icon(
+                  Icons.mic_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
             ),
           ),
         ),
@@ -581,23 +593,32 @@ class _SendButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: Motion.fast,
-      curve: Motion.standard,
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: enabled
-            ? AppColors.signal
-            : context.scheme.onSurface.withValues(alpha: 0.12),
-      ),
-      child: IconButton(
-        icon: const Icon(Icons.arrow_upward_rounded),
-        color: enabled
-            ? AppColors.deepForest
-            : context.scheme.onSurface.withValues(alpha: 0.4),
-        onPressed: enabled ? onTap : null,
+    // Same disc size as the mic so the swap between them doesn't jump.
+    return SizedBox(
+      width: _composerActionHit,
+      height: _composerActionHit,
+      child: Center(
+        child: AnimatedContainer(
+          duration: Motion.fast,
+          curve: Motion.standard,
+          width: _composerActionDisc,
+          height: _composerActionDisc,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: enabled
+                ? AppColors.signal
+                : context.scheme.onSurface.withValues(alpha: 0.12),
+          ),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            iconSize: 20,
+            icon: const Icon(Icons.arrow_upward_rounded),
+            color: enabled
+                ? Colors.white
+                : context.scheme.onSurface.withValues(alpha: 0.4),
+            onPressed: enabled ? onTap : null,
+          ),
+        ),
       ),
     );
   }
