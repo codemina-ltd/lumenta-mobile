@@ -32,8 +32,9 @@ import 'widgets/add_note_dialog.dart';
 import 'widgets/assign_thread_sheet.dart';
 import 'widgets/channel_composer.dart';
 import 'widgets/channel_indicator.dart';
-import 'widgets/controller_chip.dart';
 import 'widgets/chat_composer.dart';
+import 'widgets/chat_wallpaper.dart';
+import 'widgets/controller_chip.dart';
 import 'widgets/media_open_bubble.dart';
 import 'widgets/message_actions_sheet.dart';
 import 'widgets/order_bubble.dart';
@@ -609,9 +610,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
               }),
             ),
           Expanded(
-            child: threadKey == null
-                ? const Center(child: CircularProgressIndicator())
-                : _body(context, state, threadKey, scheduled),
+            child: ChatWallpaper(
+              child: threadKey == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : _body(context, state, threadKey, scheduled),
+            ),
           ),
           if (clientAsync.hasValue &&
               threadKey != null &&
