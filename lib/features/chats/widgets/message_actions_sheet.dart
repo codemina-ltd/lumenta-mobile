@@ -14,6 +14,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/providers.dart';
 import '../../../data/models/client.dart';
 import '../../../data/models/message.dart';
+import '../../shared/member_permissions.dart';
 import '../../shared/widgets.dart';
 import '../chat_providers.dart';
 import '../chats_controller.dart';
@@ -70,14 +71,26 @@ Future<void> showMessageActions(
   // Reminder/note creation anchors to the message id, so it needs a
   // persisted, not-deleted row.
   final canAnnotate = isPersisted && !message.isDeleted;
-  final canDeleteForMe = isPersisted;
+  // Each of these is a permission the server enforces; an action the member
+  // lacks is left out of the sheet rather than offered and then refused.
+  final permissions = ref.read(memberPermissionsProvider).asData?.value;
+  final canCreateReminder =
+      canAnnotate && memberCan(permissions, PermissionKeys.messageReminder);
+  final canAddNote =
+      canAnnotate && memberCan(permissions, PermissionKeys.messageNote);
+  final canDeleteForMe =
+      isPersisted && memberCan(permissions, PermissionKeys.messageDeleteForMe);
   final canDeleteForEveryone =
-      isPersisted && message.isOutbound && !message.isDeleted;
+      isPersisted &&
+      message.isOutbound &&
+      !message.isDeleted &&
+      memberCan(permissions, PermissionKeys.messageDeleteForEveryone);
   if (!canCopy &&
       !canForward &&
       !canShare &&
       !canReact &&
-      !canAnnotate &&
+      !canCreateReminder &&
+      !canAddNote &&
       !canDeleteForMe &&
       !canDeleteForEveryone) {
     return;
@@ -138,7 +151,7 @@ Future<void> showMessageActions(
                 label: l10n.messageActionShare,
                 onTap: () => Navigator.pop(sheetCtx, _MessageAction.share),
               ),
-            if (canAnnotate) ...[
+            if (canCreateReminder)
               _ActionTile(
                 icon: Icons.alarm_add_outlined,
                 color: AppColors.signalDeep,
@@ -146,13 +159,13 @@ Future<void> showMessageActions(
                 onTap: () =>
                     Navigator.pop(sheetCtx, _MessageAction.createReminder),
               ),
+            if (canAddNote)
               _ActionTile(
                 icon: Icons.sticky_note_2_outlined,
                 color: AppColors.amber,
                 label: l10n.inboxAddNote,
                 onTap: () => Navigator.pop(sheetCtx, _MessageAction.addNote),
               ),
-            ],
             if (canDeleteForMe)
               _ActionTile(
                 icon: Icons.delete_outline_rounded,

@@ -15,6 +15,7 @@ import '../data/repos/flows_repo.dart';
 import '../data/repos/inbox_repo.dart';
 import '../data/repos/messages_repo.dart';
 import '../data/repos/notifications_repo.dart';
+import '../data/repos/permissions_repo.dart';
 import '../data/repos/reminders_repo.dart';
 import '../data/repos/scheduled_messages_repo.dart';
 import '../data/repos/search_repo.dart';
@@ -102,6 +103,9 @@ final deviceRepoProvider = Provider<DeviceRepo>(
 );
 final featuresRepoProvider = Provider<FeaturesRepo>(
   (ref) => FeaturesRepo(ref.watch(dioProvider)),
+);
+final permissionsRepoProvider = Provider<PermissionsRepo>(
+  (ref) => PermissionsRepo(ref.watch(dioProvider)),
 );
 final flowsRepoProvider = Provider<FlowsRepo>(
   (ref) => FlowsRepo(ref.watch(dioProvider)),

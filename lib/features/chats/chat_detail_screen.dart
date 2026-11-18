@@ -23,6 +23,7 @@ import '../../data/models/scheduled_message.dart';
 import '../../data/models/sender.dart';
 import '../../data/storage/last_read_store.dart';
 import '../shared/live_call_badge.dart';
+import '../shared/member_permissions.dart';
 import '../shared/widgets.dart';
 import 'chat_providers.dart';
 import 'chats_controller.dart';
@@ -722,11 +723,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         icon: const Icon(Icons.sticky_note_2_outlined),
         onPressed: () => showAddNoteDialog(context, ref, thread),
       ),
-      IconButton(
-        tooltip: AppLocalizations.of(context).chatAssign,
-        icon: const Icon(Icons.person_add_alt_1_rounded),
-        onPressed: () => showAssignThreadSheet(context, ref, thread),
-      ),
+      // Assigning is its own permission (enforced server-side).
+      if (memberCan(
+        ref.watch(memberPermissionsProvider).asData?.value,
+        PermissionKeys.chatAssign,
+      ))
+        IconButton(
+          tooltip: AppLocalizations.of(context).chatAssign,
+          icon: const Icon(Icons.person_add_alt_1_rounded),
+          onPressed: () => showAssignThreadSheet(context, ref, thread),
+        ),
     ];
   }
 

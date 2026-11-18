@@ -10,6 +10,7 @@ import '../chats/chats_controller.dart';
 import '../chats/widgets/new_chat_sheet.dart';
 import '../notifications/notifications_controller.dart';
 import '../reminders/reminders_controller.dart';
+import '../shared/member_permissions.dart';
 import '../shared/tenant_features.dart';
 import '../you/you_screen.dart';
 import 'app_nav_bar.dart';
@@ -39,6 +40,9 @@ class HomeShell extends ConsumerWidget {
     // Kick off (and keep warm) the tenant feature flags as soon as the shell
     // mounts — chat screens read them synchronously via .value.
     ref.watch(tenantFeaturesProvider);
+    // Same for the member's permissions — message and thread actions are
+    // filtered by them.
+    ref.watch(memberPermissionsProvider);
     final unread = ref.watch(
       notificationsControllerProvider.select((s) => s.unreadCount),
     );
