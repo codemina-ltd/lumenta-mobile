@@ -62,7 +62,9 @@ final clientChannelThreadsProvider = FutureProvider.autoDispose
         flags = null; // Flags unavailable — fall back to data-gating.
       }
       if (allChannelFeaturesDisabled(flags)) return const [];
-      final threads = await ref.read(inboxRepoProvider).channelThreads(clientId);
+      final threads = await ref
+          .read(inboxRepoProvider)
+          .channelThreads(clientId);
       return threads
           .where((t) => channelFeatureEnabled(flags, t.channelType))
           .toList();
@@ -233,14 +235,41 @@ typedef ConversationControllerKey = ({String clientId, String? senderId});
 /// chip. Server state changes with every inbound and every human reply, so
 /// this re-polls every 30s while the thread is open (mirrors the portal) and
 /// is invalidated by [ThreadController] after a successful send.
+///
+/// KAN-389 — a 403 will not fix itself on the next tick, so it ends the
+/// polling (the member lost access to the client, or may not see this). The
+/// lookup runs again when the chat is reopened or after a successful send.
+/// Riverpod's automatic retry is off: the 30s timer is the only cadence, so
+/// a failing lookup is never retried in a burst.
 final conversationControllerProvider = FutureProvider.autoDispose
     .family<ConversationControllerState, ConversationControllerKey>((
       ref,
       key,
     ) async {
-      final timer = Timer(const Duration(seconds: 30), ref.invalidateSelf);
-      ref.onDispose(timer.cancel);
-      return ref
-          .read(clientsRepoProvider)
-          .conversationController(key.clientId, senderId: key.senderId);
-    });
+      Timer? timer;
+      var disposed = false;
+      ref.onDispose(() {
+        disposed = true;
+        timer?.cancel();
+      });
+      void pollAgain() {
+        if (disposed) return;
+        timer = Timer(const Duration(seconds: 30), ref.invalidateSelf);
+      }
+
+      try {
+        final state = await ref
+            .read(clientsRepoProvider)
+            .conversationController(key.clientId, senderId: key.senderId);
+        pollAgain();
+        return state;
+      } catch (e) {
+        if (!isForbiddenError(e)) pollAgain();
+        rethrow;
+      }
+    }, retry: (_, _) => null);
+
+/// True when [error] is the API answering 403 — a refusal that repeating the
+/// same request cannot change.
+bool isForbiddenError(Object? error) =>
+    error is DioException && error.response?.statusCode == 403;

@@ -23,9 +23,7 @@ String controllerChipLabel(
       : state.label;
   return switch (state.controller) {
     ConversationControllerKind.human =>
-      detail == null
-          ? l10n.controllerHuman
-          : l10n.controllerHumanNamed(detail),
+      detail == null ? l10n.controllerHuman : l10n.controllerHumanNamed(detail),
     ConversationControllerKind.chatbot =>
       detail == null
           ? l10n.controllerChatbot
@@ -75,14 +73,13 @@ class ConversationControllerBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref
-        .watch(
-          conversationControllerProvider((
-            clientId: clientId,
-            senderId: senderId,
-          )),
-        )
-        .value;
+    final lookup = ref.watch(
+      conversationControllerProvider((clientId: clientId, senderId: senderId)),
+    );
+    // KAN-389 — a refused lookup has stopped polling, so the last known
+    // state would never refresh; show nothing rather than a stale chip.
+    if (isForbiddenError(lookup.error)) return const SizedBox.shrink();
+    final state = lookup.value;
     if (state == null) return const SizedBox.shrink();
     final members = ref.watch(tenantMembersProvider).value;
     String? nameOf(String userId) =>
