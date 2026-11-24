@@ -114,8 +114,11 @@ class _ChannelComposerState extends ConsumerState<ChannelComposer> {
     final l10n = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
     final thread = widget.thread;
-    final windowOpen = thread.windowOpen;
-    final humanAgentAvailable = thread.humanAgentAvailable;
+    // A channel without a messaging window is always open and never needs
+    // the human-agent tag.
+    final windowOpen = !thread.hasMessagingWindow || thread.windowOpen;
+    final humanAgentAvailable =
+        thread.hasMessagingWindow && thread.humanAgentAvailable;
 
     // Neither window applies — the thread is read-only until the customer
     // messages again.

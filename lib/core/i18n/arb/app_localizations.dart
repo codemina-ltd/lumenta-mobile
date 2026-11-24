@@ -2656,6 +2656,24 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get channelEmail;
 
+  /// No description provided for @channelTelegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get channelTelegram;
+
+  /// No description provided for @telegramBotBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The contact blocked this bot. Messages cannot be delivered until they unblock it.'**
+  String get telegramBotBlocked;
+
+  /// No description provided for @telegramBotUnblocked.
+  ///
+  /// In en, this message translates to:
+  /// **'The contact unblocked this bot.'**
+  String get telegramBotUnblocked;
+
   /// No description provided for @channelHumanAgentLabel.
   ///
   /// In en, this message translates to:

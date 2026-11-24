@@ -1173,6 +1173,19 @@ class _MessageBubble extends ConsumerWidget {
   }
 
   Widget _bodyText(BuildContext context, Color textColor) {
+    // Telegram block / unblock notice: a localized line for the event code.
+    final notice = telegramNoticeText(AppLocalizations.of(context), message);
+    if (notice != null) {
+      return Text(
+        notice,
+        style: TextStyle(
+          color: textColor.withValues(alpha: 0.8),
+          fontStyle: FontStyle.italic,
+          fontSize: 14,
+          height: 1.35,
+        ),
+      );
+    }
     // Unknown type with no text (D4): IG 'share' attachments and other
     // unmapped channel payloads — say so instead of an empty "…" bubble.
     if (message.body.isEmpty && message.messageType == MessageType.unknown) {

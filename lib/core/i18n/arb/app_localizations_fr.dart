@@ -1402,6 +1402,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get channelEmail => 'Email';
 
   @override
+  String get channelTelegram => 'Telegram';
+
+  @override
+  String get telegramBotBlocked =>
+      'Le contact a bloqué ce bot. Les messages ne peuvent pas être remis tant qu’il ne l’a pas débloqué.';
+
+  @override
+  String get telegramBotUnblocked => 'Le contact a débloqué ce bot.';
+
+  @override
   String get channelHumanAgentLabel =>
       'Envoyer en tant qu\'agent humain (fenêtre de 7 jours)';
 

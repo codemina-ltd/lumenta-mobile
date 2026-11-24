@@ -500,6 +500,8 @@ class _ThreadTile extends StatelessWidget {
         return l10n.channelSms;
       case 'email':
         return l10n.channelEmail;
+      case 'telegram':
+        return l10n.channelTelegram;
       case null:
       case '':
       case 'whatsapp':

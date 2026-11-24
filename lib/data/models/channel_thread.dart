@@ -4,7 +4,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'channel_thread.freezed.dart';
 part 'channel_thread.g.dart';
 
-/// One of a client's non-WhatsApp (Instagram DM / Messenger) inbox threads,
+/// One of a client's non-WhatsApp (Instagram DM / Messenger / Telegram) inbox
+/// threads,
 /// from `GET /v1/inbox/clients/:id/channel-threads` — one per connected
 /// channel account, most recently active first. Hydrated with the channel
 /// account's display name/status so the composer can render (and disable
@@ -26,6 +27,11 @@ abstract class ChannelThread with _$ChannelThread {
 
   factory ChannelThread.fromJson(Map<String, dynamic> json) =>
       _$ChannelThreadFromJson(json);
+
+  /// Whether replies on this channel are limited to a messaging window.
+  /// Telegram has none: a bot may answer at any time once the customer has
+  /// messaged it, so its composer is always open (KAN-423).
+  bool get hasMessagingWindow => channelType != 'telegram';
 
   /// Whether the 24-hour customer-service window is currently open
   /// (free-form sends allowed).

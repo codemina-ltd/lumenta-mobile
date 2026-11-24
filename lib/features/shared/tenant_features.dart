@@ -24,10 +24,11 @@ const channelFeatureKeys = [
   'channel_messenger',
   'channel_sms',
   'channel_email',
+  'channel_telegram',
 ];
 
 /// Whether [channelType] ('instagram' | 'messenger' | 'sms' | 'email' |
-/// 'whatsapp') is enabled by the tenant's feature flags.
+/// 'telegram' | 'whatsapp') is enabled by the tenant's feature flags.
 ///
 /// Fail-open by design: a null [flags] map (fetch pending or failed) and an
 /// unknown key both yield true, leaving the existing data-gating in charge —

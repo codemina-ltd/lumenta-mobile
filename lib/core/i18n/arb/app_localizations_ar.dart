@@ -1387,6 +1387,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get channelEmail => 'Email';
 
   @override
+  String get channelTelegram => 'تيليجرام';
+
+  @override
+  String get telegramBotBlocked =>
+      'حظرت جهة الاتصال هذا البوت. لا يمكن تسليم الرسائل حتى تلغي الحظر.';
+
+  @override
+  String get telegramBotUnblocked => 'ألغت جهة الاتصال حظر هذا البوت.';
+
+  @override
   String get channelHumanAgentLabel => 'إرسال كوكيل بشري (نافذة 7 أيام)';
 
   @override

@@ -42,6 +42,7 @@ void main() {
           'channel_messenger': false,
           'channel_sms': false,
           'channel_email': false,
+          'channel_telegram': false,
         }),
         isTrue,
       );
@@ -51,6 +52,7 @@ void main() {
           'channel_messenger': false,
           'channel_sms': false,
           'channel_email': false,
+          'channel_telegram': false,
         }),
         isFalse,
       );

@@ -187,6 +187,15 @@ abstract class Message with _$Message {
     if (RegExp(r'^\[Document(: .+)?\]$').hasMatch(b)) return null;
     return b;
   }
+  /// Event code of a Telegram system notice (`channel_payload.telegram.event`:
+  /// 'bot_blocked' | 'bot_unblocked'); null for every other message. The
+  /// bubble shows a localized line for it instead of the stored English text.
+  String? get telegramEvent {
+    final tg = channelPayload?['telegram'];
+    final event = tg is Map ? tg['event'] : null;
+    return event is String ? event : null;
+  }
+
   /// Story context on an inbound Instagram message — the customer replied to
   /// (kind 'reply') or mentioned the business in (kind 'mention') a story.
   /// `{kind, story_id, story_url}`; null for every other message.
