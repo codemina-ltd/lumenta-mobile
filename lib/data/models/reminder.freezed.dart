@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'reminder.dart';
@@ -9,6 +9,7 @@ part of 'reminder.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -31,16 +32,21 @@ $ReminderCopyWith<Reminder> get copyWith => _$ReminderCopyWithImpl<Reminder>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Reminder&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.assignedToUserId, assignedToUserId) || other.assignedToUserId == assignedToUserId)&&(identical(other.createdByUserId, createdByUserId) || other.createdByUserId == createdByUserId)&&(identical(other.title, title) || other.title == title)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.dueAt, dueAt) || other.dueAt == dueAt)&&(identical(other.status, status) || other.status == status)&&(identical(other.recurrence, recurrence) || other.recurrence == recurrence)&&(identical(other.source, source) || other.source == source)&&(identical(other.snoozeCount, snoozeCount) || other.snoozeCount == snoozeCount));
+  final _this = this as Reminder;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Reminder&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.clientId, _this.clientId) || other.clientId == _this.clientId)&&(identical(other.messageId, _this.messageId) || other.messageId == _this.messageId)&&(identical(other.assignedToUserId, _this.assignedToUserId) || other.assignedToUserId == _this.assignedToUserId)&&(identical(other.createdByUserId, _this.createdByUserId) || other.createdByUserId == _this.createdByUserId)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.notes, _this.notes) || other.notes == _this.notes)&&(identical(other.priority, _this.priority) || other.priority == _this.priority)&&(identical(other.dueAt, _this.dueAt) || other.dueAt == _this.dueAt)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.recurrence, _this.recurrence) || other.recurrence == _this.recurrence)&&(identical(other.source, _this.source) || other.source == _this.source)&&(identical(other.snoozeCount, _this.snoozeCount) || other.snoozeCount == _this.snoozeCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,messageId,assignedToUserId,createdByUserId,title,notes,priority,dueAt,status,recurrence,source,snoozeCount);
+int get hashCode {
+  final _this = this as Reminder;
+  return Object.hash(runtimeType,_this.id,_this.clientId,_this.messageId,_this.assignedToUserId,_this.createdByUserId,_this.title,_this.notes,_this.priority,_this.dueAt,_this.status,_this.recurrence,_this.source,_this.snoozeCount);
+}
 
 @override
 String toString() {
-  return 'Reminder(id: $id, clientId: $clientId, messageId: $messageId, assignedToUserId: $assignedToUserId, createdByUserId: $createdByUserId, title: $title, notes: $notes, priority: $priority, dueAt: $dueAt, status: $status, recurrence: $recurrence, source: $source, snoozeCount: $snoozeCount)';
+  final _this = this as Reminder;
+  return 'Reminder(id: ${_this.id}, clientId: ${_this.clientId}, messageId: ${_this.messageId}, assignedToUserId: ${_this.assignedToUserId}, createdByUserId: ${_this.createdByUserId}, title: ${_this.title}, notes: ${_this.notes}, priority: ${_this.priority}, dueAt: ${_this.dueAt}, status: ${_this.status}, recurrence: ${_this.recurrence}, source: ${_this.source}, snoozeCount: ${_this.snoozeCount})';
 }
 
 
@@ -69,7 +75,7 @@ class _$ReminderCopyWithImpl<$Res>
 /// Create a copy of Reminder
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? clientId = freezed,Object? messageId = freezed,Object? assignedToUserId = freezed,Object? createdByUserId = freezed,Object? title = null,Object? notes = freezed,Object? priority = null,Object? dueAt = null,Object? status = null,Object? recurrence = null,Object? source = null,Object? snoozeCount = null,}) {
-  return _then(_self.copyWith(
+  return _then(Reminder(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,clientId: freezed == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String?,messageId: freezed == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
@@ -257,16 +263,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Reminder&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.assignedToUserId, assignedToUserId) || other.assignedToUserId == assignedToUserId)&&(identical(other.createdByUserId, createdByUserId) || other.createdByUserId == createdByUserId)&&(identical(other.title, title) || other.title == title)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.dueAt, dueAt) || other.dueAt == dueAt)&&(identical(other.status, status) || other.status == status)&&(identical(other.recurrence, recurrence) || other.recurrence == recurrence)&&(identical(other.source, source) || other.source == source)&&(identical(other.snoozeCount, snoozeCount) || other.snoozeCount == snoozeCount));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Reminder&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.assignedToUserId, assignedToUserId) || other.assignedToUserId == assignedToUserId)&&(identical(other.createdByUserId, createdByUserId) || other.createdByUserId == createdByUserId)&&(identical(other.title, title) || other.title == title)&&(identical(other.notes, notes) || other.notes == notes)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.dueAt, dueAt) || other.dueAt == dueAt)&&(identical(other.status, status) || other.status == status)&&(identical(other.recurrence, recurrence) || other.recurrence == recurrence)&&(identical(other.source, source) || other.source == source)&&(identical(other.snoozeCount, snoozeCount) || other.snoozeCount == snoozeCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,messageId,assignedToUserId,createdByUserId,title,notes,priority,dueAt,status,recurrence,source,snoozeCount);
+int get hashCode {
+    return Object.hash(runtimeType,id,clientId,messageId,assignedToUserId,createdByUserId,title,notes,priority,dueAt,status,recurrence,source,snoozeCount);
+}
 
 @override
 String toString() {
-  return 'Reminder(id: $id, clientId: $clientId, messageId: $messageId, assignedToUserId: $assignedToUserId, createdByUserId: $createdByUserId, title: $title, notes: $notes, priority: $priority, dueAt: $dueAt, status: $status, recurrence: $recurrence, source: $source, snoozeCount: $snoozeCount)';
+    return 'Reminder(id: $id, clientId: $clientId, messageId: $messageId, assignedToUserId: $assignedToUserId, createdByUserId: $createdByUserId, title: $title, notes: $notes, priority: $priority, dueAt: $dueAt, status: $status, recurrence: $recurrence, source: $source, snoozeCount: $snoozeCount)';
 }
 
 
@@ -333,16 +341,21 @@ $ReminderSummaryCopyWith<ReminderSummary> get copyWith => _$ReminderSummaryCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReminderSummary&&(identical(other.overdue, overdue) || other.overdue == overdue)&&(identical(other.dueToday, dueToday) || other.dueToday == dueToday)&&(identical(other.upcoming, upcoming) || other.upcoming == upcoming));
+  final _this = this as ReminderSummary;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReminderSummary&&(identical(other.overdue, _this.overdue) || other.overdue == _this.overdue)&&(identical(other.dueToday, _this.dueToday) || other.dueToday == _this.dueToday)&&(identical(other.upcoming, _this.upcoming) || other.upcoming == _this.upcoming));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,overdue,dueToday,upcoming);
+int get hashCode {
+  final _this = this as ReminderSummary;
+  return Object.hash(runtimeType,_this.overdue,_this.dueToday,_this.upcoming);
+}
 
 @override
 String toString() {
-  return 'ReminderSummary(overdue: $overdue, dueToday: $dueToday, upcoming: $upcoming)';
+  final _this = this as ReminderSummary;
+  return 'ReminderSummary(overdue: ${_this.overdue}, dueToday: ${_this.dueToday}, upcoming: ${_this.upcoming})';
 }
 
 
@@ -371,7 +384,7 @@ class _$ReminderSummaryCopyWithImpl<$Res>
 /// Create a copy of ReminderSummary
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? overdue = null,Object? dueToday = null,Object? upcoming = null,}) {
-  return _then(_self.copyWith(
+  return _then(ReminderSummary(
 overdue: null == overdue ? _self.overdue : overdue // ignore: cast_nullable_to_non_nullable
 as int,dueToday: null == dueToday ? _self.dueToday : dueToday // ignore: cast_nullable_to_non_nullable
 as int,upcoming: null == upcoming ? _self.upcoming : upcoming // ignore: cast_nullable_to_non_nullable
@@ -536,16 +549,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReminderSummary&&(identical(other.overdue, overdue) || other.overdue == overdue)&&(identical(other.dueToday, dueToday) || other.dueToday == dueToday)&&(identical(other.upcoming, upcoming) || other.upcoming == upcoming));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReminderSummary&&(identical(other.overdue, overdue) || other.overdue == overdue)&&(identical(other.dueToday, dueToday) || other.dueToday == dueToday)&&(identical(other.upcoming, upcoming) || other.upcoming == upcoming));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,overdue,dueToday,upcoming);
+int get hashCode {
+    return Object.hash(runtimeType,overdue,dueToday,upcoming);
+}
 
 @override
 String toString() {
-  return 'ReminderSummary(overdue: $overdue, dueToday: $dueToday, upcoming: $upcoming)';
+    return 'ReminderSummary(overdue: $overdue, dueToday: $dueToday, upcoming: $upcoming)';
 }
 
 

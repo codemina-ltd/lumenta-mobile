@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'conversation_sender.dart';
@@ -9,6 +9,7 @@ part of 'conversation_sender.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $ConversationSenderCopyWith<ConversationSender> get copyWith => _$ConversationSe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConversationSender&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.displayPhoneNumber, displayPhoneNumber) || other.displayPhoneNumber == displayPhoneNumber)&&(identical(other.senderStatus, senderStatus) || other.senderStatus == senderStatus)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.messageCount, messageCount) || other.messageCount == messageCount)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection));
+  final _this = this as ConversationSender;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConversationSender&&(identical(other.senderId, _this.senderId) || other.senderId == _this.senderId)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.displayPhoneNumber, _this.displayPhoneNumber) || other.displayPhoneNumber == _this.displayPhoneNumber)&&(identical(other.senderStatus, _this.senderStatus) || other.senderStatus == _this.senderStatus)&&(identical(other.isDefault, _this.isDefault) || other.isDefault == _this.isDefault)&&(identical(other.messageCount, _this.messageCount) || other.messageCount == _this.messageCount)&&(identical(other.lastMessageAt, _this.lastMessageAt) || other.lastMessageAt == _this.lastMessageAt)&&(identical(other.lastMessageDirection, _this.lastMessageDirection) || other.lastMessageDirection == _this.lastMessageDirection));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,senderId,displayName,displayPhoneNumber,senderStatus,isDefault,messageCount,lastMessageAt,lastMessageDirection);
+int get hashCode {
+  final _this = this as ConversationSender;
+  return Object.hash(runtimeType,_this.senderId,_this.displayName,_this.displayPhoneNumber,_this.senderStatus,_this.isDefault,_this.messageCount,_this.lastMessageAt,_this.lastMessageDirection);
+}
 
 @override
 String toString() {
-  return 'ConversationSender(senderId: $senderId, displayName: $displayName, displayPhoneNumber: $displayPhoneNumber, senderStatus: $senderStatus, isDefault: $isDefault, messageCount: $messageCount, lastMessageAt: $lastMessageAt, lastMessageDirection: $lastMessageDirection)';
+  final _this = this as ConversationSender;
+  return 'ConversationSender(senderId: ${_this.senderId}, displayName: ${_this.displayName}, displayPhoneNumber: ${_this.displayPhoneNumber}, senderStatus: ${_this.senderStatus}, isDefault: ${_this.isDefault}, messageCount: ${_this.messageCount}, lastMessageAt: ${_this.lastMessageAt}, lastMessageDirection: ${_this.lastMessageDirection})';
 }
 
 
@@ -66,7 +72,7 @@ class _$ConversationSenderCopyWithImpl<$Res>
 /// Create a copy of ConversationSender
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? senderId = null,Object? displayName = freezed,Object? displayPhoneNumber = freezed,Object? senderStatus = null,Object? isDefault = null,Object? messageCount = null,Object? lastMessageAt = freezed,Object? lastMessageDirection = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(ConversationSender(
 senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
 as String,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,displayPhoneNumber: freezed == displayPhoneNumber ? _self.displayPhoneNumber : displayPhoneNumber // ignore: cast_nullable_to_non_nullable
@@ -241,16 +247,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConversationSender&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.displayPhoneNumber, displayPhoneNumber) || other.displayPhoneNumber == displayPhoneNumber)&&(identical(other.senderStatus, senderStatus) || other.senderStatus == senderStatus)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.messageCount, messageCount) || other.messageCount == messageCount)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConversationSender&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.displayPhoneNumber, displayPhoneNumber) || other.displayPhoneNumber == displayPhoneNumber)&&(identical(other.senderStatus, senderStatus) || other.senderStatus == senderStatus)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.messageCount, messageCount) || other.messageCount == messageCount)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,senderId,displayName,displayPhoneNumber,senderStatus,isDefault,messageCount,lastMessageAt,lastMessageDirection);
+int get hashCode {
+    return Object.hash(runtimeType,senderId,displayName,displayPhoneNumber,senderStatus,isDefault,messageCount,lastMessageAt,lastMessageDirection);
+}
 
 @override
 String toString() {
-  return 'ConversationSender(senderId: $senderId, displayName: $displayName, displayPhoneNumber: $displayPhoneNumber, senderStatus: $senderStatus, isDefault: $isDefault, messageCount: $messageCount, lastMessageAt: $lastMessageAt, lastMessageDirection: $lastMessageDirection)';
+    return 'ConversationSender(senderId: $senderId, displayName: $displayName, displayPhoneNumber: $displayPhoneNumber, senderStatus: $senderStatus, isDefault: $isDefault, messageCount: $messageCount, lastMessageAt: $lastMessageAt, lastMessageDirection: $lastMessageDirection)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'client_search.dart';
@@ -9,6 +9,7 @@ part of 'client_search.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -29,16 +30,21 @@ $ClientSearchMatchCopyWith<ClientSearchMatch> get copyWith => _$ClientSearchMatc
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClientSearchMatch&&(identical(other.source, source) || other.source == source)&&(identical(other.snippet, snippet) || other.snippet == snippet)&&(identical(other.fieldLabel, fieldLabel) || other.fieldLabel == fieldLabel));
+  final _this = this as ClientSearchMatch;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClientSearchMatch&&(identical(other.source, _this.source) || other.source == _this.source)&&(identical(other.snippet, _this.snippet) || other.snippet == _this.snippet)&&(identical(other.fieldLabel, _this.fieldLabel) || other.fieldLabel == _this.fieldLabel));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,source,snippet,fieldLabel);
+int get hashCode {
+  final _this = this as ClientSearchMatch;
+  return Object.hash(runtimeType,_this.source,_this.snippet,_this.fieldLabel);
+}
 
 @override
 String toString() {
-  return 'ClientSearchMatch(source: $source, snippet: $snippet, fieldLabel: $fieldLabel)';
+  final _this = this as ClientSearchMatch;
+  return 'ClientSearchMatch(source: ${_this.source}, snippet: ${_this.snippet}, fieldLabel: ${_this.fieldLabel})';
 }
 
 
@@ -67,7 +73,7 @@ class _$ClientSearchMatchCopyWithImpl<$Res>
 /// Create a copy of ClientSearchMatch
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? source = null,Object? snippet = null,Object? fieldLabel = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(ClientSearchMatch(
 source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
 as String,snippet: null == snippet ? _self.snippet : snippet // ignore: cast_nullable_to_non_nullable
 as String,fieldLabel: freezed == fieldLabel ? _self.fieldLabel : fieldLabel // ignore: cast_nullable_to_non_nullable
@@ -233,16 +239,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClientSearchMatch&&(identical(other.source, source) || other.source == source)&&(identical(other.snippet, snippet) || other.snippet == snippet)&&(identical(other.fieldLabel, fieldLabel) || other.fieldLabel == fieldLabel));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClientSearchMatch&&(identical(other.source, source) || other.source == source)&&(identical(other.snippet, snippet) || other.snippet == snippet)&&(identical(other.fieldLabel, fieldLabel) || other.fieldLabel == fieldLabel));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,source,snippet,fieldLabel);
+int get hashCode {
+    return Object.hash(runtimeType,source,snippet,fieldLabel);
+}
 
 @override
 String toString() {
-  return 'ClientSearchMatch(source: $source, snippet: $snippet, fieldLabel: $fieldLabel)';
+    return 'ClientSearchMatch(source: $source, snippet: $snippet, fieldLabel: $fieldLabel)';
 }
 
 
@@ -299,16 +307,21 @@ $ClientSearchResultCopyWith<ClientSearchResult> get copyWith => _$ClientSearchRe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClientSearchResult&&(identical(other.client, client) || other.client == client)&&(identical(other.score, score) || other.score == score)&&const DeepCollectionEquality().equals(other.matches, matches));
+  final _this = this as ClientSearchResult;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClientSearchResult&&(identical(other.client, _this.client) || other.client == _this.client)&&(identical(other.score, _this.score) || other.score == _this.score)&&const DeepCollectionEquality().equals(other.matches, _this.matches));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,client,score,const DeepCollectionEquality().hash(matches));
+int get hashCode {
+  final _this = this as ClientSearchResult;
+  return Object.hash(runtimeType,_this.client,_this.score,const DeepCollectionEquality().hash(_this.matches));
+}
 
 @override
 String toString() {
-  return 'ClientSearchResult(client: $client, score: $score, matches: $matches)';
+  final _this = this as ClientSearchResult;
+  return 'ClientSearchResult(client: ${_this.client}, score: ${_this.score}, matches: ${_this.matches})';
 }
 
 
@@ -337,7 +350,7 @@ class _$ClientSearchResultCopyWithImpl<$Res>
 /// Create a copy of ClientSearchResult
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? client = null,Object? score = null,Object? matches = null,}) {
-  return _then(_self.copyWith(
+  return _then(ClientSearchResult(
 client: null == client ? _self.client : client // ignore: cast_nullable_to_non_nullable
 as Client,score: null == score ? _self.score : score // ignore: cast_nullable_to_non_nullable
 as int,matches: null == matches ? _self.matches : matches // ignore: cast_nullable_to_non_nullable
@@ -491,7 +504,7 @@ return $default(_that.client,_that.score,_that.matches);case _:
 @JsonSerializable()
 
 class _ClientSearchResult implements ClientSearchResult {
-  const _ClientSearchResult({required this.client, required this.score, required final  List<ClientSearchMatch> matches}): _matches = matches;
+  const _ClientSearchResult({required this.client, required this.score, required  List<ClientSearchMatch> matches}): _matches = matches;
   factory _ClientSearchResult.fromJson(Map<String, dynamic> json) => _$ClientSearchResultFromJson(json);
 
 @override final  Client client;
@@ -517,16 +530,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClientSearchResult&&(identical(other.client, client) || other.client == client)&&(identical(other.score, score) || other.score == score)&&const DeepCollectionEquality().equals(other._matches, _matches));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClientSearchResult&&(identical(other.client, client) || other.client == client)&&(identical(other.score, score) || other.score == score)&&const DeepCollectionEquality().equals(other.matches, _matches));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,client,score,const DeepCollectionEquality().hash(_matches));
+int get hashCode {
+    return Object.hash(runtimeType,client,score,const DeepCollectionEquality().hash(_matches));
+}
 
 @override
 String toString() {
-  return 'ClientSearchResult(client: $client, score: $score, matches: $matches)';
+    return 'ClientSearchResult(client: $client, score: $score, matches: $matches)';
 }
 
 

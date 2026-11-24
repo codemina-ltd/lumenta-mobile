@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'client_phone_number.dart';
@@ -9,6 +9,7 @@ part of 'client_phone_number.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $ClientPhoneNumberCopyWith<ClientPhoneNumber> get copyWith => _$ClientPhoneNumbe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClientPhoneNumber&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.isPrimary, isPrimary) || other.isPrimary == isPrimary)&&(identical(other.label, label) || other.label == label)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  final _this = this as ClientPhoneNumber;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClientPhoneNumber&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.clientId, _this.clientId) || other.clientId == _this.clientId)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.isPrimary, _this.isPrimary) || other.isPrimary == _this.isPrimary)&&(identical(other.label, _this.label) || other.label == _this.label)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,phoneNumber,isPrimary,label,createdAt);
+int get hashCode {
+  final _this = this as ClientPhoneNumber;
+  return Object.hash(runtimeType,_this.id,_this.clientId,_this.phoneNumber,_this.isPrimary,_this.label,_this.createdAt);
+}
 
 @override
 String toString() {
-  return 'ClientPhoneNumber(id: $id, clientId: $clientId, phoneNumber: $phoneNumber, isPrimary: $isPrimary, label: $label, createdAt: $createdAt)';
+  final _this = this as ClientPhoneNumber;
+  return 'ClientPhoneNumber(id: ${_this.id}, clientId: ${_this.clientId}, phoneNumber: ${_this.phoneNumber}, isPrimary: ${_this.isPrimary}, label: ${_this.label}, createdAt: ${_this.createdAt})';
 }
 
 
@@ -66,7 +72,7 @@ class _$ClientPhoneNumberCopyWithImpl<$Res>
 /// Create a copy of ClientPhoneNumber
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? clientId = null,Object? phoneNumber = null,Object? isPrimary = null,Object? label = freezed,Object? createdAt = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(ClientPhoneNumber(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String,phoneNumber: null == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -237,16 +243,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClientPhoneNumber&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.isPrimary, isPrimary) || other.isPrimary == isPrimary)&&(identical(other.label, label) || other.label == label)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClientPhoneNumber&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.isPrimary, isPrimary) || other.isPrimary == isPrimary)&&(identical(other.label, label) || other.label == label)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,phoneNumber,isPrimary,label,createdAt);
+int get hashCode {
+    return Object.hash(runtimeType,id,clientId,phoneNumber,isPrimary,label,createdAt);
+}
 
 @override
 String toString() {
-  return 'ClientPhoneNumber(id: $id, clientId: $clientId, phoneNumber: $phoneNumber, isPrimary: $isPrimary, label: $label, createdAt: $createdAt)';
+    return 'ClientPhoneNumber(id: $id, clientId: $clientId, phoneNumber: $phoneNumber, isPrimary: $isPrimary, label: $label, createdAt: $createdAt)';
 }
 
 

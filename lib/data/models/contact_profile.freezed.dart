@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'contact_profile.dart';
@@ -9,6 +9,7 @@ part of 'contact_profile.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $ContactProfileCopyWith<ContactProfile> get copyWith => _$ContactProfileCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.lifecycleStageId, lifecycleStageId) || other.lifecycleStageId == lifecycleStageId)&&(identical(other.source, source) || other.source == source)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.locale, locale) || other.locale == locale)&&(identical(other.optInMarketing, optInMarketing) || other.optInMarketing == optInMarketing)&&(identical(other.optInAt, optInAt) || other.optInAt == optInAt)&&(identical(other.firstContactedAt, firstContactedAt) || other.firstContactedAt == firstContactedAt)&&(identical(other.lastContactedAt, lastContactedAt) || other.lastContactedAt == lastContactedAt));
+  final _this = this as ContactProfile;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactProfile&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.clientId, _this.clientId) || other.clientId == _this.clientId)&&(identical(other.lifecycleStageId, _this.lifecycleStageId) || other.lifecycleStageId == _this.lifecycleStageId)&&(identical(other.source, _this.source) || other.source == _this.source)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.locale, _this.locale) || other.locale == _this.locale)&&(identical(other.optInMarketing, _this.optInMarketing) || other.optInMarketing == _this.optInMarketing)&&(identical(other.optInAt, _this.optInAt) || other.optInAt == _this.optInAt)&&(identical(other.firstContactedAt, _this.firstContactedAt) || other.firstContactedAt == _this.firstContactedAt)&&(identical(other.lastContactedAt, _this.lastContactedAt) || other.lastContactedAt == _this.lastContactedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,lifecycleStageId,source,displayName,locale,optInMarketing,optInAt,firstContactedAt,lastContactedAt);
+int get hashCode {
+  final _this = this as ContactProfile;
+  return Object.hash(runtimeType,_this.id,_this.clientId,_this.lifecycleStageId,_this.source,_this.displayName,_this.locale,_this.optInMarketing,_this.optInAt,_this.firstContactedAt,_this.lastContactedAt);
+}
 
 @override
 String toString() {
-  return 'ContactProfile(id: $id, clientId: $clientId, lifecycleStageId: $lifecycleStageId, source: $source, displayName: $displayName, locale: $locale, optInMarketing: $optInMarketing, optInAt: $optInAt, firstContactedAt: $firstContactedAt, lastContactedAt: $lastContactedAt)';
+  final _this = this as ContactProfile;
+  return 'ContactProfile(id: ${_this.id}, clientId: ${_this.clientId}, lifecycleStageId: ${_this.lifecycleStageId}, source: ${_this.source}, displayName: ${_this.displayName}, locale: ${_this.locale}, optInMarketing: ${_this.optInMarketing}, optInAt: ${_this.optInAt}, firstContactedAt: ${_this.firstContactedAt}, lastContactedAt: ${_this.lastContactedAt})';
 }
 
 
@@ -66,7 +72,7 @@ class _$ContactProfileCopyWithImpl<$Res>
 /// Create a copy of ContactProfile
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? clientId = null,Object? lifecycleStageId = freezed,Object? source = freezed,Object? displayName = freezed,Object? locale = freezed,Object? optInMarketing = null,Object? optInAt = freezed,Object? firstContactedAt = freezed,Object? lastContactedAt = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(ContactProfile(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String,lifecycleStageId: freezed == lifecycleStageId ? _self.lifecycleStageId : lifecycleStageId // ignore: cast_nullable_to_non_nullable
@@ -245,16 +251,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.lifecycleStageId, lifecycleStageId) || other.lifecycleStageId == lifecycleStageId)&&(identical(other.source, source) || other.source == source)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.locale, locale) || other.locale == locale)&&(identical(other.optInMarketing, optInMarketing) || other.optInMarketing == optInMarketing)&&(identical(other.optInAt, optInAt) || other.optInAt == optInAt)&&(identical(other.firstContactedAt, firstContactedAt) || other.firstContactedAt == firstContactedAt)&&(identical(other.lastContactedAt, lastContactedAt) || other.lastContactedAt == lastContactedAt));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactProfile&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.lifecycleStageId, lifecycleStageId) || other.lifecycleStageId == lifecycleStageId)&&(identical(other.source, source) || other.source == source)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.locale, locale) || other.locale == locale)&&(identical(other.optInMarketing, optInMarketing) || other.optInMarketing == optInMarketing)&&(identical(other.optInAt, optInAt) || other.optInAt == optInAt)&&(identical(other.firstContactedAt, firstContactedAt) || other.firstContactedAt == firstContactedAt)&&(identical(other.lastContactedAt, lastContactedAt) || other.lastContactedAt == lastContactedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,lifecycleStageId,source,displayName,locale,optInMarketing,optInAt,firstContactedAt,lastContactedAt);
+int get hashCode {
+    return Object.hash(runtimeType,id,clientId,lifecycleStageId,source,displayName,locale,optInMarketing,optInAt,firstContactedAt,lastContactedAt);
+}
 
 @override
 String toString() {
-  return 'ContactProfile(id: $id, clientId: $clientId, lifecycleStageId: $lifecycleStageId, source: $source, displayName: $displayName, locale: $locale, optInMarketing: $optInMarketing, optInAt: $optInAt, firstContactedAt: $firstContactedAt, lastContactedAt: $lastContactedAt)';
+    return 'ContactProfile(id: $id, clientId: $clientId, lifecycleStageId: $lifecycleStageId, source: $source, displayName: $displayName, locale: $locale, optInMarketing: $optInMarketing, optInAt: $optInAt, firstContactedAt: $firstContactedAt, lastContactedAt: $lastContactedAt)';
 }
 
 
@@ -318,16 +326,21 @@ $ContactProfileResponseCopyWith<ContactProfileResponse> get copyWith => _$Contac
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactProfileResponse&&(identical(other.profile, profile) || other.profile == profile)&&const DeepCollectionEquality().equals(other.fieldValues, fieldValues));
+  final _this = this as ContactProfileResponse;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactProfileResponse&&(identical(other.profile, _this.profile) || other.profile == _this.profile)&&const DeepCollectionEquality().equals(other.fieldValues, _this.fieldValues));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,profile,const DeepCollectionEquality().hash(fieldValues));
+int get hashCode {
+  final _this = this as ContactProfileResponse;
+  return Object.hash(runtimeType,_this.profile,const DeepCollectionEquality().hash(_this.fieldValues));
+}
 
 @override
 String toString() {
-  return 'ContactProfileResponse(profile: $profile, fieldValues: $fieldValues)';
+  final _this = this as ContactProfileResponse;
+  return 'ContactProfileResponse(profile: ${_this.profile}, fieldValues: ${_this.fieldValues})';
 }
 
 
@@ -356,7 +369,7 @@ class _$ContactProfileResponseCopyWithImpl<$Res>
 /// Create a copy of ContactProfileResponse
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? profile = freezed,Object? fieldValues = null,}) {
-  return _then(_self.copyWith(
+  return _then(ContactProfileResponse(
 profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as ContactProfile?,fieldValues: null == fieldValues ? _self.fieldValues : fieldValues // ignore: cast_nullable_to_non_nullable
 as Map<String, String>,
@@ -512,7 +525,7 @@ return $default(_that.profile,_that.fieldValues);case _:
 @JsonSerializable()
 
 class _ContactProfileResponse implements ContactProfileResponse {
-  const _ContactProfileResponse({this.profile, final  Map<String, String> fieldValues = const <String, String>{}}): _fieldValues = fieldValues;
+  const _ContactProfileResponse({this.profile,  Map<String, String> fieldValues = const <String, String>{}}): _fieldValues = fieldValues;
   factory _ContactProfileResponse.fromJson(Map<String, dynamic> json) => _$ContactProfileResponseFromJson(json);
 
 @override final  ContactProfile? profile;
@@ -537,16 +550,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactProfileResponse&&(identical(other.profile, profile) || other.profile == profile)&&const DeepCollectionEquality().equals(other._fieldValues, _fieldValues));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactProfileResponse&&(identical(other.profile, profile) || other.profile == profile)&&const DeepCollectionEquality().equals(other.fieldValues, _fieldValues));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,profile,const DeepCollectionEquality().hash(_fieldValues));
+int get hashCode {
+    return Object.hash(runtimeType,profile,const DeepCollectionEquality().hash(_fieldValues));
+}
 
 @override
 String toString() {
-  return 'ContactProfileResponse(profile: $profile, fieldValues: $fieldValues)';
+    return 'ContactProfileResponse(profile: $profile, fieldValues: $fieldValues)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'template.dart';
@@ -9,6 +9,7 @@ part of 'template.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -32,16 +33,21 @@ $TemplateCopyWith<Template> get copyWith => _$TemplateCopyWithImpl<Template>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Template&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.category, category) || other.category == category)&&(identical(other.language, language) || other.language == language)&&(identical(other.status, status) || other.status == status)&&(identical(other.parameterFormat, parameterFormat) || other.parameterFormat == parameterFormat)&&(identical(other.body, body) || other.body == body)&&const DeepCollectionEquality().equals(other.variables, variables)&&(identical(other.headerFormat, headerFormat) || other.headerFormat == headerFormat)&&(identical(other.headerText, headerText) || other.headerText == headerText)&&(identical(other.headerS3Key, headerS3Key) || other.headerS3Key == headerS3Key)&&(identical(other.headerMediaUrl, headerMediaUrl) || other.headerMediaUrl == headerMediaUrl)&&(identical(other.footerText, footerText) || other.footerText == footerText)&&const DeepCollectionEquality().equals(other.buttons, buttons)&&const DeepCollectionEquality().equals(other.bodyExample, bodyExample)&&const DeepCollectionEquality().equals(other.headerExample, headerExample)&&const DeepCollectionEquality().equals(other.carouselCards, carouselCards));
+  final _this = this as Template;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Template&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.category, _this.category) || other.category == _this.category)&&(identical(other.language, _this.language) || other.language == _this.language)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.parameterFormat, _this.parameterFormat) || other.parameterFormat == _this.parameterFormat)&&(identical(other.body, _this.body) || other.body == _this.body)&&const DeepCollectionEquality().equals(other.variables, _this.variables)&&(identical(other.headerFormat, _this.headerFormat) || other.headerFormat == _this.headerFormat)&&(identical(other.headerText, _this.headerText) || other.headerText == _this.headerText)&&(identical(other.headerS3Key, _this.headerS3Key) || other.headerS3Key == _this.headerS3Key)&&(identical(other.headerMediaUrl, _this.headerMediaUrl) || other.headerMediaUrl == _this.headerMediaUrl)&&(identical(other.footerText, _this.footerText) || other.footerText == _this.footerText)&&const DeepCollectionEquality().equals(other.buttons, _this.buttons)&&const DeepCollectionEquality().equals(other.bodyExample, _this.bodyExample)&&const DeepCollectionEquality().equals(other.headerExample, _this.headerExample)&&const DeepCollectionEquality().equals(other.carouselCards, _this.carouselCards));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,category,language,status,parameterFormat,body,const DeepCollectionEquality().hash(variables),headerFormat,headerText,headerS3Key,headerMediaUrl,footerText,const DeepCollectionEquality().hash(buttons),const DeepCollectionEquality().hash(bodyExample),const DeepCollectionEquality().hash(headerExample),const DeepCollectionEquality().hash(carouselCards));
+int get hashCode {
+  final _this = this as Template;
+  return Object.hash(runtimeType,_this.id,_this.name,_this.category,_this.language,_this.status,_this.parameterFormat,_this.body,const DeepCollectionEquality().hash(_this.variables),_this.headerFormat,_this.headerText,_this.headerS3Key,_this.headerMediaUrl,_this.footerText,const DeepCollectionEquality().hash(_this.buttons),const DeepCollectionEquality().hash(_this.bodyExample),const DeepCollectionEquality().hash(_this.headerExample),const DeepCollectionEquality().hash(_this.carouselCards));
+}
 
 @override
 String toString() {
-  return 'Template(id: $id, name: $name, category: $category, language: $language, status: $status, parameterFormat: $parameterFormat, body: $body, variables: $variables, headerFormat: $headerFormat, headerText: $headerText, headerS3Key: $headerS3Key, headerMediaUrl: $headerMediaUrl, footerText: $footerText, buttons: $buttons, bodyExample: $bodyExample, headerExample: $headerExample, carouselCards: $carouselCards)';
+  final _this = this as Template;
+  return 'Template(id: ${_this.id}, name: ${_this.name}, category: ${_this.category}, language: ${_this.language}, status: ${_this.status}, parameterFormat: ${_this.parameterFormat}, body: ${_this.body}, variables: ${_this.variables}, headerFormat: ${_this.headerFormat}, headerText: ${_this.headerText}, headerS3Key: ${_this.headerS3Key}, headerMediaUrl: ${_this.headerMediaUrl}, footerText: ${_this.footerText}, buttons: ${_this.buttons}, bodyExample: ${_this.bodyExample}, headerExample: ${_this.headerExample}, carouselCards: ${_this.carouselCards})';
 }
 
 
@@ -70,7 +76,7 @@ class _$TemplateCopyWithImpl<$Res>
 /// Create a copy of Template
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? category = null,Object? language = null,Object? status = null,Object? parameterFormat = null,Object? body = null,Object? variables = freezed,Object? headerFormat = freezed,Object? headerText = freezed,Object? headerS3Key = freezed,Object? headerMediaUrl = freezed,Object? footerText = freezed,Object? buttons = freezed,Object? bodyExample = freezed,Object? headerExample = freezed,Object? carouselCards = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(Template(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,category: null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
@@ -227,7 +233,7 @@ return $default(_that.id,_that.name,_that.category,_that.language,_that.status,_
 @JsonSerializable()
 
 class _Template extends Template {
-  const _Template({required this.id, this.name = '', this.category = '', this.language = '', this.status = '', this.parameterFormat = 'positional', this.body = '', final  List<String>? variables, this.headerFormat, this.headerText, this.headerS3Key, this.headerMediaUrl, this.footerText, final  List<dynamic>? buttons, this.bodyExample, this.headerExample, final  List<TemplateCarouselCard>? carouselCards}): _variables = variables,_buttons = buttons,_carouselCards = carouselCards,super._();
+  const _Template({required this.id, this.name = '', this.category = '', this.language = '', this.status = '', this.parameterFormat = 'positional', this.body = '',  List<String>? variables, this.headerFormat, this.headerText, this.headerS3Key, this.headerMediaUrl, this.footerText,  List<dynamic>? buttons, this.bodyExample, this.headerExample,  List<TemplateCarouselCard>? carouselCards}): _variables = variables,_buttons = buttons,_carouselCards = carouselCards,super._();
   factory _Template.fromJson(Map<String, dynamic> json) => _$TemplateFromJson(json);
 
 @override final  String id;
@@ -291,16 +297,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Template&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.category, category) || other.category == category)&&(identical(other.language, language) || other.language == language)&&(identical(other.status, status) || other.status == status)&&(identical(other.parameterFormat, parameterFormat) || other.parameterFormat == parameterFormat)&&(identical(other.body, body) || other.body == body)&&const DeepCollectionEquality().equals(other._variables, _variables)&&(identical(other.headerFormat, headerFormat) || other.headerFormat == headerFormat)&&(identical(other.headerText, headerText) || other.headerText == headerText)&&(identical(other.headerS3Key, headerS3Key) || other.headerS3Key == headerS3Key)&&(identical(other.headerMediaUrl, headerMediaUrl) || other.headerMediaUrl == headerMediaUrl)&&(identical(other.footerText, footerText) || other.footerText == footerText)&&const DeepCollectionEquality().equals(other._buttons, _buttons)&&const DeepCollectionEquality().equals(other.bodyExample, bodyExample)&&const DeepCollectionEquality().equals(other.headerExample, headerExample)&&const DeepCollectionEquality().equals(other._carouselCards, _carouselCards));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Template&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.category, category) || other.category == category)&&(identical(other.language, language) || other.language == language)&&(identical(other.status, status) || other.status == status)&&(identical(other.parameterFormat, parameterFormat) || other.parameterFormat == parameterFormat)&&(identical(other.body, body) || other.body == body)&&const DeepCollectionEquality().equals(other.variables, _variables)&&(identical(other.headerFormat, headerFormat) || other.headerFormat == headerFormat)&&(identical(other.headerText, headerText) || other.headerText == headerText)&&(identical(other.headerS3Key, headerS3Key) || other.headerS3Key == headerS3Key)&&(identical(other.headerMediaUrl, headerMediaUrl) || other.headerMediaUrl == headerMediaUrl)&&(identical(other.footerText, footerText) || other.footerText == footerText)&&const DeepCollectionEquality().equals(other.buttons, _buttons)&&const DeepCollectionEquality().equals(other.bodyExample, bodyExample)&&const DeepCollectionEquality().equals(other.headerExample, headerExample)&&const DeepCollectionEquality().equals(other.carouselCards, _carouselCards));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,category,language,status,parameterFormat,body,const DeepCollectionEquality().hash(_variables),headerFormat,headerText,headerS3Key,headerMediaUrl,footerText,const DeepCollectionEquality().hash(_buttons),const DeepCollectionEquality().hash(bodyExample),const DeepCollectionEquality().hash(headerExample),const DeepCollectionEquality().hash(_carouselCards));
+int get hashCode {
+    return Object.hash(runtimeType,id,name,category,language,status,parameterFormat,body,const DeepCollectionEquality().hash(_variables),headerFormat,headerText,headerS3Key,headerMediaUrl,footerText,const DeepCollectionEquality().hash(_buttons),const DeepCollectionEquality().hash(bodyExample),const DeepCollectionEquality().hash(headerExample),const DeepCollectionEquality().hash(_carouselCards));
+}
 
 @override
 String toString() {
-  return 'Template(id: $id, name: $name, category: $category, language: $language, status: $status, parameterFormat: $parameterFormat, body: $body, variables: $variables, headerFormat: $headerFormat, headerText: $headerText, headerS3Key: $headerS3Key, headerMediaUrl: $headerMediaUrl, footerText: $footerText, buttons: $buttons, bodyExample: $bodyExample, headerExample: $headerExample, carouselCards: $carouselCards)';
+    return 'Template(id: $id, name: $name, category: $category, language: $language, status: $status, parameterFormat: $parameterFormat, body: $body, variables: $variables, headerFormat: $headerFormat, headerText: $headerText, headerS3Key: $headerS3Key, headerMediaUrl: $headerMediaUrl, footerText: $footerText, buttons: $buttons, bodyExample: $bodyExample, headerExample: $headerExample, carouselCards: $carouselCards)';
 }
 
 
@@ -370,16 +378,21 @@ $TemplateCarouselCardCopyWith<TemplateCarouselCard> get copyWith => _$TemplateCa
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TemplateCarouselCard&&(identical(other.headerFormat, headerFormat) || other.headerFormat == headerFormat)&&(identical(other.body, body) || other.body == body)&&const DeepCollectionEquality().equals(other.bodyExample, bodyExample)&&const DeepCollectionEquality().equals(other.buttons, buttons)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl));
+  final _this = this as TemplateCarouselCard;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TemplateCarouselCard&&(identical(other.headerFormat, _this.headerFormat) || other.headerFormat == _this.headerFormat)&&(identical(other.body, _this.body) || other.body == _this.body)&&const DeepCollectionEquality().equals(other.bodyExample, _this.bodyExample)&&const DeepCollectionEquality().equals(other.buttons, _this.buttons)&&(identical(other.mediaUrl, _this.mediaUrl) || other.mediaUrl == _this.mediaUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,headerFormat,body,const DeepCollectionEquality().hash(bodyExample),const DeepCollectionEquality().hash(buttons),mediaUrl);
+int get hashCode {
+  final _this = this as TemplateCarouselCard;
+  return Object.hash(runtimeType,_this.headerFormat,_this.body,const DeepCollectionEquality().hash(_this.bodyExample),const DeepCollectionEquality().hash(_this.buttons),_this.mediaUrl);
+}
 
 @override
 String toString() {
-  return 'TemplateCarouselCard(headerFormat: $headerFormat, body: $body, bodyExample: $bodyExample, buttons: $buttons, mediaUrl: $mediaUrl)';
+  final _this = this as TemplateCarouselCard;
+  return 'TemplateCarouselCard(headerFormat: ${_this.headerFormat}, body: ${_this.body}, bodyExample: ${_this.bodyExample}, buttons: ${_this.buttons}, mediaUrl: ${_this.mediaUrl})';
 }
 
 
@@ -408,7 +421,7 @@ class _$TemplateCarouselCardCopyWithImpl<$Res>
 /// Create a copy of TemplateCarouselCard
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? headerFormat = null,Object? body = null,Object? bodyExample = freezed,Object? buttons = freezed,Object? mediaUrl = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(TemplateCarouselCard(
 headerFormat: null == headerFormat ? _self.headerFormat : headerFormat // ignore: cast_nullable_to_non_nullable
 as String,body: null == body ? _self.body : body // ignore: cast_nullable_to_non_nullable
 as String,bodyExample: freezed == bodyExample ? _self.bodyExample : bodyExample ,buttons: freezed == buttons ? _self.buttons : buttons // ignore: cast_nullable_to_non_nullable
@@ -554,7 +567,7 @@ return $default(_that.headerFormat,_that.body,_that.bodyExample,_that.buttons,_t
 @JsonSerializable()
 
 class _TemplateCarouselCard extends TemplateCarouselCard {
-  const _TemplateCarouselCard({this.headerFormat = 'IMAGE', this.body = '', this.bodyExample, final  List<dynamic>? buttons, this.mediaUrl}): _buttons = buttons,super._();
+  const _TemplateCarouselCard({this.headerFormat = 'IMAGE', this.body = '', this.bodyExample,  List<dynamic>? buttons, this.mediaUrl}): _buttons = buttons,super._();
   factory _TemplateCarouselCard.fromJson(Map<String, dynamic> json) => _$TemplateCarouselCardFromJson(json);
 
 @override@JsonKey() final  String headerFormat;
@@ -585,16 +598,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TemplateCarouselCard&&(identical(other.headerFormat, headerFormat) || other.headerFormat == headerFormat)&&(identical(other.body, body) || other.body == body)&&const DeepCollectionEquality().equals(other.bodyExample, bodyExample)&&const DeepCollectionEquality().equals(other._buttons, _buttons)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _TemplateCarouselCard&&(identical(other.headerFormat, headerFormat) || other.headerFormat == headerFormat)&&(identical(other.body, body) || other.body == body)&&const DeepCollectionEquality().equals(other.bodyExample, bodyExample)&&const DeepCollectionEquality().equals(other.buttons, _buttons)&&(identical(other.mediaUrl, mediaUrl) || other.mediaUrl == mediaUrl));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,headerFormat,body,const DeepCollectionEquality().hash(bodyExample),const DeepCollectionEquality().hash(_buttons),mediaUrl);
+int get hashCode {
+    return Object.hash(runtimeType,headerFormat,body,const DeepCollectionEquality().hash(bodyExample),const DeepCollectionEquality().hash(_buttons),mediaUrl);
+}
 
 @override
 String toString() {
-  return 'TemplateCarouselCard(headerFormat: $headerFormat, body: $body, bodyExample: $bodyExample, buttons: $buttons, mediaUrl: $mediaUrl)';
+    return 'TemplateCarouselCard(headerFormat: $headerFormat, body: $body, bodyExample: $bodyExample, buttons: $buttons, mediaUrl: $mediaUrl)';
 }
 
 

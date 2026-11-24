@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'inbox_note.dart';
@@ -9,6 +9,7 @@ part of 'inbox_note.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -29,16 +30,21 @@ $InboxNoteCopyWith<InboxNote> get copyWith => _$InboxNoteCopyWithImpl<InboxNote>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxNote&&(identical(other.id, id) || other.id == id)&&(identical(other.threadId, threadId) || other.threadId == threadId)&&(identical(other.authorUserId, authorUserId) || other.authorUserId == authorUserId)&&(identical(other.body, body) || other.body == body)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.reactions, reactions));
+  final _this = this as InboxNote;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxNote&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.threadId, _this.threadId) || other.threadId == _this.threadId)&&(identical(other.authorUserId, _this.authorUserId) || other.authorUserId == _this.authorUserId)&&(identical(other.body, _this.body) || other.body == _this.body)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&const DeepCollectionEquality().equals(other.reactions, _this.reactions));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,threadId,authorUserId,body,createdAt,const DeepCollectionEquality().hash(reactions));
+int get hashCode {
+  final _this = this as InboxNote;
+  return Object.hash(runtimeType,_this.id,_this.threadId,_this.authorUserId,_this.body,_this.createdAt,const DeepCollectionEquality().hash(_this.reactions));
+}
 
 @override
 String toString() {
-  return 'InboxNote(id: $id, threadId: $threadId, authorUserId: $authorUserId, body: $body, createdAt: $createdAt, reactions: $reactions)';
+  final _this = this as InboxNote;
+  return 'InboxNote(id: ${_this.id}, threadId: ${_this.threadId}, authorUserId: ${_this.authorUserId}, body: ${_this.body}, createdAt: ${_this.createdAt}, reactions: ${_this.reactions})';
 }
 
 
@@ -67,7 +73,7 @@ class _$InboxNoteCopyWithImpl<$Res>
 /// Create a copy of InboxNote
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? threadId = null,Object? authorUserId = null,Object? body = null,Object? createdAt = freezed,Object? reactions = null,}) {
-  return _then(_self.copyWith(
+  return _then(InboxNote(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,threadId: null == threadId ? _self.threadId : threadId // ignore: cast_nullable_to_non_nullable
 as String,authorUserId: null == authorUserId ? _self.authorUserId : authorUserId // ignore: cast_nullable_to_non_nullable
@@ -215,7 +221,7 @@ return $default(_that.id,_that.threadId,_that.authorUserId,_that.body,_that.crea
 @JsonSerializable()
 
 class _InboxNote extends InboxNote {
-  const _InboxNote({required this.id, required this.threadId, required this.authorUserId, required this.body, this.createdAt, final  List<InboxNoteReaction> reactions = const <InboxNoteReaction>[]}): _reactions = reactions,super._();
+  const _InboxNote({required this.id, required this.threadId, required this.authorUserId, required this.body, this.createdAt,  List<InboxNoteReaction> reactions = const <InboxNoteReaction>[]}): _reactions = reactions,super._();
   factory _InboxNote.fromJson(Map<String, dynamic> json) => _$InboxNoteFromJson(json);
 
 @override final  String id;
@@ -246,16 +252,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxNote&&(identical(other.id, id) || other.id == id)&&(identical(other.threadId, threadId) || other.threadId == threadId)&&(identical(other.authorUserId, authorUserId) || other.authorUserId == authorUserId)&&(identical(other.body, body) || other.body == body)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._reactions, _reactions));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxNote&&(identical(other.id, id) || other.id == id)&&(identical(other.threadId, threadId) || other.threadId == threadId)&&(identical(other.authorUserId, authorUserId) || other.authorUserId == authorUserId)&&(identical(other.body, body) || other.body == body)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.reactions, _reactions));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,threadId,authorUserId,body,createdAt,const DeepCollectionEquality().hash(_reactions));
+int get hashCode {
+    return Object.hash(runtimeType,id,threadId,authorUserId,body,createdAt,const DeepCollectionEquality().hash(_reactions));
+}
 
 @override
 String toString() {
-  return 'InboxNote(id: $id, threadId: $threadId, authorUserId: $authorUserId, body: $body, createdAt: $createdAt, reactions: $reactions)';
+    return 'InboxNote(id: $id, threadId: $threadId, authorUserId: $authorUserId, body: $body, createdAt: $createdAt, reactions: $reactions)';
 }
 
 
@@ -315,16 +323,21 @@ $InboxNoteReactionCopyWith<InboxNoteReaction> get copyWith => _$InboxNoteReactio
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxNoteReaction&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other.userIds, userIds)&&(identical(other.reactedByMe, reactedByMe) || other.reactedByMe == reactedByMe));
+  final _this = this as InboxNoteReaction;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxNoteReaction&&(identical(other.emoji, _this.emoji) || other.emoji == _this.emoji)&&(identical(other.count, _this.count) || other.count == _this.count)&&const DeepCollectionEquality().equals(other.userIds, _this.userIds)&&(identical(other.reactedByMe, _this.reactedByMe) || other.reactedByMe == _this.reactedByMe));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,emoji,count,const DeepCollectionEquality().hash(userIds),reactedByMe);
+int get hashCode {
+  final _this = this as InboxNoteReaction;
+  return Object.hash(runtimeType,_this.emoji,_this.count,const DeepCollectionEquality().hash(_this.userIds),_this.reactedByMe);
+}
 
 @override
 String toString() {
-  return 'InboxNoteReaction(emoji: $emoji, count: $count, userIds: $userIds, reactedByMe: $reactedByMe)';
+  final _this = this as InboxNoteReaction;
+  return 'InboxNoteReaction(emoji: ${_this.emoji}, count: ${_this.count}, userIds: ${_this.userIds}, reactedByMe: ${_this.reactedByMe})';
 }
 
 
@@ -353,7 +366,7 @@ class _$InboxNoteReactionCopyWithImpl<$Res>
 /// Create a copy of InboxNoteReaction
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? emoji = null,Object? count = null,Object? userIds = null,Object? reactedByMe = null,}) {
-  return _then(_self.copyWith(
+  return _then(InboxNoteReaction(
 emoji: null == emoji ? _self.emoji : emoji // ignore: cast_nullable_to_non_nullable
 as String,count: null == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
 as int,userIds: null == userIds ? _self.userIds : userIds // ignore: cast_nullable_to_non_nullable
@@ -499,7 +512,7 @@ return $default(_that.emoji,_that.count,_that.userIds,_that.reactedByMe);case _:
 @JsonSerializable()
 
 class _InboxNoteReaction implements InboxNoteReaction {
-  const _InboxNoteReaction({required this.emoji, this.count = 0, final  List<String> userIds = const <String>[], this.reactedByMe = false}): _userIds = userIds;
+  const _InboxNoteReaction({required this.emoji, this.count = 0,  List<String> userIds = const <String>[], this.reactedByMe = false}): _userIds = userIds;
   factory _InboxNoteReaction.fromJson(Map<String, dynamic> json) => _$InboxNoteReactionFromJson(json);
 
 @override final  String emoji;
@@ -526,16 +539,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxNoteReaction&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other._userIds, _userIds)&&(identical(other.reactedByMe, reactedByMe) || other.reactedByMe == reactedByMe));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxNoteReaction&&(identical(other.emoji, emoji) || other.emoji == emoji)&&(identical(other.count, count) || other.count == count)&&const DeepCollectionEquality().equals(other.userIds, _userIds)&&(identical(other.reactedByMe, reactedByMe) || other.reactedByMe == reactedByMe));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,emoji,count,const DeepCollectionEquality().hash(_userIds),reactedByMe);
+int get hashCode {
+    return Object.hash(runtimeType,emoji,count,const DeepCollectionEquality().hash(_userIds),reactedByMe);
+}
 
 @override
 String toString() {
-  return 'InboxNoteReaction(emoji: $emoji, count: $count, userIds: $userIds, reactedByMe: $reactedByMe)';
+    return 'InboxNoteReaction(emoji: $emoji, count: $count, userIds: $userIds, reactedByMe: $reactedByMe)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'scheduled_message.dart';
@@ -9,6 +9,7 @@ part of 'scheduled_message.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -35,16 +36,21 @@ $ScheduledMessageCopyWith<ScheduledMessage> get copyWith => _$ScheduledMessageCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScheduledMessage&&(identical(other.id, id) || other.id == id)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.createdByUserId, createdByUserId) || other.createdByUserId == createdByUserId)&&(identical(other.templateId, templateId) || other.templateId == templateId)&&(identical(other.templateName, templateName) || other.templateName == templateName)&&(identical(other.templateLanguage, templateLanguage) || other.templateLanguage == templateLanguage)&&const DeepCollectionEquality().equals(other.templateVariables, templateVariables)&&const DeepCollectionEquality().equals(other.buttonVariables, buttonVariables)&&(identical(other.renderedBody, renderedBody) || other.renderedBody == renderedBody)&&(identical(other.scheduledFor, scheduledFor) || other.scheduledFor == scheduledFor)&&(identical(other.timezone, timezone) || other.timezone == timezone)&&(identical(other.status, status) || other.status == status)&&(identical(other.jobId, jobId) || other.jobId == jobId)&&(identical(other.sentMessageId, sentMessageId) || other.sentMessageId == sentMessageId)&&(identical(other.sentAt, sentAt) || other.sentAt == sentAt)&&(identical(other.cancelledByUserId, cancelledByUserId) || other.cancelledByUserId == cancelledByUserId)&&(identical(other.cancelledAt, cancelledAt) || other.cancelledAt == cancelledAt)&&(identical(other.cancellationReason, cancellationReason) || other.cancellationReason == cancellationReason)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  final _this = this as ScheduledMessage;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScheduledMessage&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.tenantId, _this.tenantId) || other.tenantId == _this.tenantId)&&(identical(other.clientId, _this.clientId) || other.clientId == _this.clientId)&&(identical(other.senderId, _this.senderId) || other.senderId == _this.senderId)&&(identical(other.createdByUserId, _this.createdByUserId) || other.createdByUserId == _this.createdByUserId)&&(identical(other.templateId, _this.templateId) || other.templateId == _this.templateId)&&(identical(other.templateName, _this.templateName) || other.templateName == _this.templateName)&&(identical(other.templateLanguage, _this.templateLanguage) || other.templateLanguage == _this.templateLanguage)&&const DeepCollectionEquality().equals(other.templateVariables, _this.templateVariables)&&const DeepCollectionEquality().equals(other.buttonVariables, _this.buttonVariables)&&(identical(other.renderedBody, _this.renderedBody) || other.renderedBody == _this.renderedBody)&&(identical(other.scheduledFor, _this.scheduledFor) || other.scheduledFor == _this.scheduledFor)&&(identical(other.timezone, _this.timezone) || other.timezone == _this.timezone)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.jobId, _this.jobId) || other.jobId == _this.jobId)&&(identical(other.sentMessageId, _this.sentMessageId) || other.sentMessageId == _this.sentMessageId)&&(identical(other.sentAt, _this.sentAt) || other.sentAt == _this.sentAt)&&(identical(other.cancelledByUserId, _this.cancelledByUserId) || other.cancelledByUserId == _this.cancelledByUserId)&&(identical(other.cancelledAt, _this.cancelledAt) || other.cancelledAt == _this.cancelledAt)&&(identical(other.cancellationReason, _this.cancellationReason) || other.cancellationReason == _this.cancellationReason)&&(identical(other.errorMessage, _this.errorMessage) || other.errorMessage == _this.errorMessage)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&(identical(other.updatedAt, _this.updatedAt) || other.updatedAt == _this.updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,tenantId,clientId,senderId,createdByUserId,templateId,templateName,templateLanguage,const DeepCollectionEquality().hash(templateVariables),const DeepCollectionEquality().hash(buttonVariables),renderedBody,scheduledFor,timezone,status,jobId,sentMessageId,sentAt,cancelledByUserId,cancelledAt,cancellationReason,errorMessage,createdAt,updatedAt]);
+int get hashCode {
+  final _this = this as ScheduledMessage;
+  return Object.hashAll([runtimeType,_this.id,_this.tenantId,_this.clientId,_this.senderId,_this.createdByUserId,_this.templateId,_this.templateName,_this.templateLanguage,const DeepCollectionEquality().hash(_this.templateVariables),const DeepCollectionEquality().hash(_this.buttonVariables),_this.renderedBody,_this.scheduledFor,_this.timezone,_this.status,_this.jobId,_this.sentMessageId,_this.sentAt,_this.cancelledByUserId,_this.cancelledAt,_this.cancellationReason,_this.errorMessage,_this.createdAt,_this.updatedAt]);
+}
 
 @override
 String toString() {
-  return 'ScheduledMessage(id: $id, tenantId: $tenantId, clientId: $clientId, senderId: $senderId, createdByUserId: $createdByUserId, templateId: $templateId, templateName: $templateName, templateLanguage: $templateLanguage, templateVariables: $templateVariables, buttonVariables: $buttonVariables, renderedBody: $renderedBody, scheduledFor: $scheduledFor, timezone: $timezone, status: $status, jobId: $jobId, sentMessageId: $sentMessageId, sentAt: $sentAt, cancelledByUserId: $cancelledByUserId, cancelledAt: $cancelledAt, cancellationReason: $cancellationReason, errorMessage: $errorMessage, createdAt: $createdAt, updatedAt: $updatedAt)';
+  final _this = this as ScheduledMessage;
+  return 'ScheduledMessage(id: ${_this.id}, tenantId: ${_this.tenantId}, clientId: ${_this.clientId}, senderId: ${_this.senderId}, createdByUserId: ${_this.createdByUserId}, templateId: ${_this.templateId}, templateName: ${_this.templateName}, templateLanguage: ${_this.templateLanguage}, templateVariables: ${_this.templateVariables}, buttonVariables: ${_this.buttonVariables}, renderedBody: ${_this.renderedBody}, scheduledFor: ${_this.scheduledFor}, timezone: ${_this.timezone}, status: ${_this.status}, jobId: ${_this.jobId}, sentMessageId: ${_this.sentMessageId}, sentAt: ${_this.sentAt}, cancelledByUserId: ${_this.cancelledByUserId}, cancelledAt: ${_this.cancelledAt}, cancellationReason: ${_this.cancellationReason}, errorMessage: ${_this.errorMessage}, createdAt: ${_this.createdAt}, updatedAt: ${_this.updatedAt})';
 }
 
 
@@ -73,7 +79,7 @@ class _$ScheduledMessageCopyWithImpl<$Res>
 /// Create a copy of ScheduledMessage
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? tenantId = null,Object? clientId = null,Object? senderId = freezed,Object? createdByUserId = freezed,Object? templateId = freezed,Object? templateName = null,Object? templateLanguage = null,Object? templateVariables = freezed,Object? buttonVariables = freezed,Object? renderedBody = freezed,Object? scheduledFor = null,Object? timezone = freezed,Object? status = null,Object? jobId = freezed,Object? sentMessageId = freezed,Object? sentAt = freezed,Object? cancelledByUserId = freezed,Object? cancelledAt = freezed,Object? cancellationReason = freezed,Object? errorMessage = freezed,Object? createdAt = null,Object? updatedAt = null,}) {
-  return _then(_self.copyWith(
+  return _then(ScheduledMessage(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,tenantId: null == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
 as String,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
@@ -238,7 +244,7 @@ return $default(_that.id,_that.tenantId,_that.clientId,_that.senderId,_that.crea
 @JsonSerializable()
 
 class _ScheduledMessage extends ScheduledMessage {
-  const _ScheduledMessage({required this.id, required this.tenantId, required this.clientId, this.senderId, this.createdByUserId, this.templateId, required this.templateName, this.templateLanguage = 'en', final  Map<String, dynamic>? templateVariables, final  Map<String, String>? buttonVariables, this.renderedBody, required this.scheduledFor, this.timezone, @JsonKey(unknownEnumValue: ScheduledMessageStatus.pending) this.status = ScheduledMessageStatus.pending, this.jobId, this.sentMessageId, this.sentAt, this.cancelledByUserId, this.cancelledAt, this.cancellationReason, this.errorMessage, required this.createdAt, required this.updatedAt}): _templateVariables = templateVariables,_buttonVariables = buttonVariables,super._();
+  const _ScheduledMessage({required this.id, required this.tenantId, required this.clientId, this.senderId, this.createdByUserId, this.templateId, required this.templateName, this.templateLanguage = 'en',  Map<String, dynamic>? templateVariables,  Map<String, String>? buttonVariables, this.renderedBody, required this.scheduledFor, this.timezone, @JsonKey(unknownEnumValue: ScheduledMessageStatus.pending) this.status = ScheduledMessageStatus.pending, this.jobId, this.sentMessageId, this.sentAt, this.cancelledByUserId, this.cancelledAt, this.cancellationReason, this.errorMessage, required this.createdAt, required this.updatedAt}): _templateVariables = templateVariables,_buttonVariables = buttonVariables,super._();
   factory _ScheduledMessage.fromJson(Map<String, dynamic> json) => _$ScheduledMessageFromJson(json);
 
 @override final  String id;
@@ -304,16 +310,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduledMessage&&(identical(other.id, id) || other.id == id)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.createdByUserId, createdByUserId) || other.createdByUserId == createdByUserId)&&(identical(other.templateId, templateId) || other.templateId == templateId)&&(identical(other.templateName, templateName) || other.templateName == templateName)&&(identical(other.templateLanguage, templateLanguage) || other.templateLanguage == templateLanguage)&&const DeepCollectionEquality().equals(other._templateVariables, _templateVariables)&&const DeepCollectionEquality().equals(other._buttonVariables, _buttonVariables)&&(identical(other.renderedBody, renderedBody) || other.renderedBody == renderedBody)&&(identical(other.scheduledFor, scheduledFor) || other.scheduledFor == scheduledFor)&&(identical(other.timezone, timezone) || other.timezone == timezone)&&(identical(other.status, status) || other.status == status)&&(identical(other.jobId, jobId) || other.jobId == jobId)&&(identical(other.sentMessageId, sentMessageId) || other.sentMessageId == sentMessageId)&&(identical(other.sentAt, sentAt) || other.sentAt == sentAt)&&(identical(other.cancelledByUserId, cancelledByUserId) || other.cancelledByUserId == cancelledByUserId)&&(identical(other.cancelledAt, cancelledAt) || other.cancelledAt == cancelledAt)&&(identical(other.cancellationReason, cancellationReason) || other.cancellationReason == cancellationReason)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduledMessage&&(identical(other.id, id) || other.id == id)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.createdByUserId, createdByUserId) || other.createdByUserId == createdByUserId)&&(identical(other.templateId, templateId) || other.templateId == templateId)&&(identical(other.templateName, templateName) || other.templateName == templateName)&&(identical(other.templateLanguage, templateLanguage) || other.templateLanguage == templateLanguage)&&const DeepCollectionEquality().equals(other.templateVariables, _templateVariables)&&const DeepCollectionEquality().equals(other.buttonVariables, _buttonVariables)&&(identical(other.renderedBody, renderedBody) || other.renderedBody == renderedBody)&&(identical(other.scheduledFor, scheduledFor) || other.scheduledFor == scheduledFor)&&(identical(other.timezone, timezone) || other.timezone == timezone)&&(identical(other.status, status) || other.status == status)&&(identical(other.jobId, jobId) || other.jobId == jobId)&&(identical(other.sentMessageId, sentMessageId) || other.sentMessageId == sentMessageId)&&(identical(other.sentAt, sentAt) || other.sentAt == sentAt)&&(identical(other.cancelledByUserId, cancelledByUserId) || other.cancelledByUserId == cancelledByUserId)&&(identical(other.cancelledAt, cancelledAt) || other.cancelledAt == cancelledAt)&&(identical(other.cancellationReason, cancellationReason) || other.cancellationReason == cancellationReason)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hashAll([runtimeType,id,tenantId,clientId,senderId,createdByUserId,templateId,templateName,templateLanguage,const DeepCollectionEquality().hash(_templateVariables),const DeepCollectionEquality().hash(_buttonVariables),renderedBody,scheduledFor,timezone,status,jobId,sentMessageId,sentAt,cancelledByUserId,cancelledAt,cancellationReason,errorMessage,createdAt,updatedAt]);
+int get hashCode {
+    return Object.hashAll([runtimeType,id,tenantId,clientId,senderId,createdByUserId,templateId,templateName,templateLanguage,const DeepCollectionEquality().hash(_templateVariables),const DeepCollectionEquality().hash(_buttonVariables),renderedBody,scheduledFor,timezone,status,jobId,sentMessageId,sentAt,cancelledByUserId,cancelledAt,cancellationReason,errorMessage,createdAt,updatedAt]);
+}
 
 @override
 String toString() {
-  return 'ScheduledMessage(id: $id, tenantId: $tenantId, clientId: $clientId, senderId: $senderId, createdByUserId: $createdByUserId, templateId: $templateId, templateName: $templateName, templateLanguage: $templateLanguage, templateVariables: $templateVariables, buttonVariables: $buttonVariables, renderedBody: $renderedBody, scheduledFor: $scheduledFor, timezone: $timezone, status: $status, jobId: $jobId, sentMessageId: $sentMessageId, sentAt: $sentAt, cancelledByUserId: $cancelledByUserId, cancelledAt: $cancelledAt, cancellationReason: $cancellationReason, errorMessage: $errorMessage, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ScheduledMessage(id: $id, tenantId: $tenantId, clientId: $clientId, senderId: $senderId, createdByUserId: $createdByUserId, templateId: $templateId, templateName: $templateName, templateLanguage: $templateLanguage, templateVariables: $templateVariables, buttonVariables: $buttonVariables, renderedBody: $renderedBody, scheduledFor: $scheduledFor, timezone: $timezone, status: $status, jobId: $jobId, sentMessageId: $sentMessageId, sentAt: $sentAt, cancelledByUserId: $cancelledByUserId, cancelledAt: $cancelledAt, cancellationReason: $cancellationReason, errorMessage: $errorMessage, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -390,16 +398,21 @@ $ScheduledMessageEventCopyWith<ScheduledMessageEvent> get copyWith => _$Schedule
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScheduledMessageEvent&&(identical(other.id, id) || other.id == id)&&(identical(other.scheduledMessageId, scheduledMessageId) || other.scheduledMessageId == scheduledMessageId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.eventType, eventType) || other.eventType == eventType)&&(identical(other.actorUserId, actorUserId) || other.actorUserId == actorUserId)&&(identical(other.actorKind, actorKind) || other.actorKind == actorKind)&&const DeepCollectionEquality().equals(other.metadata, metadata)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  final _this = this as ScheduledMessageEvent;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScheduledMessageEvent&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.scheduledMessageId, _this.scheduledMessageId) || other.scheduledMessageId == _this.scheduledMessageId)&&(identical(other.tenantId, _this.tenantId) || other.tenantId == _this.tenantId)&&(identical(other.eventType, _this.eventType) || other.eventType == _this.eventType)&&(identical(other.actorUserId, _this.actorUserId) || other.actorUserId == _this.actorUserId)&&(identical(other.actorKind, _this.actorKind) || other.actorKind == _this.actorKind)&&const DeepCollectionEquality().equals(other.metadata, _this.metadata)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,scheduledMessageId,tenantId,eventType,actorUserId,actorKind,const DeepCollectionEquality().hash(metadata),createdAt);
+int get hashCode {
+  final _this = this as ScheduledMessageEvent;
+  return Object.hash(runtimeType,_this.id,_this.scheduledMessageId,_this.tenantId,_this.eventType,_this.actorUserId,_this.actorKind,const DeepCollectionEquality().hash(_this.metadata),_this.createdAt);
+}
 
 @override
 String toString() {
-  return 'ScheduledMessageEvent(id: $id, scheduledMessageId: $scheduledMessageId, tenantId: $tenantId, eventType: $eventType, actorUserId: $actorUserId, actorKind: $actorKind, metadata: $metadata, createdAt: $createdAt)';
+  final _this = this as ScheduledMessageEvent;
+  return 'ScheduledMessageEvent(id: ${_this.id}, scheduledMessageId: ${_this.scheduledMessageId}, tenantId: ${_this.tenantId}, eventType: ${_this.eventType}, actorUserId: ${_this.actorUserId}, actorKind: ${_this.actorKind}, metadata: ${_this.metadata}, createdAt: ${_this.createdAt})';
 }
 
 
@@ -428,7 +441,7 @@ class _$ScheduledMessageEventCopyWithImpl<$Res>
 /// Create a copy of ScheduledMessageEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? scheduledMessageId = null,Object? tenantId = null,Object? eventType = null,Object? actorUserId = freezed,Object? actorKind = null,Object? metadata = freezed,Object? createdAt = null,}) {
-  return _then(_self.copyWith(
+  return _then(ScheduledMessageEvent(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,scheduledMessageId: null == scheduledMessageId ? _self.scheduledMessageId : scheduledMessageId // ignore: cast_nullable_to_non_nullable
 as String,tenantId: null == tenantId ? _self.tenantId : tenantId // ignore: cast_nullable_to_non_nullable
@@ -578,7 +591,7 @@ return $default(_that.id,_that.scheduledMessageId,_that.tenantId,_that.eventType
 @JsonSerializable()
 
 class _ScheduledMessageEvent extends ScheduledMessageEvent {
-  const _ScheduledMessageEvent({required this.id, required this.scheduledMessageId, required this.tenantId, @JsonKey(unknownEnumValue: ScheduledMessageEventType.scheduled) required this.eventType, this.actorUserId, this.actorKind = 'user', final  Map<String, dynamic>? metadata, required this.createdAt}): _metadata = metadata,super._();
+  const _ScheduledMessageEvent({required this.id, required this.scheduledMessageId, required this.tenantId, @JsonKey(unknownEnumValue: ScheduledMessageEventType.scheduled) required this.eventType, this.actorUserId, this.actorKind = 'user',  Map<String, dynamic>? metadata, required this.createdAt}): _metadata = metadata,super._();
   factory _ScheduledMessageEvent.fromJson(Map<String, dynamic> json) => _$ScheduledMessageEventFromJson(json);
 
 @override final  String id;
@@ -611,16 +624,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduledMessageEvent&&(identical(other.id, id) || other.id == id)&&(identical(other.scheduledMessageId, scheduledMessageId) || other.scheduledMessageId == scheduledMessageId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.eventType, eventType) || other.eventType == eventType)&&(identical(other.actorUserId, actorUserId) || other.actorUserId == actorUserId)&&(identical(other.actorKind, actorKind) || other.actorKind == actorKind)&&const DeepCollectionEquality().equals(other._metadata, _metadata)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduledMessageEvent&&(identical(other.id, id) || other.id == id)&&(identical(other.scheduledMessageId, scheduledMessageId) || other.scheduledMessageId == scheduledMessageId)&&(identical(other.tenantId, tenantId) || other.tenantId == tenantId)&&(identical(other.eventType, eventType) || other.eventType == eventType)&&(identical(other.actorUserId, actorUserId) || other.actorUserId == actorUserId)&&(identical(other.actorKind, actorKind) || other.actorKind == actorKind)&&const DeepCollectionEquality().equals(other.metadata, _metadata)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,scheduledMessageId,tenantId,eventType,actorUserId,actorKind,const DeepCollectionEquality().hash(_metadata),createdAt);
+int get hashCode {
+    return Object.hash(runtimeType,id,scheduledMessageId,tenantId,eventType,actorUserId,actorKind,const DeepCollectionEquality().hash(_metadata),createdAt);
+}
 
 @override
 String toString() {
-  return 'ScheduledMessageEvent(id: $id, scheduledMessageId: $scheduledMessageId, tenantId: $tenantId, eventType: $eventType, actorUserId: $actorUserId, actorKind: $actorKind, metadata: $metadata, createdAt: $createdAt)';
+    return 'ScheduledMessageEvent(id: $id, scheduledMessageId: $scheduledMessageId, tenantId: $tenantId, eventType: $eventType, actorUserId: $actorUserId, actorKind: $actorKind, metadata: $metadata, createdAt: $createdAt)';
 }
 
 

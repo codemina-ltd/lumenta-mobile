@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'conversation.dart';
@@ -9,6 +9,7 @@ part of 'conversation.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -45,16 +46,21 @@ $ConversationCopyWith<Conversation> get copyWith => _$ConversationCopyWithImpl<C
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Conversation&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name)&&(identical(other.lastMessageBody, lastMessageBody) || other.lastMessageBody == lastMessageBody)&&(identical(other.lastMessageType, lastMessageType) || other.lastMessageType == lastMessageType)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection)&&(identical(other.lastMessageChannelType, lastMessageChannelType) || other.lastMessageChannelType == lastMessageChannelType)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.lastMessageStatus, lastMessageStatus) || other.lastMessageStatus == lastMessageStatus)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.pinnedAt, pinnedAt) || other.pinnedAt == pinnedAt));
+  final _this = this as Conversation;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Conversation&&(identical(other.clientId, _this.clientId) || other.clientId == _this.clientId)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.profileName, _this.profileName) || other.profileName == _this.profileName)&&(identical(other.workspaceName, _this.workspaceName) || other.workspaceName == _this.workspaceName)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.lastMessageBody, _this.lastMessageBody) || other.lastMessageBody == _this.lastMessageBody)&&(identical(other.lastMessageType, _this.lastMessageType) || other.lastMessageType == _this.lastMessageType)&&(identical(other.lastMessageDirection, _this.lastMessageDirection) || other.lastMessageDirection == _this.lastMessageDirection)&&(identical(other.lastMessageChannelType, _this.lastMessageChannelType) || other.lastMessageChannelType == _this.lastMessageChannelType)&&(identical(other.lastMessageAt, _this.lastMessageAt) || other.lastMessageAt == _this.lastMessageAt)&&(identical(other.lastMessageStatus, _this.lastMessageStatus) || other.lastMessageStatus == _this.lastMessageStatus)&&(identical(other.unreadCount, _this.unreadCount) || other.unreadCount == _this.unreadCount)&&(identical(other.pinnedAt, _this.pinnedAt) || other.pinnedAt == _this.pinnedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,clientId,phoneNumber,profileName,workspaceName,name,lastMessageBody,lastMessageType,lastMessageDirection,lastMessageChannelType,lastMessageAt,lastMessageStatus,unreadCount,pinnedAt);
+int get hashCode {
+  final _this = this as Conversation;
+  return Object.hash(runtimeType,_this.clientId,_this.phoneNumber,_this.profileName,_this.workspaceName,_this.name,_this.lastMessageBody,_this.lastMessageType,_this.lastMessageDirection,_this.lastMessageChannelType,_this.lastMessageAt,_this.lastMessageStatus,_this.unreadCount,_this.pinnedAt);
+}
 
 @override
 String toString() {
-  return 'Conversation(clientId: $clientId, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name, lastMessageBody: $lastMessageBody, lastMessageType: $lastMessageType, lastMessageDirection: $lastMessageDirection, lastMessageChannelType: $lastMessageChannelType, lastMessageAt: $lastMessageAt, lastMessageStatus: $lastMessageStatus, unreadCount: $unreadCount, pinnedAt: $pinnedAt)';
+  final _this = this as Conversation;
+  return 'Conversation(clientId: ${_this.clientId}, phoneNumber: ${_this.phoneNumber}, profileName: ${_this.profileName}, workspaceName: ${_this.workspaceName}, name: ${_this.name}, lastMessageBody: ${_this.lastMessageBody}, lastMessageType: ${_this.lastMessageType}, lastMessageDirection: ${_this.lastMessageDirection}, lastMessageChannelType: ${_this.lastMessageChannelType}, lastMessageAt: ${_this.lastMessageAt}, lastMessageStatus: ${_this.lastMessageStatus}, unreadCount: ${_this.unreadCount}, pinnedAt: ${_this.pinnedAt})';
 }
 
 
@@ -83,7 +89,7 @@ class _$ConversationCopyWithImpl<$Res>
 /// Create a copy of Conversation
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? clientId = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? workspaceName = freezed,Object? name = freezed,Object? lastMessageBody = freezed,Object? lastMessageType = freezed,Object? lastMessageDirection = freezed,Object? lastMessageChannelType = freezed,Object? lastMessageAt = freezed,Object? lastMessageStatus = freezed,Object? unreadCount = freezed,Object? pinnedAt = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(Conversation(
 clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
@@ -285,16 +291,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Conversation&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name)&&(identical(other.lastMessageBody, lastMessageBody) || other.lastMessageBody == lastMessageBody)&&(identical(other.lastMessageType, lastMessageType) || other.lastMessageType == lastMessageType)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection)&&(identical(other.lastMessageChannelType, lastMessageChannelType) || other.lastMessageChannelType == lastMessageChannelType)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.lastMessageStatus, lastMessageStatus) || other.lastMessageStatus == lastMessageStatus)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.pinnedAt, pinnedAt) || other.pinnedAt == pinnedAt));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Conversation&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name)&&(identical(other.lastMessageBody, lastMessageBody) || other.lastMessageBody == lastMessageBody)&&(identical(other.lastMessageType, lastMessageType) || other.lastMessageType == lastMessageType)&&(identical(other.lastMessageDirection, lastMessageDirection) || other.lastMessageDirection == lastMessageDirection)&&(identical(other.lastMessageChannelType, lastMessageChannelType) || other.lastMessageChannelType == lastMessageChannelType)&&(identical(other.lastMessageAt, lastMessageAt) || other.lastMessageAt == lastMessageAt)&&(identical(other.lastMessageStatus, lastMessageStatus) || other.lastMessageStatus == lastMessageStatus)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.pinnedAt, pinnedAt) || other.pinnedAt == pinnedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,clientId,phoneNumber,profileName,workspaceName,name,lastMessageBody,lastMessageType,lastMessageDirection,lastMessageChannelType,lastMessageAt,lastMessageStatus,unreadCount,pinnedAt);
+int get hashCode {
+    return Object.hash(runtimeType,clientId,phoneNumber,profileName,workspaceName,name,lastMessageBody,lastMessageType,lastMessageDirection,lastMessageChannelType,lastMessageAt,lastMessageStatus,unreadCount,pinnedAt);
+}
 
 @override
 String toString() {
-  return 'Conversation(clientId: $clientId, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name, lastMessageBody: $lastMessageBody, lastMessageType: $lastMessageType, lastMessageDirection: $lastMessageDirection, lastMessageChannelType: $lastMessageChannelType, lastMessageAt: $lastMessageAt, lastMessageStatus: $lastMessageStatus, unreadCount: $unreadCount, pinnedAt: $pinnedAt)';
+    return 'Conversation(clientId: $clientId, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name, lastMessageBody: $lastMessageBody, lastMessageType: $lastMessageType, lastMessageDirection: $lastMessageDirection, lastMessageChannelType: $lastMessageChannelType, lastMessageAt: $lastMessageAt, lastMessageStatus: $lastMessageStatus, unreadCount: $unreadCount, pinnedAt: $pinnedAt)';
 }
 
 

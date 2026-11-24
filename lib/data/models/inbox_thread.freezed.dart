@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'inbox_thread.dart';
@@ -9,6 +9,7 @@ part of 'inbox_thread.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -33,16 +34,21 @@ $InboxThreadContactCopyWith<InboxThreadContact> get copyWith => _$InboxThreadCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThreadContact&&(identical(other.id, id) || other.id == id)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name));
+  final _this = this as InboxThreadContact;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThreadContact&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.profileName, _this.profileName) || other.profileName == _this.profileName)&&(identical(other.workspaceName, _this.workspaceName) || other.workspaceName == _this.workspaceName)&&(identical(other.name, _this.name) || other.name == _this.name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,phoneNumber,profileName,workspaceName,name);
+int get hashCode {
+  final _this = this as InboxThreadContact;
+  return Object.hash(runtimeType,_this.id,_this.phoneNumber,_this.profileName,_this.workspaceName,_this.name);
+}
 
 @override
 String toString() {
-  return 'InboxThreadContact(id: $id, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name)';
+  final _this = this as InboxThreadContact;
+  return 'InboxThreadContact(id: ${_this.id}, phoneNumber: ${_this.phoneNumber}, profileName: ${_this.profileName}, workspaceName: ${_this.workspaceName}, name: ${_this.name})';
 }
 
 
@@ -71,7 +77,7 @@ class _$InboxThreadContactCopyWithImpl<$Res>
 /// Create a copy of InboxThreadContact
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? phoneNumber = freezed,Object? profileName = freezed,Object? workspaceName = freezed,Object? name = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(InboxThreadContact(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
 as String?,profileName: freezed == profileName ? _self.profileName : profileName // ignore: cast_nullable_to_non_nullable
@@ -245,16 +251,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThreadContact&&(identical(other.id, id) || other.id == id)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThreadContact&&(identical(other.id, id) || other.id == id)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.profileName, profileName) || other.profileName == profileName)&&(identical(other.workspaceName, workspaceName) || other.workspaceName == workspaceName)&&(identical(other.name, name) || other.name == name));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,phoneNumber,profileName,workspaceName,name);
+int get hashCode {
+    return Object.hash(runtimeType,id,phoneNumber,profileName,workspaceName,name);
+}
 
 @override
 String toString() {
-  return 'InboxThreadContact(id: $id, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name)';
+    return 'InboxThreadContact(id: $id, phoneNumber: $phoneNumber, profileName: $profileName, workspaceName: $workspaceName, name: $name)';
 }
 
 
@@ -317,16 +325,21 @@ $InboxThreadCopyWith<InboxThread> get copyWith => _$InboxThreadCopyWithImpl<Inbo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThread&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.channelType, channelType) || other.channelType == channelType)&&(identical(other.status, status) || other.status == status)&&(identical(other.assignedUserId, assignedUserId) || other.assignedUserId == assignedUserId)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.snoozedUntil, snoozedUntil) || other.snoozedUntil == snoozedUntil)&&(identical(other.lastInboundAt, lastInboundAt) || other.lastInboundAt == lastInboundAt)&&(identical(other.lastOutboundAt, lastOutboundAt) || other.lastOutboundAt == lastOutboundAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.serviceWindowExpiresAt, serviceWindowExpiresAt) || other.serviceWindowExpiresAt == serviceWindowExpiresAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.labels, labels)&&(identical(other.client, client) || other.client == client));
+  final _this = this as InboxThread;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InboxThread&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.senderId, _this.senderId) || other.senderId == _this.senderId)&&(identical(other.clientId, _this.clientId) || other.clientId == _this.clientId)&&(identical(other.channelType, _this.channelType) || other.channelType == _this.channelType)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.assignedUserId, _this.assignedUserId) || other.assignedUserId == _this.assignedUserId)&&(identical(other.priority, _this.priority) || other.priority == _this.priority)&&(identical(other.snoozedUntil, _this.snoozedUntil) || other.snoozedUntil == _this.snoozedUntil)&&(identical(other.lastInboundAt, _this.lastInboundAt) || other.lastInboundAt == _this.lastInboundAt)&&(identical(other.lastOutboundAt, _this.lastOutboundAt) || other.lastOutboundAt == _this.lastOutboundAt)&&(identical(other.unreadCount, _this.unreadCount) || other.unreadCount == _this.unreadCount)&&(identical(other.serviceWindowExpiresAt, _this.serviceWindowExpiresAt) || other.serviceWindowExpiresAt == _this.serviceWindowExpiresAt)&&(identical(other.updatedAt, _this.updatedAt) || other.updatedAt == _this.updatedAt)&&const DeepCollectionEquality().equals(other.labels, _this.labels)&&(identical(other.client, _this.client) || other.client == _this.client));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,clientId,channelType,status,assignedUserId,priority,snoozedUntil,lastInboundAt,lastOutboundAt,unreadCount,serviceWindowExpiresAt,updatedAt,const DeepCollectionEquality().hash(labels),client);
+int get hashCode {
+  final _this = this as InboxThread;
+  return Object.hash(runtimeType,_this.id,_this.senderId,_this.clientId,_this.channelType,_this.status,_this.assignedUserId,_this.priority,_this.snoozedUntil,_this.lastInboundAt,_this.lastOutboundAt,_this.unreadCount,_this.serviceWindowExpiresAt,_this.updatedAt,const DeepCollectionEquality().hash(_this.labels),_this.client);
+}
 
 @override
 String toString() {
-  return 'InboxThread(id: $id, senderId: $senderId, clientId: $clientId, channelType: $channelType, status: $status, assignedUserId: $assignedUserId, priority: $priority, snoozedUntil: $snoozedUntil, lastInboundAt: $lastInboundAt, lastOutboundAt: $lastOutboundAt, unreadCount: $unreadCount, serviceWindowExpiresAt: $serviceWindowExpiresAt, updatedAt: $updatedAt, labels: $labels, client: $client)';
+  final _this = this as InboxThread;
+  return 'InboxThread(id: ${_this.id}, senderId: ${_this.senderId}, clientId: ${_this.clientId}, channelType: ${_this.channelType}, status: ${_this.status}, assignedUserId: ${_this.assignedUserId}, priority: ${_this.priority}, snoozedUntil: ${_this.snoozedUntil}, lastInboundAt: ${_this.lastInboundAt}, lastOutboundAt: ${_this.lastOutboundAt}, unreadCount: ${_this.unreadCount}, serviceWindowExpiresAt: ${_this.serviceWindowExpiresAt}, updatedAt: ${_this.updatedAt}, labels: ${_this.labels}, client: ${_this.client})';
 }
 
 
@@ -355,7 +368,7 @@ class _$InboxThreadCopyWithImpl<$Res>
 /// Create a copy of InboxThread
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? senderId = freezed,Object? clientId = null,Object? channelType = freezed,Object? status = null,Object? assignedUserId = freezed,Object? priority = null,Object? snoozedUntil = freezed,Object? lastInboundAt = freezed,Object? lastOutboundAt = freezed,Object? unreadCount = null,Object? serviceWindowExpiresAt = freezed,Object? updatedAt = freezed,Object? labels = null,Object? client = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(InboxThread(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,senderId: freezed == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
 as String?,clientId: null == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
@@ -524,7 +537,7 @@ return $default(_that.id,_that.senderId,_that.clientId,_that.channelType,_that.s
 @JsonSerializable()
 
 class _InboxThread extends InboxThread {
-  const _InboxThread({required this.id, this.senderId, required this.clientId, this.channelType, this.status = 'open', this.assignedUserId, this.priority = 'normal', this.snoozedUntil, this.lastInboundAt, this.lastOutboundAt, this.unreadCount = 0, this.serviceWindowExpiresAt, this.updatedAt, final  List<InboxLabel> labels = const <InboxLabel>[], this.client}): _labels = labels,super._();
+  const _InboxThread({required this.id, this.senderId, required this.clientId, this.channelType, this.status = 'open', this.assignedUserId, this.priority = 'normal', this.snoozedUntil, this.lastInboundAt, this.lastOutboundAt, this.unreadCount = 0, this.serviceWindowExpiresAt, this.updatedAt,  List<InboxLabel> labels = const <InboxLabel>[], this.client}): _labels = labels,super._();
   factory _InboxThread.fromJson(Map<String, dynamic> json) => _$InboxThreadFromJson(json);
 
 @override final  String id;
@@ -566,16 +579,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThread&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.channelType, channelType) || other.channelType == channelType)&&(identical(other.status, status) || other.status == status)&&(identical(other.assignedUserId, assignedUserId) || other.assignedUserId == assignedUserId)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.snoozedUntil, snoozedUntil) || other.snoozedUntil == snoozedUntil)&&(identical(other.lastInboundAt, lastInboundAt) || other.lastInboundAt == lastInboundAt)&&(identical(other.lastOutboundAt, lastOutboundAt) || other.lastOutboundAt == lastOutboundAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.serviceWindowExpiresAt, serviceWindowExpiresAt) || other.serviceWindowExpiresAt == serviceWindowExpiresAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other._labels, _labels)&&(identical(other.client, client) || other.client == client));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _InboxThread&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.channelType, channelType) || other.channelType == channelType)&&(identical(other.status, status) || other.status == status)&&(identical(other.assignedUserId, assignedUserId) || other.assignedUserId == assignedUserId)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.snoozedUntil, snoozedUntil) || other.snoozedUntil == snoozedUntil)&&(identical(other.lastInboundAt, lastInboundAt) || other.lastInboundAt == lastInboundAt)&&(identical(other.lastOutboundAt, lastOutboundAt) || other.lastOutboundAt == lastOutboundAt)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount)&&(identical(other.serviceWindowExpiresAt, serviceWindowExpiresAt) || other.serviceWindowExpiresAt == serviceWindowExpiresAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&const DeepCollectionEquality().equals(other.labels, _labels)&&(identical(other.client, client) || other.client == client));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,clientId,channelType,status,assignedUserId,priority,snoozedUntil,lastInboundAt,lastOutboundAt,unreadCount,serviceWindowExpiresAt,updatedAt,const DeepCollectionEquality().hash(_labels),client);
+int get hashCode {
+    return Object.hash(runtimeType,id,senderId,clientId,channelType,status,assignedUserId,priority,snoozedUntil,lastInboundAt,lastOutboundAt,unreadCount,serviceWindowExpiresAt,updatedAt,const DeepCollectionEquality().hash(_labels),client);
+}
 
 @override
 String toString() {
-  return 'InboxThread(id: $id, senderId: $senderId, clientId: $clientId, channelType: $channelType, status: $status, assignedUserId: $assignedUserId, priority: $priority, snoozedUntil: $snoozedUntil, lastInboundAt: $lastInboundAt, lastOutboundAt: $lastOutboundAt, unreadCount: $unreadCount, serviceWindowExpiresAt: $serviceWindowExpiresAt, updatedAt: $updatedAt, labels: $labels, client: $client)';
+    return 'InboxThread(id: $id, senderId: $senderId, clientId: $clientId, channelType: $channelType, status: $status, assignedUserId: $assignedUserId, priority: $priority, snoozedUntil: $snoozedUntil, lastInboundAt: $lastInboundAt, lastOutboundAt: $lastOutboundAt, unreadCount: $unreadCount, serviceWindowExpiresAt: $serviceWindowExpiresAt, updatedAt: $updatedAt, labels: $labels, client: $client)';
 }
 
 

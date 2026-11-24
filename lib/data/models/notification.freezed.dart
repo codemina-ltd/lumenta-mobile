@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'notification.dart';
@@ -9,6 +9,7 @@ part of 'notification.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $AppNotificationCopyWith<AppNotification> get copyWith => _$AppNotificationCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppNotification&&(identical(other.id, id) || other.id == id)&&(identical(other.eventKey, eventKey) || other.eventKey == eventKey)&&(identical(other.category, category) || other.category == category)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.titleKey, titleKey) || other.titleKey == titleKey)&&const DeepCollectionEquality().equals(other.titleParams, titleParams)&&(identical(other.bodyKey, bodyKey) || other.bodyKey == bodyKey)&&const DeepCollectionEquality().equals(other.bodyParams, bodyParams)&&(identical(other.resourceType, resourceType) || other.resourceType == resourceType)&&(identical(other.resourceId, resourceId) || other.resourceId == resourceId)&&(identical(other.actionUrl, actionUrl) || other.actionUrl == actionUrl)&&(identical(other.readAt, readAt) || other.readAt == readAt)&&(identical(other.archivedAt, archivedAt) || other.archivedAt == archivedAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  final _this = this as AppNotification;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppNotification&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.eventKey, _this.eventKey) || other.eventKey == _this.eventKey)&&(identical(other.category, _this.category) || other.category == _this.category)&&(identical(other.severity, _this.severity) || other.severity == _this.severity)&&(identical(other.titleKey, _this.titleKey) || other.titleKey == _this.titleKey)&&const DeepCollectionEquality().equals(other.titleParams, _this.titleParams)&&(identical(other.bodyKey, _this.bodyKey) || other.bodyKey == _this.bodyKey)&&const DeepCollectionEquality().equals(other.bodyParams, _this.bodyParams)&&(identical(other.resourceType, _this.resourceType) || other.resourceType == _this.resourceType)&&(identical(other.resourceId, _this.resourceId) || other.resourceId == _this.resourceId)&&(identical(other.actionUrl, _this.actionUrl) || other.actionUrl == _this.actionUrl)&&(identical(other.readAt, _this.readAt) || other.readAt == _this.readAt)&&(identical(other.archivedAt, _this.archivedAt) || other.archivedAt == _this.archivedAt)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,eventKey,category,severity,titleKey,const DeepCollectionEquality().hash(titleParams),bodyKey,const DeepCollectionEquality().hash(bodyParams),resourceType,resourceId,actionUrl,readAt,archivedAt,createdAt);
+int get hashCode {
+  final _this = this as AppNotification;
+  return Object.hash(runtimeType,_this.id,_this.eventKey,_this.category,_this.severity,_this.titleKey,const DeepCollectionEquality().hash(_this.titleParams),_this.bodyKey,const DeepCollectionEquality().hash(_this.bodyParams),_this.resourceType,_this.resourceId,_this.actionUrl,_this.readAt,_this.archivedAt,_this.createdAt);
+}
 
 @override
 String toString() {
-  return 'AppNotification(id: $id, eventKey: $eventKey, category: $category, severity: $severity, titleKey: $titleKey, titleParams: $titleParams, bodyKey: $bodyKey, bodyParams: $bodyParams, resourceType: $resourceType, resourceId: $resourceId, actionUrl: $actionUrl, readAt: $readAt, archivedAt: $archivedAt, createdAt: $createdAt)';
+  final _this = this as AppNotification;
+  return 'AppNotification(id: ${_this.id}, eventKey: ${_this.eventKey}, category: ${_this.category}, severity: ${_this.severity}, titleKey: ${_this.titleKey}, titleParams: ${_this.titleParams}, bodyKey: ${_this.bodyKey}, bodyParams: ${_this.bodyParams}, resourceType: ${_this.resourceType}, resourceId: ${_this.resourceId}, actionUrl: ${_this.actionUrl}, readAt: ${_this.readAt}, archivedAt: ${_this.archivedAt}, createdAt: ${_this.createdAt})';
 }
 
 
@@ -66,7 +72,7 @@ class _$AppNotificationCopyWithImpl<$Res>
 /// Create a copy of AppNotification
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? eventKey = null,Object? category = freezed,Object? severity = null,Object? titleKey = null,Object? titleParams = null,Object? bodyKey = null,Object? bodyParams = null,Object? resourceType = freezed,Object? resourceId = freezed,Object? actionUrl = freezed,Object? readAt = freezed,Object? archivedAt = freezed,Object? createdAt = null,}) {
-  return _then(_self.copyWith(
+  return _then(AppNotification(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,eventKey: null == eventKey ? _self.eventKey : eventKey // ignore: cast_nullable_to_non_nullable
 as String,category: freezed == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
@@ -222,7 +228,7 @@ return $default(_that.id,_that.eventKey,_that.category,_that.severity,_that.titl
 @JsonSerializable()
 
 class _AppNotification extends AppNotification {
-  const _AppNotification({required this.id, required this.eventKey, this.category, @JsonKey(unknownEnumValue: NotificationSeverity.info) this.severity = NotificationSeverity.info, required this.titleKey, final  Map<String, dynamic> titleParams = const <String, dynamic>{}, required this.bodyKey, final  Map<String, dynamic> bodyParams = const <String, dynamic>{}, this.resourceType, this.resourceId, this.actionUrl, this.readAt, this.archivedAt, required this.createdAt}): _titleParams = titleParams,_bodyParams = bodyParams,super._();
+  const _AppNotification({required this.id, required this.eventKey, this.category, @JsonKey(unknownEnumValue: NotificationSeverity.info) this.severity = NotificationSeverity.info, required this.titleKey,  Map<String, dynamic> titleParams = const <String, dynamic>{}, required this.bodyKey,  Map<String, dynamic> bodyParams = const <String, dynamic>{}, this.resourceType, this.resourceId, this.actionUrl, this.readAt, this.archivedAt, required this.createdAt}): _titleParams = titleParams,_bodyParams = bodyParams,super._();
   factory _AppNotification.fromJson(Map<String, dynamic> json) => _$AppNotificationFromJson(json);
 
 @override final  String id;
@@ -265,16 +271,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppNotification&&(identical(other.id, id) || other.id == id)&&(identical(other.eventKey, eventKey) || other.eventKey == eventKey)&&(identical(other.category, category) || other.category == category)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.titleKey, titleKey) || other.titleKey == titleKey)&&const DeepCollectionEquality().equals(other._titleParams, _titleParams)&&(identical(other.bodyKey, bodyKey) || other.bodyKey == bodyKey)&&const DeepCollectionEquality().equals(other._bodyParams, _bodyParams)&&(identical(other.resourceType, resourceType) || other.resourceType == resourceType)&&(identical(other.resourceId, resourceId) || other.resourceId == resourceId)&&(identical(other.actionUrl, actionUrl) || other.actionUrl == actionUrl)&&(identical(other.readAt, readAt) || other.readAt == readAt)&&(identical(other.archivedAt, archivedAt) || other.archivedAt == archivedAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppNotification&&(identical(other.id, id) || other.id == id)&&(identical(other.eventKey, eventKey) || other.eventKey == eventKey)&&(identical(other.category, category) || other.category == category)&&(identical(other.severity, severity) || other.severity == severity)&&(identical(other.titleKey, titleKey) || other.titleKey == titleKey)&&const DeepCollectionEquality().equals(other.titleParams, _titleParams)&&(identical(other.bodyKey, bodyKey) || other.bodyKey == bodyKey)&&const DeepCollectionEquality().equals(other.bodyParams, _bodyParams)&&(identical(other.resourceType, resourceType) || other.resourceType == resourceType)&&(identical(other.resourceId, resourceId) || other.resourceId == resourceId)&&(identical(other.actionUrl, actionUrl) || other.actionUrl == actionUrl)&&(identical(other.readAt, readAt) || other.readAt == readAt)&&(identical(other.archivedAt, archivedAt) || other.archivedAt == archivedAt)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,eventKey,category,severity,titleKey,const DeepCollectionEquality().hash(_titleParams),bodyKey,const DeepCollectionEquality().hash(_bodyParams),resourceType,resourceId,actionUrl,readAt,archivedAt,createdAt);
+int get hashCode {
+    return Object.hash(runtimeType,id,eventKey,category,severity,titleKey,const DeepCollectionEquality().hash(_titleParams),bodyKey,const DeepCollectionEquality().hash(_bodyParams),resourceType,resourceId,actionUrl,readAt,archivedAt,createdAt);
+}
 
 @override
 String toString() {
-  return 'AppNotification(id: $id, eventKey: $eventKey, category: $category, severity: $severity, titleKey: $titleKey, titleParams: $titleParams, bodyKey: $bodyKey, bodyParams: $bodyParams, resourceType: $resourceType, resourceId: $resourceId, actionUrl: $actionUrl, readAt: $readAt, archivedAt: $archivedAt, createdAt: $createdAt)';
+    return 'AppNotification(id: $id, eventKey: $eventKey, category: $category, severity: $severity, titleKey: $titleKey, titleParams: $titleParams, bodyKey: $bodyKey, bodyParams: $bodyParams, resourceType: $resourceType, resourceId: $resourceId, actionUrl: $actionUrl, readAt: $readAt, archivedAt: $archivedAt, createdAt: $createdAt)';
 }
 
 

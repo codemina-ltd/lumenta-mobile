@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'contact_field.dart';
@@ -9,6 +9,7 @@ part of 'contact_field.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $ContactFieldCopyWith<ContactField> get copyWith => _$ContactFieldCopyWithImpl<C
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactField&&(identical(other.id, id) || other.id == id)&&(identical(other.key, key) || other.key == key)&&(identical(other.label, label) || other.label == label)&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.options, options)&&(identical(other.isRequired, isRequired) || other.isRequired == isRequired)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder));
+  final _this = this as ContactField;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactField&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.key, _this.key) || other.key == _this.key)&&(identical(other.label, _this.label) || other.label == _this.label)&&(identical(other.type, _this.type) || other.type == _this.type)&&const DeepCollectionEquality().equals(other.options, _this.options)&&(identical(other.isRequired, _this.isRequired) || other.isRequired == _this.isRequired)&&(identical(other.displayOrder, _this.displayOrder) || other.displayOrder == _this.displayOrder));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,key,label,type,const DeepCollectionEquality().hash(options),isRequired,displayOrder);
+int get hashCode {
+  final _this = this as ContactField;
+  return Object.hash(runtimeType,_this.id,_this.key,_this.label,_this.type,const DeepCollectionEquality().hash(_this.options),_this.isRequired,_this.displayOrder);
+}
 
 @override
 String toString() {
-  return 'ContactField(id: $id, key: $key, label: $label, type: $type, options: $options, isRequired: $isRequired, displayOrder: $displayOrder)';
+  final _this = this as ContactField;
+  return 'ContactField(id: ${_this.id}, key: ${_this.key}, label: ${_this.label}, type: ${_this.type}, options: ${_this.options}, isRequired: ${_this.isRequired}, displayOrder: ${_this.displayOrder})';
 }
 
 
@@ -66,7 +72,7 @@ class _$ContactFieldCopyWithImpl<$Res>
 /// Create a copy of ContactField
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? key = null,Object? label = null,Object? type = null,Object? options = freezed,Object? isRequired = null,Object? displayOrder = null,}) {
-  return _then(_self.copyWith(
+  return _then(ContactField(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,key: null == key ? _self.key : key // ignore: cast_nullable_to_non_nullable
 as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
@@ -215,7 +221,7 @@ return $default(_that.id,_that.key,_that.label,_that.type,_that.options,_that.is
 @JsonSerializable()
 
 class _ContactField implements ContactField {
-  const _ContactField({required this.id, required this.key, required this.label, required this.type, final  List<String>? options, this.isRequired = false, this.displayOrder = 0}): _options = options;
+  const _ContactField({required this.id, required this.key, required this.label, required this.type,  List<String>? options, this.isRequired = false, this.displayOrder = 0}): _options = options;
   factory _ContactField.fromJson(Map<String, dynamic> json) => _$ContactFieldFromJson(json);
 
 @override final  String id;
@@ -247,16 +253,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactField&&(identical(other.id, id) || other.id == id)&&(identical(other.key, key) || other.key == key)&&(identical(other.label, label) || other.label == label)&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other._options, _options)&&(identical(other.isRequired, isRequired) || other.isRequired == isRequired)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactField&&(identical(other.id, id) || other.id == id)&&(identical(other.key, key) || other.key == key)&&(identical(other.label, label) || other.label == label)&&(identical(other.type, type) || other.type == type)&&const DeepCollectionEquality().equals(other.options, _options)&&(identical(other.isRequired, isRequired) || other.isRequired == isRequired)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,key,label,type,const DeepCollectionEquality().hash(_options),isRequired,displayOrder);
+int get hashCode {
+    return Object.hash(runtimeType,id,key,label,type,const DeepCollectionEquality().hash(_options),isRequired,displayOrder);
+}
 
 @override
 String toString() {
-  return 'ContactField(id: $id, key: $key, label: $label, type: $type, options: $options, isRequired: $isRequired, displayOrder: $displayOrder)';
+    return 'ContactField(id: $id, key: $key, label: $label, type: $type, options: $options, isRequired: $isRequired, displayOrder: $displayOrder)';
 }
 
 
@@ -317,16 +325,21 @@ $ContactLifecycleStageCopyWith<ContactLifecycleStage> get copyWith => _$ContactL
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactLifecycleStage&&(identical(other.id, id) || other.id == id)&&(identical(other.key, key) || other.key == key)&&(identical(other.label, label) || other.label == label)&&(identical(other.color, color) || other.color == color)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault));
+  final _this = this as ContactLifecycleStage;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContactLifecycleStage&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.key, _this.key) || other.key == _this.key)&&(identical(other.label, _this.label) || other.label == _this.label)&&(identical(other.color, _this.color) || other.color == _this.color)&&(identical(other.displayOrder, _this.displayOrder) || other.displayOrder == _this.displayOrder)&&(identical(other.isDefault, _this.isDefault) || other.isDefault == _this.isDefault));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,key,label,color,displayOrder,isDefault);
+int get hashCode {
+  final _this = this as ContactLifecycleStage;
+  return Object.hash(runtimeType,_this.id,_this.key,_this.label,_this.color,_this.displayOrder,_this.isDefault);
+}
 
 @override
 String toString() {
-  return 'ContactLifecycleStage(id: $id, key: $key, label: $label, color: $color, displayOrder: $displayOrder, isDefault: $isDefault)';
+  final _this = this as ContactLifecycleStage;
+  return 'ContactLifecycleStage(id: ${_this.id}, key: ${_this.key}, label: ${_this.label}, color: ${_this.color}, displayOrder: ${_this.displayOrder}, isDefault: ${_this.isDefault})';
 }
 
 
@@ -355,7 +368,7 @@ class _$ContactLifecycleStageCopyWithImpl<$Res>
 /// Create a copy of ContactLifecycleStage
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? key = null,Object? label = null,Object? color = null,Object? displayOrder = null,Object? isDefault = null,}) {
-  return _then(_self.copyWith(
+  return _then(ContactLifecycleStage(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,key: null == key ? _self.key : key // ignore: cast_nullable_to_non_nullable
 as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
@@ -526,16 +539,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactLifecycleStage&&(identical(other.id, id) || other.id == id)&&(identical(other.key, key) || other.key == key)&&(identical(other.label, label) || other.label == label)&&(identical(other.color, color) || other.color == color)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContactLifecycleStage&&(identical(other.id, id) || other.id == id)&&(identical(other.key, key) || other.key == key)&&(identical(other.label, label) || other.label == label)&&(identical(other.color, color) || other.color == color)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,key,label,color,displayOrder,isDefault);
+int get hashCode {
+    return Object.hash(runtimeType,id,key,label,color,displayOrder,isDefault);
+}
 
 @override
 String toString() {
-  return 'ContactLifecycleStage(id: $id, key: $key, label: $label, color: $color, displayOrder: $displayOrder, isDefault: $isDefault)';
+    return 'ContactLifecycleStage(id: $id, key: $key, label: $label, color: $color, displayOrder: $displayOrder, isDefault: $isDefault)';
 }
 
 

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'smp_call.dart';
@@ -9,6 +9,7 @@ part of 'smp_call.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -32,16 +33,21 @@ $SmpCallCopyWith<SmpCall> get copyWith => _$SmpCallCopyWithImpl<SmpCall>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SmpCall&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.status, status) || other.status == status)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.deviceIdentifier, deviceIdentifier) || other.deviceIdentifier == deviceIdentifier)&&(identical(other.clientNumber, clientNumber) || other.clientNumber == clientNumber)&&(identical(other.smpEmployeeName, smpEmployeeName) || other.smpEmployeeName == smpEmployeeName)&&(identical(other.agentUserId, agentUserId) || other.agentUserId == agentUserId)&&(identical(other.agentName, agentName) || other.agentName == agentName));
+  final _this = this as SmpCall;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SmpCall&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.clientId, _this.clientId) || other.clientId == _this.clientId)&&(identical(other.startedAt, _this.startedAt) || other.startedAt == _this.startedAt)&&(identical(other.direction, _this.direction) || other.direction == _this.direction)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.durationSeconds, _this.durationSeconds) || other.durationSeconds == _this.durationSeconds)&&(identical(other.deviceIdentifier, _this.deviceIdentifier) || other.deviceIdentifier == _this.deviceIdentifier)&&(identical(other.clientNumber, _this.clientNumber) || other.clientNumber == _this.clientNumber)&&(identical(other.smpEmployeeName, _this.smpEmployeeName) || other.smpEmployeeName == _this.smpEmployeeName)&&(identical(other.agentUserId, _this.agentUserId) || other.agentUserId == _this.agentUserId)&&(identical(other.agentName, _this.agentName) || other.agentName == _this.agentName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,startedAt,direction,status,durationSeconds,deviceIdentifier,clientNumber,smpEmployeeName,agentUserId,agentName);
+int get hashCode {
+  final _this = this as SmpCall;
+  return Object.hash(runtimeType,_this.id,_this.clientId,_this.startedAt,_this.direction,_this.status,_this.durationSeconds,_this.deviceIdentifier,_this.clientNumber,_this.smpEmployeeName,_this.agentUserId,_this.agentName);
+}
 
 @override
 String toString() {
-  return 'SmpCall(id: $id, clientId: $clientId, startedAt: $startedAt, direction: $direction, status: $status, durationSeconds: $durationSeconds, deviceIdentifier: $deviceIdentifier, clientNumber: $clientNumber, smpEmployeeName: $smpEmployeeName, agentUserId: $agentUserId, agentName: $agentName)';
+  final _this = this as SmpCall;
+  return 'SmpCall(id: ${_this.id}, clientId: ${_this.clientId}, startedAt: ${_this.startedAt}, direction: ${_this.direction}, status: ${_this.status}, durationSeconds: ${_this.durationSeconds}, deviceIdentifier: ${_this.deviceIdentifier}, clientNumber: ${_this.clientNumber}, smpEmployeeName: ${_this.smpEmployeeName}, agentUserId: ${_this.agentUserId}, agentName: ${_this.agentName})';
 }
 
 
@@ -70,7 +76,7 @@ class _$SmpCallCopyWithImpl<$Res>
 /// Create a copy of SmpCall
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? clientId = freezed,Object? startedAt = null,Object? direction = null,Object? status = null,Object? durationSeconds = null,Object? deviceIdentifier = freezed,Object? clientNumber = null,Object? smpEmployeeName = freezed,Object? agentUserId = freezed,Object? agentName = freezed,}) {
-  return _then(_self.copyWith(
+  return _then(SmpCall(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,clientId: freezed == clientId ? _self.clientId : clientId // ignore: cast_nullable_to_non_nullable
 as String?,startedAt: null == startedAt ? _self.startedAt : startedAt // ignore: cast_nullable_to_non_nullable
@@ -255,16 +261,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SmpCall&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.status, status) || other.status == status)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.deviceIdentifier, deviceIdentifier) || other.deviceIdentifier == deviceIdentifier)&&(identical(other.clientNumber, clientNumber) || other.clientNumber == clientNumber)&&(identical(other.smpEmployeeName, smpEmployeeName) || other.smpEmployeeName == smpEmployeeName)&&(identical(other.agentUserId, agentUserId) || other.agentUserId == agentUserId)&&(identical(other.agentName, agentName) || other.agentName == agentName));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SmpCall&&(identical(other.id, id) || other.id == id)&&(identical(other.clientId, clientId) || other.clientId == clientId)&&(identical(other.startedAt, startedAt) || other.startedAt == startedAt)&&(identical(other.direction, direction) || other.direction == direction)&&(identical(other.status, status) || other.status == status)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.deviceIdentifier, deviceIdentifier) || other.deviceIdentifier == deviceIdentifier)&&(identical(other.clientNumber, clientNumber) || other.clientNumber == clientNumber)&&(identical(other.smpEmployeeName, smpEmployeeName) || other.smpEmployeeName == smpEmployeeName)&&(identical(other.agentUserId, agentUserId) || other.agentUserId == agentUserId)&&(identical(other.agentName, agentName) || other.agentName == agentName));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,clientId,startedAt,direction,status,durationSeconds,deviceIdentifier,clientNumber,smpEmployeeName,agentUserId,agentName);
+int get hashCode {
+    return Object.hash(runtimeType,id,clientId,startedAt,direction,status,durationSeconds,deviceIdentifier,clientNumber,smpEmployeeName,agentUserId,agentName);
+}
 
 @override
 String toString() {
-  return 'SmpCall(id: $id, clientId: $clientId, startedAt: $startedAt, direction: $direction, status: $status, durationSeconds: $durationSeconds, deviceIdentifier: $deviceIdentifier, clientNumber: $clientNumber, smpEmployeeName: $smpEmployeeName, agentUserId: $agentUserId, agentName: $agentName)';
+    return 'SmpCall(id: $id, clientId: $clientId, startedAt: $startedAt, direction: $direction, status: $status, durationSeconds: $durationSeconds, deviceIdentifier: $deviceIdentifier, clientNumber: $clientNumber, smpEmployeeName: $smpEmployeeName, agentUserId: $agentUserId, agentName: $agentName)';
 }
 
 

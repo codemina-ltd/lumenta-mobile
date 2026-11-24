@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sender.dart';
@@ -9,6 +9,7 @@ part of 'sender.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $SenderCopyWith<Sender> get copyWith => _$SenderCopyWithImpl<Sender>(this as Sen
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Sender&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.displayPhoneNumber, displayPhoneNumber) || other.displayPhoneNumber == displayPhoneNumber)&&(identical(other.status, status) || other.status == status)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault));
+  final _this = this as Sender;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Sender&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.displayPhoneNumber, _this.displayPhoneNumber) || other.displayPhoneNumber == _this.displayPhoneNumber)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.isDefault, _this.isDefault) || other.isDefault == _this.isDefault));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,phoneNumber,displayPhoneNumber,status,isDefault);
+int get hashCode {
+  final _this = this as Sender;
+  return Object.hash(runtimeType,_this.id,_this.displayName,_this.phoneNumber,_this.displayPhoneNumber,_this.status,_this.isDefault);
+}
 
 @override
 String toString() {
-  return 'Sender(id: $id, displayName: $displayName, phoneNumber: $phoneNumber, displayPhoneNumber: $displayPhoneNumber, status: $status, isDefault: $isDefault)';
+  final _this = this as Sender;
+  return 'Sender(id: ${_this.id}, displayName: ${_this.displayName}, phoneNumber: ${_this.phoneNumber}, displayPhoneNumber: ${_this.displayPhoneNumber}, status: ${_this.status}, isDefault: ${_this.isDefault})';
 }
 
 
@@ -66,7 +72,7 @@ class _$SenderCopyWithImpl<$Res>
 /// Create a copy of Sender
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? displayName = null,Object? phoneNumber = freezed,Object? displayPhoneNumber = freezed,Object? status = null,Object? isDefault = null,}) {
-  return _then(_self.copyWith(
+  return _then(Sender(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,phoneNumber: freezed == phoneNumber ? _self.phoneNumber : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -237,16 +243,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Sender&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.displayPhoneNumber, displayPhoneNumber) || other.displayPhoneNumber == displayPhoneNumber)&&(identical(other.status, status) || other.status == status)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Sender&&(identical(other.id, id) || other.id == id)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.displayPhoneNumber, displayPhoneNumber) || other.displayPhoneNumber == displayPhoneNumber)&&(identical(other.status, status) || other.status == status)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,displayName,phoneNumber,displayPhoneNumber,status,isDefault);
+int get hashCode {
+    return Object.hash(runtimeType,id,displayName,phoneNumber,displayPhoneNumber,status,isDefault);
+}
 
 @override
 String toString() {
-  return 'Sender(id: $id, displayName: $displayName, phoneNumber: $phoneNumber, displayPhoneNumber: $displayPhoneNumber, status: $status, isDefault: $isDefault)';
+    return 'Sender(id: $id, displayName: $displayName, phoneNumber: $phoneNumber, displayPhoneNumber: $displayPhoneNumber, status: $status, isDefault: $isDefault)';
 }
 
 

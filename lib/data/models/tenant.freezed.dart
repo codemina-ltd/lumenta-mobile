@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'tenant.dart';
@@ -9,6 +9,7 @@ part of 'tenant.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 
@@ -28,16 +29,21 @@ $TenantSummaryCopyWith<TenantSummary> get copyWith => _$TenantSummaryCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TenantSummary&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.role, role) || other.role == role)&&(identical(other.complianceStatus, complianceStatus) || other.complianceStatus == complianceStatus)&&(identical(other.suspendedReason, suspendedReason) || other.suspendedReason == suspendedReason)&&(identical(other.mobileLoginEnabled, mobileLoginEnabled) || other.mobileLoginEnabled == mobileLoginEnabled));
+  final _this = this as TenantSummary;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TenantSummary&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.slug, _this.slug) || other.slug == _this.slug)&&(identical(other.role, _this.role) || other.role == _this.role)&&(identical(other.complianceStatus, _this.complianceStatus) || other.complianceStatus == _this.complianceStatus)&&(identical(other.suspendedReason, _this.suspendedReason) || other.suspendedReason == _this.suspendedReason)&&(identical(other.mobileLoginEnabled, _this.mobileLoginEnabled) || other.mobileLoginEnabled == _this.mobileLoginEnabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,slug,role,complianceStatus,suspendedReason,mobileLoginEnabled);
+int get hashCode {
+  final _this = this as TenantSummary;
+  return Object.hash(runtimeType,_this.id,_this.name,_this.slug,_this.role,_this.complianceStatus,_this.suspendedReason,_this.mobileLoginEnabled);
+}
 
 @override
 String toString() {
-  return 'TenantSummary(id: $id, name: $name, slug: $slug, role: $role, complianceStatus: $complianceStatus, suspendedReason: $suspendedReason, mobileLoginEnabled: $mobileLoginEnabled)';
+  final _this = this as TenantSummary;
+  return 'TenantSummary(id: ${_this.id}, name: ${_this.name}, slug: ${_this.slug}, role: ${_this.role}, complianceStatus: ${_this.complianceStatus}, suspendedReason: ${_this.suspendedReason}, mobileLoginEnabled: ${_this.mobileLoginEnabled})';
 }
 
 
@@ -66,7 +72,7 @@ class _$TenantSummaryCopyWithImpl<$Res>
 /// Create a copy of TenantSummary
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? slug = freezed,Object? role = freezed,Object? complianceStatus = freezed,Object? suspendedReason = freezed,Object? mobileLoginEnabled = null,}) {
-  return _then(_self.copyWith(
+  return _then(TenantSummary(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,slug: freezed == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
@@ -239,16 +245,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TenantSummary&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.role, role) || other.role == role)&&(identical(other.complianceStatus, complianceStatus) || other.complianceStatus == complianceStatus)&&(identical(other.suspendedReason, suspendedReason) || other.suspendedReason == suspendedReason)&&(identical(other.mobileLoginEnabled, mobileLoginEnabled) || other.mobileLoginEnabled == mobileLoginEnabled));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _TenantSummary&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.role, role) || other.role == role)&&(identical(other.complianceStatus, complianceStatus) || other.complianceStatus == complianceStatus)&&(identical(other.suspendedReason, suspendedReason) || other.suspendedReason == suspendedReason)&&(identical(other.mobileLoginEnabled, mobileLoginEnabled) || other.mobileLoginEnabled == mobileLoginEnabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,slug,role,complianceStatus,suspendedReason,mobileLoginEnabled);
+int get hashCode {
+    return Object.hash(runtimeType,id,name,slug,role,complianceStatus,suspendedReason,mobileLoginEnabled);
+}
 
 @override
 String toString() {
-  return 'TenantSummary(id: $id, name: $name, slug: $slug, role: $role, complianceStatus: $complianceStatus, suspendedReason: $suspendedReason, mobileLoginEnabled: $mobileLoginEnabled)';
+    return 'TenantSummary(id: $id, name: $name, slug: $slug, role: $role, complianceStatus: $complianceStatus, suspendedReason: $suspendedReason, mobileLoginEnabled: $mobileLoginEnabled)';
 }
 
 
